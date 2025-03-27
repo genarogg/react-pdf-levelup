@@ -1,55 +1,83 @@
-import { useEffect, useState } from "react";
-import { PDFViewer, Document, Page, Text, View } from "@react-pdf/renderer";
-import { Editor } from "@monaco-editor/react";
 
-const ReactPDFLevelUp = () => {
-  const [isClient, setIsClient] = useState(false);
-  const [code, setCode] = useState("Escribe aquí...");
+import { useState } from "react"
+import CodeEditor from "./components/CodeEditor"
+import PDFPreview from "./components/PDFPreview"
+//@ts-ignore
+import "./App.css"
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+function App() {
+  // Código de ejemplo con los componentes personalizados
+  const [code, setCode] = useState<string>(`
+// Ejemplo de uso de los componentes personalizados
+// No uses declaraciones import aquí, las dependencias ya están disponibles
 
-  const handleEditorChange = (value: any) => {
-    setCode(value || "");
-  };
+// Estilos para el PDF
+const styles = StyleSheet.create({
+  section: {
+    margin: 10,
+    padding: 10,
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#333',
+  },
+  text: {
+    fontSize: 12,
+    marginBottom: 10,
+  },
+  highlight: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    borderRadius: 5,
+  }
+});
+
+// Componente PDF con los componentes personalizados
+const MyDocument = () => (
+  <Document>
+    <Page size="A4" style={{ padding: 30, backgroundColor: '#ffffff' }}>
+      <View style={{ padding: 10 }}>
+        <Text style={styles.title}>Mi Documento PDF</Text>
+        
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ width: '50%', padding: 10 }}>
+            <Text style={styles.text}>Este es un ejemplo de documento PDF creado con React PDF.</Text>
+            <Text style={styles.text}>Puedes usar componentes personalizados para crear tus documentos.</Text>
+          </View>
+          <View style={{ width: '50%', padding: 10, backgroundColor: '#f0f0f0' }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 5 }}>Características</Text>
+            <Text style={styles.text}>• Sistema de grid responsive</Text>
+            <Text style={styles.text}>• Componentes de texto semánticos</Text>
+            <Text style={styles.text}>• Tablas y listas</Text>
+          </View>
+        </View>
+      </View>
+    </Page>
+  </Document>
+);
+
+// Asignar el componente a result (NO usar return)
+result = MyDocument;
+`)
 
   return (
-    <div className="container-playground">
-      <div className="container-editor fade-in">
-        <Editor
-          theme="vs-dark"
-          value={code}
-          onChange={handleEditorChange}
-          defaultLanguage="javascript"
-          options={{
-            minimap: { enabled: true },
-            fontSize: 14,
-            wordWrap: "on",
-            automaticLayout: true,
-            lineNumbers: "on",
-            scrollBeyondLastLine: false,
-            smoothScrolling: true,
-          }}
-        />
-      </div>
-      <div className="container-render fade-in">
-        {isClient ? (
-          <PDFViewer style={{ width: "100%", height: "500px" }}>
-            <Document>
-              <Page size="A4">
-                <View>
-                  <Text>{code}</Text>
-                </View>
-              </Page>
-            </Document>
-          </PDFViewer>
-        ) : (
-          <p>Cargando visor de PDF...</p>
-        )}
-      </div>
+    <div className="app-container">
+      <header>
+        <h1>Editor de PDF con React</h1>
+      </header>
+      <main>
+        <div className="editor-container">
+          <CodeEditor value={code} onChange={setCode as any} />
+        </div>
+        <div className="preview-container">
+          <PDFPreview code={code} />
+        </div>
+      </main>
     </div>
-  );
-};
+  )
+}
 
-export default ReactPDFLevelUp;
+export default App
+
