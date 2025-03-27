@@ -1,3 +1,4 @@
+"use client"
 
 import { useState } from "react"
 import CodeEditor from "./components/CodeEditor"
@@ -31,6 +32,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     padding: 10,
     borderRadius: 5,
+  },
+  qrSection: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    flexDirection: 'column',
   }
 });
 
@@ -51,7 +59,14 @@ const MyDocument = () => (
             <Text style={styles.text}>• Sistema de grid responsive</Text>
             <Text style={styles.text}>• Componentes de texto semánticos</Text>
             <Text style={styles.text}>• Tablas y listas</Text>
+            <Text style={styles.text}>• Códigos QR</Text>
           </View>
+        </View>
+        
+        <View style={styles.qrSection}>
+          <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}>Escanea este código QR</Text>
+          <QR value="https://example.com" size={120} />
+          <Text style={{ fontSize: 10, marginTop: 5 }}>https://example.com</Text>
         </View>
       </View>
     </Page>

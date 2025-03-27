@@ -5,6 +5,7 @@ import { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, S
 import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./Grid"
 import { Header, Footer } from "./PageElements"
+import QR from "./QR"
 
 export {
   LayoutPDF,
@@ -50,5 +51,6 @@ export {
   Col12,
   Header,
   Footer,
+  QR,
 }
 

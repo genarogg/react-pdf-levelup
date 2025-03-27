@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { PDFViewer, Document, Page, Text, View, StyleSheet, Font, Image, Link } from "@react-pdf/renderer"
 import * as React from "react"
@@ -94,6 +96,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
             Col12,
             Header,
             Footer,
+            QR,
             Lista,
             ListItem
           } = arguments[9];
