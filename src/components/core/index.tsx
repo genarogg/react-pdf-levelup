@@ -6,6 +6,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./Grid"
 import { Header, Footer } from "./PageElements"
 import QR from "./QR"
+import { UL, OL, LI } from "./Lista"
 
 export {
   LayoutPDF,
@@ -52,5 +53,8 @@ export {
   Header,
   Footer,
   QR,
+  UL,
+  OL,
+  LI,
 }
 

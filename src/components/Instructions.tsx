@@ -41,6 +41,9 @@ const Instructions = () => {
           <code>H1-H6, P, Strong, Em, etc.</code> - Componentes de texto
         </li>
         <li>
+          <code>UL, OL, LI</code> - Componentes de lista
+        </li>
+        <li>
           <code>Table, Thead, Tbody, Tr, Th, Td</code> - Componentes de tabla
         </li>
         <li>
@@ -51,6 +54,47 @@ const Instructions = () => {
         </li>
         <li>
           <code>QR</code> - Componente para generar códigos QR personalizables
+        </li>
+      </ul>
+
+      <h3>Opciones de los componentes de lista:</h3>
+      <ul>
+        <li>
+          <code>UL</code> - Lista desordenada
+          <ul>
+            <li>
+              <code>type</code> - Tipo de viñeta: "disc" (predeterminado), "circle", "square"
+            </li>
+            <li>
+              <code>style</code> - Estilos personalizados
+            </li>
+          </ul>
+        </li>
+        <li>
+          <code>OL</code> - Lista ordenada
+          <ul>
+            <li>
+              <code>type</code> - Tipo de numeración: "decimal" (predeterminado), "lower-alpha", "upper-alpha",
+              "lower-roman", "upper-roman"
+            </li>
+            <li>
+              <code>start</code> - Número inicial (predeterminado: 1)
+            </li>
+            <li>
+              <code>style</code> - Estilos personalizados
+            </li>
+          </ul>
+        </li>
+        <li>
+          <code>LI</code> - Elemento de lista
+          <ul>
+            <li>
+              <code>value</code> - Valor específico para este elemento (solo para OL)
+            </li>
+            <li>
+              <code>style</code> - Estilos personalizados
+            </li>
+          </ul>
         </li>
       </ul>
 

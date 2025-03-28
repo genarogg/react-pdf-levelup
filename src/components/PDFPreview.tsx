@@ -97,8 +97,9 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
             Header,
             Footer,
             QR,
-            Lista,
-            ListItem
+            UL,
+            OL,
+            LI
           } = arguments[9];
           
           let result = null;
