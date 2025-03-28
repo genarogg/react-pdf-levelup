@@ -47,7 +47,7 @@ const MyDocument = () => (
   <Document>
     <Page size="A4" style={{ padding: 30, backgroundColor: '#ffffff' }}>
       <View style={{ padding: 10 }}>
-        <Text style={styles.title}>Mi Documento PDF</Text>
+        <Text style={styles.title}>Mi Documento PDF con QR Personalizado</Text>
         
         <View style={{ flexDirection: 'row' }}>
           <View style={{ width: '50%', padding: 10 }}>
@@ -59,14 +59,35 @@ const MyDocument = () => (
             <Text style={styles.text}>• Sistema de grid responsive</Text>
             <Text style={styles.text}>• Componentes de texto semánticos</Text>
             <Text style={styles.text}>• Tablas y listas</Text>
-            <Text style={styles.text}>• Códigos QR</Text>
+            <Text style={styles.text}>• Códigos QR personalizables con logo</Text>
           </View>
         </View>
         
         <View style={styles.qrSection}>
-          <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}>Escanea este código QR</Text>
-          <QR value="https://example.com" size={120} />
+          <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}>QR Básico</Text>
+          <QR 
+            value="https://example.com" 
+            size={120} 
+            colorDark="#000000"
+            colorLight="#ffffff"
+          />
           <Text style={{ fontSize: 10, marginTop: 5 }}>https://example.com</Text>
+        </View>
+        
+        <View style={styles.qrSection}>
+          <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 10 }}>QR con Logo</Text>
+          <QR 
+            value="https://example.com/con-logo" 
+            size={150} 
+            colorDark="#1976D2"
+            colorLight="#F5F5F5"
+            margin={4}
+            errorCorrectionLevel="H"
+            logo="https://cdn.iconscout.com/icon/free/png-256/free-react-1-282599.png"
+            logoWidth={40}
+            logoHeight={40}
+          />
+          <Text style={{ fontSize: 10, marginTop: 5 }}>QR con logo de React</Text>
         </View>
       </View>
     </Page>

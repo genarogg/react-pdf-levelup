@@ -1,5 +1,3 @@
-
-
 const Instructions = () => {
   return (
     <div className="instructions">
@@ -51,6 +49,40 @@ const Instructions = () => {
         <li>
           <code>Header, Footer</code> - Encabezado y pie de página
         </li>
+        <li>
+          <code>QR</code> - Componente para generar códigos QR personalizables
+        </li>
+      </ul>
+
+      <h3>Opciones del componente QR:</h3>
+      <ul>
+        <li>
+          <code>value</code> - Texto o URL para el código QR (requerido)
+        </li>
+        <li>
+          <code>size</code> - Tamaño en píxeles (por defecto: 150)
+        </li>
+        <li>
+          <code>colorDark</code> - Color de los puntos (por defecto: "#000000")
+        </li>
+        <li>
+          <code>colorLight</code> - Color de fondo (por defecto: "#ffffff")
+        </li>
+        <li>
+          <code>margin</code> - Margen alrededor del QR (por defecto: 0)
+        </li>
+        <li>
+          <code>errorCorrectionLevel</code> - Nivel de corrección ("L", "M", "Q", "H")
+        </li>
+        <li>
+          <code>logo</code> - URL de la imagen del logo
+        </li>
+        <li>
+          <code>logoWidth</code> - Ancho del logo en píxeles
+        </li>
+        <li>
+          <code>logoHeight</code> - Alto del logo en píxeles
+        </li>
       </ul>
 
       <h3>Notas importantes:</h3>
@@ -67,9 +99,7 @@ const Instructions = () => {
         <li>
           Usa <code>StyleSheet.create()</code> para definir estilos
         </li>
-        <li>
-          Para empezar, usa el ejemplo básico con <code>Document</code> y <code>Page</code>
-        </li>
+        <li>Al usar un logo en el QR, usa el nivel de corrección "H" para mejor lectura</li>
       </ul>
     </div>
   )

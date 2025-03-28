@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@babel/standalone": "^7.23.10",
-    "@react-pdf/renderer": "^4.3.0",
     "@monaco-editor/react": "^4.7.0",
-
+    "@react-pdf/renderer": "^4.3.0",
+    "easyqrcodejs": "^4.6.2",
+    "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
