@@ -25,7 +25,7 @@ export const generateQRAsBase64 = async ({
     // Configuración para QRCode
     const options = {
       errorCorrectionLevel: errorCorrectionLevel,
-      type: "image/png",
+      type: "image/png" as const,
       quality: 0.92,
       margin: margin,
       color: {
@@ -36,7 +36,7 @@ export const generateQRAsBase64 = async ({
     }
 
     // Generar el código QR como base64
-    const qrDataUrl = await QRCode.toDataURL(value, options)
+    const qrDataUrl = QRCode.toDataURL(value, options)
     return qrDataUrl
   } catch (error) {
     console.error("Error generando QR:", error)
@@ -51,7 +51,7 @@ export const addLogoToQR = async (
   logoWidth: number,
   logoHeight: number,
 ): Promise<string> => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!qrDataUrl || !logoUrl) {
       resolve(qrDataUrl)
       return
