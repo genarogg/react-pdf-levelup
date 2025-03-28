@@ -1,4 +1,4 @@
-
+import React from 'react'
 import { Editor as MonacoEditor } from "@monaco-editor/react"
 
 interface EditorProps {
