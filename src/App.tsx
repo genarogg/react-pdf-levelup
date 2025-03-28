@@ -3,6 +3,9 @@ import React from 'react'
 import { useState } from "react"
 import CodeEditor from "./components/CodeEditor"
 import PDFPreview from "./components/PDFPreview"
+// import TemplateSelector from "./components/TemplateSelector"
+// import QuickHelp from "./components/QuickHelp"
+import ColorPicker from "./components/ColorPicker"
 //@ts-ignore
 import "./App.css"
 
@@ -173,14 +176,33 @@ const ReporteFinanciero = () => <Solicitudes data={reporteData} />;
 result = ReporteFinanciero;
 `)
 
+  const [selectedColor, setSelectedColor] = useState("#3366cc")
+
+  const handleSelectTemplate = (templateCode: string) => {
+    setCode(templateCode)
+  }
+
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color)
+    // Aquí puedes implementar la lógica para usar el color seleccionado
+    console.log("Color seleccionado:", color)
+  }
+
   return (
     <div className="app-container">
       <header>
         <h1>Editor de PDF con React</h1>
+        <div className="header-controls">
+          <ColorPicker onColorSelect={handleColorSelect} />
+        </div>
       </header>
       <main>
         <div className="editor-container">
+          <div className="template-container">
+            {/* <TemplateSelector onSelectTemplate={handleSelectTemplate} /> */}
+          </div>
           <CodeEditor value={code} onChange={setCode as any} />
+          {/* <QuickHelp /> */}
         </div>
         <div className="preview-container">
           <PDFPreview code={code} />
