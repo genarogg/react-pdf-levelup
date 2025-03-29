@@ -8,6 +8,8 @@ import { Header, Footer } from "./PageElements"
 import QR from "./QR"
 import { UL, OL, LI } from "./Lista"
 
+import { View, Text } from "@react-pdf/renderer"
+
 export {
   LayoutPDF,
   Img,
@@ -56,5 +58,7 @@ export {
   UL,
   OL,
   LI,
+  View,
+  Text,
 }
 

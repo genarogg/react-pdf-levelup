@@ -18,7 +18,7 @@ import {
   Strong,
   Center,
   Text,
-  Col8,
+
   Col4,
 } from "react-pdf-levelup"
 
@@ -45,7 +45,7 @@ const InvoiceTemplate = () => {
   }
 
   return (
-    <LayoutPDF size="A4" padding={30} showPageNumbers={false}>
+    <LayoutPDF size="A4" showPageNumbers={false}>
       {/* Encabezado */}
       <View style={{ marginBottom: 20, borderBottom: "1px solid #ccc", padding: 10 }}>
         <Row>
@@ -110,7 +110,7 @@ const InvoiceTemplate = () => {
       {/* Totales */}
       <View style={{ marginTop: 20, borderTop: "1px solid #ccc", padding: 10 }}>
         <Row>
-          <Col8></Col8>
+      
           <Col4>
             <Table>
               <Tbody>
@@ -163,9 +163,4 @@ const InvoiceTemplate = () => {
   )
 }
 
-// Declare the result variable
-let result
-
-// Asignar el componente a result
-result = InvoiceTemplate
-
+export default InvoiceTemplate

@@ -1,7 +1,9 @@
 {
   "name": "react-pdf-levelup",
-  "version": "2.0.11",
+  "version": "2.0.14",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -25,7 +27,7 @@
     "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-pdf-levelup": "^2.0.9",
+    "react-pdf-levelup": "^2.0.14",
     "react-router-dom": "^7.4.1",
     "rimraf": "^6.0.1"
   },

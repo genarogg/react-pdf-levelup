@@ -47,7 +47,7 @@ const TemplatePage = () => {
   }, [templateId])
 
   const handleColorSelect = (color: string) => {
-    setSelectedColor(color)
+    // setSelectedColor(color)
     console.log("Color seleccionado:", color)
   }
 

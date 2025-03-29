@@ -1,5 +1,5 @@
 import React from 'react'
-import { LayoutPDF, View, Text, Image, QR, Strong } from "@react-pdf/renderer"
+import { LayoutPDF, View, Text, Img, QR, Strong } from "react-pdf-levelup"
 
 // Plantilla de Certificado
 const CertificadoTemplate = () => {
@@ -18,7 +18,7 @@ const CertificadoTemplate = () => {
   }
 
   return (
-    <LayoutPDF size="A4" orientation="landscape" padding={30} showPageNumbers={false}>
+    <LayoutPDF size="A4" orientation="landscape" >
       {/* Borde decorativo */}
       <View
         style={{
@@ -29,7 +29,6 @@ const CertificadoTemplate = () => {
           bottom: 20,
           borderWidth: 5,
           borderColor: "#003366",
-          borderStyle: "double",
           padding: 15,
         }}
       >
@@ -46,7 +45,7 @@ const CertificadoTemplate = () => {
         >
           {/* Encabezado */}
           <View style={{ marginBottom: 20, alignItems: "center" }}>
-            <Image src="/placeholder.svg" style={{ width: 120, marginBottom: 20 }} />
+            <Img src="/placeholder.svg" style={{ width: 120, marginBottom: 20 }} />
             <Text style={{ fontSize: 10, color: "#666", marginBottom: 5 }}>FUNDACIÓN PARA EL DESARROLLO</Text>
           </View>
 
@@ -93,6 +92,4 @@ const CertificadoTemplate = () => {
   )
 }
 
-// Asignar el componente a result
-const result = CertificadoTemplate
-
+export default CertificadoTemplate

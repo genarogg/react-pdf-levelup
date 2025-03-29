@@ -1,5 +1,6 @@
+import React from 'react'
 import { View, Text } from "@react-pdf/renderer"
-import { LayoutPDF, Table, Thead, Tbody, Tr, Th, Td, Strong } from "../components/ui"
+import { LayoutPDF, Table, Thead, Tbody, Tr, Th, Td, Strong } from "react-pdf-levelup"
 
 // Plantilla de Reporte Financiero
 const ReporteFinanciero = () => {
@@ -38,7 +39,7 @@ const ReporteFinanciero = () => {
   }
 
   // Componentes simulados para el ejemplo
-  const Header = ({ isFundesurg }) => (
+  const Header = ({ isFundesurg }: any) => (
     <View style={{ marginBottom: 20, borderBottom: "1px solid #ccc", paddingBottom: 10 }}>
       <Text style={{ fontSize: 16, fontWeight: "bold", color: "#003366" }}>
         {isFundesurg === "true" ? "FUNDESURG" : "ORGANIZACIÓN"}
@@ -47,13 +48,13 @@ const ReporteFinanciero = () => {
     </View>
   )
 
-  const Title = ({ text }) => (
+  const Title = ({ text }: any) => (
     <View style={{ marginBottom: 15, backgroundColor: "#f0f0f0", padding: 8 }}>
       <Text style={{ fontSize: 14, fontWeight: "bold", textAlign: "center" }}>{text}</Text>
     </View>
   )
 
-  const Detalles = ({ data }) => (
+  const Detalles = ({ data }: any) => (
     <View style={{ marginBottom: 20 }}>
       <Text style={{ fontSize: 12, marginBottom: 5 }}>
         <Strong>Periodo:</Strong> {data.periodo}
@@ -68,7 +69,7 @@ const ReporteFinanciero = () => {
   )
 
   return (
-    <LayoutPDF size="A4" padding={20} showPageNumbers={false}>
+    <LayoutPDF size="A4" showPageNumbers={false}>
       <Header isFundesurg="true"></Header>
 
       <Title text="REPORTE FINANCIERO"></Title>
@@ -114,9 +115,5 @@ const ReporteFinanciero = () => {
   )
 }
 
-// Declare the result variable
-let result
-
-// Asignar el componente a result
-result = ReporteFinanciero
+export default ReporteFinanciero
 
