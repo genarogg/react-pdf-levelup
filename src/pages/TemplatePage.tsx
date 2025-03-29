@@ -11,7 +11,7 @@ import { loadTemplateFile } from "../utils/templateLoader"
 const TemplatePage = () => {
   const { templateId } = useParams<{ templateId: string }>()
   const [code, setCode] = useState<string>("")
-  const [selectedColor, setSelectedColor] = useState("#3366cc")
+  // const [selectedColor, setSelectedColor] = useState("#3366cc")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

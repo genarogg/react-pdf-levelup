@@ -3,6 +3,7 @@
 // import React from "react";
 import { LayoutPDF, Table, Thead, Tbody, Tr, Th, Td } from "react-pdf-levelup"
 //
+import React from 'react'
 // import Header from "./components/Header";
 // import Title from "./components/Title";
 // import Detalles from "./components/Detalles";

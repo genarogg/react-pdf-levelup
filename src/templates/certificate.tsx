@@ -1,3 +1,4 @@
+import React from 'react'
 import { LayoutPDF, View, Text, Image, QR, Strong } from "@react-pdf/renderer"
 
 // Plantilla de Certificado

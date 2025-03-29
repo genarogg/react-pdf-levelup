@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   LayoutPDF,
   View,
@@ -19,7 +20,7 @@ import {
   Text,
   Col8,
   Col4,
-} from "@react-pdf/renderer"
+} from "react-pdf-levelup"
 
 // Plantilla de Factura
 const InvoiceTemplate = () => {
