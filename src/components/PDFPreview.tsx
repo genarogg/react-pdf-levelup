@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { PDFViewer, Document, Page, Text, View, StyleSheet, Font, Image, Link } from "@react-pdf/renderer"
 import * as React from "react"
