@@ -1,4 +1,6 @@
-import React from "react"
+"use client"
+
+import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Palette } from "lucide-react"
 

@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 import { Text, View, StyleSheet } from "@react-pdf/renderer"
 
 interface PageElementProps {

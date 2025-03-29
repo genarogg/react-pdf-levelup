@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 import { View, Text, StyleSheet } from "@react-pdf/renderer"
 
 interface TableProps {
@@ -20,13 +20,12 @@ const styles = StyleSheet.create({
     width: "100%",
     borderWidth: 1,
     borderColor: "#000",
-    
-    overflow: "hidden", 
+
+    overflow: "hidden",
     marginBottom: 20,
   },
   thead: {
     backgroundColor: "#f0f0f0",
-   
   },
   tbody: {},
   tr: {
@@ -119,3 +118,4 @@ const Td: React.FC<CellProps> = ({ children, style, cellSize = "medium", width, 
 }
 
 export { Table, Thead, Tbody, Tr, Th, Td }
+

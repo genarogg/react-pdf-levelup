@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { PDFViewer, Document, Page, Text, View, StyleSheet, Font, Image, Link } from "@react-pdf/renderer"
 import * as React from "react"
@@ -104,6 +106,15 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
           
           try {
             ${transformedCode}
+            
+            // Si existe un componente llamado Component, asignarlo automáticamente a result
+            if (typeof Component !== 'undefined') {
+              if (typeof reporteData !== 'undefined') {
+                result = () => React.createElement(Component, { data: reporteData });
+              } else {
+                result = Component;
+              }
+            }
           } catch (err) {
             console.error("Error en el código del usuario:", err);
             throw err;

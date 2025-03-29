@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import type React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { useEffect, useState } from "react"
 import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"

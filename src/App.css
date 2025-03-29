@@ -21,6 +21,50 @@ header h1 {
   font-size: 1.5rem;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.template-selector-dropdown {
+  position: relative;
+}
+
+.template-select {
+  padding: 8px 12px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 180px;
+}
+
+.template-select:hover {
+  background-color: #444;
+}
+
+.template-select:focus {
+  outline: none;
+  border-color: #666;
+}
+
+.back-button {
+  padding: 8px 12px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.back-button:hover {
+  background-color: #444;
+}
+
 main {
   display: flex;
   flex: 1;
@@ -95,5 +139,25 @@ main {
   padding: 2px 4px;
   border-radius: 3px;
   font-family: monospace;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 1.2rem;
+  color: #666;
+  background-color: #f8f9fa;
+}
+
+.error-message {
+  padding: 20px;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border-left: 4px solid #d32f2f;
+  margin: 10px;
+  overflow: auto;
+  max-height: 100%;
 }
 

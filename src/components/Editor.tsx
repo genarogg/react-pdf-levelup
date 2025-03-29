@@ -1,4 +1,4 @@
-import React from 'react'
+"use client"
 import { Editor as MonacoEditor } from "@monaco-editor/react"
 
 interface EditorProps {

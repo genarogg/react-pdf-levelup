@@ -1,4 +1,4 @@
-import React from 'react'
+"use client"
 import { Editor } from "@monaco-editor/react"
 import { useRef } from "react"
 

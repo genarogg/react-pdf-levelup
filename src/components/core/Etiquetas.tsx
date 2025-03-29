@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 import { Text, StyleSheet, Link } from "@react-pdf/renderer"
 
 interface TextProps {
