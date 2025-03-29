@@ -168,11 +168,52 @@ const Component = ({ data }) => {
     console.log("Color seleccionado:", color)
   }
 
+  const downloadTemplate = (templateCode: string) => {
+    // Add necessary imports to the template
+    const importsSection = `import React from "react";
+import { 
+      LayoutPDF, 
+      Container, 
+      Row, 
+      Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12,
+      P, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, A,
+      Table, Thead, Tbody, Tr, Th, Td,
+      Left, Right, Center,
+      Img, QR,
+      Header, Footer,
+      UL, OL, LI
+    } from "react-pdf-levelup";
+import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
+
+`
+
+    // Create the full template content with imports
+    const fullTemplateContent = importsSection + templateCode
+
+    // Create a blob with the content
+    const blob = new Blob([fullTemplateContent], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+
+    // Create a temporary link element to trigger the download
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "template.tsx"
+    document.body.appendChild(a)
+    a.click()
+
+    // Clean up
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="app-container">
       <header>
         <h1>Editor de PDF con React</h1>
         <div className="header-controls">
+          <button className="download-button" onClick={() => downloadTemplate(code)}>
+            Descargar Template
+          </button>
           <ColorPicker onColorSelect={handleColorSelect} />
           <TemplateSelector />
         </div>
