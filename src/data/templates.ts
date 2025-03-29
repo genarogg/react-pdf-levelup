@@ -18,7 +18,7 @@ export const templates = [
   {
     id: "certificate",
     name: "Certificado",
-    path: "/templates/certificate.txt",
+    path: "/templates/certificate.tsx",
   },
 ]
 

@@ -1,4 +1,5 @@
-// Plantilla de Certificado
+// import React from 'react'
+
 const CertificadoTemplate = () => {
   // Datos de ejemplo
   const certificadoData = {
