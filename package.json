@@ -1,8 +1,48 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
-  "private": true,
+  "name": "react-pdf-levelup",
+  "version": "2.0.11",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "echo 'no build script'"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "upVersion": "node ./fn/upVersion.js",
+    "update-jsx": "node ./fn/updateTsconfig.js",
+    "clean-dist": "rimraf dist",
+    "build-lib": "npm run clean-dist && tsup",
+    "publicar": "npm run upVersion && npm run update-jsx && npm run build-lib && npm publish"
+  },
+  "dependencies": {
+    "@babel/standalone": "^7.23.10",
+    "@monaco-editor/react": "^4.7.0",
+    "@react-pdf/renderer": "^4.3.0",
+    "easyqrcodejs": "^4.6.2",
+    "lucide-react": "^0.485.0",
+    "qrcode": "^1.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pdf-levelup": "^2.0.9",
+    "rimraf": "^6.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@react-pdf/types": "^2.9.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "json": "^11.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.2.0"
   }
 }

@@ -1,4 +1,4 @@
-import type React from "react"
+import  React from "react"
 import { Image, StyleSheet } from "@react-pdf/renderer"
 
 interface ImgProps {

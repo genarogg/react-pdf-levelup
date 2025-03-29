@@ -1,4 +1,4 @@
-"use client"
+import React from 'react'
 import { useState, useEffect } from "react"
 import CodeEditor from "./components/CodeEditor"
 import PDFPreview from "./components/PDFPreview"

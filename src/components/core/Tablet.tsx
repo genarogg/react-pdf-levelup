@@ -1,4 +1,4 @@
-import type React from "react"
+import  React from "react"
 import { View, Text, StyleSheet } from "@react-pdf/renderer"
 
 interface TableProps {
