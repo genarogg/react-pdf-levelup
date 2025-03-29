@@ -1,6 +1,6 @@
 
 
-import  React from "react"
+import React from "react"
 import { useState } from "react"
 
 const QuickHelp: React.FC = () => {
@@ -245,6 +245,8 @@ const QuickHelp: React.FC = () => {
       },
     ],
   }
+  // @ts-ignore
+  const activeDocs = componentDocs[activeTab] // Refactorización: extraer los documentos activos
 
   return (
     <div className="quick-help-container">
@@ -303,7 +305,7 @@ const QuickHelp: React.FC = () => {
             </div>
 
             <div className="tab-content">
-              {componentDocs[activeTab].map((component, index) => (
+              {activeDocs.map((component: any, index: any) => (
                 <div key={index} className="component-doc">
                   <h4>{component.name}</h4>
                   <p className="component-description">{component.description}</p>
@@ -318,7 +320,7 @@ const QuickHelp: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {component.props.map((prop, propIndex) => (
+                      {component.props.map((prop: any, propIndex: any) => (
                         <tr key={propIndex}>
                           <td>
                             <code>{prop.name}</code>
@@ -345,4 +347,3 @@ const QuickHelp: React.FC = () => {
 }
 
 export default QuickHelp
-

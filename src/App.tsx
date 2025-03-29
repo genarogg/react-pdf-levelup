@@ -12,7 +12,7 @@ import "./App.css"
 
 function App() {
   const [code, setCode] = useState<string>("")
-  const [selectedColor, setSelectedColor] = useState("#3366cc")
+  // const [selectedColor, setSelectedColor] = useState("#3366cc")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -164,7 +164,7 @@ const Component = ({ data }) => {
   }, [])
 
   const handleColorSelect = (color: string) => {
-    setSelectedColor(color)
+    // setSelectedColor(color)
     console.log("Color seleccionado:", color)
   }
 
