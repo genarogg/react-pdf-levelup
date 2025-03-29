@@ -26,130 +26,7 @@ function App() {
           setCode(templateContent)
         } else {
           // Fallback to hardcoded template if file loading fails
-          setCode(`
-// Este es un ejemplo de un componente para generar un reporte financiero en PDF
-// En una aplicación real, importarías los componentes así:
-// import React from "react";
-// import {
-//     LayoutPDF,
-//     Table,
-//     Thead,
-//     Tbody,
-//     Tr,
-//     Th,
-//     Td,
-//     Center,
-//     P,
-//     Strong,
-//     Right,
-//     Span,
-//     Col6,
-//     Container,
-//     Row,
-// } from "react-pdf-levelup";
-//
-// import Header from "./components/Header";
-// import Title from "./components/Title";
-// import Detalles from "./components/Detalles";
-
-// Datos de ejemplo para el reporte
-const reporteData = {
-  periodo: "Enero - Marzo 2024",
-  departamento: "Finanzas",
-  responsable: "Juan Pérez",
-  costoTotal: "15,750.00",
-  documentos: {
-    "Certificados": {
-      totalCantidad: 250,
-      tipoPapel: {
-        SIMPLE: 150,
-        SEGURIDAD: 100
-      },
-      totalCosto: "5,250.00"
-    },
-    "Diplomas": {
-      totalCantidad: 120,
-      tipoPapel: {
-        SIMPLE: 20,
-        SEGURIDAD: 100
-      },
-      totalCosto: "4,200.00"
-    },
-    "Constancias": {
-      totalCantidad: 300,
-      tipoPapel: {
-        SIMPLE: 200,
-        SEGURIDAD: 100
-      },
-      totalCosto: "6,300.00"
-    }
-  }
-};
-
-// Componente principal
-const Component = ({ data }) => {
-  return (
-    <LayoutPDF size="A4" padding={20} showPageNumbers={false}>
-
-      <Table style={{ borderBottom: 0, borderRight: 0 }}>
-        <Thead>
-          <Tr>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "50%" }}>
-              Documento
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "30%" }}>
-              Tipo de papel
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "20%" }}>
-              SubTotal
-            </Th>
-          </Tr>
-          <Tr>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "40%" }}>
-              Nombre
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "10%" }}>
-              Cantidad
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "15%" }}>
-              Simple
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "15%" }}>
-              Seguridad
-            </Th>
-            <Th style={{ backgroundColor: "#b6d4ff", width: "20%" }}></Th>
-          </Tr>
-        </Thead>
-
-        <Tbody>
-          {Object.entries(data.documentos).map(([nombreDoc, detalles]) => (
-            <Tr key={nombreDoc}>
-              <Td style={{ width: "40%" }}>{nombreDoc}</Td>
-              <Td style={{ width: "10%", textAlign: "right" }}>
-                {detalles.totalCantidad}
-              </Td>
-              <Td style={{ width: "15%", textAlign: "right" }}>
-                {detalles.tipoPapel.SIMPLE}
-              </Td>
-              <Td style={{ width: "15%", textAlign: "right" }}>
-                {detalles.tipoPapel.SEGURIDAD}
-              </Td>
-              <Td style={{ width: "20%", textAlign: "right" }}>{detalles.totalCosto}Bs</Td>
-            </Tr>
-          ))}
-          <Tr>
-            <Td style={{ width: "40%" }}>Total</Td>
-            <Td style={{ width: "10%" }}></Td>
-            <Td style={{ width: "15%" }}></Td>
-            <Td style={{ width: "15%" }}></Td>
-            <Td style={{ width: "20%", textAlign: "right", backgroundColor: "#b6d4ff" }}>{data.costoTotal}Bs</Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </LayoutPDF>
-  );
-};
-`)
+          setCode(``)
         }
       } catch (error) {
         console.error("Failed to load default template:", error)
@@ -223,7 +100,7 @@ import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
           {isLoading ? (
             <div className="loading">Cargando plantilla...</div>
           ) : (
-            <CodeEditor value={code} onChange={setCode as any} />
+            <div className="loading">Cargando plantilla...</div>
           )}
           <QuickHelp />
         </div>

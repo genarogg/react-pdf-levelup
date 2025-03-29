@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Instructions = () => {
   return (
     <div className="instructions">
@@ -56,6 +54,28 @@ const Instructions = () => {
         </li>
         <li>
           <code>QR</code> - Componente para generar códigos QR personalizables
+        </li>
+      </ul>
+
+      <h3>Uso correcto de estilos:</h3>
+      <ul>
+        <li>
+          <strong>Siempre usa doble llave para los estilos:</strong>{" "}
+          <code>style=&#123;&#123; propiedad: valor &#125;&#125;</code>
+        </li>
+        <li>
+          <strong>Propiedades de estilo en camelCase:</strong> <code>backgroundColor</code> en lugar de{" "}
+          <code>background-color</code>
+        </li>
+        <li>
+          <strong>Valores numéricos:</strong> No necesitan unidades para píxeles: <code>fontSize: 12</code>
+        </li>
+        <li>
+          <strong>Valores de texto:</strong> Deben ir entre comillas: <code>fontWeight: "bold"</code>
+        </li>
+        <li>
+          <strong>Ejemplo completo:</strong>{" "}
+          <code>style=&#123;&#123; fontSize: 12, fontWeight: "bold", color: "#ff0000", padding: 10 &#125;&#125;</code>
         </li>
       </ul>
 
