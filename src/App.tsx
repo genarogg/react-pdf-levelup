@@ -58,9 +58,9 @@ import {
       Left, Right, Center,
       Img, QR,
       Header, Footer,
-      UL, OL, LI
+      UL, OL, LI,
+      View, Text, StyleSheet, Font,
     } from "react-pdf-levelup";
-import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
 
 `
 

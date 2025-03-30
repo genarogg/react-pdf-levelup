@@ -137,16 +137,13 @@ const A: React.FC<TextProps> = ({ children, style, href }) => {
   )
 }
 
-// Add BR component for line breaks
 const BR: React.FC<{ style?: any }> = ({ style }) => {
   return <Text style={[styles.br, style]}>{"\n"}</Text>
 }
 
-// Agregar la etiqueta Span después de la etiqueta Mark
 const Span: React.FC<TextProps> = ({ children, style }) => {
   return <Text style={[style]}>{children}</Text>
 }
 
-// Exportar la etiqueta Span junto con las demás
 export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR }
 

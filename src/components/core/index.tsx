@@ -8,7 +8,7 @@ import { Header, Footer } from "./PageElements"
 import QR from "./QR"
 import { UL, OL, LI } from "./Lista"
 
-import { View, Text } from "@react-pdf/renderer"
+import { View, Text, StyleSheet, Font, } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
@@ -62,6 +62,7 @@ export {
   LI,
   View,
   Text,
+  StyleSheet, Font,
   decodeBase64Pdf,
   generatePDF
 }
