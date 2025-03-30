@@ -1,4 +1,4 @@
-"use client"
+import React from 'react'
 import { useState, useEffect } from "react"
 import { Github, Download, Coffee } from "lucide-react"
 
@@ -141,7 +141,7 @@ import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
             </div>
           ) : (
             <div className="flex-1 overflow-hidden">
-              <CodeEditor value={code} onChange={setCode} />
+              <CodeEditor value={code} onChange={setCode as any} />
             </div>
           )}
           <QuickHelp />
