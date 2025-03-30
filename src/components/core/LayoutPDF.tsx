@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   pageNumber: {
     position: "absolute",
     fontSize: 10,
-    bottom: 30,
+    top: 792 - 14,
     left: 0,
     right: 0,
     textAlign: "center",
@@ -26,6 +26,7 @@ interface LayoutPDFProps {
   orientation?: "portrait" | "landscape"
   backgroundColor?: string
   showPageNumbers?: boolean
+  padding?: number
   style?: any
 }
 
@@ -35,6 +36,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   orientation = "portrait",
   backgroundColor = "white",
   showPageNumbers = true,
+  padding = 30,
   style = {},
 }) => {
   // Validar y sanitizar props
@@ -74,6 +76,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   const pageStyle = {
     ...styles.page,
     backgroundColor: safeBackgroundColor,
+    padding: padding,
     ...style,
   }
 

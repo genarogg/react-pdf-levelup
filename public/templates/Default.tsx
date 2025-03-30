@@ -1,29 +1,4 @@
-// Este es un ejemplo de un componente para generar un reporte financiero en PDF
-// En una aplicación real, importarías los componentes así:
-// import React from "react";
-// import {
-//     LayoutPDF,
-//     Table,
-//     Thead,
-//     Tbody,
-//     Tr,
-//     Th,
-//     Td,
-//     Center,
-//     P,
-//     Strong,
-//     Right,
-//     Span,
-//     Col6,
-//     Container,
-//     Row,
-// } from "react-pdf-levelup";
-//
-// import Header from "./components/Header";
-// import Title from "./components/Title";
-// import Detalles from "./components/Detalles";
 
-// Datos de ejemplo para el reporte
 const reporteData = {
   periodo: "Enero - Marzo 2024",
   departamento: "Finanzas",

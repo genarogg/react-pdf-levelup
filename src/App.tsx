@@ -1,10 +1,12 @@
-import React from 'react'
+"use client"
 import { useState, useEffect } from "react"
+import { Github, Download, Coffee } from "lucide-react"
 
 import PDFPreview from "./components/PDFPreview"
 import TemplateSelector from "./components/TemplateSelector"
 import QuickHelp from "./components/QuickHelp"
 import ColorPicker from "./components/ColorPicker"
+import CodeEditor from "./components/CodeEditor"
 import { loadTemplateFile } from "./utils/templateLoader"
 import { templates } from "./data/templates"
 //@ts-ignore
@@ -12,7 +14,6 @@ import "./App.css"
 
 function App() {
   const [code, setCode] = useState<string>("")
-  // const [selectedColor, setSelectedColor] = useState("#3366cc")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -41,7 +42,6 @@ function App() {
   }, [])
 
   const handleColorSelect = (color: string) => {
-    // setSelectedColor(color)
     console.log("Color seleccionado:", color)
   }
 
@@ -84,27 +84,69 @@ import { View, Text, StyleSheet, Image } from "@react-pdf/renderer";
   }
 
   return (
-    <div className="app-container">
-      <header>
-        <h1>Editor de PDF con React</h1>
-        <div className="header-controls">
-          <button className="download-button" onClick={() => downloadTemplate(code)}>
-            Descargar Template
-          </button>
-          <ColorPicker onColorSelect={handleColorSelect} />
-          <TemplateSelector />
+    <div className="flex flex-col h-screen bg-gray-900 text-white">
+      <header className="bg-gray-800 border-b border-gray-700 px-6 py-4 shadow-md">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-xl md:text-2xl font-bold text-blue-400">React PDF Editor</h1>
+          <div className="flex items-center gap-4">
+            <button
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
+              onClick={() => downloadTemplate(code)}
+            >
+              <Download size={18} />
+              <span className="hidden md:inline">Download Template</span>
+            </button>
+
+            <a
+              href="https://www.paypal.com/paypalme/genarogg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
+            >
+              <Coffee size={18} />
+              <span className="hidden md:inline">Donate</span>
+            </a>
+
+            <a
+              href="https://github.com/genarogg/react-pdf-editor"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
+            >
+              <Github size={18} />
+              <span className="hidden md:inline">GitHub</span>
+            </a>
+
+            <div className="hidden md:flex items-center gap-3">
+              <ColorPicker onColorSelect={handleColorSelect} />
+              <TemplateSelector />
+            </div>
+          </div>
         </div>
       </header>
-      <main>
-        <div className="editor-container">
+
+      <div className="flex md:hidden items-center justify-center gap-3 py-2 bg-gray-800 border-b border-gray-700">
+        <ColorPicker onColorSelect={handleColorSelect} />
+        <TemplateSelector />
+      </div>
+
+      <main className="flex flex-1 overflow-hidden">
+        <div className="w-1/2 border-r border-gray-700 flex flex-col">
           {isLoading ? (
-            <div className="loading">Cargando plantilla...</div>
+            <div className="flex items-center justify-center h-full bg-gray-800">
+              <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 rounded-full border-4 border-t-blue-500 border-r-transparent border-b-blue-500 border-l-transparent animate-spin"></div>
+                <p className="mt-4 text-gray-400">Loading template...</p>
+              </div>
+            </div>
           ) : (
-            <div className="loading">Cargando plantilla...</div>
+            <div className="flex-1 overflow-hidden">
+              <CodeEditor value={code} onChange={setCode} />
+            </div>
           )}
           <QuickHelp />
         </div>
-        <div className="preview-container">
+        <div className="w-1/2 bg-gray-100">
           <PDFPreview code={code} />
         </div>
       </main>

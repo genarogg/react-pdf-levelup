@@ -1,33 +1,71 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "lib": [
-      "ES2023",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
+    "target": "esnext",
+    "module": "commonjs",
     "jsx": "react",
+    "outDir": "./dist",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@env": [
+        "./env.ts"
+      ],
+      "@/*": [
+        "./src/client/*"
+      ],
+      "@fn": [
+        "./src/functions"
+      ],
+      "@email/*": [
+        "email/*"
+      ],
+      "@controller/*": [
+        "controllers/*"
+      ],
+      "@router": [
+        "routers/index.ts"
+      ],
+      "@graphql/*": [
+        "graphql/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
+      "@pdf/*": [
+        "./src/pdf/*"
+      ]
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": [
-    "vite.config.ts",
-    "src/**/*"
+    "*.ts",
+    "**/**/*.ts",
+    "**/**/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.jsx",
+    "csv/csvReader.js",
+    "prisma/changeProvider.js",
+    "src/pdf/HelloWorldTemplate.tsx",
+    "src/pdf/HelloWorldTemplate.tsx"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "build",
+    ".next"
   ]
 }

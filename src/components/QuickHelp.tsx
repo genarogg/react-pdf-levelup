@@ -1,7 +1,8 @@
+"use client"
 
-
-import React from "react"
+import  React from "react"
 import { useState } from "react"
+import { HelpCircle, X } from "lucide-react"
 
 const QuickHelp: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -250,13 +251,14 @@ const QuickHelp: React.FC = () => {
 
   return (
     <div className="quick-help-container">
-      <button className="help-button" onClick={toggleHelp}>
-        {isOpen ? "Cerrar Ayuda" : "Ayuda Rápida"}
+      <button className="help-button flex items-center gap-2" onClick={toggleHelp}>
+        {isOpen ? <X size={16} /> : <HelpCircle size={16} />}
+        <span>{isOpen ? "Close Help" : "Quick Help"}</span>
       </button>
 
       {isOpen && (
         <div className="help-panel">
-          <h3>Documentación de Componentes</h3>
+          <h3>Component Documentation</h3>
 
           <div className="component-tabs">
             <div className="tab-buttons">
@@ -270,25 +272,25 @@ const QuickHelp: React.FC = () => {
                 className={`tab-button ${activeTab === "text" ? "active" : ""}`}
                 onClick={() => setActiveTab("text")}
               >
-                Texto
+                Text
               </button>
               <button
                 className={`tab-button ${activeTab === "table" ? "active" : ""}`}
                 onClick={() => setActiveTab("table")}
               >
-                Tablas
+                Tables
               </button>
               <button
                 className={`tab-button ${activeTab === "position" ? "active" : ""}`}
                 onClick={() => setActiveTab("position")}
               >
-                Posición
+                Position
               </button>
               <button
                 className={`tab-button ${activeTab === "lists" ? "active" : ""}`}
                 onClick={() => setActiveTab("lists")}
               >
-                Listas
+                Lists
               </button>
               <button
                 className={`tab-button ${activeTab === "media" ? "active" : ""}`}
@@ -300,7 +302,7 @@ const QuickHelp: React.FC = () => {
                 className={`tab-button ${activeTab === "page" ? "active" : ""}`}
                 onClick={() => setActiveTab("page")}
               >
-                Página
+                Page
               </button>
             </div>
 
@@ -314,9 +316,9 @@ const QuickHelp: React.FC = () => {
                     <thead>
                       <tr>
                         <th>Prop</th>
-                        <th>Tipo</th>
+                        <th>Type</th>
                         <th>Default</th>
-                        <th>Descripción</th>
+                        <th>Description</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -347,3 +349,4 @@ const QuickHelp: React.FC = () => {
 }
 
 export default QuickHelp
+

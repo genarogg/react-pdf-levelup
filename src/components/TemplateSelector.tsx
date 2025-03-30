@@ -1,6 +1,6 @@
 "use client"
 
-import  React from "react"
+import React from "react"
 import { useState } from "react"
 import { templates } from "../data/templates"
 
@@ -19,9 +19,10 @@ const TemplateSelector: React.FC = () => {
         className="template-select"
         onChange={(e) => handleSelectTemplate(e.target.value)}
         value={selectedTemplate}
+        title="Select Template"
       >
         <option value="" disabled>
-          Plantillas Disponibles
+          Templates
         </option>
         {templates.map((template) => (
           <option key={template.id} value={template.id}>

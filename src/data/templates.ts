@@ -3,22 +3,22 @@ export const templates = [
   {
     id: "default",
     name: "Plantilla Predeterminada",
-    path: "/templates/default.txt",
+    path: "/templates/Default.tsx",
   },
   {
     id: "invoice",
     name: "Factura",
-    path: "/templates/invoice.txt",
+    path: "/templates/Invoice.tsx",
   },
   {
     id: "report",
     name: "Reporte Financiero",
-    path: "/templates/report.txt",
+    path: "/templates/Report.tsx",
   },
   {
     id: "certificate",
     name: "Certificado",
-    path: "/templates/certificate.tsx",
+    path: "/templates/Certificate.tsx",
   },
 ]
 

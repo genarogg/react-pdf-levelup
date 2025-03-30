@@ -1,4 +1,4 @@
-// import React from 'react'
+import React from 'react'
 
 const CertificadoTemplate = () => {
   // Datos de ejemplo
@@ -16,7 +16,7 @@ const CertificadoTemplate = () => {
   };
 
   return (
-    <LayoutPDF size="A4" orientation="landscape" padding={30} showPageNumbers={false}>
+    <LayoutPDF size="A4" orientation="landscape" padding={30} showPageNumbers={true}>
       {/* Borde decorativo */}
       <View style={{ 
         position: 'absolute', 

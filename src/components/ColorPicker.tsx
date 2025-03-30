@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Palette } from "lucide-react"
@@ -25,17 +27,17 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect }) => {
     "#e9ecef",
     "#f8f9fa",
     "#ffffff",
-    "#007bff",
-    "#0056b3",
-    "#6610f2",
-    "#6f42c1",
-    "#e83e8c",
-    "#dc3545",
-    "#fd7e14",
-    "#ffc107",
-    "#28a745",
-    "#20c997",
-    "#17a2b8",
+    "#3b82f6",
+    "#2563eb",
+    "#7c3aed",
+    "#8b5cf6",
+    "#ec4899",
+    "#ef4444",
+    "#f97316",
+    "#eab308",
+    "#22c55e",
+    "#14b8a6",
+    "#0ea5e9",
   ]
 
   useEffect(() => {
@@ -80,7 +82,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect }) => {
 
   return (
     <div className="color-picker-container" ref={colorPickerRef}>
-      <button className="color-picker-button" onClick={() => setIsOpen(!isOpen)}>
+      <button className="color-picker-button" onClick={() => setIsOpen(!isOpen)} title="Color Picker">
         <Palette size={20} style={{ color: selectedColor }} />
       </button>
 
