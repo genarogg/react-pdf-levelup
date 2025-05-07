@@ -14,6 +14,7 @@ interface CellProps {
   colSpan?: number
   isLast?: boolean
   isLastRow?: boolean
+  isOdd?: boolean
 }
 
 const styles = StyleSheet.create({
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   thead: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#ccc",
   },
   tr: {
     flexDirection: "row",
@@ -43,6 +44,9 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
   },
+  zebraOdd: {
+    backgroundColor: "#eeeeee",
+  },
 })
 
 const Table: React.FC<TableProps> = ({ children, style }) => (
@@ -53,21 +57,27 @@ const Thead: React.FC<TableProps> = ({ children, style }) => (
   <View style={[styles.thead, style]}>{children}</View>
 )
 
-// Tbody marca la última fila para quitar su borde inferior
 const Tbody: React.FC<TableProps> = ({ children, style }) => {
   const rows = React.Children.toArray(children) as React.ReactElement<any>[]
   const count = rows.length
   return (
     <>
       {rows.map((row, idx) =>
-        React.cloneElement(row, { isLastRow: idx === count - 1 })
+        React.cloneElement(row, {
+          isLastRow: idx === count - 1,
+          isOdd: idx % 2 === 1,
+        })
       )}
     </>
   )
 }
 
-// Tr reparte ancho y pasa isLastRow a sus celdas
-const Tr: React.FC<TableProps & { isLastRow?: boolean }> = ({ children, style, isLastRow = false }) => {
+const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
+  children,
+  style,
+  isLastRow = false,
+  isOdd = false,
+}) => {
   const elements = React.Children.toArray(children) as React.ReactElement<CellProps>[]
   const count = elements.length
   return (
@@ -75,7 +85,7 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean }> = ({ children, style, i
       {elements.map((child, idx) => {
         const isLast = idx === count - 1
         const width = `${(100 / count).toFixed(2)}%`
-        return React.cloneElement(child, { width, isLast, isLastRow })
+        return React.cloneElement(child, { width, isLast, isLastRow, isOdd })
       })}
     </View>
   )
@@ -96,7 +106,6 @@ const Th: React.FC<CellProps> = ({
 
   const borders = {
     borderRightWidth: isLast ? 0 : 1,
-    // si es última fila, nada; si no, 1
     borderBottomWidth: isLastRow ? 0 : 1,
     borderColor: "#000",
     ...(height !== undefined && { height }),
@@ -117,6 +126,7 @@ const Td: React.FC<CellProps> = ({
   colSpan,
   isLast = false,
   isLastRow = false,
+  isOdd = false,
 }) => {
   const baseWidth = typeof width === 'string' && colSpan
     ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
@@ -130,7 +140,13 @@ const Td: React.FC<CellProps> = ({
   }
 
   return (
-    <View style={[styles.text, { width: baseWidth }, borders, style]}>
+    <View style={[
+      styles.text,
+      isOdd && styles.zebraOdd,
+      { width: baseWidth },
+      borders,
+      style,
+    ]}>
       <Text>{children}</Text>
     </View>
   )

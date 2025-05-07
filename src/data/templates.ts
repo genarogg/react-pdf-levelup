@@ -20,5 +20,10 @@ export const templates = [
     name: "Certificado",
     path: "/templates/Certificate.tsx",
   },
+  {
+    id: "tablasTemplateBasico",
+    name: "Tablas Básicas",
+    path: "/templates/tablasTemplateBasico.tsx",
+  }
 ]
 
