@@ -1,4 +1,4 @@
-import  React from "react"
+import React from "react"
 import { View, Text, StyleSheet } from "@react-pdf/renderer"
 
 interface TableProps {
@@ -13,109 +13,117 @@ interface CellProps {
   width?: string | number
   height?: string | number
   colSpan?: number
+  isLast?: boolean       // última columna
+  isLastRow?: boolean    // última fila
 }
 
 const styles = StyleSheet.create({
   table: {
     width: "100%",
+    // marco exterior completo
     borderWidth: 1,
     borderColor: "#000",
-
-    overflow: "hidden",
     marginBottom: 20,
   },
   thead: {
     backgroundColor: "#f0f0f0",
   },
-  tbody: {},
   tr: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#000",
   },
-  th: {
-    paddingTop: 4,
+  cellSmall: { width: "25%" },
+  cellMedium: { width: "33.33%" },
+  cellLarge: { width: "50%" },
+  textBold: {
     fontSize: 10,
     fontFamily: "Helvetica",
     fontWeight: "bold",
-    borderRight: 1,
-    borderColor: "#000",
     textAlign: "center",
+    paddingTop: 4,
   },
-  td: {
+  text: {
+    fontSize: 10,
+    fontFamily: "Helvetica",
     paddingTop: 4,
     paddingLeft: 8,
     paddingRight: 8,
-    fontSize: 10,
-    fontFamily: "Helvetica",
-    borderRight: 1,
-    borderColor: "#000",
-  },
-  cellSmall: {
-    width: "25%",
-  },
-  cellMedium: {
-    width: "33.33%",
-  },
-  cellLarge: {
-    width: "50%",
   },
 })
 
-// Mapeo explícito de cellSize a su estilo correspondiente
 const cellSizeMapping = {
   small: styles.cellSmall,
   medium: styles.cellMedium,
   large: styles.cellLarge,
 }
 
-const Table: React.FC<TableProps> = ({ children, style }) => {
-  return <View style={[styles.table, style]}>{children}</View>
-}
+const Table: React.FC<TableProps> = ({ children, style }) => (
+  <View style={[styles.table, style]}>{children}</View>
+)
 
-const Thead: React.FC<TableProps> = ({ children, style }) => {
-  return <View style={[styles.thead, style]}>{children}</View>
-}
+const Thead: React.FC<TableProps> = ({ children, style }) => (
+  <View style={[styles.thead, style]}>{children}</View>
+)
 
-const Tbody: React.FC<TableProps> = ({ children, style }) => {
-  return <View style={[styles.tbody, style]}>{children}</View>
-}
+const Tbody: React.FC<TableProps> = ({ children, style }) => (
+  <View>{children}</View>
+)
 
-const Tr: React.FC<TableProps> = ({ children, style }) => {
-  return <View style={[styles.tr, style]}>{children}</View>
-}
+const Tr: React.FC<TableProps> = ({ children, style }) => (
+  <View style={[styles.tr, style]}>{children}</View>
+)
 
-const Th: React.FC<CellProps> = ({ children, style, cellSize = "medium", width, height, colSpan }) => {
+const Th: React.FC<CellProps> = ({
+  children,
+  style,
+  cellSize = "medium",
+  width,
+  height,
+  colSpan,
+  isLast = false,
+  isLastRow = false,
+}) => {
   const spanWidth = colSpan ? `${(100 / 3) * colSpan}%` : undefined
   const sizeStyle = cellSizeMapping[cellSize]
-
-  const customStyle = {
-    width: width || spanWidth || sizeStyle?.width,
+  const customSize: any = { width: width || spanWidth || sizeStyle?.width }
+  const borders = {
+    borderRightWidth: isLast ? 0 : 1,
+    borderBottomWidth: isLastRow ? 0 : 1,
+    borderColor: "#000",
     ...(height !== undefined && { height }),
   }
 
   return (
-    <View style={[styles.th, customStyle, style]}>
+    <View style={[styles.textBold, customSize, borders, style]}>
       <Text>{children}</Text>
     </View>
   )
 }
 
-const Td: React.FC<CellProps> = ({ children, style, cellSize = "medium", width, height, colSpan }) => {
+const Td: React.FC<CellProps> = ({
+  children,
+  style,
+  cellSize = "medium",
+  width,
+  height,
+  colSpan,
+  isLast = false,
+  isLastRow = false,
+}) => {
   const spanWidth = colSpan ? `${(100 / 3) * colSpan}%` : undefined
   const sizeStyle = cellSizeMapping[cellSize]
-
-  const customStyle = {
-    width: width || spanWidth || sizeStyle?.width,
+  const customSize: any = { width: width || spanWidth || sizeStyle?.width }
+  const borders = {
+    borderRightWidth: isLast ? 0 : 1,
+    borderBottomWidth: isLastRow ? 0 : 1,
+    borderColor: "#000",
     ...(height !== undefined && { height }),
   }
 
   return (
-    <View style={[styles.td, customStyle, style]}>
+    <View style={[styles.text, customSize, borders, style]}>
       <Text>{children}</Text>
     </View>
   )
 }
 
 export { Table, Thead, Tbody, Tr, Th, Td }
-
