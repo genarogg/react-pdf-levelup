@@ -36,7 +36,7 @@ const reporteData = {
 const Component = ({ data }) => {
   return (
     <LayoutPDF size="A4" padding={20} showPageNumbers={false}>
-
+<QR value="http://localhost:5173/" size={150} colorDark="#000000" />
       <Table style={{ borderBottom: 0, borderRight: 0 }}>
         <Thead>
           <Tr>

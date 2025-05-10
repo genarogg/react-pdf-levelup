@@ -1,106 +1,170 @@
 "use client"
 
-import  React from "react"
-import { Image, StyleSheet, View } from "@react-pdf/renderer"
+import type React from "react"
 import { useEffect, useState } from "react"
-import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
+import { Image, StyleSheet } from "@react-pdf/renderer"
+import QRCodeStyling from "qr-code-styling"
 
-// Define the props for the QR component
-interface QRProps {
+interface QRCustomProps {
   value: string
   size?: number
-  style?: any
   colorDark?: string
   colorLight?: string
   margin?: number
+  errorCorrectionLevel?: "L" | "M" | "Q" | "H"
   logo?: string
   logoWidth?: number
   logoHeight?: number
-  errorCorrectionLevel?: "L" | "M" | "Q" | "H"
+  style?: any
+  // Opciones de personalización adicionales
+  dotType?: "rounded" | "dots" | "classy" | "classy-rounded" | "square" | "extra-rounded"
+  cornerSquareType?: "square" | "dot" | "extra-rounded"
+  cornerDotType?: "square" | "dot"
+  cornerSquareColor?: string
+  cornerDotColor?: string
+  backgroundImage?: string
+  backgroundDimming?: string
 }
 
 const styles = StyleSheet.create({
-  qrContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10,
+  qrCode: {
+    marginBottom: 14,
   },
 })
 
-// Mapa para convertir niveles de corrección numéricos a letras
-const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
-  0: "L",
-  1: "M",
-  2: "Q",
-  3: "H",
-}
-
-// Este componente funciona con React PDF
-const QR: React.FC<QRProps> = ({
+const QRCustom: React.FC<QRCustomProps> = ({
   value,
   size = 150,
-  style,
   colorDark = "#000000",
   colorLight = "#ffffff",
   margin = 0,
-  logo = "",
+  errorCorrectionLevel = "H", // Usamos H por defecto para mejor compatibilidad con logos
+  logo,
   logoWidth = 30,
   logoHeight = 30,
-  errorCorrectionLevel = "M",
+  style,
+  // Opciones de personalización con valores por defecto
+  dotType = "square",
+  cornerSquareType = "square",
+  cornerDotType = "square",
+  cornerSquareColor,
+  cornerDotColor,
+  backgroundImage,
+  backgroundDimming = "0.8",
 }) => {
-  const [qrDataUrl, setQrDataUrl] = useState<string>("")
+  const [qrDataURL, setQrDataURL] = useState<string | null>(null)
 
-  // Generar el código QR cuando el componente se monta o cuando cambian las props
   useEffect(() => {
-    const generateQR = async () => {
-      try {
-        // Primero generamos el QR básico
-        const baseQrDataUrl = await generateQRAsBase64({
-          value,
-          size,
-          colorDark,
-          colorLight,
-          margin,
-          errorCorrectionLevel:
-            typeof errorCorrectionLevel === "number"
-              ? errorLevelMap[errorCorrectionLevel] || "M"
-              : errorCorrectionLevel,
-        })
+    // Solo ejecutar en entorno de navegador
+    if (typeof window === "undefined") return
 
-        // Si hay un logo, lo añadimos al QR
-        if (logo && logoWidth && logoHeight) {
-          const qrWithLogo = await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
-          setQrDataUrl(qrWithLogo)
-        } else {
-          setQrDataUrl(baseQrDataUrl)
+    try {
+      // Crear instancia de QR code con opciones personalizadas
+      const qrCode = new QRCodeStyling({
+        width: size,
+        height: size,
+        type: "canvas",
+        data: value,
+        dotsOptions: {
+          color: colorDark,
+          type: dotType,
+        },
+        cornersSquareOptions: {
+          color: cornerSquareColor || colorDark,
+          type: cornerSquareType,
+        },
+        cornersDotOptions: {
+          color: cornerDotColor || colorDark,
+          type: cornerDotType,
+        },
+        backgroundOptions: {
+          color: colorLight,
+          ...(backgroundImage && {
+            image: backgroundImage,
+            dimming: backgroundDimming,
+          }),
+        },
+        qrOptions: {
+          errorCorrectionLevel: errorCorrectionLevel,
+          margin: margin,
+        },
+        ...(logo && {
+          image: logo,
+          imageOptions: {
+            crossOrigin: "anonymous",
+            hideBackgroundDots: true,
+            imageSize: 0.3,
+            margin: 5,
+            width: logoWidth,
+            height: logoHeight,
+          },
+        }),
+      })
+
+      // Crear un elemento canvas temporal
+      const canvas = document.createElement("canvas")
+      canvas.width = size
+      canvas.height = size
+
+      // Crear un contenedor para el código QR
+      const container = document.createElement("div")
+      container.style.position = "absolute"
+      container.style.top = "-9999px"
+      container.style.left = "-9999px"
+      document.body.appendChild(container)
+
+      // Renderizar el código QR en el contenedor
+      qrCode.append(container)
+
+      // Usar setTimeout para permitir que el código QR se renderice
+      setTimeout(() => {
+        try {
+          // Obtener el canvas del contenedor
+          const qrCanvas = container.querySelector("canvas")
+          if (qrCanvas) {
+            // Dibujar el canvas del código QR en nuestro canvas temporal
+            const ctx = canvas.getContext("2d")
+            ctx?.drawImage(qrCanvas, 0, 0)
+
+            // Convertir canvas a URL de datos
+            const dataURL = canvas.toDataURL("image/png")
+            setQrDataURL(dataURL)
+          }
+
+          // Limpiar
+          document.body.removeChild(container)
+        } catch (error) {
+          console.error("Error al capturar el código QR:", error)
         }
-      } catch (error) {
-        console.error("Error generando QR:", error)
-        // En caso de error, generamos un QR básico usando una API externa
-        const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-          value,
-        )}&size=${size}x${size}&color=${encodeURIComponent(colorDark.replace("#", ""))}&bgcolor=${encodeURIComponent(
-          colorLight.replace("#", ""),
-        )}`
-        setQrDataUrl(fallbackUrl)
-      }
+      }, 100)
+    } catch (error) {
+      console.error("Error al inicializar el código QR:", error)
     }
-
-    generateQR()
-  }, [value, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, errorCorrectionLevel])
-
-  // Mostrar un QR de respaldo mientras se genera el QR personalizado
-  const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+  }, [
     value,
-  )}&size=${size}x${size}`
+    size,
+    colorDark,
+    colorLight,
+    margin,
+    errorCorrectionLevel,
+    logo,
+    logoWidth,
+    logoHeight,
+    dotType,
+    cornerSquareType,
+    cornerDotType,
+    cornerSquareColor,
+    cornerDotColor,
+    backgroundImage,
+    backgroundDimming,
+  ])
 
-  return (
-    <View style={[styles.qrContainer, style]}>
-      <Image src={qrDataUrl || fallbackUrl} style={{ width: size, height: size }} />
-    </View>
-  )
+  // Si estamos en un entorno de servidor o el código QR aún no se ha generado, devolver null
+  if (!qrDataURL) {
+    return null
+  }
+
+  return <Image src={qrDataURL || "/placeholder.svg"} style={[styles.qrCode, style]} />
 }
 
-export default QR
-
+export default QRCustom
