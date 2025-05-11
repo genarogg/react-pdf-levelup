@@ -10,11 +10,23 @@ interface CodeEditorProps {
 const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const editorRef = useRef<any>(null)
 
-  const handleEditorChange = (value: string | undefined) => {
+  // Add a debounce function to delay updates
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout
+    return (...args: any[]) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        func(...args)
+      }, delay)
+    }
+  }
+
+  const handleEditorChange = debounce((value: string | undefined) => {
     if (value !== undefined) {
       onChange(value)
     }
-  }
+  }, 1000)
+
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
@@ -101,7 +113,16 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       },
       {
         label: "QR",
-        insertText: '<QR url="https://example.com" size={150} colorData="#000000" />',
+        insertText: `<QR 
+      url="https://example.com" 
+      size={150} colorData="#3794ff" 
+      logo="https://genarogg.github.io/media/genarogg/favicon.png" 
+      logoText="Logo"
+      dotType="extra-rounded" cornerSquareType="extra-rounded"
+      cornerDotType="dot"
+      cornerSquareColor="#3794ff"
+      cornerDotColor="#e13e83"
+        />`,
         kind: monaco.languages.CompletionItemKind.Snippet,
       },
       { label: "Header", insertText: "<Header>\n  \n</Header>", kind: monaco.languages.CompletionItemKind.Snippet },
