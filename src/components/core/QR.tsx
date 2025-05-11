@@ -1,38 +1,50 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { useEffect, useState } from "react"
-import { Image, StyleSheet } from "@react-pdf/renderer"
+import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import QRCodeStyling from "qr-code-styling"
 
-// Modificar la interfaz QRCustomProps para añadir propiedades de texto
+// Modificar la interfaz QRCustomProps para añadir propiedades de contenedor
 interface QRCustomProps {
-  value: string
+  url: string
+
   size?: number
-  colorDark?: string
-  colorLight?: string
-  margin?: number
-  errorCorrectionLevel?: "L" | "M" | "Q" | "H"
+  containerWidth?: number
+  containerHeight?: number
+  
+  colorData?: string
+  colorDataBG?: string
+
   logo?: string
   logoWidth?: number
   logoHeight?: number
+
+  margin?: number
+  errorCorrectionLevel?: "L" | "M" | "Q" | "H"
+  
   style?: any
+
   // Opciones de personalización adicionales
   dotType?: "rounded" | "dots" | "classy" | "classy-rounded" | "square" | "extra-rounded"
   cornerSquareType?: "square" | "dot" | "extra-rounded"
   cornerDotType?: "square" | "dot"
+  
   cornerSquareColor?: string
   cornerDotColor?: string
+
   backgroundImage?: string
   backgroundDimming?: string
+  
   // Nuevas propiedades para texto central
-  centerText?: string
+  logoText?: string
   textColor?: string
   fontSize?: number
   fontFamily?: string
   textBackgroundColor?: string
   textPadding?: number
   textBold?: boolean
+ 
 }
 
 const styles = StyleSheet.create({
@@ -41,17 +53,25 @@ const styles = StyleSheet.create({
   },
 })
 
-// Modificar el componente QRCustom para incluir los nuevos props con valores por defecto
+// Modificar el componente QRCustom para incluir el View contenedor
 const QRCustom: React.FC<QRCustomProps> = ({
-  value,
-  size = 150,
-  colorDark = "#000000",
-  colorLight = "#ffffff",
-  margin = 0,
-  errorCorrectionLevel = "H", // Usamos H por defecto para mejor compatibilidad con logos
+  url,
+  
+  // TAMAÑO DEL CÓDIGO QR
+  size = 200,
+  containerWidth = size,
+  containerHeight = size,
+
+  // LOGO
   logo,
   logoWidth = 30,
-  logoHeight = 30,
+  logoHeight = logoWidth,
+
+  colorData = "#000000",
+  colorDataBG = "#ffffff",
+  margin = 0,
+  errorCorrectionLevel = "H", 
+  
   style,
   // Opciones de personalización con valores por defecto
   dotType = "square",
@@ -62,13 +82,15 @@ const QRCustom: React.FC<QRCustomProps> = ({
   backgroundImage,
   backgroundDimming = "0.8",
   // Nuevos props para texto central
-  centerText,
-  textColor = "#000000",
-  fontSize = 14,
+  logoText,
+  textColor = colorData,
+  fontSize = 18,
   fontFamily = "Arial, sans-serif",
-  textBackgroundColor = "#ffffff",
-  textPadding = 8,
-  textBold = false,
+  textBackgroundColor = colorDataBG,
+  textPadding = 0,
+  textBold = true,
+  // Nuevos props para el contenedor
+  
 }) => {
   const [qrDataURL, setQrDataURL] = useState<string | null>(null)
 
@@ -88,7 +110,7 @@ const QRCustom: React.FC<QRCustomProps> = ({
       const textHeight = fontSize
 
       // Establecer el tamaño del canvas con padding
-      const canvasWidth = textWidth + textPadding * 2
+      const canvasWidth = textWidth + textPadding 
       const canvasHeight = textHeight + textPadding * 2
       canvas.width = canvasWidth
       canvas.height = canvasHeight
@@ -119,8 +141,8 @@ const QRCustom: React.FC<QRCustomProps> = ({
         let imageSource = logo
 
         // Si hay texto central pero no hay logo, crear una imagen con el texto
-        if (centerText && !logo) {
-          imageSource = await createTextImage(centerText)
+        if (logoText && !logo) {
+          imageSource = await createTextImage(logoText)
         }
 
         // Crear instancia de QR code con opciones personalizadas
@@ -128,21 +150,21 @@ const QRCustom: React.FC<QRCustomProps> = ({
           width: size,
           height: size,
           type: "canvas",
-          data: value,
+          data: url,
           dotsOptions: {
-            color: colorDark,
+            color: colorData,
             type: dotType,
           },
           cornersSquareOptions: {
-            color: cornerSquareColor || colorDark,
+            color: cornerSquareColor || colorData,
             type: cornerSquareType,
           },
           cornersDotOptions: {
-            color: cornerDotColor || colorDark,
+            color: cornerDotColor || colorData,
             type: cornerDotType,
           },
           backgroundOptions: {
-            color: colorLight,
+            color: colorDataBG,
             ...(backgroundImage && {
               image: backgroundImage,
               dimming: backgroundDimming,
@@ -150,8 +172,10 @@ const QRCustom: React.FC<QRCustomProps> = ({
           },
           qrOptions: {
             errorCorrectionLevel: errorCorrectionLevel,
-            margin: margin,
+            // La propiedad margin no va dentro de qrOptions
           },
+          // Mover margin fuera de qrOptions, como propiedad directa
+          margin: margin,
           ...(imageSource && {
             image: imageSource,
             imageOptions: {
@@ -159,8 +183,6 @@ const QRCustom: React.FC<QRCustomProps> = ({
               hideBackgroundDots: true,
               imageSize: 0.3,
               margin: 5,
-              width: logoWidth,
-              height: logoHeight,
             },
           }),
         })
@@ -208,10 +230,10 @@ const QRCustom: React.FC<QRCustomProps> = ({
 
     initQRCode()
   }, [
-    value,
+    url,
     size,
-    colorDark,
-    colorLight,
+    colorData,
+    colorDataBG,
     margin,
     errorCorrectionLevel,
     logo,
@@ -224,21 +246,31 @@ const QRCustom: React.FC<QRCustomProps> = ({
     cornerDotColor,
     backgroundImage,
     backgroundDimming,
-    centerText,
+    logoText,
     textColor,
     fontSize,
     fontFamily,
     textBackgroundColor,
     textPadding,
     textBold,
+    containerWidth,
+    containerHeight,
   ])
 
   // Si estamos en un entorno de servidor o el código QR aún no se ha generado, devolver null
   if (!qrDataURL) {
     return null
   }
-
-  return <Image src={qrDataURL || "/placeholder.svg"} style={[styles.qrCode, style]} />
+  
+  // Envolver la imagen en un View con tamaño controlado
+  return (
+    <View style={{ width: containerWidth, height: containerHeight, alignItems: "center", justifyContent: "center" }}>
+      <Image
+        src={qrDataURL || "/placeholder.svg"}
+        style={[styles.qrCode, { maxWidth: "100%", maxHeight: "100%" }, style]}
+      />
+    </View>
+  )
 }
 
 export default QRCustom

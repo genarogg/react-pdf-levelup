@@ -101,7 +101,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       },
       {
         label: "QR",
-        insertText: '<QR value="" size={150} colorDark="#000000" />',
+        insertText: '<QR url="https://example.com" size={150} colorData="#000000" />',
         kind: monaco.languages.CompletionItemKind.Snippet,
       },
       { label: "Header", insertText: "<Header>\n  \n</Header>", kind: monaco.languages.CompletionItemKind.Snippet },
