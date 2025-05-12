@@ -24,6 +24,11 @@ export const templates = [
     id: "tablasTemplateBasico",
     name: "Tablas Básicas",
     path: "/templates/tablasTemplateBasico.tsx",
+  },
+   {
+    id: "QRTemplate",
+    name: "QR Template",
+    path: "/templates/QR.tsx",
   }
 ]
 
