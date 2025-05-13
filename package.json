@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-levelup",
-  "version": "2.0.21",
+  "version": "2.0.26",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -20,9 +20,9 @@
   },
   "peerDependencies": {
     "@react-pdf/renderer": "^4.3.0",
+    "qrcode": "^1.5.4",
     "react": "^18",
-    "react-dom": "^18",
-    "qr-code-styling": "^1.9.2"
+    "react-dom": "^18"
   },
   "dependencies": {
     "@babel/standalone": "^7.23.10",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@react-pdf/types": "^2.9.0",
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.3.4",

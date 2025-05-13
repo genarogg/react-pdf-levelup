@@ -1,212 +1,106 @@
-import  React from "react"
-import { useEffect, useState } from "react"
-import { Image, View, Text } from "@react-pdf/renderer"
-import QRCodeStyling from "qr-code-styling"
+"use client"
 
-interface QRCustomProps {
-  url: string
+import  React from "react"
+import { Image, StyleSheet, View } from "@react-pdf/renderer"
+import { useEffect, useState } from "react"
+import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
+
+// Define the props for the QR component
+interface QRProps {
+  value: string
   size?: number
-  colorData?: string
-  colorDataBG?: string
+  style?: any
+  colorDark?: string
+  colorLight?: string
+  margin?: number
   logo?: string
   logoWidth?: number
   logoHeight?: number
-  margin?: number
   errorCorrectionLevel?: "L" | "M" | "Q" | "H"
-  style?: any
-  dotType?: "rounded" | "dots" | "classy" | "classy-rounded" | "square" | "extra-rounded"
-  cornerSquareType?: "square" | "dot" | "extra-rounded"
-  cornerDotType?: "square" | "dot"
-  cornerSquareColor?: string
-  cornerDotColor?: string
- 
-  logoBG?: string
-  logoText?: string
-  moveText?: number
-  textColor?: string
-  fontSize?: number
-  fontFamily?: string
-  textBackgroundColor?: string
-  textPadding?: number
-  textBold?: boolean
 }
 
-const QR: React.FC<QRCustomProps> = ({
-  url,
-  size = 200,
-  colorData = "#000000",
-  colorDataBG = "#ffffff",
-  logo,
-  logoWidth = 30,
-  logoHeight,
-  margin = 0,
-  errorCorrectionLevel = "H",
+const styles = StyleSheet.create({
+  qrContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+  },
+})
+
+// Mapa para convertir niveles de corrección numéricos a letras
+const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
+  0: "L",
+  1: "M",
+  2: "Q",
+  3: "H",
+}
+
+// Este componente funciona con React PDF
+const QR: React.FC<QRProps> = ({
+  value,
+  size = 150,
   style,
-  dotType = "square",
-  cornerSquareType = "square",
-  cornerDotType = "square",
-  cornerSquareColor,
-  cornerDotColor,
-logoBG=colorDataBG,
-  logoText,
-  moveText = 0,
-  textColor = colorData,
-  fontSize = 12,
-  fontFamily = "Helvetica",
-  textBackgroundColor = colorDataBG,
-  textPadding = 1,
-  textBold = true,
+  colorDark = "#000000",
+  colorLight = "#ffffff",
+  margin = 0,
+  logo = "",
+  logoWidth = 30,
+  logoHeight = 30,
+  errorCorrectionLevel = "M",
 }) => {
-  const [qrDataURL, setQrDataURL] = useState<string | null>(null)
+  const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
-  // Calculate actual logo dimensions
-  const actualLogoWidth = logoWidth || Math.floor(size * 0.2)
-  const actualLogoHeight = logoHeight || actualLogoWidth
-
+  // Generar el código QR cuando el componente se monta o cuando cambian las props
   useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const generateQRCode = async () => {
+    const generateQR = async () => {
       try {
-        // Create QR code without logo
-        const qrCode = new QRCodeStyling({
-          width: size,
-          height: size,
-          type: "canvas",
-          data: url,
-          dotsOptions: {
-            color: colorData,
-            type: dotType,
-          },
-          cornersSquareOptions: {
-            color: cornerSquareColor || colorData,
-            type: cornerSquareType,
-          },
-          cornersDotOptions: {
-            color: cornerDotColor || colorData,
-            type: cornerDotType,
-          },
-          backgroundOptions: {
-            color: colorDataBG,
-          },
-          qrOptions: {
-            errorCorrectionLevel: errorCorrectionLevel,
-          },
-          margin: margin,
+        // Primero generamos el QR básico
+        const baseQrDataUrl = await generateQRAsBase64({
+          value,
+          size,
+          colorDark,
+          colorLight,
+          margin,
+          errorCorrectionLevel:
+            typeof errorCorrectionLevel === "number"
+              ? errorLevelMap[errorCorrectionLevel] || "M"
+              : errorCorrectionLevel,
         })
 
-        const container = document.createElement("div")
-        container.style.position = "absolute"
-        container.style.top = "-9999px"
-        container.style.left = "-9999px"
-        document.body.appendChild(container)
-
-        qrCode.append(container)
-
-        setTimeout(() => {
-          try {
-            const qrCanvas = container.querySelector("canvas")
-            if (qrCanvas) {
-              const canvas = document.createElement("canvas")
-              canvas.width = size
-              canvas.height = size
-              const ctx = canvas.getContext("2d")
-              if (ctx) {
-                ctx.drawImage(qrCanvas, 0, 0)
-                const dataURL = canvas.toDataURL("image/png")
-                setQrDataURL(dataURL)
-              }
-            }
-            document.body.removeChild(container)
-          } catch (error) {
-            console.error("Error capturing QR code:", error)
-          }
-        }, 100)
+        // Si hay un logo, lo añadimos al QR
+        if (logo && logoWidth && logoHeight) {
+          const qrWithLogo = await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
+          setQrDataUrl(qrWithLogo)
+        } else {
+          setQrDataUrl(baseQrDataUrl)
+        }
       } catch (error) {
-        console.error("Error generating QR code:", error)
+        console.error("Error generando QR:", error)
+        // En caso de error, generamos un QR básico usando una API externa
+        const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+          value,
+        )}&size=${size}x${size}&color=${encodeURIComponent(colorDark.replace("#", ""))}&bgcolor=${encodeURIComponent(
+          colorLight.replace("#", ""),
+        )}`
+        setQrDataUrl(fallbackUrl)
       }
     }
 
-    generateQRCode()
-  }, [
-    url,
-    size,
-    colorData,
-    colorDataBG,
-    margin,
-    errorCorrectionLevel,
-    dotType,
-    cornerSquareType,
-    cornerDotType,
-    cornerSquareColor,
-    cornerDotColor,
-    logoBG
-  ])
+    generateQR()
+  }, [value, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, errorCorrectionLevel])
 
-  if (!qrDataURL) return null
-
-  // Calculate center position for logo
-  const centerPosition = size / 2
-  const logoContainerSize = Math.max(actualLogoWidth, actualLogoHeight) + 10
+  // Mostrar un QR de respaldo mientras se genera el QR personalizado
+  const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
+    value,
+  )}&size=${size}x${size}`
 
   return (
-    <View style={{ width: size, height: size, position: "relative", ...style }}>
-      {/* QR Code */}
-      <Image src={qrDataURL || "/placeholder.svg"} style={{ width: size, height: size }} />
-
-      {/* Logo */}
-      {logo && (
-        <View
-          style={{
-            position: "absolute",
-            width: logoContainerSize,
-            height: logoContainerSize,
-            backgroundColor: logoBG || colorDataBG,
-            left: centerPosition - logoContainerSize / 2,
-            top: centerPosition - logoContainerSize / 2,
-            borderRadius: 100,
-            border: `5px solid ${colorData}`,
-            padding: 0,
-          }}
-        >
-          <Image
-            src={logo || "/placeholder.svg"}
-            style={{
-              objectFit: "contain",
-              width: actualLogoWidth,
-              height: actualLogoHeight || actualLogoWidth,
-            }}
-          />
-        </View>
-      )}
-
-      {/* Text (if no logo) */}
-      {!logo && logoText && (
-        <View
-          style={{
-            position: "absolute",
-            backgroundColor: textBackgroundColor,
-            padding: textPadding,
-            borderRadius: 4,
-            
-            left: moveText + centerPosition - 20, // Approximate center
-            top: centerPosition - 10, // Approximate center
-          }}
-        >
-          <Text
-            style={{
-              color: textColor,
-              fontSize: fontSize,
-              fontFamily: fontFamily,
-              fontWeight: textBold ? "bold" : "normal",
-            }}
-          >
-            {logoText}
-          </Text>
-        </View>
-      )}
+    <View style={[styles.qrContainer, style]}>
+      <Image src={qrDataUrl || fallbackUrl} style={{ width: size, height: size }} />
     </View>
   )
 }
 
 export default QR
+
