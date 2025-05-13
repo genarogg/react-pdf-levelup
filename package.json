@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-levelup",
-  "version": "2.0.26",
+  "version": "2.0.32",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
