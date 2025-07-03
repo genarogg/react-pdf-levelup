@@ -10,9 +10,12 @@ import { UL, OL, LI } from "./Lista"
 
 import { View, Text, StyleSheet, Font, } from "@react-pdf/renderer"
 
+import QRAVANZADO from "./QRAVANZADO"
+
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
 export {
+  QRAVANZADO,
   LayoutPDF,
   Img,
   Left,
