@@ -1,5 +1,5 @@
-import  React from "react"
-import { Text, StyleSheet, Link } from "@react-pdf/renderer"
+import React from "react"
+import { Text, StyleSheet, Link, View } from "@react-pdf/renderer"
 
 interface TextProps {
   children: React.ReactNode
@@ -75,6 +75,16 @@ const styles = StyleSheet.create({
     marginTop: 7,
     marginBottom: 7,
   },
+  header: {
+    position: "absolute",
+    top: 20,
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    fontSize: 10,
+    color: "#666",
+    paddingHorizontal: 40,
+  }
 })
 
 const P: React.FC<TextProps> = ({ children, style }) => {
@@ -145,5 +155,19 @@ const Span: React.FC<TextProps> = ({ children, style }) => {
   return <Text style={[style]}>{children}</Text>
 }
 
-export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR }
+interface HeaderProps {
+  children: React.ReactNode
+  style?: any
+  fixed?: boolean
+}
+
+const Header: React.FC<HeaderProps> = ({ children, style, fixed = false }) => {
+  return (
+    <View style={[styles.header, style]} fixed={fixed}>
+      {typeof children === "string" ? <Text>{children}</Text> : children}
+    </View>
+  )
+}
+
+export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header }
 

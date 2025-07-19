@@ -6,8 +6,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 30,
     fontFamily: "Helvetica",
-    fontSize: 12,
-
+    fontSize: 14,
   },
   footer: {
     position: "absolute",
@@ -23,11 +22,11 @@ interface LayoutPDFProps {
   orientation?: "vertical" | "horizontal"
   backgroundColor?: string
   padding?: number
+  margen?: "apa" | "normal" | "estrecho" | "ancho"
   style?: any
-
   styleFooter?: any
   footer?: React.ReactNode
-  lines?: number // Number of lines in footer (1, 2, 3, 4...)
+  lines?: number
 }
 
 const LayoutPDF: React.FC<LayoutPDFProps> = ({
@@ -36,6 +35,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   orientation = "vertical",
   backgroundColor = "white",
   padding = 30,
+  margen = "normal",
   style = {},
   styleFooter = {},
   footer,
@@ -47,11 +47,62 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   const FOOTER_PADDING = 10
   const footerHeight = (lines * LINE_HEIGHT) + FOOTER_PADDING
 
+  // Función para obtener márgenes según las normas APA y otros estándares
+  const getMargins = (margen: string, pageSize: string) => {
+    const normalizedSize = pageSize.toUpperCase()
+
+    switch (margen) {
+      case "apa":
+        // Normas APA: 1 pulgada en todos los lados (72 puntos)
+        if (normalizedSize === "LETTER" || normalizedSize === "LEGAL") {
+          return {
+            paddingTop: 72,
+            paddingRight: 72,
+            paddingBottom: 72,
+            paddingLeft: 72
+          }
+        }
+        // Para otros tamaños, usar equivalente proporcional
+        return {
+          paddingTop: 72,
+          paddingRight: 72,
+          paddingBottom: 72,
+          paddingLeft: 72
+        }
+
+      case "estrecho":
+        return {
+          paddingTop: 36,
+          paddingRight: 36,
+          paddingBottom: 36,
+          paddingLeft: 36
+        }
+
+      case "ancho":
+        return {
+          paddingTop: 108,
+          paddingRight: 108,
+          paddingBottom: 108,
+          paddingLeft: 108
+        }
+
+      case "normal":
+      default:
+        return {
+          paddingTop: padding,
+          paddingRight: padding,
+          paddingBottom: padding,
+          paddingLeft: padding
+        }
+    }
+  }
+
   // Validar y sanitizar props
   let safeSize = size
   let safeOrientation = orientation
   let safeBackgroundColor = backgroundColor
   let safeLines = Math.max(1, Math.min(lines, 10)) // Limit between 1 and 10 lines
+  let safeMargen = margen
 
   try {
     // Validar size
@@ -71,6 +122,13 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
     if (typeof backgroundColor !== "string") {
       console.warn(`Invalid background color: ${backgroundColor}. Using white as default.`)
       safeBackgroundColor = "white"
+    }
+
+    // Validar margen
+    const validMargins = ["apa", "normal", "estrecho", "ancho"]
+    if (!validMargins.includes(margen)) {
+      console.warn(`Invalid margin type: ${margen}. Using normal as default.`)
+      safeMargen = "normal"
     }
 
     // Validar lines
@@ -134,13 +192,17 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
 
   const pdfOrientation = transformOrientation(safeOrientation)
 
+  // Obtener márgenes según el tipo seleccionado
+  const margins = getMargins(safeMargen, safeSize)
+
   // Calculate footer position based on calculated footer height
   const footerTop = getFooterPosition(safeSize, pdfOrientation, footerHeight)
 
   const pageStyle = {
     ...styles.page,
     backgroundColor: safeBackgroundColor,
-    padding: padding,
+    ...margins,
+    paddingBottom: margins.paddingBottom + footerHeight,
     ...style,
   }
 
@@ -160,7 +222,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   return (
     <Document>
       <Page size={safeSize as any} orientation={pdfOrientation} style={pageStyle} wrap>
-        <View style={{ paddingBottom: footerHeight + 20 }}>
+        <View style={{ paddingBottom: footerHeight }}>
           {children}
         </View>
         <View style={footerStyle} fixed>
@@ -170,7 +232,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
           )} />
         </View>
       </Page>
-    </Document >
+    </Document>
   )
 }
 
