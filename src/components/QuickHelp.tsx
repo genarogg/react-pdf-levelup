@@ -1,6 +1,6 @@
 "use client"
 
-import  React from "react"
+import React from "react"
 import { useState } from "react"
 import { HelpCircle, X } from "lucide-react"
 
@@ -18,17 +18,19 @@ const QuickHelp: React.FC = () => {
         name: "LayoutPDF",
         description: "Componente principal para configurar el documento PDF",
         props: [
-          { name: "size", type: "string", default: "A4", description: "Tamaño de la página (A4, Letter, Legal, etc.)" },
+          { name: "size", type: "string", default: "A4", description: "Tamaño de la página (A0-A9, Letter, Legal, Tabloid)" },
           {
             name: "orientation",
             type: "string",
-            default: "portrait",
-            description: "Orientación de la página (portrait, landscape)",
+            default: "vertical",
+            description: "Orientación de la página (vertical, horizontal)",
           },
-          { name: "padding", type: "number", default: "30", description: "Padding interno de la página en píxeles" },
           { name: "backgroundColor", type: "string", default: "white", description: "Color de fondo de la página" },
-          { name: "showPageNumbers", type: "boolean", default: "true", description: "Mostrar números de página" },
+          { name: "padding", type: "number", default: "30", description: "Padding interno de la página en puntos (solo si margen=normal)" },
+          { name: "margen", type: "string", default: "normal", description: "Tipo de margen (apa, normal, estrecho, ancho)" },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales para la página" },
+          { name: "footer", type: "ReactNode", default: "", description: "Contenido del pie de página" },
+          { name: "lines", type: "number", default: "1", description: "Número de líneas para el pie de página (1-10)" },
         ],
       },
       {

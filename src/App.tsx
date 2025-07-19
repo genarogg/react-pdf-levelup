@@ -98,13 +98,13 @@ import {
             </button>
 
             <a
-              href="https://www.paypal.com/paypalme/genarogg"
+              href="https://www.paypal.com/paypalme/genaroggpaypal"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
             >
               <Coffee size={18} />
-              <span className="hidden md:inline">Donate</span>
+       
             </a>
 
             <a
@@ -114,7 +114,7 @@ import {
               className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
             >
               <Github size={18} />
-              <span className="hidden md:inline">GitHub</span>
+         
             </a>
 
             <div className="hidden md:flex items-center gap-3">
