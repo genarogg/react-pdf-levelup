@@ -89,12 +89,13 @@ import {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-xl md:text-2xl font-bold text-blue-400">React PDF Editor</h1>
           <div className="flex items-center gap-4">
+            <TemplateSelector />
             <button
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
               onClick={() => downloadTemplate(code)}
             >
               <Download size={18} />
-              <span className="hidden md:inline">Download Template</span>
+
             </button>
 
             <a
@@ -104,22 +105,22 @@ import {
               className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
             >
               <Coffee size={18} />
-       
+
             </a>
 
             <a
-              href="https://github.com/genarogg/react-pdf-editor"
+              href="https://github.com/genarogg/react-pdf-levelup"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors duration-200 shadow-sm"
             >
               <Github size={18} />
-         
+
             </a>
 
             <div className="hidden md:flex items-center gap-3">
               <ColorPicker onColorSelect={handleColorSelect} />
-              <TemplateSelector />
+
             </div>
           </div>
         </div>

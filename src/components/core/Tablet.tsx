@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     fontFamily: "Helvetica",
-    paddingTop: 4,
+    paddingTop: 8,
     paddingLeft: 8,
     paddingRight: 8,
   },
