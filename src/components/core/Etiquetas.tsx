@@ -10,8 +10,8 @@ interface TextProps {
 const styles = StyleSheet.create({
   p: {
     fontSize: 12,
-    marginBottom: 14,
-    lineHeight: 1.5,
+    marginBottom: 5,
+    lineHeight: 1.2,
   },
   h1: {
     fontSize: 24,

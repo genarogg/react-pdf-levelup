@@ -130,7 +130,7 @@ const result = Component;`
   
   // Componentes personalizados
   const {
-  QRAVANZADO,
+
     LayoutPDF,
     Img,
     Left,

@@ -17,17 +17,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
     paddingHorizontal: 40,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 20,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-    fontSize: 10,
-    color: "#666",
-    paddingHorizontal: 40,
-  },
+  }
 })
 
 const Header: React.FC<PageElementProps> = ({ children, style, fixed = false }) => {
@@ -38,13 +28,6 @@ const Header: React.FC<PageElementProps> = ({ children, style, fixed = false }) 
   )
 }
 
-const Footer: React.FC<PageElementProps> = ({ children, style, fixed = false }) => {
-  return (
-    <View style={[styles.footer, style]} fixed={fixed}>
-      {typeof children === "string" ? <Text>{children}</Text> : children}
-    </View>
-  )
-}
 
-export { Header, Footer }
+export { Header }
 
