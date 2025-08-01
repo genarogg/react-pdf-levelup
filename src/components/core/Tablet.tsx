@@ -1,38 +1,38 @@
-import React, { createContext, useContext } from "react"
-import { View, Text, StyleSheet } from "@react-pdf/renderer"
+import React, { createContext, useContext } from "react";
+import { View, Text, StyleSheet } from "@react-pdf/renderer";
 
 interface TableProps {
-  children: React.ReactNode
-  style?: any
-  cellHeight?: number
+  children: React.ReactNode;
+  style?: any;
+  cellHeight?: number;
 }
 
 interface TheadProps {
-  children: React.ReactNode
-  style?: any
-  textAlign?: 'left' | 'center' | 'right'
+  children: React.ReactNode;
+  style?: any;
+  textAlign?: "left" | "center" | "right" | any;
 }
 
 interface CellProps {
-  children?: React.ReactNode
-  style?: any
-  width?: string | number
-  height?: string | number
-  colSpan?: number
-  isLast?: boolean
-  isLastRow?: boolean
-  isOdd?: boolean
-  textAlign?: 'left' | 'center' | 'right'
+  children?: React.ReactNode;
+  style?: any;
+  width?: string | number;
+  height?: string | number;
+  colSpan?: number;
+  isLast?: boolean;
+  isLastRow?: boolean;
+  isOdd?: boolean;
+  textAlign?: "left" | "center" | "right" | any;
 }
 
 // Context para pasar cellHeight y textAlign a los componentes hijos
-const TableContext = createContext<{ 
-  cellHeight: number
-  textAlign?: 'left' | 'center' | 'right'
-}>({ 
+const TableContext = createContext<{
+  cellHeight: number;
+  textAlign?: "left" | "center" | "right" | any;
+}>({
   cellHeight: 22,
-  textAlign: 'left'
-})
+  textAlign: "left",
+});
 
 const styles = StyleSheet.create({
   table: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
-    alignItems: "left",
+
   },
   text: {
     fontSize: 10,
@@ -62,32 +62,36 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
-    alignItems: "left",
+
   },
   zebraOdd: {
     backgroundColor: "#eeeeee",
   },
-})
+});
 
 const Table: React.FC<TableProps> = ({ children, style, cellHeight = 22 }) => (
-  <TableContext.Provider value={{ cellHeight, textAlign: 'left' }}>
+  <TableContext.Provider value={{ cellHeight, textAlign: "left" }}>
     <View style={[styles.table, style]}>{children}</View>
   </TableContext.Provider>
-)
+);
 
-const Thead: React.FC<TheadProps> = ({ children, style, textAlign = 'left' }) => {
-  const { cellHeight } = useContext(TableContext)
-  
+const Thead: React.FC<TheadProps> = ({
+  children,
+  style,
+  textAlign = "left",
+}) => {
+  const { cellHeight } = useContext(TableContext);
+
   return (
     <TableContext.Provider value={{ cellHeight, textAlign }}>
       <View style={[styles.thead, style]}>{children}</View>
     </TableContext.Provider>
-  )
-}
+  );
+};
 
 const Tbody: React.FC<TableProps> = ({ children, style }) => {
-  const rows = React.Children.toArray(children) as React.ReactElement<any>[]
-  const count = rows.length
+  const rows = React.Children.toArray(children) as React.ReactElement<any>[];
+  const count = rows.length;
   return (
     <>
       {rows.map((row, idx) =>
@@ -97,8 +101,8 @@ const Tbody: React.FC<TableProps> = ({ children, style }) => {
         })
       )}
     </>
-  )
-}
+  );
+};
 
 const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   children,
@@ -106,18 +110,20 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   isLastRow = false,
   isOdd = false,
 }) => {
-  const elements = React.Children.toArray(children) as React.ReactElement<CellProps>[]
-  const count = elements.length
+  const elements = React.Children.toArray(
+    children
+  ) as React.ReactElement<CellProps>[];
+  const count = elements.length;
   return (
     <View style={[styles.tr, style]}>
       {elements.map((child, idx) => {
-        const isLast = idx === count - 1
-        const width = `${(100 / count).toFixed(2)}%`
-        return React.cloneElement(child, { width, isLast, isLastRow, isOdd })
+        const isLast = idx === count - 1;
+        const width = `${(100 / count).toFixed(2)}%`;
+        return React.cloneElement(child, { width, isLast, isLastRow, isOdd });
       })}
     </View>
-  )
-}
+  );
+};
 
 const Th: React.FC<CellProps> = ({
   children,
@@ -129,38 +135,40 @@ const Th: React.FC<CellProps> = ({
   isLastRow = false,
   textAlign: propTextAlign,
 }) => {
-  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext)
-  
-  // Usar textAlign del prop si está definido, sino el del contexto
-  const finalTextAlign = propTextAlign || contextTextAlign || 'left'
-  
-  const baseWidth = typeof width === 'string' && colSpan
-    ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
-    : width
+  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext);
 
-  const cellHeightValue = height !== undefined ? height : cellHeight
+  // Usar textAlign del prop si está definido, sino el del contexto
+  const finalTextAlign = propTextAlign || contextTextAlign || "left";
+
+  const baseWidth =
+    typeof width === "string" && colSpan
+      ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
+      : width;
+
+  const cellHeightValue = height !== undefined ? height : cellHeight;
 
   const borders = {
     borderRightWidth: isLast ? 0 : 1,
     borderBottomWidth: isLastRow ? 0 : 1,
     borderColor: "#000",
     minHeight: cellHeightValue,
-  }
+  };
 
   return (
-    <View style={[
-      styles.textBold, 
-      { 
-        width: baseWidth,
-        textAlign: finalTextAlign 
-      }, 
-      borders, 
-      style
-    ]}>
+    <View
+      style={[
+        styles.textBold,
+        {
+          width: baseWidth,
+        },
+        borders,
+        style,
+      ]}
+    >
       <Text style={{ textAlign: finalTextAlign }}>{children}</Text>
     </View>
-  )
-}
+  );
+};
 
 const Td: React.FC<CellProps> = ({
   children,
@@ -173,38 +181,40 @@ const Td: React.FC<CellProps> = ({
   isOdd = false,
   textAlign: propTextAlign,
 }) => {
-  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext)
-  
-  // Usar textAlign del prop si está definido, sino el del contexto, sino 'left'
-  const finalTextAlign = propTextAlign || contextTextAlign || 'left'
-  
-  const baseWidth = typeof width === 'string' && colSpan
-    ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
-    : width
+  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext);
 
-  const cellHeightValue = height !== undefined ? height : cellHeight
+  // Usar textAlign del prop si está definido, sino el del contexto, sino 'left'
+  const finalTextAlign = propTextAlign || contextTextAlign || "left";
+
+  const baseWidth =
+    typeof width === "string" && colSpan
+      ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
+      : width;
+
+  const cellHeightValue = height !== undefined ? height : cellHeight;
 
   const borders = {
     borderRightWidth: isLast ? 0 : 1,
     borderBottomWidth: isLastRow ? 0 : 1,
     borderColor: "#000",
     minHeight: cellHeightValue,
-  }
+  };
 
   return (
-    <View style={[
-      styles.text,
-      isOdd && styles.zebraOdd,
-      { 
-        width: baseWidth,
-        textAlign: finalTextAlign 
-      },
-      borders,
-      style,
-    ]}>
+    <View
+      style={[
+        styles.text,
+        isOdd && styles.zebraOdd,
+        {
+          width: baseWidth,
+        },
+        borders,
+        style,
+      ]}
+    >
       <Text style={{ textAlign: finalTextAlign }}>{children}</Text>
     </View>
-  )
-}
+  );
+};
 
-export { Table, Thead, Tbody, Tr, Th, Td }
+export { Table, Thead, Tbody, Tr, Th, Td };
