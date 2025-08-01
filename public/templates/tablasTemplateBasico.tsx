@@ -4,7 +4,7 @@ const Component = ({ data }) => {
         <LayoutPDF size="A4" padding={20} showPageNumbers={false}>
             <H5>Tabla Simple</H5>
             <Table>
-                <Thead>
+                <Thead textAlign="center">
                     <Tr>
                         <Th>thead 1</Th>
                         <Th>thead 2</Th>
