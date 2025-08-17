@@ -30,85 +30,93 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
 
+    const kind = monaco.languages.CompletionItemKind
+    const insertTextRules =  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+
     // Definir las etiquetas personalizadas para el autocompletado
     const customTags = [
       // Componentes de layout
       {
         label: "LayoutPDF",
         insertText: '<LayoutPDF size="A4" orientation="v" showPageNumbers={true}>\n\n</LayoutPDF>',
-        kind: monaco.languages.CompletionItemKind.Snippet,
+        kind,
       },
       {
         label: "Container",
         insertText: "<Container>  </Container>",
-        kind: monaco.languages.CompletionItemKind.Snippet,
+        kind,
       },
-      { label: "Row", insertText: "<Row></Row>", kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "Row", insertText: "<Row></Row>", kind },
 
       // Componentes de columnas
-      { label: "Col1", insertText: "<Col1>  </Col1>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col2", insertText: "<Col2>  </Col2>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col3", insertText: "<Col3>  </Col3>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col4", insertText: "<Col4>  </Col4>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col5", insertText: "<Col5>  </Col5>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col6", insertText: "<Col6>  </Col6>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col7", insertText: "<Col7>  </Col7>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col8", insertText: "<Col8>  </Col8>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col9", insertText: "<Col9>  </Col9>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col10", insertText: "<Col10>  </Col10>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col11", insertText: "<Col11>  </Col11>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Col12", insertText: "<Col12>  </Col12>", kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "Col1", insertText: "<Col1>  </Col1>", kind },
+      { label: "Col2", insertText: "<Col2>  </Col2>", kind },
+      { label: "Col3", insertText: "<Col3>  </Col3>", kind },
+      { label: "Col4", insertText: "<Col4>  </Col4>", kind },
+      { label: "Col5", insertText: "<Col5>  </Col5>", kind },
+      { label: "Col6", insertText: "<Col6>  </Col6>", kind },
+      { label: "Col7", insertText: "<Col7>  </Col7>", kind },
+      { label: "Col8", insertText: "<Col8>  </Col8>", kind },
+      { label: "Col9", insertText: "<Col9>  </Col9>", kind },
+      { label: "Col10", insertText: "<Col10>  </Col10>", kind },
+      { label: "Col11", insertText: "<Col11>  </Col11>", kind },
+      { label: "Col12", insertText: "<Col12>  </Col12>", kind },
 
       // Componentes de texto
-      { label: "P", insertText: "<P>  </P>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H1", insertText: "<H1>  </H1>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H2", insertText: "<H2>  </H2>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H3", insertText: "<H3>  </H3>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H4", insertText: "<H4>  </H4>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H5", insertText: "<H5>  </H5>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "H6", insertText: "<H6>  </H6>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Strong", insertText: "<Strong>  </Strong>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Em", insertText: "<Em>  </Em>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "U", insertText: "<U>  </U>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Small", insertText: "<Small>  </Small>", kind: monaco.languages.CompletionItemKind.Snippet },
+      {
+        label: "P",
+        insertText: "<P>$1</P>",
+        kind,
+        insertTextRules
+      },
+      { label: "H1", insertText: "<H1>  </H1>", kind },
+      { label: "H2", insertText: "<H2>  </H2>", kind },
+      { label: "H3", insertText: "<H3>  </H3>", kind },
+      { label: "H4", insertText: "<H4>  </H4>", kind },
+      { label: "H5", insertText: "<H5>  </H5>", kind },
+      { label: "H6", insertText: "<H6>  </H6>", kind },
+      { label: "Strong", insertText: "<Strong>  </Strong>", kind },
+      { label: "Em", insertText: "<Em>  </Em>", kind },
+      { label: "U", insertText: "<U>  </U>", kind },
+      { label: "Small", insertText: "<Small>  </Small>", kind },
       {
         label: "Blockquote",
         insertText: "<Blockquote>  </Blockquote>",
-        kind: monaco.languages.CompletionItemKind.Snippet,
+        kind,
       },
-      { label: "Mark", insertText: "<Mark>  </Mark>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Span", insertText: "<Span>  </Span>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "BR", insertText: "<BR />", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "A", insertText: '<A href="">  </A>', kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "Mark", insertText: "<Mark>  </Mark>", kind },
+      { label: "Span", insertText: "<Span>  </Span>", kind },
+      { label: "BR", insertText: "<BR />", kind },
+      { label: "A", insertText: '<A href="">  </A>', kind },
 
       // Componentes de posicionamiento
-      { label: "Left", insertText: "<Left>  </Left>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Right", insertText: "<Right>  </Right>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Center", insertText: "<Center>  </Center>", kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "Left", insertText: "<Left>  </Left>", kind },
+      { label: "Right", insertText: "<Right>  </Right>", kind },
+      { label: "Center", insertText: "<Center>  </Center>", kind },
 
       // Componentes de tabla
       {
         label: "Table",
         insertText:
           "<Table>  <Thead>    <Tr>      <Th></Th>    </Tr>  </Thead>  <Tbody>    <Tr>      <Td></Td>    </Tr>  </Tbody></Table>",
-        kind: monaco.languages.CompletionItemKind.Snippet,
+        kind,
       },
-      { label: "Thead", insertText: "<Thead>  </Thead>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Tbody", insertText: "<Tbody>  </Tbody>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Tr", insertText: "<Tr>  </Tr>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Th", insertText: "<Th>  </Th>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Td", insertText: "<Td>  </Td>", kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "Thead", insertText: "<Thead>  </Thead>", kind },
+      { label: "Tbody", insertText: "<Tbody>  </Tbody>", kind },
+      { label: "Tr", insertText: "<Tr>  </Tr>", kind },
+      { label: "Th", insertText: "<Th>  </Th>", kind },
+      { label: "Td", insertText: "<Td>  </Td>", kind },
 
       // Componentes de lista
-      { label: "UL", insertText: "<UL>  <LI></LI></UL>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "OL", insertText: "<OL>  <LI></LI></OL>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "LI", insertText: "<LI>  </LI>", kind: monaco.languages.CompletionItemKind.Snippet },
+      { label: "UL", insertText: "<UL>  <LI></LI></UL>", kind },
+      { label: "OL", insertText: "<OL>  <LI></LI></OL>", kind },
+      { label: "LI", insertText: "<LI>  </LI>", kind },
 
       // Otros componentes
       {
         label: "Img",
         insertText: '<Img src="" style={{}} />',
-        kind: monaco.languages.CompletionItemKind.Snippet,
+        kind,
       },
       {
         label: "QR",
