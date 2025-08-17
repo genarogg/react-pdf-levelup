@@ -12,30 +12,6 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@env": [
-        "./env.ts"
-      ],
-      "@/*": [
-        "./src/client/*"
-      ],
-      "@fn": [
-        "./src/functions"
-      ],
-      "@email/*": [
-        "email/*"
-      ],
-      "@controller/*": [
-        "controllers/*"
-      ],
-      "@router": [
-        "routers/index.ts"
-      ],
-      "@graphql/*": [
-        "graphql/*"
-      ],
-      "@config/*": [
-        "config/*"
-      ],
       "@pdf/*": [
         "./src/pdf/*"
       ]
