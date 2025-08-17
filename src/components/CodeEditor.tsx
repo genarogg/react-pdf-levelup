@@ -31,7 +31,43 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     editorRef.current = editor
 
     const kind = monaco.languages.CompletionItemKind
-    const insertTextRules =  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+    const insertTextRules = monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+
+    const etiqueta = (label: string) => {
+      return {
+        label,
+        insertText: `<${label}>$1</${label}>`,
+        kind,
+        insertTextRules,
+      }
+    }
+
+    const etiquetaConAtributo = (label: string, atributo?: string) => {
+      return {
+        label,
+        insertText: `<${label} ${atributo ? atributo : ""}>$5</${label}>`,
+        kind,
+        insertTextRules,
+      }
+    }
+
+    const etiquetaConSalto = (label: string) => {
+      return {
+        label,
+        insertText: `<${label}>\n$1\n</${label}>`,
+        kind,
+        insertTextRules,
+      }
+    }
+
+    const etiquetaAutoConclusiva = (label: string, atributo?: string) => {
+      return {
+        label,
+        insertText: `<${label} ${atributo ? atributo : ""}/>\n$1`,
+        kind,
+        insertTextRules,
+      }
+    }
 
     // Definir las etiquetas personalizadas para el autocompletado
     const customTags = [
@@ -41,58 +77,47 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
         insertText: '<LayoutPDF size="A4" orientation="v" showPageNumbers={true}>\n\n</LayoutPDF>',
         kind,
       },
-      {
-        label: "Container",
-        insertText: "<Container>  </Container>",
-        kind,
-      },
-      { label: "Row", insertText: "<Row></Row>", kind },
-
-      // Componentes de columnas
-      { label: "Col1", insertText: "<Col1>  </Col1>", kind },
-      { label: "Col2", insertText: "<Col2>  </Col2>", kind },
-      { label: "Col3", insertText: "<Col3>  </Col3>", kind },
-      { label: "Col4", insertText: "<Col4>  </Col4>", kind },
-      { label: "Col5", insertText: "<Col5>  </Col5>", kind },
-      { label: "Col6", insertText: "<Col6>  </Col6>", kind },
-      { label: "Col7", insertText: "<Col7>  </Col7>", kind },
-      { label: "Col8", insertText: "<Col8>  </Col8>", kind },
-      { label: "Col9", insertText: "<Col9>  </Col9>", kind },
-      { label: "Col10", insertText: "<Col10>  </Col10>", kind },
-      { label: "Col11", insertText: "<Col11>  </Col11>", kind },
-      { label: "Col12", insertText: "<Col12>  </Col12>", kind },
 
       // Componentes de texto
-      {
-        label: "P",
-        insertText: "<P>$1</P>",
-        kind,
-        insertTextRules
-      },
-      { label: "H1", insertText: "<H1>  </H1>", kind },
-      { label: "H2", insertText: "<H2>  </H2>", kind },
-      { label: "H3", insertText: "<H3>  </H3>", kind },
-      { label: "H4", insertText: "<H4>  </H4>", kind },
-      { label: "H5", insertText: "<H5>  </H5>", kind },
-      { label: "H6", insertText: "<H6>  </H6>", kind },
-      { label: "Strong", insertText: "<Strong>  </Strong>", kind },
-      { label: "Em", insertText: "<Em>  </Em>", kind },
-      { label: "U", insertText: "<U>  </U>", kind },
-      { label: "Small", insertText: "<Small>  </Small>", kind },
-      {
-        label: "Blockquote",
-        insertText: "<Blockquote>  </Blockquote>",
-        kind,
-      },
-      { label: "Mark", insertText: "<Mark>  </Mark>", kind },
-      { label: "Span", insertText: "<Span>  </Span>", kind },
-      { label: "BR", insertText: "<BR />", kind },
-      { label: "A", insertText: '<A href="">  </A>', kind },
+      etiqueta("P"),
+      etiqueta("H1"),
+      etiqueta("H2"),
+      etiqueta("H3"),
+      etiqueta("H4"),
+      etiqueta("H5"),
+      etiqueta("H6"),
+      etiqueta("Strong"),
+      etiqueta("Em"),
+      etiqueta("U"),
+      etiqueta("Small"),
+      etiqueta("Mark"),
+      etiqueta("Span"),
+
+      // Componentes de columnas
+      etiquetaConSalto("Container"),
+      etiquetaConSalto("Row"),
+      etiquetaConSalto("Col1"),
+      etiquetaConSalto("Col2"),
+      etiquetaConSalto("Col3"),
+      etiquetaConSalto("Col4"),
+      etiquetaConSalto("Col5"),
+      etiquetaConSalto("Col6"),
+      etiquetaConSalto("Col7"),
+      etiquetaConSalto("Col8"),
+      etiquetaConSalto("Col9"),
+      etiquetaConSalto("Col10"),
+      etiquetaConSalto("Col11"),
+      etiquetaConSalto("Col12"),
 
       // Componentes de posicionamiento
-      { label: "Left", insertText: "<Left>  </Left>", kind },
-      { label: "Right", insertText: "<Right>  </Right>", kind },
-      { label: "Center", insertText: "<Center>  </Center>", kind },
+      etiquetaConSalto("Left"),
+      etiquetaConSalto("Right"),
+      etiquetaConSalto("Center"),
+
+      etiquetaAutoConclusiva("BR"),
+      etiquetaAutoConclusiva("Img", 'src="$1"'),
+
+      etiquetaConAtributo("A", 'src="$1"'),
 
       // Componentes de tabla
       {
@@ -113,11 +138,8 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       { label: "LI", insertText: "<LI>  </LI>", kind },
 
       // Otros componentes
-      {
-        label: "Img",
-        insertText: '<Img src="" style={{}} />',
-        kind,
-      },
+
+      etiquetaConSalto("Blockquote"),
       {
         label: "QR",
         insertText: `<QR 
