@@ -127,6 +127,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaConSalto("Header"),
       etiquetaConSalto("Main"),
       etiquetaConSalto("Footer"),
+      etiquetaConSalto("ImgBg"),
 
 
 

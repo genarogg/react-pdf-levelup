@@ -10,12 +10,11 @@ import { UL, OL, LI } from "./Lista"
 
 import { View, Text, StyleSheet, Font, } from "@react-pdf/renderer"
 
-
-
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
+import ImgBg from "./ImgBg"
 export {
-
+  ImgBg,
   LayoutPDF,
   Img,
   Left,

@@ -173,7 +173,7 @@ const result = Component;`
     Col11,
     Col12,
     Header,
-  
+  ImgBg,
     QR,
     UL,
     OL,

@@ -24,7 +24,7 @@ interface LayoutPDFProps {
   padding?: number
   margen?: "apa" | "normal" | "estrecho" | "ancho"
   style?: any
-
+  pagination: true
   footer?: React.ReactNode
   lines?: number
 }
@@ -37,7 +37,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   padding = 30,
   margen = "normal",
   style = {},
-
+  pagination = true,
   footer,
   lines = footer ? 2 : 1,
 }) => {
@@ -228,12 +228,14 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
         <View style={{ paddingBottom: footerHeight }}>
           {children}
         </View>
-        <View style={footerStyle} fixed>
-          {footer}
-          <Text style={{ fontSize: footerStyle.fontSize }} render={({ pageNumber, totalPages }) => (
-            `${pageNumber} / ${totalPages}`
-          )} />
-        </View>
+        {pagination ? (
+          <View style={footerStyle} fixed>
+            {footer}
+            <Text style={{ fontSize: footerStyle.fontSize }} render={({ pageNumber, totalPages }) => (
+              `${pageNumber} / ${totalPages}`
+            )} />
+          </View>
+        ) : null}
       </Page>
     </Document>
   )
