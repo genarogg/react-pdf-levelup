@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 interface LayoutPDFProps {
   children: React.ReactNode
   size?: string
-  orientation?: "vertical" | "horizontal"
+  orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
   backgroundColor?: string
   padding?: number
   margen?: "apa" | "normal" | "estrecho" | "ancho"
@@ -141,11 +141,15 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   }
 
   // Transform orientation from "vertical"/"horizontal" to "portrait"/"landscape"
-  const transformOrientation = (orientation: "vertical" | "horizontal"): "portrait" | "landscape" => {
+  const transformOrientation = (orientation: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"): "portrait" | "landscape" => {
     switch (orientation) {
       case "vertical":
+      case "portrait":
+      case "v":
         return "portrait"
       case "horizontal":
+      case "landscape":
+      case "h":
         return "landscape"
       default:
         console.warn(`Unrecognized orientation: ${orientation}. Using portrait as default.`)
