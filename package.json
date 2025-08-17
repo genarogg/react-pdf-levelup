@@ -22,8 +22,8 @@
   "peerDependencies": {
     "@react-pdf/renderer": "^4.3.0",
     "qrcode": "^1.5.4",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^19",
+    "react-dom": "^19"
   },
   "dependencies": {
     "@babel/standalone": "^7.23.10",
@@ -43,8 +43,8 @@
     "@react-pdf/types": "^2.9.0",
     "@types/jsdom": "^21.1.7",
     "@types/qrcode": "^1.5.5",
-    "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
