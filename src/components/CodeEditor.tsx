@@ -42,6 +42,15 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       }
     }
 
+    const etiquetaAvanzada = (label: string, insertText: string) => {
+      return {
+        label,
+        insertText,
+        kind,
+        insertTextRules,
+      }
+    }
+
     const etiquetaConAtributo = (label: string, atributo?: string) => {
       return {
         label,
@@ -114,65 +123,48 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaConSalto("Right"),
       etiquetaConSalto("Center"),
 
+      //header y footer
+      etiquetaConSalto("Header"),
+      etiquetaConSalto("Main"),
+      etiquetaConSalto("Footer"),
+
+
+
       etiquetaAutoConclusiva("BR"),
       etiquetaAutoConclusiva("Img", 'src="$1"'),
 
       etiquetaConAtributo("A", 'src="$1"'),
 
       // Componentes de tabla
-      {
-        label: "Table",
-        insertText:
-          "<Table>  <Thead>    <Tr>      <Th></Th>    </Tr>  </Thead>  <Tbody>    <Tr>      <Td></Td>    </Tr>  </Tbody></Table>",
-        kind,
-      },
-      { label: "Thead", insertText: "<Thead>  </Thead>", kind },
-      { label: "Tbody", insertText: "<Tbody>  </Tbody>", kind },
-      { label: "Tr", insertText: "<Tr>  </Tr>", kind },
-      { label: "Th", insertText: "<Th>  </Th>", kind },
-      { label: "Td", insertText: "<Td>  </Td>", kind },
+      etiquetaAvanzada("Table", "<Table>\n  <Thead>\n    <Tr>\n      <Th></Th>\n    </Tr>\n  </Thead>\n  <Tbody>\n    <Tr>\n      <Td></Td>\n    </Tr>\n  </Tbody>\n</Table>"),
+
+      etiquetaConSalto("Thead"),
+      etiquetaConSalto("Tbody"),
+      etiquetaConSalto("Tr"),
+      etiquetaConSalto("Th"),
+      etiquetaConSalto("Td"),
 
       // Componentes de lista
-      { label: "UL", insertText: "<UL>  <LI></LI></UL>", kind },
-      { label: "OL", insertText: "<OL>  <LI></LI></OL>", kind },
-      { label: "LI", insertText: "<LI>  </LI>", kind },
+      etiquetaAvanzada("UL", "<UL>\n<LI>$1</LI>\n</UL>"),
+      etiquetaAvanzada("OL", "<OL>\n<LI>$1</LI>\n</OL>"),
 
+      etiquetaConSalto("LI"),
       // Otros componentes
 
       etiquetaConSalto("Blockquote"),
-      {
-        label: "QR",
-        insertText: `<QR 
-      url="https://example.com" 
-      size={150} colorData="#3794ff" 
-      logo="https://genarogg.github.io/media/genarogg/favicon.png" 
-      logoText="Logo"
-      dotType="extra-rounded" cornerSquareType="extra-rounded"
-      cornerDotType="dot"
-      cornerSquareColor="#3794ff"
-      cornerDotColor="#e13e83"
-        />`,
-        kind: monaco.languages.CompletionItemKind.Snippet,
-      },
-      { label: "Header", insertText: "<Header>  </Header>", kind: monaco.languages.CompletionItemKind.Snippet },
-      { label: "Footer", insertText: "<Footer>  </Footer>", kind: monaco.languages.CompletionItemKind.Snippet },
 
-      // Snippets para estilos
-      {
-        label: "style-object",
-        insertText: 'style={{ backgroundColor: "#ffffff", padding: 10, margin: 5 }}',
-        kind: monaco.languages.CompletionItemKind.Snippet,
-      },
-      {
-        label: "style-text",
-        insertText: 'style={{ fontSize: 12, fontWeight: "bold", color: "#000000", textAlign: "center" }}',
-        kind: monaco.languages.CompletionItemKind.Snippet,
-      },
-      {
-        label: "style-border",
-        insertText: 'style={{ borderWidth: 1, borderColor: "#000000", borderStyle: "solid", borderRadius: 5 }}',
-        kind: monaco.languages.CompletionItemKind.Snippet,
-      },
+      etiquetaAvanzada("QR", `
+        <QR 
+          value="https://example.com" 
+          size={150} 
+          colorDark="#3794ff" 
+          colorLight="#ffffff"
+          logo="https://genarogg.github.io/media/genarogg/favicon.png" 
+          logoWidth={30}
+          logoHeight={30}
+          margin={0}
+          errorCorrectionLevel="H"
+        />`),
     ]
 
     // Registrar el proveedor de autocompletado

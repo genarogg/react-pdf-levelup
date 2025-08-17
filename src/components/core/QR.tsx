@@ -1,6 +1,6 @@
 "use client"
 
-import  React from "react"
+import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { useEffect, useState } from "react"
 import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
@@ -47,7 +47,7 @@ const QR: React.FC<QRProps> = ({
   logo = "",
   logoWidth = 30,
   logoHeight = 30,
-  errorCorrectionLevel = "M",
+  errorCorrectionLevel = logo ? "H" : "M",
 }) => {
   const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
