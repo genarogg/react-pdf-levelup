@@ -14,13 +14,7 @@ const Demo = ({ data }: { data: any }) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <View>
-                {/* <QR
-                    value="https://example.co"
-                    size={150} 
-                    logo="https://genarogg.github.io/media/genarogg/favicon.png"
-                   
-                   
-                /> */}
+            
                 <QR
                     value="https://example.co"
                     size={150} 
