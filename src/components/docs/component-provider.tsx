@@ -1,7 +1,7 @@
 "use client"
-
-import { createContext, useContext, type ReactNode } from "react"
 import React from 'react'
+import { createContext, useContext, type ReactNode } from "react"
+
 interface ComponentProp {
   name: string
   type: string
@@ -15,7 +15,7 @@ interface ComponentProp {
 
 interface ComponentExample {
   title: {
-    es: string
+    es?: any
     en: string
   }
   description: {
@@ -45,8 +45,16 @@ interface ComponentData {
   props: ComponentProp[]
   examples: ComponentExample[]
   usage: {
-    es: string
-    en: string
+    es: {
+      title: string
+      subtitle: string
+      content: string
+    }
+    en: {
+      title: string
+      subtitle: string
+      content: string
+    }
   }
 }
 
@@ -267,9 +275,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
-      <h3>Flujo de Trabajo Completo</h3>
-      <p><strong>1. Backend (Generación):</strong></p>
+      es: {
+        title: `Flujo de Trabajo Completo`,
+        subtitle: ``,
+        content: `<p><strong>1. Backend (Generación):</strong></p>
       <ul>
         <li>Instala react-pdf-levelup en tu proyecto</li>
         <li>Crea una API route que genere PDFs usando los componentes</li>
@@ -295,8 +304,11 @@ export default function PDFGenerator() {
         <li>Implementa validación de datos antes de generar PDFs</li>
       </ul>
       `,
-      en: `
-      <h3>Complete Workflow</h3>
+      },
+      en: {
+        title: `Complete Workflow`,
+        subtitle: ``,
+        content: `
       <p><strong>1. Backend (Generation):</strong></p>
       <ul>
         <li>Install react-pdf-levelup in your project</li>
@@ -323,6 +335,7 @@ export default function PDFGenerator() {
         <li>Implement data validation before generating PDFs</li>
       </ul>
       `,
+      },
     },
   },
   {
@@ -575,7 +588,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Componentes Disponibles:</h4>
       <ul>
         <li><strong>Table:</strong> Contenedor principal con contexto para altura de celda</li>
@@ -601,7 +617,11 @@ export default function PDFGenerator() {
         <li>Usar estilos condicionales para resaltar datos importantes</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Available Components:</h4>
       <ul>
         <li><strong>Table:</strong> Main container with cell height context</li>
@@ -627,6 +647,7 @@ export default function PDFGenerator() {
         <li>Use conditional styling to highlight important data</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -728,7 +749,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Componentes Disponibles:</h4>
       <ul>
         <li><strong>Container:</strong> Envuelve contenido con padding</li>
@@ -742,7 +766,11 @@ export default function PDFGenerator() {
         <li>Col9: 75% | Col10: 83.33% | Col11: 91.66% | Col12: 100%</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Available Components:</h4>
       <ul>
         <li><strong>Container:</strong> Wraps content with padding</li>
@@ -756,6 +784,7 @@ export default function PDFGenerator() {
         <li>Col9: 75% | Col10: 83.33% | Col11: 91.66% | Col12: 100%</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -934,7 +963,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Niveles de Corrección de Errores:</h4>
       <ul>
         <li><strong>L:</strong> ~7% capacidad de recuperación</li>
@@ -950,7 +982,11 @@ export default function PDFGenerator() {
         <li>Asegurar suficiente contraste entre colores</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Error Correction Levels:</h4>
       <ul>
         <li><strong>L:</strong> ~7% recovery capability</li>
@@ -966,6 +1002,7 @@ export default function PDFGenerator() {
         <li>Ensure sufficient contrast between colors</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1052,7 +1089,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Formatos Soportados:</h4>
       <ul>
         <li>JPEG (.jpg, .jpeg)</li>
@@ -1067,7 +1107,11 @@ export default function PDFGenerator() {
         <li>Margen inferior: 14px</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Supported Formats:</h4>
       <ul>
         <li>JPEG (.jpg, .jpeg)</li>
@@ -1082,6 +1126,7 @@ export default function PDFGenerator() {
         <li>Bottom margin: 14px</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1207,7 +1252,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Tipos de Lista:</h4>
       <ul>
         <li><strong>UL (No ordenada):</strong> disc (•), circle (○), square (■)</li>
@@ -1221,7 +1269,11 @@ export default function PDFGenerator() {
         <li><strong>LI:</strong> Elemento de lista (funciona con UL y OL)</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>List Types:</h4>
       <ul>
         <li><strong>UL (Unordered):</strong> disc (•), circle (○), square (■)</li>
@@ -1235,6 +1287,7 @@ export default function PDFGenerator() {
         <li><strong>LI:</strong> List item (works with both UL and OL)</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1381,7 +1434,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Componentes Disponibles:</h4>
       <ul>
         <li><strong>Encabezados:</strong> H1 (24px), H2 (20px), H3 (18px), H4 (16px), H5 (14px), H6 (12px)</li>
@@ -1398,7 +1454,11 @@ export default function PDFGenerator() {
         <li>Color de resaltado: fondo amarillo</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Available Components:</h4>
       <ul>
         <li><strong>Headings:</strong> H1 (24px), H2 (20px), H3 (18px), H4 (16px), H5 (14px), H6 (12px)</li>
@@ -1415,6 +1475,7 @@ export default function PDFGenerator() {
         <li>Highlight color: yellow background</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1477,7 +1538,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Casos de Uso:</h4>
       <ul>
         <li>Agregar marcas de agua a documentos</li>
@@ -1485,7 +1549,11 @@ export default function PDFGenerator() {
         <li>Elementos decorativos</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Use cases:</h4>
       <ul>
         <li>Adding watermarks to documents</li>
@@ -1493,6 +1561,7 @@ export default function PDFGenerator() {
         <li>Decorative elements</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1687,7 +1756,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Tipos de Posicionamiento:</h4>
       <ul>
         <li><strong>Absolute:</strong> Posición fija relativa al documento</li>
@@ -1710,7 +1782,11 @@ export default function PDFGenerator() {
         <li>Usar transform para centrado preciso</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Positioning Types:</h4>
       <ul>
         <li><strong>Absolute:</strong> Fixed position relative to document</li>
@@ -1733,6 +1809,7 @@ export default function PDFGenerator() {
         <li>Use transform for precise centering</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -1973,7 +2050,10 @@ export default function PDFGenerator() {
       },
     ],
     usage: {
-      es: `
+      es: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Tamaños de Página Estándar:</h4>
       <ul>
         <li><strong>A4:</strong> 210 × 297 mm (más común)</li>
@@ -1997,7 +2077,11 @@ export default function PDFGenerator() {
         <li>Considerar la impresión al configurar márgenes</li>
       </ul>
     `,
-      en: `
+      },
+      en: {
+        title: ``,
+        subtitle: ``,
+        content: `
       <h4>Standard Page Sizes:</h4>
       <ul>
         <li><strong>A4:</strong> 210 × 297 mm (most common)</li>
@@ -2021,6 +2105,7 @@ export default function PDFGenerator() {
         <li>Consider printing when setting margins</li>
       </ul>
     `,
+      },
     },
   },
   {
@@ -2062,6 +2147,7 @@ export default function PDFGenerator() {
           es: "Contenedor principal para agrupar elementos",
           en: "Main container for grouping elements",
         },
+        required: false
       },
       {
         name: "Spacer",
@@ -2070,6 +2156,7 @@ export default function PDFGenerator() {
           es: "Elemento para crear espacios en blanco",
           en: "Element for creating white space",
         },
+        required: false
       },
       {
         name: "Divider",
@@ -2078,6 +2165,7 @@ export default function PDFGenerator() {
           es: "Línea divisoria para separar contenido",
           en: "Divider line for separating content",
         },
+        required: false
       },
       {
         name: "Flex",
@@ -2086,9 +2174,11 @@ export default function PDFGenerator() {
           es: "Contenedor flexible con propiedades flexbox",
           en: "Flexible container with flexbox properties",
         },
+        required: false
       },
     ],
     examples: {
+      // @ts-ignore
       es: [
         {
           title: "Contenedor Básico",

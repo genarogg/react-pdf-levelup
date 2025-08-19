@@ -31,7 +31,7 @@ export function ComponentDetail({ componentId }: ComponentDetailProps) {
   }
 
   return (
-    <div className="flex-1 bg-black overflow-y-auto"     style={{backgroundColor: "#020817"}}>
+    <div className="flex-1 bg-black overflow-y-auto" style={{ backgroundColor: "#020817" }}>
       <div className="p-8 pb-20 max-w-6xl mx-auto opacity-100">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -46,7 +46,7 @@ export function ComponentDetail({ componentId }: ComponentDetailProps) {
                     : "bg-gray-700 text-gray-300"
               }
             >
-              {translations.categories[component.category] || component.category}
+              {translations.categories[component.category as keyof typeof translations.categories] || component.category}
             </Badge>
           </div>
           <p className="text-lg text-gray-400 mb-4">{component.description[language]}</p>
