@@ -30,15 +30,13 @@
     "autoprefixer": "^10.4.21",
     "canvas": "^3.1.2",
     "class-variance-authority": "^0.7.1",
-    "i": "^0.3.7",
     "jsdom": "^26.1.0",
     "lucide-react": "^0.485.0",
     "qr-code-styling": "^1.9.2",
     "react-router-dom": "^7.4.1",
     "rimraf": "^6.0.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12",
-    "ts-node": "^10.9.2"
+    "tailwindcss": "^4.1.12"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.0",
@@ -59,7 +57,8 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "json": "^11.0.0",
-    "react-pdf-levelup": "^2.0.18",
+    "react-pdf-levelup": "^3.1.18",
+    "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
     "tsx": "^4.20.3",
     "typescript": "~5.7.2",
