@@ -82,9 +82,10 @@ export function Sidebar({ selectedComponent, onSelectComponent }: SidebarProps) 
   return (
     <div
       className={cn(
-        "bg-black border-r border-gray-800 transition-all duration-300 flex flex-col h-full",
+        "bg-black border-r border-gray-800 transition-all duration-300 flex flex-col h-full max-h-[calc(100vh-70px)]",
         isCollapsed ? "w-16" : "w-80",
       )} 
+
       style={{backgroundColor: "#020817"}}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800 flex-shrink-0">
