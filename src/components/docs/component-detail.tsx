@@ -200,7 +200,7 @@ export function ComponentDetail({ componentId }: ComponentDetailProps) {
                 <div className="prose prose-lg max-w-none text-gray-300 leading-relaxed">
                   <div
                     className="space-y-4 text-base leading-7 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mb-3 [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-200 [&>h4]:mb-2 [&>p]:mb-4 [&>ul]:space-y-2 [&>ul]:ml-4 [&>li]:flex [&>li]:items-start [&>li]:gap-2"
-                    dangerouslySetInnerHTML={{ __html: component.usage[language] }}
+                    dangerouslySetInnerHTML={{ __html: component.usage[language].content }}
                   />
                 </div>
               </CardContent>

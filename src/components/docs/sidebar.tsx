@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { Button } from "../ui/button"
+import packageJson from '../../../package.json'
 import { Badge } from "../ui/badge"
 import {
   ChevronLeft,
@@ -84,15 +85,15 @@ export function Sidebar({ selectedComponent, onSelectComponent }: SidebarProps) 
       className={cn(
         "bg-black border-r border-gray-800 transition-all duration-300 flex flex-col h-full max-h-[calc(100vh-70px)]",
         isCollapsed ? "w-16" : "w-80",
-      )} 
+      )}
 
-      style={{backgroundColor: "#020817"}}
+      style={{ backgroundColor: "#020817" }}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800 flex-shrink-0">
         {!isCollapsed && (
           <div>
-            <h1 className="text-lg font-bold text-white font-mono">{t("pdf.components")}</h1>
-            <p className="text-sm text-gray-400">{t("interactive.documentation")}</p>
+            <h1 className="text-lg font-bold text-white font-mono">{t("react-pdf-levelup")}</h1>
+            <p className="text-sm text-gray-400">{t("documentation")}</p>
           </div>
         )}
         <Button
@@ -156,9 +157,9 @@ export function Sidebar({ selectedComponent, onSelectComponent }: SidebarProps) 
         <div className="p-4 border-t border-gray-800 flex-shrink-0">
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <Badge variant="secondary" className="text-xs bg-gray-700 text-gray-300">
-              v1.0.0
+              v{packageJson.version}
             </Badge>
-            <span>{t("react.pdf.components")}</span>
+            <span>{t("react-pdf-levelup")}</span>
           </div>
         </div>
       )}

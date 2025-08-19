@@ -1,18 +1,9 @@
 "use client"
-import React from 'react'
-
-import { createContext, useContext, useState, type ReactNode } from "react"
+import React, { createContext, useContext, useState, type ReactNode } from "react"
 
 type Language = "es" | "en"
 
-interface LanguageContextType {
-  language: Language
-  setLanguage: (lang: Language) => void
-  translations: typeof translations.es
-  t: (key: string) => string // Added t function to interface
-}
-
-const translations = {
+const translations: Record<Language, any> = {
   es: {
     // Header
     pdfComponents: "Componentes PDF",
@@ -96,89 +87,14 @@ const translations = {
     // Language selector
     language: "Idioma",
   },
-  en: {
-    // Header
-    pdfComponents: "PDF Components",
-    interactiveDocumentation: "Interactive Documentation",
+  en: {}, // 🚨 vacío, pero existe para que no dé error TS
+}
 
-    // Categories
-    gettingStarted: "GETTING STARTED",
-    layout: "LAYOUT",
-    media: "MEDIA",
-    content: "CONTENT",
-    categories: {
-      Layout: "Layout",
-      Content: "Content",
-      Media: "Media",
-    },
-
-    // Navigation
-    overview: "Overview",
-    implementation: "Implementation",
-    backendFrontendUsage: "Backend & Frontend Usage",
-    props: "Props",
-    examples: "Examples",
-    usage: "Usage",
-
-    // Component Detail translations
-    componentNotFound: "Component not found",
-    copiedToClipboard: "Copied to clipboard",
-    codeHasBeenCopied: "Code has been copied to your clipboard.",
-    componentOverview: "Component Overview",
-    understandingComponent: "Understanding the {component} component",
-    keyFeatures: "Key Features",
-    propsInterface: "Props Interface",
-    allAvailableProps: "All available props for {component}",
-    required: "Required",
-    optional: "Optional",
-    type: "Type",
-    default: "Default",
-    copy: "Copy",
-    usageGuidelines: "Usage Guidelines",
-    bestPractices: "Best practices and implementation notes",
-
-    // Component Overview translations
-    pdfComponentsDocumentation: "PDF Components Documentation",
-    comprehensiveCollection:
-      "A comprehensive collection of React components for generating professional PDFs with @react-pdf/renderer",
-    interactive: "Interactive",
-    tenComponents: "10 Components",
-    completeSetDescription: "Complete set of PDF components for tables, images, layouts, and more",
-    interactiveExamples: "Interactive Examples",
-    liveCodeExamples: "Live code examples with syntax highlighting and copy functionality",
-    typescriptSupport: "TypeScript Support",
-    fullTypescriptDefinitions: "Full TypeScript definitions with detailed prop interfaces",
-    professionalDesign: "Professional Design",
-    cleanModernInterface: "Clean, modern interface inspired by React PDF Editor",
-    quickStart: "Quick Start",
-    getStartedMinutes: "Get started with PDF components in minutes",
-    importAnyComponent:
-      "Import any component from the sidebar to see detailed documentation, props, and interactive examples.",
-    exploreComponents: "Explore Components",
-
-    // Components
-    tablet: "Tablet",
-    tableComponent: "Table component",
-    gridSystem: "Grid System",
-    bootstrapLikeGrid: "Bootstrap-like grid",
-    position: "Position",
-    positioningWrapper: "Positioning wrapper",
-    layoutPdf: "LayoutPDF",
-    pdfLayout: "PDF layout",
-    image: "Image",
-    imageDisplay: "Image display",
-    imgBg: "ImgBg",
-    backgroundImages: "Background images",
-    qrCode: "QR Code",
-    qrCodeDisplay: "QR code display",
-    textElements: "Text Elements",
-    typographyComponents: "Typography components",
-    lists: "Lists",
-    listComponents: "List components",
-
-    // Language selector
-    language: "Language",
-  },
+interface LanguageContextType {
+  language: Language
+  setLanguage: (lang: Language) => void
+  translations: typeof translations[Language]
+  t: (key: string) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -194,7 +110,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       if (value && typeof value === "object" && k in value) {
         value = value[k]
       } else {
-        return key // Return key if translation not found
+        return key
       }
     }
 
@@ -207,7 +123,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         language,
         setLanguage,
         translations: translations[language],
-        t, // Added t function to context value
+        t,
       }}
     >
       {children}

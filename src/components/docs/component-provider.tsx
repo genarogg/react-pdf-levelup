@@ -2235,56 +2235,24 @@ export default function PDFGenerator() {
       ],
       en: [
         {
-          title: "Basic Container",
-          description: "Simple container example for grouping elements",
-          code: `import { Container, Text } from "react-pdf-levelup";
-
-<Container style={{ padding: 20, backgroundColor: '#f5f5f5' }}>
-  <Text>Content inside container</Text>
-  <Text>More grouped content</Text>
-</Container>`,
+          title: "",
+          description: "",
+          code: ``,
         },
         {
-          title: "Spacing with Spacer",
-          description: "Using Spacer to create controlled spaces",
-          code: `import { Container, Text, Spacer } from "react-pdf-levelup";
-
-<Container>
-  <Text>First element</Text>
-  <Spacer height={20} />
-  <Text>Second element with space above</Text>
-  <Spacer height={40} />
-  <Text>Third element with more space</Text>
-</Container>`,
+          title: "",
+          description: "",
+          code: ``,
         },
         {
-          title: "Flex Layout",
-          description: "Flexible container for advanced alignment",
-          code: `import { Flex, Text } from "react-pdf-levelup";
-
-<Flex direction="row" justify="space-between" align="center">
-  <Text>Left</Text>
-  <Text>Center</Text>
-  <Text>Right</Text>
-</Flex>
-
-<Flex direction="column" align="center" style={{ marginTop: 20 }}>
-  <Text>Centered element</Text>
-  <Text>Another centered element</Text>
-</Flex>`,
+          title: "",
+          description: "",
+          code: ``,
         },
         {
-          title: "Dividers",
-          description: "Divider lines for separating sections",
-          code: `import { Container, Text, Divider } from "react-pdf-levelup";
-
-<Container>
-  <Text>Section 1</Text>
-  <Divider style={{ margin: '10 0', borderColor: '#ccc' }} />
-  <Text>Section 2</Text>
-  <Divider style={{ margin: '10 0', borderColor: '#999', borderWidth: 2 }} />
-  <Text>Section 3</Text>
-</Container>`,
+          title: "",
+          description: "",
+          code: ``,
         },
       ],
     },
@@ -2322,36 +2290,9 @@ export default function PDFGenerator() {
         `,
       },
       en: {
-        title: "Usage Guide",
-        subtitle: "Best practices and implementation notes",
-        content: `
-**Available Components:**
-**Containers:** Container (basic container), Flex (flexible container)
-**Spacing:** Spacer (white space), Margin (controlled margins)
-**Separators:** Divider (divider lines), HR (horizontal rule)
-**Alignment:** Center (centering), Align (custom alignment)
-
-**Best Practices:**
-• Use Container to group related elements
-• Spacer is ideal for consistent vertical spacing
-• Flex provides advanced alignment control
-• Dividers help visually separate sections
-• Combine components to create complex layouts
-
-**Style Properties:**
-• **padding:** Internal spacing of container
-• **margin:** External spacing of element
-• **backgroundColor:** Container background color
-• **borderRadius:** Rounded borders
-• **flexDirection:** Flex layout direction (row, column)
-• **justifyContent:** Horizontal alignment (flex-start, center, flex-end, space-between)
-• **alignItems:** Vertical alignment (flex-start, center, flex-end, stretch)
-
-**Consistent Spacing:**
-• Use multiples of 4 for spacing (4, 8, 12, 16, 20, 24)
-• Maintain consistency in margins and padding
-• Consider reading flow when organizing elements
-        `,
+        title: "",
+        subtitle: "",
+        content: ``,
       },
     },
   },

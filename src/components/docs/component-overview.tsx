@@ -14,7 +14,7 @@ export function ComponentOverview({ onSelectComponent }: ComponentOverviewProps)
   const { translations } = useLanguage()
 
   return (
-    <div className="flex-1 overflow-auto bg-black" >
+    <div className="flex-1 overflow-auto bg-black"   style={{ backgroundColor: "#020817" }} >
       <div className="p-8 max-w-4xl mx-auto" >
         <div className="mb-8">
           <h1 className="text-4xl font-bold font-serif mb-4 text-white">{translations.pdfComponentsDocumentation}</h1>

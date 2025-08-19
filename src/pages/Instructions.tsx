@@ -8,11 +8,10 @@ import { LanguageProvider } from "../components/docs/language-provider"
 import Header from '../components/Header'
 
 export default function HomePage() {
-  const [selectedComponent, setSelectedComponent] = useState("grid")
-
+  const [selectedComponent, setSelectedComponent] = useState("overview")
   return (
     <LanguageProvider>
-      <Header />
+      <Header context='docs'/>
       <ComponentProvider>
         <div className="flex h-screen bg-black">
           <Sidebar selectedComponent={selectedComponent} onSelectComponent={setSelectedComponent} />

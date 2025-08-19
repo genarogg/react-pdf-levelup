@@ -8,11 +8,12 @@ import ColorPicker from "./ColorPicker"
 
 interface HeaderProps {
     code?: any
+    context?: "playgroud" | "docs"
 }
 
 
 
-const Header: React.FC<HeaderProps> = ({ code }) => {
+const Header: React.FC<HeaderProps> = ({ code, context }) => {
 
     const handleColorSelect = (color: string) => {
         console.log("Color seleccionado:", color)
@@ -74,23 +75,44 @@ import {
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                        <div className="bg-gray-800/30 backdrop-blur-md rounded-lg p-1">
-                            <TemplateSelector />
-                        </div>
 
-                        <a
-                            href="/docs"
-                            className="group flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 px-3 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-500/25 hover:scale-105 border border-gray-600/50"
-                        >
-                            <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <span className="hidden sm:inline font-medium text-sm">Docs</span>
-                        </a>
+
+                        {context === "playgroud" ? (
+                            <>
+                                <div className="bg-gray-800/30 backdrop-blur-md rounded-lg p-1">
+                                    <TemplateSelector />
+                                </div>
+                                <a
+                                    href="/docs"
+                                    className="group flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 px-3 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-500/25 hover:scale-105 border border-gray-600/50"
+                                >
+                                    <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                    <span className="hidden sm:inline font-medium text-sm">Docs</span>
+                                </a>
+                            </>
+                        ) : null}
+
+                        {context === "docs" ? (
+                            <a
+                                href="/"
+                                className="group flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 px-3 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-500/25 hover:scale-105 border border-gray-600/50"
+                            >
+                                <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                                <span className="hidden sm:inline font-medium text-sm">playground</span>
+                            </a>
+                        ) : null}
 
                         {code && (<button
                             className="group flex items-center gap-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white px-3 py-2 rounded-lg transition-all duration-300 shadow-lg hover:shadow-gray-500/25 hover:scale-105 border border-gray-500/50"
@@ -119,10 +141,14 @@ import {
                             <Github size={16} className="group-hover:rotate-12 transition-transform" />
                             <span className="hidden sm:inline font-medium text-sm">GitHub</span>
                         </a>
+                        {context === "playgroud" ? (
+                            <>
+                                <div className="hidden md:flex items-center gap-2 bg-gray-800/30 backdrop-blur-md rounded-lg p-1 border border-gray-700/50">
+                                    <ColorPicker onColorSelect={handleColorSelect} />
+                                </div>
+                            </>
+                        ) : null}
 
-                        <div className="hidden md:flex items-center gap-2 bg-gray-800/30 backdrop-blur-md rounded-lg p-1 border border-gray-700/50">
-                            <ColorPicker onColorSelect={handleColorSelect} />
-                        </div>
                     </div>
                 </div>
 
