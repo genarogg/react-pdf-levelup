@@ -10,7 +10,7 @@ import { UL, OL, LI } from "./Lista"
 
 import { View, Text, StyleSheet, Font, } from "@react-pdf/renderer"
 
-import { decodeBase64Pdf, generatePDF } from "../../functions"
+import { decodeBase64Pdf, generatePDF, renderToStream } from "../../functions"
 
 import ImgBg from "./ImgBg"
 export {
@@ -65,6 +65,7 @@ export {
   Text,
   StyleSheet, Font,
   decodeBase64Pdf,
-  generatePDF
+  generatePDF,
+  renderToStream
 }
 
