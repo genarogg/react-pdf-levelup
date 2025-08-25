@@ -20,6 +20,13 @@
     "demo": "tsx ./src/useExample/index.ts"
   },
   "peerDependencies": {
+    "@react-pdf/renderer": "^4.3.0",
+    "qrcode": "^1.5.4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "dependencies": {},
+  "devDependencies": {
     "@babel/standalone": "^7.23.10",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -28,23 +35,12 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "autoprefixer": "^10.4.21",
-    "canvas": "^3.1.2",
     "class-variance-authority": "^0.7.1",
-    "jsdom": "^26.1.0",
     "lucide-react": "^0.485.0",
-    "qr-code-styling": "^1.9.2",
     "react-router-dom": "^7.4.1",
     "rimraf": "^6.0.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12"
-  },
-  "dependencies": {
-    "@react-pdf/renderer": "^4.3.0",
-    "qrcode": "^1.5.4",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
+    "tailwindcss": "^4.1.12",
     "@eslint/js": "^9.21.0",
     "@react-pdf/types": "^2.9.0",
     "@types/jsdom": "^21.1.7",
