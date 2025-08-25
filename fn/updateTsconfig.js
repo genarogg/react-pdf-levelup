@@ -1,11 +1,14 @@
 import fs from "fs"
 
-const tsconfigPath = "./tsconfig.json"
-const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, "utf8"))
+const updateTsconfig = () => {
+    const tsconfigPath = "./tsconfig.json"
+    const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, "utf8"))
 
-tsconfig.compilerOptions.jsx = "react"
+    tsconfig.compilerOptions.jsx = "react"
 
-fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2), "utf8")
+    fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2), "utf8")
 
-console.log("tsconfig.json actualizado correctamente")
+    console.log("tsconfig.json actualizado correctamente")
+}
 
+export default updateTsconfig
