@@ -101,6 +101,8 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiqueta("Small"),
       etiqueta("Mark"),
       etiqueta("Span"),
+      etiqueta("Div"),
+
 
       // Componentes de columnas
       etiquetaConSalto("Container"),

@@ -7,6 +7,17 @@ interface TextProps {
   href?: string
 }
 
+interface DivProps {
+  children: React.ReactNode
+  style?: any
+}
+
+interface HeaderProps {
+  children: React.ReactNode
+  style?: any
+  fixed?: boolean
+}
+
 const styles = StyleSheet.create({
   p: {
     fontSize: 12,
@@ -155,12 +166,6 @@ const Span: React.FC<TextProps> = ({ children, style }) => {
   return <Text style={[style]}>{children}</Text>
 }
 
-interface HeaderProps {
-  children: React.ReactNode
-  style?: any
-  fixed?: boolean
-}
-
 const Header: React.FC<HeaderProps> = ({ children, style, fixed = false }) => {
   return (
     <View style={[styles.header, style]} fixed={fixed}>
@@ -169,5 +174,8 @@ const Header: React.FC<HeaderProps> = ({ children, style, fixed = false }) => {
   )
 }
 
-export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header }
+const Div: React.FC<DivProps> = ({ children, style }) => {
+  return <View style={style}>{children}</View>
+}
 
+export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div }

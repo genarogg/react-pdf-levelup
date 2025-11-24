@@ -1,7 +1,7 @@
 import LayoutPDF from "./LayoutPDF"
 import Img from "./Img"
 import { Left, Right, Center } from "./Position"
-import { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header } from "./Etiquetas"
+import { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header,Div } from "./Etiquetas"
 import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./Grid"
 
@@ -66,6 +66,7 @@ export {
   StyleSheet, Font,
   decodeBase64Pdf,
   generatePDF,
-  renderToStream
+  renderToStream,
+  Div
 }
 
