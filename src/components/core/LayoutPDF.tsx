@@ -27,6 +27,7 @@ interface LayoutPDFProps {
   pagination: boolean
   footer?: React.ReactNode
   lines?: number
+  rule?: boolean
 }
 
 const LayoutPDF: React.FC<LayoutPDFProps> = ({
@@ -40,6 +41,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   pagination = true,
   footer,
   lines = footer ? 2 : 1,
+  rule = false,
 }) => {
   // Calculate footer height based on number of lines
   // Each line is approximately 20 points (considering font size and line height)
@@ -202,6 +204,79 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   // Calculate footer position based on calculated footer height
   const footerTop = getFooterPosition(safeSize, pdfOrientation, footerHeight)
 
+  // Function to render grid (ruler)
+  const renderGrid = () => {
+    if (!rule) return null
+
+    // 1 cm = 28.3465 points
+    const cmToPoints = 28.3465
+    
+    // Get page dimensions in points
+    const pageDimensions: Record<string, { width: number; height: number }> = {
+      A0: { width: 841 * 2.834645669, height: 1189 * 2.834645669 },
+      A1: { width: 594 * 2.834645669, height: 841 * 2.834645669 },
+      A2: { width: 420 * 2.834645669, height: 594 * 2.834645669 },
+      A3: { width: 297 * 2.834645669, height: 420 * 2.834645669 },
+      A4: { width: 210 * 2.834645669, height: 297 * 2.834645669 },
+      A5: { width: 148 * 2.834645669, height: 210 * 2.834645669 },
+      A6: { width: 105 * 2.834645669, height: 148 * 2.834645669 },
+      A7: { width: 74 * 2.834645669, height: 105 * 2.834645669 },
+      A8: { width: 52 * 2.834645669, height: 74 * 2.834645669 },
+      A9: { width: 37 * 2.834645669, height: 52 * 2.834645669 },
+      LETTER: { width: 216 * 2.834645669, height: 279 * 2.834645669 },
+      LEGAL: { width: 216 * 2.834645669, height: 356 * 2.834645669 },
+      TABLOID: { width: 279 * 2.834645669, height: 432 * 2.834645669 },
+    }
+
+    const dimensions = pageDimensions[safeSize.toUpperCase()] || pageDimensions.A4
+    const pageWidth = pdfOrientation === "landscape" ? dimensions.height : dimensions.width
+    const pageHeight = pdfOrientation === "landscape" ? dimensions.width : dimensions.height
+
+    const horizontalLines = []
+    const verticalLines = []
+
+    // Generate horizontal lines (every cm)
+    for (let i = 0; i <= Math.ceil(pageHeight / cmToPoints); i++) {
+      horizontalLines.push(
+        <View
+          key={`h-${i}`}
+          style={{
+            position: "absolute",
+            top: i * cmToPoints,
+            left: 0,
+            right: 0,
+            height: 0.5,
+            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.3)" : "rgba(200, 200, 200, 0.3)",
+          }}
+        />
+      )
+    }
+
+    // Generate vertical lines (every cm)
+    for (let i = 0; i <= Math.ceil(pageWidth / cmToPoints); i++) {
+      verticalLines.push(
+        <View
+          key={`v-${i}`}
+          style={{
+            position: "absolute",
+            left: i * cmToPoints,
+            top: 0,
+            bottom: 0,
+            width: 0.5,
+            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.3)" : "rgba(200, 200, 200, 0.3)",
+          }}
+        />
+      )
+    }
+
+    return (
+      <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} fixed>
+        {horizontalLines}
+        {verticalLines}
+      </View>
+    )
+  }
+
   const pageStyle = {
     ...styles.page,
     backgroundColor: safeBackgroundColor,
@@ -225,6 +300,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   return (
     <Document>
       <Page size={safeSize as any} orientation={pdfOrientation} style={pageStyle} wrap>
+        {renderGrid()}
         <View style={{ paddingBottom: footerHeight }}>
           {children}
         </View>
