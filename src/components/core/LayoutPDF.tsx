@@ -24,7 +24,7 @@ interface LayoutPDFProps {
   padding?: number
   margen?: "apa" | "normal" | "estrecho" | "ancho"
   style?: any
-  pagination: true
+  pagination: boolean
   footer?: React.ReactNode
   lines?: number
 }
