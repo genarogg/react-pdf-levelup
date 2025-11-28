@@ -245,8 +245,8 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
             top: i * cmToPoints,
             left: 0,
             right: 0,
-            height: 0.5,
-            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.3)" : "rgba(200, 200, 200, 0.3)",
+            height: i % 5 === 0 ? 1 : 0.5,
+            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.8)" : "rgba(100, 100, 100, 0.5)",
           }}
         />
       )
@@ -262,8 +262,8 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
             left: i * cmToPoints,
             top: 0,
             bottom: 0,
-            width: 0.5,
-            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.3)" : "rgba(200, 200, 200, 0.3)",
+            width: i % 5 === 0 ? 1 : 0.5,
+            backgroundColor: i % 5 === 0 ? "rgba(255, 0, 0, 0.8)" : "rgba(100, 100, 100, 0.5)",
           }}
         />
       )
