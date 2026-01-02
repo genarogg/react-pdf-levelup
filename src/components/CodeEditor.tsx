@@ -134,6 +134,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
 
       etiquetaAutoConclusiva("BR"),
+      etiquetaAutoConclusiva("HR"),
       etiquetaAutoConclusiva("Img", 'src="$1"'),
 
       etiquetaConAtributo("A", 'src="$1"'),

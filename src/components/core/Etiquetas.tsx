@@ -95,7 +95,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#666",
     paddingHorizontal: 40,
-  }
+  },
+  hr: {
+    width: "100%",
+    borderTop: "1px solid #000",
+    marginTop: 8,
+    marginBottom: 8,
+  },
 })
 
 const P: React.FC<TextProps> = ({ children, style }) => {
@@ -162,6 +168,10 @@ const BR: React.FC<{ style?: any }> = ({ style }) => {
   return <Text style={[styles.br, style]}>{"\n"}</Text>
 }
 
+const HR: React.FC<{ style?: any }> = ({ style }) => {
+  return <View style={[styles.hr, style]} />
+}
+
 const Span: React.FC<TextProps> = ({ children, style }) => {
   return <Text style={[style]}>{children}</Text>
 }
@@ -178,4 +188,4 @@ const Div: React.FC<DivProps> = ({ children, style }) => {
   return <View style={style}>{children}</View>
 }
 
-export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div }
+export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, HR, Header, Div }

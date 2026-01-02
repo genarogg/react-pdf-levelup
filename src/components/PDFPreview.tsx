@@ -177,7 +177,8 @@ const result = Component;`
     QR,
     UL,
     OL,
-    LI
+    LI,
+    HR
   } = arguments[9];
   
   // Función auxiliar para procesar estilos
