@@ -20,7 +20,7 @@
     "publicar": "cd lib && npm run publicar"
   },
   "dependencies": {
-
+    "turbo": "^2.7.2"
   },
   "packageManager": "npm@10.9.4"
 }
