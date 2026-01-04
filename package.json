@@ -1,44 +1,26 @@
 {
   "name": "monorepo",
   "version": "1.0.0",
-  "private": true,
-  "description": "Monorepo con Turborepo: Astro (docs), React.js (frontend) y Fastify (backend).",
+  "private": false,
+  "description": "Monorepo con Turborepo: Astro (docs), React.js (frontend)",
   "engines": {
     "node": "22"
   },
   "workspaces": [
-    "docs",
     "frontend",
-    "backend",
+    "docs",
     "lib"
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "dev:static": "turbo run dev --parallel  --filter=frontend --filter=docs",
-    "dev:server": "turbo run dev --filter=backend",
-    "dev:client": "turbo run dev --filter=frontend",
-    "build": "turbo run build --filter=backend --filter=frontend --filter=docs",
-    "build:static": "turbo run build --filter=frontend --filter=docs",
+    "build": "turbo run build  --filter=frontend --filter=docs",
     "start": "turbo run start",
-    "start:static": "turbo run start --filter=frontend --filter=docs",
-    "docs": "npm run dev -w docs",
     "lint": "turbo run lint",
-    "clean": "turbo run clean",
-    "-----server-----": "-----------------------------------------",
-    "prismaInit": "cd backend && npm run prismaInit",
-    "prismaReset": "cd backend && npx prisma migrate reset",
-    "prismaMigrate": "cd backend && npx prisma migrate",
-    "prismaMigrateOnli": "cd backend && npx prisma migrate --create-only",
-    "prismaGenerate": "cd backend && npx prisma generate",
-    "enumGenerar": "cd backend && npm run enumGenerar",
     "-----lib-----": "-----------------------------------------",
     "publicar": "cd lib && npm run publicar"
   },
   "dependencies": {
-    "@graphql-codegen/cli": "^6.1.0",
-    "@graphql-codegen/typescript": "^5.0.7",
-    "@graphql-codegen/typescript-operations": "^5.0.7",
-    "@graphql-codegen/typescript-react-apollo": "^4.3.4"
+
   },
   "packageManager": "npm@10.9.4"
 }
