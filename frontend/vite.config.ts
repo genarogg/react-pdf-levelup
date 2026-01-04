@@ -15,31 +15,31 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/docs': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/docs/_astro': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/_astro': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@id': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@fs': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
@@ -51,31 +51,31 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/docs': {
-        target: 'http://localhost:5570',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/docs/_astro': {
-        target: 'http://localhost:4321',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/_astro': {
-        target: 'http://localhost:4321',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@id': {
-        target: 'http://localhost:4321',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@fs': {
-        target: 'http://localhost:4321',
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud',
         changeOrigin: true,
         secure: false,
         ws: true,
