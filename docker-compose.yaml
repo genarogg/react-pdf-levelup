@@ -8,8 +8,6 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     env_file:
       - .env
-    depends_on:
-      - backend
     networks:
       - monorepo-network
 
