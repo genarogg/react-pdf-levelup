@@ -1,0 +1,58 @@
+##############################################
+# Tipos de Usuario
+##############################################
+
+type Usuario {
+  id: Int!
+  name: String!
+  email: String!
+  rol: Rol!
+  token: String!
+}
+
+##############################################
+# Responses de Usuario
+##############################################
+
+type UsuarioResponse {
+  type: String
+  message: String
+  data: Usuario
+}
+
+type UsuariosResponse {
+  type: String
+  message: String
+  data: [Usuario]
+  meta: Meta
+}
+
+##############################################
+# Extensiones de Query y Mutation
+##############################################
+
+extend type Query {
+  validarSesion(token: String!): UsuarioResponse!
+  getUsuarios(token: String!, filtro: String): UsuariosResponse!
+}
+
+extend type Mutation {
+  registerUsuario(
+    token: String
+    name: String!
+    email: String!
+    password: String!
+    captchaToken: String
+    rol: Rol
+  ): UsuarioResponse!
+
+  loginUsuario(
+    email: String!,
+    password: String!,
+    captchaToken: String
+  ): UsuarioResponse!
+
+  resetPassword(email: String!): NotificacionResponse!
+
+  resetPassWithToken(token: String!, nuevaContrasena: String!): UsuarioResponse!
+}

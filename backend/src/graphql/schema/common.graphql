@@ -1,0 +1,29 @@
+##############################################
+# Tipos básicos y Scalars Globales
+##############################################
+
+scalar Upload
+scalar Date
+
+type Meta {
+  total: Int
+  page: Int
+  limit: Int
+}
+
+type NotificacionResponse {
+  type: String
+  message: String
+}
+
+##############################################
+# Root Types
+##############################################
+
+type Query {
+  hello: String
+}
+
+type Mutation {
+  _empty: String
+}

@@ -1,0 +1,9 @@
+node_modules
+/backend/node_modules
+.git
+.turbo
+dist
+.next
+build
+.astro
+.env

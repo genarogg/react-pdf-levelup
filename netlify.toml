@@ -1,5 +1,7 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[build]
+command = "rm -rf node_modules package-lock.json && npm install && npm run build:static && npm run start:static"
+publish = "frontend/dist"
 
+[build.environment]
+NODE_VERSION = "22"
+NPM_FLAGS = "--legacy-peer-deps"

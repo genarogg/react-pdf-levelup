@@ -1,0 +1,8 @@
+schema: http://localhost:4000/graphql
+generates:
+  ../global/enums.ts:
+    plugins:
+      - typescript
+    config:
+      onlyEnums: true
+      enumsAsTypes: false
