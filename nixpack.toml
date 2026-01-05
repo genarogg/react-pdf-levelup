@@ -1,5 +1,5 @@
 [build]
-command = "rm -rf node_modules package-lock.json && npm install && npm run build:static && npm run start:static"
+command = "rm -rf node_modules package-lock.json && npm install && npm run build && npm run start"
 publish = "frontend/dist"
 
 [build.environment]
