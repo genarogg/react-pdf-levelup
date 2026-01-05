@@ -5,20 +5,12 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
 	base: '/docs',
-	// server: {
-	// 	host: '0.0.0.0',
-	// },
-	// preview: {
-	// 	host: '0.0.0.0',
-	// },
-	vite: {
-		server: {
-			allowedHosts: true,
-		},
-		preview: {
-			allowedHosts: true,
-		},
+	server: {
+		host: '0.0.0.0',
+		allowedHosts: true,
+
 	},
+
 	integrations: [
 		starlight({
 			title: 'My Docs',
