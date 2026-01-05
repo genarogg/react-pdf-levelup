@@ -15,31 +15,31 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/docs': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/docs/_astro': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/_astro': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@id': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@fs': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
@@ -51,31 +51,31 @@ export default defineConfig({
     allowedHosts: true,
     proxy: {
       '/docs': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/docs/_astro': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/_astro': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@id': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@fs': {
-        target: 'http://localhost:4321/',
+        target: 'http://172.18.0.3:4321/',
         changeOrigin: true,
         secure: false,
         ws: true,

@@ -9,20 +9,28 @@ COPY docs/package.json ./docs/
 # Instalamos dependencias
 RUN npm install
 
-# Copiamos código fuente
+# Copiamos código fuente Y archivos de configuración
 COPY docs ./docs
 
-# Construimos el sitio estático
+# Construimos la aplicación
 WORKDIR /app/docs
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
-# Servimos con Nginx
-FROM nginx:alpine AS runner
+# Stage de producción
+FROM node:22 AS runner
 
-# Copiamos los archivos estáticos generados al directorio de Nginx
-COPY --from=builder /app/docs/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Exponemos el puerto 80
-EXPOSE 80
+ENV PRODUCTION=false
+ENV PORT=4321
 
-CMD ["nginx", "-g", "daemon off;"]
+# Copiamos los artefactos necesarios del builder
+COPY --from=builder /app/docs/dist ./dist
+COPY --from=builder /app/docs/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
+
+EXPOSE 3000
+
+CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "4321"]
