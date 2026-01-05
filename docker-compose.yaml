@@ -19,7 +19,7 @@ services:
       dockerfile: docs/Dockerfile
     container_name: monorepo-docs
     ports:
-      - "${DOCS_HOST_PORT}:${DOCS_CONTAINER_PORT}"
+      - "${DOCS_PORT}:${DOCS_PORT}"
     env_file:
       - .env
     networks:
