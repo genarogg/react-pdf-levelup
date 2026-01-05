@@ -14,8 +14,6 @@ COPY docs ./docs
 
 # Construimos la aplicación
 WORKDIR /app/docs
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Stage de producción
@@ -30,7 +28,8 @@ ENV PORT=4321
 COPY --from=builder /app/docs/dist ./dist
 COPY --from=builder /app/docs/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/docs/astro.config.mjs ./
 
-EXPOSE 3000
+EXPOSE 4321
 
 CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "4321"]
