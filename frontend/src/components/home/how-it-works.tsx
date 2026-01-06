@@ -36,28 +36,36 @@ import { Page, Header, Table } from 'react-pdf-levelup';`,
 
 export function HowItWorks() {
   return (
-    <section className="border-t border-border px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance mb-4">
+    <section className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance mb-3 sm:mb-4">
             How It Works
           </h2>
-          <p className="text-lg text-muted-foreground">Get from zero to PDF in under 5 minutes</p>
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground">
+            Get from zero to PDF in under 5 minutes
+          </p>
         </div>
 
-        <div className="space-y-12">
+        <div className="space-y-8 sm:space-y-10 lg:space-y-12">
           {steps.map((item) => (
-            <div key={item.step} className="flex gap-6">
+            <div key={item.step} className="flex gap-3 sm:gap-4 lg:gap-6">
               <div className="flex-shrink-0">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500 text-lg font-bold text-white">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-cyan-500 text-base sm:text-lg font-bold text-white">
                   {item.step}
                 </div>
               </div>
 
-              <div className="flex-1 pt-1">
-                <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
-                <p className="text-muted-foreground mb-4 leading-relaxed">{item.description}</p>
-                <CodeBlock code={item.code} language={item.language} />
+              <div className="flex-1 pt-0.5 sm:pt-1 min-w-0">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-foreground mb-1.5 sm:mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-3 sm:mb-4 leading-relaxed">
+                  {item.description}
+                </p>
+                <div className="overflow-x-auto">
+                  <CodeBlock code={item.code} language={item.language} />
+                </div>
               </div>
             </div>
           ))}

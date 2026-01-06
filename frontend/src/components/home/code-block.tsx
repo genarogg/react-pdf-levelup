@@ -12,6 +12,8 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
 
+  console.log("Rendering CodeBlock with language:", language)
+
   const handleCopy = () => {
     navigator.clipboard.writeText(code)
     setCopied(true)

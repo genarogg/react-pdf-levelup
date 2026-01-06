@@ -23,16 +23,7 @@ const features = [
   },
 ]
 
-const codeExample = `interface InvoiceProps {
-  logo?: string;
-  client: ClientInfo;
-  items: LineItem[];
-  currency?: 'USD' | 'EUR' | 'GBP';
-  dueDate?: string;
-  notes?: string;
-  theme?: ThemeConfig;
-  onRender?: (blob: Blob) => void;
-}`
+
 
 export function DeveloperFeatures() {
   return (

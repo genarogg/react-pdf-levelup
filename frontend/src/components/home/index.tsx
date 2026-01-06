@@ -1,4 +1,5 @@
-import { Header } from "./header"
+// import { Header } from "./header"
+import Header from "../header"
 import { HeroSection } from "./hero-section"
 import { ValueProposition } from "./value-proposition"
 import { ComparisonSection } from "./comparison-section"
@@ -16,7 +17,7 @@ import { Footer } from "./footer"
 export default function Home() {
     return (
         <div className="min-h-screen bg-background">
-            <Header />
+            <Header context="home" />
             <main>
                 <HeroSection />
                 <ValueProposition />
