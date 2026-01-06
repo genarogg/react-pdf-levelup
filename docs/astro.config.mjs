@@ -24,6 +24,13 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Guías',
+					items: [
+						{ label: 'Tu Primer Template', slug: 'guides/first-template' },
+						{ label: 'Integración Backend', slug: 'guides/backend-integration' },
+					],
+				},
+				{
 					label: 'Componentes',
 					autogenerate: { directory: 'components' },
 				},

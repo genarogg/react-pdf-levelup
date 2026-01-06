@@ -1,0 +1,71 @@
+---
+title: Integración Backend
+description: Generación de PDFs en el servidor o scripts con Node.js.
+---
+
+React PDF Level Up no es solo para el frontend. Puedes utilizar la función `generatePDF` en entornos de Node.js para generar documentos programáticamente, guardarlos en disco o enviarlos como respuesta HTTP.
+
+## Requisitos
+
+Asegúrate de que tu entorno soporte React y SSR (Server Side Rendering). Generalmente esto funciona out-of-the-box en frameworks como Next.js o Remix, o en scripts simples de Node con configuración de Babel/TypeScript.
+
+## Ejemplo de Script
+
+El siguiente ejemplo muestra cómo generar un PDF, convertirlo a Buffer y guardarlo en el sistema de archivos.
+
+```typescript
+import { generatePDF } from "react-pdf-levelup";
+import Template from "./MyTemplate"; // Tu componente Template
+import fs from "fs";
+import path from "path";
+
+const data = {
+    nombre: "Juan Pérez",
+    edad: 30,
+    ciudad: "Madrid",
+};
+
+const generateAndSavePDF = async () => {
+    try {
+        console.log("Generando PDF...");
+        
+        // 1. Generar el PDF en base64
+        const base64PDF = await generatePDF({ template: Template, data });
+
+        if (!base64PDF) {
+            throw new Error("No se pudo generar el PDF");
+        }
+
+        // 2. Convertir base64 a Buffer
+        const buffer = Buffer.from(base64PDF, "base64");
+
+        // 3. Definir ruta de salida
+        const outputPath = path.join(process.cwd(), "output", "documento.pdf");
+
+        // 4. Guardar archivo
+        fs.writeFileSync(outputPath, buffer);
+        console.log(`PDF guardado exitosamente en: ${outputPath}`);
+
+    } catch (error) {
+        console.error("Error generating/saving PDF:", error);
+    }
+};
+
+generateAndSavePDF();
+```
+
+## Uso en API Endpoints
+
+Si estás utilizando Express, Next.js API Routes u otro servidor HTTP, puedes enviar el buffer directamente al cliente.
+
+```typescript
+// Ejemplo conceptual para Express
+app.get('/download-pdf', async (req, res) => {
+  const base64 = await generatePDF({ template: InvoiceTemplate, data: req.body });
+  const buffer = Buffer.from(base64, 'base64');
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename=factura.pdf');
+  res.send(buffer);
+});
+```
