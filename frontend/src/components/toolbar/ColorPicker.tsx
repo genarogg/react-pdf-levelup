@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import { useState, useRef, useEffect } from "react"
+
+import React, { useState, useRef, useEffect } from "react"
 import { Palette, Copy, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
 
@@ -111,7 +111,7 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
             <Input
               type="text"
               value={selectedColor}
-              onChange={(e) => selectColor(e.target.value)}
+              onChange={(e: any) => selectColor(e.target.value)}
               className="flex-1 bg-gray-700 border-gray-600 text-gray-200 font-mono text-sm"
             />
             <button

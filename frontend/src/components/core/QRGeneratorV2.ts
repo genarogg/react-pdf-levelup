@@ -81,7 +81,7 @@ export const generateQRV2AsBase64 = async (options: QRV2Options): Promise<string
 
     const width = typeof options.width === "number" && isFinite(options.width) ? Math.round(options.width) : 300;
     const height = typeof options.height === "number" && isFinite(options.height) ? Math.round(options.height) : 300;
-    const hasImage = !!options.image;
+   
 
     const qrOptions = {
       width,

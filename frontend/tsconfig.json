@@ -7,14 +7,5 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ],
-  "baseUrl": "./",
-  "paths": {
-    "@pdf/*": [
-      "./src/pdf/*"
-    ],
-    "@/*": [
-      "./src/*"
-    ],
-  },
+  ]
 }

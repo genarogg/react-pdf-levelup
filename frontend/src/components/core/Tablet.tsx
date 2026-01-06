@@ -89,7 +89,7 @@ const Thead: React.FC<TheadProps> = ({
   );
 };
 
-const Tbody: React.FC<TableProps> = ({ children, style }) => {
+const Tbody: React.FC<TableProps> = ({ children }) => {
   const rows = React.Children.toArray(children) as React.ReactElement<any>[];
   const count = rows.length;
   return (

@@ -1,9 +1,9 @@
-import React from 'react'
+
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 import PDFPreview from "./PDFPreview"
-import QuickHelp from "../toolbar/QuickHelp"
+
 import CodeEditor from "./CodeEditor"
 import ToolBar from "../toolbar/ToolBar"
 import { loadTemplateFile } from "../../utils/templateLoader"

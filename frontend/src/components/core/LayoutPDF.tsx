@@ -103,7 +103,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   let safeSize = size
   let safeOrientation = orientation
   let safeBackgroundColor = backgroundColor
-  let safeLines = Math.max(1, Math.min(lines, 10)) // Limit between 1 and 10 lines
+
   let safeMargen = margen
 
   try {
@@ -136,7 +136,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
     // Validar lines
     if (typeof lines !== "number" || lines < 1) {
       console.warn(`Invalid lines value: ${lines}. Using 1 as default.`)
-      safeLines = 1
+ 
     }
   } catch (e) {
     console.warn("Error processing props in LayoutPDF:", e)

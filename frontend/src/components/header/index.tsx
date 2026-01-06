@@ -1,11 +1,9 @@
 "use client"
 import React from "react"
-import { Github, Download, Coffee, FileText, Play } from "lucide-react"
+import { Github, Coffee, FileText, Play } from "lucide-react"
 
 import TemplateSelector from "./TemplateSelector"
-import ColorPicker from "../toolbar/ColorPicker"
 
-import downloadTemplate from "../toolbar/funciones/dowloadTemplate"
 
 interface HeaderProps {
     code?: any
@@ -16,7 +14,7 @@ const linkStyles =
     "text-gray-300 hover:text-white transition-colors duration-200 flex items-center gap-1.5 text-sm font-medium"
 const iconStyles = "w-4 h-4"
 
-const Header: React.FC<HeaderProps> = ({ code, context }) => {
+const Header: React.FC<HeaderProps> = ({ context }) => {
     return (
         <>
             <header className="relative bg-gradient-to-r from-black via-gray-900 to-black border-b border-gray-800/50 px-2.5 py-3 shadow-2xl backdrop-blur-sm h-[70px]">
@@ -48,9 +46,9 @@ const Header: React.FC<HeaderProps> = ({ code, context }) => {
                             </a>
                         ) : null}
 
-                        
 
-                        
+
+
 
                         <a
                             href="https://github.com/genarogg/react-pdf-levelup"
