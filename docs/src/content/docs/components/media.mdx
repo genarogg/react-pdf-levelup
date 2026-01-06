@@ -1,0 +1,115 @@
+---
+title: Media
+description: Componentes para imágenes y códigos QR.
+---
+
+## Img
+
+Componente para mostrar imágenes.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `src` | `string` | `""` | URL de la imagen. |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<Img src="https://picsum.photos/400/200" style={{ width: 200 }} />
+```
+
+## ImgBg
+
+Imagen de fondo con contenido superpuesto.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `src` | `string` | `""` | URL de la imagen de fondo. |
+| `width` | `number\|string` | `"100%"` | Ancho del fondo. |
+| `height` | `number\|string` | `"100%"` | Alto del fondo. |
+| `opacity` | `number` | `0.2` | Opacidad del fondo (0-1). |
+| `objectFit` | `string` | `"cover"` | Ajuste de la imagen (cover, contain, fill, none, scale-down). |
+| `objectPosition` | `string` | `"center"` | Posición de la imagen. |
+| `fixed` | `boolean` | `false` | Fijar en todas las páginas. |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
+  <P>Texto sobre imagen de fondo</P>
+</ImgBg>
+```
+
+## QR
+
+Generador de código QR básico.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `value` | `string` | `""` | Texto o URL para el código QR. |
+| `size` | `number` | `150` | Tamaño en píxeles. |
+| `colorDark` | `string` | `"#000000"` | Color de los puntos. |
+| `colorLight` | `string` | `"#ffffff"` | Color de fondo. |
+| `margin` | `number` | `0` | Margen alrededor del QR. |
+| `errorCorrectionLevel` | `string` | `"M"` | Nivel de corrección (L, M, Q, H). |
+| `logo` | `string` | `""` | URL de la imagen del logo. |
+| `logoWidth` | `number` | `30` | Ancho del logo en píxeles. |
+| `logoHeight` | `number` | `30` | Alto del logo en píxeles. |
+
+### Ejemplo
+
+```tsx
+<QR 
+  value="https://example.com" 
+  size={150} 
+  colorDark="#000" 
+  colorLight="#fff" 
+  logo="https://picsum.photos/80" 
+  logoWidth={30} 
+  logoHeight={30} 
+/>
+```
+
+## QRV2
+
+Código QR estilizado con opciones avanzadas y soporte para imagen central.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `value` | `string` | `""` | Texto o URL para el código QR. |
+| `size` | `number` | `300` | Tamaño del QR. |
+| `image` | `string` | `""` | URL del logo central. |
+| `dotsOptions` | `object` | `{}` | Opciones de puntos (color, tipo). |
+| `backgroundOptions` | `object` | `{ color: #ffffff }` | Opciones de fondo. |
+| `imageOptions` | `object` | `{ margin: 0, imageSize: 0.4 }` | Opciones de imagen central. |
+| `cornersSquareOptions` | `object` | `{}` | Opciones de esquinas cuadradas. |
+| `cornersDotOptions` | `object` | `{}` | Opciones de esquinas en punto. |
+| `colorDark` | `string` | `""` | Color de puntos (fallback). |
+| `colorLight` | `string` | `""` | Color de fondo (fallback). |
+| `margin` | `number` | `0` | Margen (fallback). |
+| `errorCorrectionLevel` | `string` | `"M"` | Corrección de errores (fallback L, M, Q, H). |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<QRV2
+  value="https://example.com"
+  size={300}
+  image="https://picsum.photos/80"
+  dotsOptions={{ color: "#1f2937", type: "rounded" }}
+  backgroundOptions={{ color: "#ffffff" }}
+  imageOptions={{ margin: 0, imageSize: 0.35 }}
+  cornersSquareOptions={{ type: "extra-rounded", color: "#1f2937" }}
+  cornersDotOptions={{ type: "dot", color: "#1f2937" }}
+/>
+```

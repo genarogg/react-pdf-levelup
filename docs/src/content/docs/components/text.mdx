@@ -1,0 +1,144 @@
+---
+title: Text
+description: Componentes para renderizar y formatear texto.
+---
+
+## P, H1-H6
+
+Componentes básicos de texto (párrafo y encabezados).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales para el texto. |
+
+### Ejemplo
+
+```tsx
+<H1>Título</H1>
+<H3>Subtítulo</H3>
+<P>Parrafo con texto normal.</P>
+```
+
+## Strong, Em, U, Small
+
+Componentes de formato de texto en línea.
+
+- **Strong**: Texto en negrita.
+- **Em**: Texto en cursiva (énfasis).
+- **U**: Texto subrayado.
+- **Small**: Texto más pequeño.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<P>
+  <Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U>Subrayado</U>, <Small>Pequeño</Small>
+</P>
+```
+
+## Blockquote
+
+Bloque de cita para destacar texto importante.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<Blockquote>Una cita destacada en el documento.</Blockquote>
+```
+
+## Mark
+
+Texto resaltado (como con un marcador).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<Mark>Texto resaltado</Mark>
+```
+
+## Span
+
+Contenedor de texto inline genérico.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<P>Texto normal con un <Span style={{ color: 'red' }}>span rojo</Span>.</P>
+```
+
+## BR
+
+Salto de línea.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<P>Linea 1</P>
+<BR />
+<P>Linea 2</P>
+```
+
+## HR
+
+Línea horizontal divisoria.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<HR />
+```
+
+## A
+
+Enlace (Link).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `href` | `string` | `""` | URL del enlace. |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<A href="https://example.com">Ir al sitio web</A>
+```

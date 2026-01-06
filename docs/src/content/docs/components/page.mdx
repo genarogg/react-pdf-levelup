@@ -1,0 +1,40 @@
+---
+title: Page Elements
+description: Elementos estructurales de la página como encabezados y pies de página.
+---
+
+## Header
+
+Encabezado de página que se puede repetir en todas las páginas.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `fixed` | `boolean` | `false` | Fijar en todas las páginas. |
+
+### Ejemplo
+
+```tsx
+<Header fixed>Encabezado fijo en todas las páginas</Header>
+```
+
+## Pie de página (Footer)
+
+El pie de página se configura a través del componente `LayoutPDF`.
+
+### Props (en LayoutPDF)
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `footer` | `ReactNode` | `""` | Contenido del pie de página. |
+| `lines` | `number` | `1` | Número de líneas reservadas para el pie de página. |
+
+### Ejemplo
+
+```tsx
+<LayoutPDF footer={<P>Pie de página personalizado</P>} lines={2}>
+  <P>Contenido del documento</P>
+</LayoutPDF>
+```
