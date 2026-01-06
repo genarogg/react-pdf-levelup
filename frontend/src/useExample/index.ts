@@ -13,17 +13,17 @@ const generateAndSavePDF = async () => {
     try {
         console.log("Generando PDF...");
         const base64PDF = await generatePDF({ template: Template, data });
-        
+
         if (!base64PDF) {
             throw new Error("No se pudo generar el PDF");
         }
 
         // Convertir base64 a buffer
         const buffer = Buffer.from(base64PDF, "base64");
-        
+
         // Definir ruta de salida (usando process.cwd() en lugar de __dirname)
-        const outputPath = path.join(process.cwd(), "src/useExample/example.pdf");
-        
+        const outputPath = path.join(process.cwd(), "frontend", "src", "useExample", "example.pdf");
+
         // Guardar archivo
         fs.writeFileSync(outputPath, buffer);
         console.log(`PDF guardado exitosamente en: ${outputPath}`);
