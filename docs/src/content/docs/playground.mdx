@@ -1,0 +1,68 @@
+---
+title: Playground
+description: Entorno interactivo para diseñar y probar tus documentos PDF.
+---
+
+import { LinkButton, Card, CardGrid } from '@astrojs/starlight/components';
+
+El **Playground** es el corazón de React PDF Level Up. Es un entorno de desarrollo interactivo que te permite escribir código React PDF y ver los resultados en tiempo real.
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}>
+  <LinkButton href="/" variant="primary" icon="rocket">
+    Abrir Playground
+  </LinkButton>
+</div>
+
+## Características Principales
+
+<CardGrid>
+  <Card title="Editor en Tiempo Real" icon="pencil">
+    Escribe código TypeScript/React a la izquierda y ve el PDF renderizado instantáneamente a la derecha.
+  </Card>
+  <Card title="Persistencia Automática" icon="save">
+    Tu trabajo se guarda automáticamente en el navegador para que no pierdas tus cambios.
+  </Card>
+  <Card title="Templates Predefinidos" icon="document">
+    Carga plantillas de ejemplo como facturas, reportes y certificados para empezar rápidamente.
+  </Card>
+</CardGrid>
+
+## Barra de Herramientas (Toolbar)
+
+La barra de herramientas flotante en la parte inferior del editor te da acceso rápido a utilidades esenciales.
+
+### 1. Ayuda Rápida (QuickHelp)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+  <div style={{ background: '#333', padding: '0.5rem', borderRadius: '0.5rem', color: 'white' }}>?</div>
+  <span>Acceso instantáneo a la documentación de componentes.</span>
+</div>
+
+- **Snippets de código**: Copia ejemplos de uso de componentes con un clic.
+- **Referencia de Props**: Consulta las propiedades disponibles para cada componente sin salir del editor.
+
+### 2. Selector de Color (ColorPicker)
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+  <div style={{ background: '#333', padding: '0.5rem', borderRadius: '0.5rem', color: 'white' }}>🎨</div>
+  <span>Herramienta completa para gestión de colores.</span>
+</div>
+
+- **Paleta Predefinida**: Colores comunes listos para usar.
+- **Selector Visual**: Elige cualquier color visualmente.
+- **Historial**: Accede rápidamente a los últimos colores utilizados.
+- **Copiado Hex**: Copia el código hexadecimal al portapapeles para pegarlo en tu código.
+
+### 3. Descargar Template
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+  <div style={{ background: '#333', padding: '0.5rem', borderRadius: '0.5rem', color: 'white' }}>⬇️</div>
+  <span>Exporta tu trabajo.</span>
+</div>
+
+- Descarga el código actual de tu editor como un archivo `.tsx`.
+- Útil para llevar tu diseño a tu propio proyecto una vez finalizado.
+
+## Atajos de Teclado
+
+El editor soporta atajos de teclado estándar de editores de código (tipo VS Code) para facilitar la edición.

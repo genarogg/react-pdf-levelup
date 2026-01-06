@@ -17,6 +17,13 @@ export default defineConfig({
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/genarogg/react-pdf-levelup' }],
 			sidebar: [
 				{
+					label: 'Inicio',
+					items: [
+						{ label: 'Get Started', slug: 'get-started' },
+						{ label: 'Playground', slug: 'playground' },
+					],
+				},
+				{
 					label: 'Componentes',
 					autogenerate: { directory: 'components' },
 				},
