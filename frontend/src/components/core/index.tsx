@@ -1,0 +1,77 @@
+import LayoutPDF from "./LayoutPDF"
+import Img from "./Img"
+import { Left, Right, Center } from "./Position"
+import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div } from "./Etiquetas"
+import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet"
+import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./Grid"
+
+import QR from "./QR"
+import QRV2 from "./QRV2"
+
+import { UL, OL, LI } from "./Lista"
+
+import { View, Text, StyleSheet, Font, renderToStream } from "@react-pdf/renderer"
+
+import { decodeBase64Pdf, generatePDF } from "../../functions"
+
+import ImgBg from "./ImgBg"
+export {
+  ImgBg,
+  LayoutPDF,
+  Img,
+  Left,
+  Right,
+  Center,
+  P,
+  A,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  H6,
+  Strong,
+  Em,
+  U,
+  Small,
+  Blockquote,
+  Mark,
+  Span,
+  BR,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Container,
+  Row,
+  Col1,
+  Col2,
+  Col3,
+  Col4,
+  Col5,
+  Col6,
+  Col7,
+  Col8,
+  Col9,
+  Col10,
+  Col11,
+  Col12,
+  Header,
+  QR,
+  QRV2,
+  UL,
+  OL,
+  LI,
+  View,
+  Text,
+  StyleSheet,
+  Font,
+  decodeBase64Pdf,
+  generatePDF,
+  renderToStream,
+  Div,
+  HR
+}
+

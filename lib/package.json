@@ -17,5 +17,8 @@
   },
   "dependencies": {
     "tsup": "^8.5.1"
+  },
+  "devDependencies": {
+    "json": "^11.0.0"
   }
 }
