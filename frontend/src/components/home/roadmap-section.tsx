@@ -3,38 +3,38 @@ import { Check, Clock, Sparkles } from "lucide-react"
 const roadmapItems = [
   {
     status: "completed",
-    title: "Core Components",
-    description: "Document, Page, View, Text, Image, and Link components",
+    title: "Componentes Principales",
+    description: "Componentes Document, Page, View, Text, Image y Link",
     icon: Check,
   },
   {
     status: "completed",
-    title: "Flexbox Layout",
-    description: "Full flexbox support for complex layouts",
+    title: "Diseño Flexbox",
+    description: "Soporte completo de flexbox para diseños complejos",
     icon: Check,
   },
   {
     status: "completed",
-    title: "Custom Fonts",
-    description: "Support for custom font families and weights",
+    title: "Fuentes Personalizadas",
+    description: "Soporte para familias de fuentes y pesos personalizados",
     icon: Check,
   },
   {
     status: "in-progress",
-    title: "Table Component",
-    description: "Native table support with auto-pagination",
+    title: "Componente de Tabla",
+    description: "Soporte nativo de tablas con paginación automática",
     icon: Clock,
   },
   {
     status: "planned",
-    title: "Charts & Graphs",
-    description: "Built-in charting components for data visualization",
+    title: "Gráficos y Diagramas",
+    description: "Componentes de gráficos integrados para visualización de datos",
     icon: Sparkles,
   },
   {
     status: "planned",
-    title: "Form Fields",
-    description: "Interactive PDF form fields and inputs",
+    title: "Campos de Formulario",
+    description: "Campos de formulario y entradas PDF interactivas",
     icon: Sparkles,
   },
 ]
@@ -67,10 +67,10 @@ export function RoadmapSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground lg:text-4xl text-balance">
-            Roadmap
+            Hoja de Ruta
           </h2>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg text-muted-foreground">
-            What we've built and what's coming next.
+            Lo que hemos construido y lo que viene después.
           </p>
         </div>
 

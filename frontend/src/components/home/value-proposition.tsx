@@ -3,23 +3,23 @@ import { Zap, Shield, Palette, Code2 } from "lucide-react"
 const features = [
   {
     icon: Code2,
-    title: "React-First Approach",
-    description: "Write PDFs using familiar React patterns. Components, props, and JSX - everything you already know.",
+    title: "Nativo de React",
+    description: "Escribe PDFs usando los patrones que ya conoces. Componentes, props y JSX, sin aprender nuevas sintaxis extrañas.",
   },
   {
     icon: Shield,
-    title: "Full TypeScript Support",
-    description: "Complete type definitions for all components. Catch errors at compile time, not runtime.",
+    title: "TypeScript Completo",
+    description: "Definiciones de tipos robustas para todos los componentes. Detecta errores mientras escribes, no en producción.",
   },
   {
     icon: Zap,
-    title: "Optimized Performance",
-    description: "Built for speed with lazy loading, efficient rendering, and minimal bundle size.",
+    title: "Rendimiento Optimizado",
+    description: "Diseñado para la velocidad con renderizado eficiente y un tamaño de paquete mínimo. Genera documentos al instante.",
   },
   {
     icon: Palette,
-    title: "Flexible Styling",
-    description: "Style your PDFs with a CSS-like API. Flexbox layout, custom fonts, and responsive designs.",
+    title: "Estilos Flexibles",
+    description: "Estiliza tus PDFs con una API similar a CSS. Flexbox, fuentes personalizadas y diseños que se adaptan a tus necesidades.",
   },
 ]
 
@@ -29,10 +29,10 @@ export function ValueProposition() {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
-            Why react-pdf-levelup?
+            ¿Por qué react-pdf-levelup?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Everything you need to create professional PDF documents with React.
+            Todo lo que necesitas para crear documentos PDF profesionales con React.
           </p>
         </div>
 

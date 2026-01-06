@@ -1,29 +1,53 @@
 import { Check } from "lucide-react"
+import { CodeBlock } from "./code-block"
 
 const features = [
   {
-    title: "Fully Typed with TypeScript",
-    description: "IntelliSense, autocomplete, and compile-time safety for all components and props.",
+    title: "Tipado completo con TypeScript",
+    description: "IntelliSense, autocompletado y seguridad en tiempo de compilación para todos los componentes y props.",
   },
   {
-    title: "Works with Modern Frameworks",
-    description: "Seamless integration with Vite, Next.js, Remix, and Create React App.",
+    title: "Funciona con Frameworks Modernos",
+    description: "Integración perfecta con Vite, Next.js, Remix y Create React App.",
   },
   {
-    title: "Composable Components",
-    description: "Build complex layouts by combining simple, reusable building blocks.",
+    title: "Componentes Componibles",
+    description: "Construye diseños complejos combinando bloques de construcción simples y reutilizables.",
   },
   {
-    title: "Easy Theming & Customization",
-    description: "Override colors, fonts, and spacing with a simple theme object or CSS-like syntax.",
+    title: "Temas y Personalización Fáciles",
+    description: "Sobrescribe colores, fuentes y espaciado con un objeto de tema simple o sintaxis tipo CSS.",
   },
   {
-    title: "Designed for Scale",
-    description: "Generate thousands of PDFs efficiently with optimized rendering and caching.",
+    title: "Diseñado para Escalar",
+    description: "Genera miles de PDFs eficientemente con renderizado y caché optimizados.",
   },
 ]
 
+const exampleCode = `import { Document, Page, Text, View } from '@react-pdf/renderer';
+import { InvoiceHeader, InvoiceTable, InvoiceTotal } from './components';
 
+export const InvoicePDF = ({ data }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <InvoiceHeader 
+        client={data.client} 
+        date={data.date} 
+      />
+      
+      <View style={styles.content}>
+        <Text style={styles.title}>Factura #{data.number}</Text>
+        <InvoiceTable items={data.items} />
+      </View>
+
+      <InvoiceTotal 
+        subtotal={data.subtotal} 
+        tax={data.tax} 
+        total={data.total} 
+      />
+    </Page>
+  </Document>
+);`
 
 export function DeveloperFeatures() {
   return (
@@ -32,10 +56,9 @@ export function DeveloperFeatures() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left side - Features */}
           <div>
-            <h2 className="text-4xl font-bold mb-4 text-balance">Built for Developers</h2>
+            <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">Creado para Desarrolladores</h2>
             <p className="text-muted-foreground mb-12 text-pretty leading-relaxed">
-              We obsess over the little things so you can focus on shipping. Every API decision is made with developer
-              experience in mind.
+              Nos obsesionamos con los pequeños detalles para que puedas concentrarte en programar. Cada decisión de la librería está pensada en la experiencia del desarrollador.
             </p>
 
             <div className="space-y-8">
@@ -47,7 +70,7 @@ export function DeveloperFeatures() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">{feature.title}</h3>
+                    <h3 className="font-semibold mb-1 text-foreground">{feature.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
@@ -57,68 +80,12 @@ export function DeveloperFeatures() {
 
           {/* Right side - Code example */}
           <div className="lg:sticky lg:top-8">
-            <div className="bg-card border rounded-lg shadow-lg overflow-hidden">
-              {/* Window controls */}
-              <div className="bg-muted/50 px-4 py-3 flex items-center gap-2 border-b">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                </div>
-                <span className="ml-2 text-sm text-muted-foreground font-mono">types.d.ts</span>
-              </div>
-
-              {/* Code content */}
-              <div className="p-6 bg-card">
-                <pre className="text-sm leading-relaxed">
-                  <code className="font-mono">
-                    <span className="text-purple-600">interface</span>{" "}
-                    <span className="text-yellow-600">InvoiceProps</span> <span className="text-foreground">{"{"}</span>
-                    {"\n  "}
-                    <span className="text-blue-600">logo?</span>
-                    <span className="text-foreground">:</span> <span className="text-cyan-600">string</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">client</span>
-                    <span className="text-foreground">:</span> <span className="text-yellow-600">ClientInfo</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">items</span>
-                    <span className="text-foreground">:</span> <span className="text-yellow-600">LineItem</span>
-                    <span className="text-foreground">[];</span>
-                    {"\n  "}
-                    <span className="text-blue-600">currency?</span>
-                    <span className="text-foreground">:</span> <span className="text-green-600">'USD'</span>
-                    <span className="text-foreground"> | </span>
-                    <span className="text-green-600">'EUR'</span>
-                    <span className="text-foreground"> | </span>
-                    <span className="text-green-600">'GBP'</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">dueDate?</span>
-                    <span className="text-foreground">:</span> <span className="text-cyan-600">string</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">notes?</span>
-                    <span className="text-foreground">:</span> <span className="text-cyan-600">string</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">theme?</span>
-                    <span className="text-foreground">:</span> <span className="text-yellow-600">ThemeConfig</span>
-                    <span className="text-foreground">;</span>
-                    {"\n  "}
-                    <span className="text-blue-600">onRender?</span>
-                    <span className="text-foreground">:</span> <span className="text-foreground">(</span>
-                    <span className="text-blue-600">blob</span>
-                    <span className="text-foreground">:</span> <span className="text-yellow-600">Blob</span>
-                    <span className="text-foreground">) {"=>"} </span>
-                    <span className="text-cyan-600">void</span>
-                    <span className="text-foreground">;</span>
-                    {"\n"}
-                    <span className="text-foreground">{"}"}</span>
-                  </code>
-                </pre>
-              </div>
+            <div className="shadow-lg">
+                <CodeBlock 
+                  code={exampleCode} 
+                  language="tsx" 
+                  filename="Invoice.tsx" 
+                />
             </div>
           </div>
         </div>

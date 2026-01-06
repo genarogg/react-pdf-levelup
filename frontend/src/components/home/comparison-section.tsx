@@ -1,14 +1,14 @@
 import { Check, X } from "lucide-react"
 
 const comparisonData = [
-  { feature: "React Components", levelup: true, pdfkit: false, jspdf: false },
-  { feature: "TypeScript Support", levelup: true, pdfkit: "Partial", jspdf: "Partial" },
-  { feature: "Flexbox Layout", levelup: true, pdfkit: false, jspdf: false },
-  { feature: "SSR Compatible", levelup: true, pdfkit: true, jspdf: false },
-  { feature: "Custom Fonts", levelup: true, pdfkit: true, jspdf: true },
-  { feature: "Image Support", levelup: true, pdfkit: true, jspdf: true },
-  { feature: "Learning Curve", levelup: "Low", pdfkit: "High", jspdf: "Medium" },
-  { feature: "Bundle Size", levelup: "~45kb", pdfkit: "~200kb", jspdf: "~80kb" },
+  { feature: "Componentes React", levelup: true, pdfkit: false, jspdf: false },
+  { feature: "Soporte TypeScript", levelup: true, pdfkit: "Parcial", jspdf: "Parcial" },
+  { feature: "Diseño Flexbox", levelup: true, pdfkit: false, jspdf: false },
+  { feature: "Compatible con SSR", levelup: true, pdfkit: true, jspdf: false },
+  { feature: "Sistema de Diseño", levelup: "Automático (Flex)", pdfkit: "Manual (X,Y)", jspdf: "Manual (X,Y)" },
+  { feature: "Fuentes Personalizadas", levelup: true, pdfkit: true, jspdf: true },
+  { feature: "Curva de Aprendizaje", levelup: "Baja", pdfkit: "Alta", jspdf: "Media" },
+  { feature: "Mantenibilidad", levelup: "Alta", pdfkit: "Baja", jspdf: "Baja" },
 ]
 
 function renderCell(value: boolean | string) {
@@ -45,10 +45,10 @@ export function ComparisonSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground lg:text-4xl text-balance">
-            How We Compare
+            Cómo nos Comparamos
           </h2>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg text-muted-foreground">
-            See how react-pdf-levelup stacks up against other PDF libraries.
+            Mira cómo react-pdf-levelup se destaca frente a otras librerías de PDF.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export function ComparisonSection() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b border-border">
-                <th className="py-4 text-left text-sm font-medium text-muted-foreground">Feature</th>
+                <th className="py-4 text-left text-sm font-medium text-muted-foreground">Característica</th>
                 <th className="px-4 lg:px-6 py-4 text-center text-sm font-semibold text-accent">react-pdf-levelup</th>
                 <th className="px-4 lg:px-6 py-4 text-center text-sm font-medium text-muted-foreground">PDFKit</th>
                 <th className="px-4 lg:px-6 py-4 text-center text-sm font-medium text-muted-foreground">jsPDF</th>
