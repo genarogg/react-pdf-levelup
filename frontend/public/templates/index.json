@@ -28,5 +28,10 @@
     "id": "QRTemplate",
     "name": "QR Template",
     "path": "/templates/QR.tsx"
+  },
+  {
+    "id": "tablaMinimal",
+    "name": "Tabla Minimal",
+    "path": "/templates/TablaMinimal.tsx"
   }
 ]

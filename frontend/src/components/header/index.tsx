@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react"
 import { Github, Coffee, FileText, Play, Menu, X } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import TemplateSelector from "./TemplateSelector"
 
@@ -26,9 +27,11 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         <div className="w-8 h-8from-gray-600 rounded-lg flex items-center justify-center shadow-lg">
                             <img src="/android-chrome-192x192.png" alt="react-pdf-levelup" />
                         </div>
-                        <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 bg-clip-text text-transparent">
-                            React PDF Levelup
-                        </h1>
+                        <Link to="/" >
+                            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 bg-clip-text text-transparent">
+                                React PDF Levelup
+                            </h1>
+                        </Link>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -49,10 +52,10 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         {context === "home" ? (
                             <nav className="hidden md:flex items-center gap-4">
                                 <a href="#features" className={linkStyles}>Características</a>
-                                <a href="#templates" className={linkStyles}>Plantillas</a>
-                                <a href="#como-funciona" className={linkStyles}>Cómo funciona</a>
-                                <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
                                 <a href="#comparacion" className={linkStyles}>Comparación</a>
+                                <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
+                                <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
+                                <a href="#templates" className={linkStyles}>Plantillas</a>
                                 <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                                 <a href="#stack" className={linkStyles}>Stack</a>
                                 <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
@@ -101,10 +104,10 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                 <aside className="md:hidden bg-black/80 border-t border-gray-800/50 px-3 py-4">
                     <nav className="flex flex-col gap-2">
                         <a href="#features" className={linkStyles}>Características</a>
-                        <a href="#templates" className={linkStyles}>Plantillas</a>
-                        <a href="#como-funciona" className={linkStyles}>Cómo funciona</a>
-                        <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
                         <a href="#comparacion" className={linkStyles}>Comparación</a>
+                        <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
+                        <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
+                        <a href="#templates" className={linkStyles}>Plantillas</a>
                         <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                         <a href="#stack" className={linkStyles}>Stack</a>
                         <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>

@@ -1,5 +1,7 @@
 // import { Header } from "./header"
 import Header from "../header"
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
 import { HeroSection } from "./hero-section"
 import { ValueProposition } from "./value-proposition"
 import { ComparisonSection } from "./comparison-section"
@@ -14,7 +16,19 @@ import { FaqSection } from "./faq-section"
 import { CtaSection } from "./cta-section"
 import { Footer } from "./footer"
 
+import { ArrowUp } from "lucide-react"
+
+
 export default function Home() {
+    const [showTop, setShowTop] = useState(false)
+
+    useEffect(() => {
+        const onScroll = () => setShowTop(window.scrollY > 300)
+        window.addEventListener("scroll", onScroll, { passive: true })
+        onScroll()
+        return () => window.removeEventListener("scroll", onScroll)
+    }, [])
+
     return (
         <div className="min-h-screen bg-background">
             <Header context="home" />
@@ -33,6 +47,17 @@ export default function Home() {
                 <CtaSection />
             </main>
             <Footer />
+            {showTop && (
+                <div className="fixed bottom-6 right-6 z-50">
+                    <Button
+                        size="lg"
+                        className="shadow-lg bg-emerald-600 text-white hover:bg-emerald-700"
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    >
+                        <ArrowUp />
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }

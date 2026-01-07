@@ -24,30 +24,39 @@ const features = [
   },
 ]
 
-const exampleCode = `import { Document, Page, Text, View } from '@react-pdf/renderer';
-import { InvoiceHeader, InvoiceTable, InvoiceTotal } from './components';
+const exampleCode = `import { H1, LayoutPDF, Table, Tbody, Td, Th, Thead, Tr } from "react-pdf-levelup";';
 
-export const InvoicePDF = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <InvoiceHeader 
-        client={data.client} 
-        date={data.date} 
-      />
-      
-      <View style={styles.content}>
-        <Text style={styles.title}>Factura #{data.number}</Text>
-        <InvoiceTable items={data.items} />
-      </View>
-
-      <InvoiceTotal 
-        subtotal={data.subtotal} 
-        tax={data.tax} 
-        total={data.total} 
-      />
-    </Page>
-  </Document>
-);`
+const Component = ({ data }) => {
+  return (
+    <LayoutPDF>
+      <H1>Tabla</H1>
+      <Table cellHeight={24}>
+        <Thead >
+          <Tr style={{ backgroundColor: "#2563eb"}} >
+            <Th width="40%">Producto</Th>
+            <Th width="20%">Cant</Th>
+            <Th width="20%">Precio</Th>
+            <Th width="20%">Total</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          <Tr>
+            <Td width="40%">Item A</Td>
+            <Td width="20%">2</Td>
+            <Td width="20%">$5.00</Td>
+            <Td width="20%">$10.00</Td>
+          </Tr>
+          <Tr>
+            <Td width="40%">Item B</Td>
+            <Td width="20%">1</Td>
+            <Td width="20%">$8.00</Td>
+            <Td width="20%">$8.00</Td>
+          </Tr>
+        </Tbody>
+      </Table>
+    </LayoutPDF>
+  )
+}`
 
 export function DeveloperFeatures() {
   return (

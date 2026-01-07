@@ -18,29 +18,42 @@ yarn add react-pdf-levelup`,
     step: "02",
     title: "Crea tu template en el Playground",
     description:
-      "Abre /playground y define un componente de React que represente tu PDF. Usa las primitivas de @react-pdf/renderer.",
+      "Abre /playground y define un componente de React para tu PDF usando los componentes de react-pdf-levelup (LayoutPDF, texto, tablas, QR, etc.).",
     blocks: [
       {
-        code: `import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, LayoutPDF, P, QR, Row, Strong, UL } from "react-pdf-levelup";
 
-const styles = StyleSheet.create({
-  page: { flexDirection: 'column', padding: 30 },
-  section: { margin: 10, padding: 10 },
-  title: { fontSize: 20, marginBottom: 6 }
-})
-
-export const MyTemplate = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.title}>{data.title}</Text>
-        {data.items?.map((item, i) => (
-          <Text key={i}>• {item}</Text>
-        ))}
-      </View>
-    </Page>
-  </Document>
-)`,
+const Component = ({ data }) => {
+  return (
+    <LayoutPDF>
+      <H1>Documento de Presentación</H1>
+      <P>
+        Bienvenido a <Strong>react-pdf-levelup</Strong>. Con esta librería puedes construir PDFs usando componentes de
+        React de forma <Em>rápida</Em> y <Em>tipada</Em>.
+      </P>
+      <HR />
+      <Container>
+        <Row>
+          <Col6>
+            <H2>Resumen</H2>
+            <UL>
+              <LI>Plantillas listas</LI>
+              <LI>Componentes composables</LI>
+              <LI>TypeScript</LI>
+              <LI>Integración moderna</LI>
+            </UL>
+            <P>Más información en <A href="https://github.com/genarogg/react-pdf-levelup">GitHub</A>.</P>
+          </Col6>
+          <Col6>
+            <H2>Acceso Rápido</H2>
+            <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+            <P>Escanea el código para ir al Playground.</P>
+          </Col6>
+        </Row>
+      </Container>
+    </LayoutPDF>
+  )
+}`,
         language: "tsx" as const,
         filename: "MyTemplate.tsx",
       },
@@ -86,7 +99,7 @@ writeFileSync('reporte.pdf', buffer)`,
 
 export function HowItWorks() {
   return (
-    <section id="como-funciona" className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+    <section id="como-funciona" className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-14">
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-12 sm:mb-16 lg:mb-20">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance mb-3 sm:mb-4">
