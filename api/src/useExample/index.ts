@@ -4,10 +4,15 @@ import dotenv from "dotenv";
 
 dotenv.config({ debug: false });
 
-
 const { ENDPOINT } = process.env;
 
-const petition = async ({ template, data }: { template: string, data: any }) => {
+type ApiResponse = {
+    data?: {
+        pdf?: string
+    }
+}
+
+const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
     //ruta de los templates
     const templatePath = path.join(process.cwd(), "src", "useExample", template);
     //convertir a base64
@@ -25,8 +30,8 @@ const petition = async ({ template, data }: { template: string, data: any }) => 
         throw new Error(`API error (${res.status}): ${txt}`);
     }
 
-    const json = await res.json();
-    const resultBase64 = json?.data?.pdf;
+    const json = await res.json() as ApiResponse;
+    const resultBase64 = json?.data?.pdf ?? "";
 
     return resultBase64;
 }
@@ -47,7 +52,7 @@ const savePDF = (resultBase64: string) => {
 const generateAndSavePDF = async () => {
     try {
         const data = {
-            nombre: "Juan Pérez",
+            nombre: "Genaro Gonzalez",
         }
 
         const resultBase64 = await petition({ template: "template.tsx", data });
