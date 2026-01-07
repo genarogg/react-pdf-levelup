@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ debug: false });
 
-const { ENDPOINT } = process.env;
+const { ENDPOINT_API } = process.env;
 
 type ApiResponse = {
     data?: {
@@ -19,7 +19,7 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
     const tsxCode = fs.readFileSync(templatePath, "utf-8");
     const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
 
-    const res = await fetch(`${ENDPOINT}`, {
+    const res = await fetch(`${ENDPOINT_API}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ template: templateBase64, data }),

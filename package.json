@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "description": "Monorepo con Turborepo: Astro (docs), React.js (frontend)",
+  "type": "module",
   "engines": {
     "node": "22"
   },
@@ -24,9 +25,11 @@
     "-----lib-----": "-----------------------------------------",
     "publicar": "cd lib && npm run publicar",
     "demo:frontend": "cd frontend && npm run demo",
-    "demo:api": "cd api && npm run demo"
+    "demo:api": "cd api && npm run demo",
+    "zip:api": "node ./global/zip-api.js"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
     "turbo": "^2.7.2"
   },
   "packageManager": "npm@10.9.4"
