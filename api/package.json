@@ -11,7 +11,7 @@
     "-----Product-----": "-----------------------------------------",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc-alias -p tsconfig.json && node scripts/add-js-ext.js",
     "start": "set PRODUCTION=false && node dist/index.js",
-    "demo": "tsx ./api/src/useExample/index.ts"
+    "demo": "tsx ./src/useExample/index.ts"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.2",

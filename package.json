@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "build": "turbo run build  --filter=frontend --filter=docs --only",
+    "build": "turbo run build  --filter=frontend --filter=docs --filter=backend --only",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",

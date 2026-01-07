@@ -22,7 +22,7 @@ const generateAndSavePDF = async () => {
         const buffer = Buffer.from(base64PDF, "base64");
 
         // Definir ruta de salida (usando process.cwd() en lugar de __dirname)
-        const outputPath = path.join(process.cwd(), "frontend", "src", "useExample", "example.pdf");
+        const outputPath = path.join(process.cwd(), "src", "useExample", "example.pdf");
 
         // Guardar archivo
         fs.writeFileSync(outputPath, buffer);

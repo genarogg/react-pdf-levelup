@@ -1,43 +1,23 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import { QR, QRV2 } from "react-pdf-levelup";
+import React from 'react'
+import { P, LayoutPDF, HR, Strong, H4, Em, QR } from 'react-pdf-levelup'
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 12,
-    fontFamily: "Helvetica",
-  },
-});
+const Component = () => {
+  return (
+    <LayoutPDF>
+      <H4>Documento de Presentación</H4>
+      <P>
+        Bienvenido a <Strong style={{ color: "#3d65fd" }}>react-pdf-levelup</Strong>.
+        Con esta librería puedes construir PDFs usando componentes de
+        React de forma <Em>rápida</Em> y <Em>tipada</Em>.
+      </P>
+      <HR />
+      <P>
+        Gracias por usar <Strong>react-pdf-levelup</Strong>.
+        Explora el Playground y crea tu propio template.
+      </P>
+      <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+    </LayoutPDF>
+  )
+}
 
-const Demo = ({ data }: { data: any }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View>
-
-        <QR
-          value="https://example.co"
-          size={150}
-          logo="https://genarogg.github.io/media/genarogg/favicon.png"
-
-
-        />
-
-        <QRV2
-          value="https://www.facebook.com/"
-          size={300}
-          dotsOptions={{
-            color: "#4267b2",
-            type: "rounded"
-          }}
-          backgroundOptions={{
-            color: "#e9ebee"
-          }}
-          
-        />
-        <Text>Hola, {data.nombre || "Usuario"}</Text>
-      </View>
-    </Page>
-  </Document>
-);
-
-export default Demo;
+export default Component
