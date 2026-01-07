@@ -1,0 +1,101 @@
+import React from "react"
+import {
+  LayoutPDF,
+  Header,
+  H1,
+  H2,
+  P,
+  Strong,
+  Em,
+  UL,
+  LI,
+  HR,
+  A,
+  Container,
+  Row,
+  Col6,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  QR,
+} from "@/components/core"
+
+const Component: React.FC<{ data?: any }> = ({ data }) => {
+  return (
+    <LayoutPDF>
+      <Header fixed>React PDF Levelup</Header>
+
+      <H1>Documento de Presentación</H1>
+      <P>
+        Bienvenido a <Strong>react-pdf-levelup</Strong>. Con esta librería puedes construir PDFs usando componentes de
+        React de forma <Em>rápida</Em> y <Em>tipada</Em>.
+      </P>
+
+      <HR />
+
+      <Container>
+        <Row>
+          <Col6>
+            <H2>Resumen</H2>
+            <UL>
+              <LI>Plantillas listas para usar</LI>
+              <LI>Componentes composables</LI>
+              <LI>Soporte completo de TypeScript</LI>
+              <LI>Integración con frameworks modernos</LI>
+            </UL>
+            <P>
+              Más información en{" "}
+              <A href="https://github.com/genarogg/react-pdf-levelup">GitHub del proyecto</A>.
+            </P>
+          </Col6>
+          <Col6>
+            <H2>Acceso Rápido</H2>
+            <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+            <P>Escanea el código para ir al Playground.</P>
+          </Col6>
+        </Row>
+      </Container>
+
+      <H2>Ejemplo de Tabla</H2>
+      <Table cellHeight={24}>
+        <Thead>
+          <Tr>
+            <Th width="40%">Producto</Th>
+            <Th width="20%">Cantidad</Th>
+            <Th width="20%">Precio</Th>
+            <Th width="20%">Total</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          <Tr>
+            <Td width="40%">Etiqueta Térmica 50x30</Td>
+            <Td width="20%">2</Td>
+            <Td width="20%">$5.00</Td>
+            <Td width="20%">$10.00</Td>
+          </Tr>
+          <Tr>
+            <Td width="40%">QR con Logo</Td>
+            <Td width="20%">1</Td>
+            <Td width="20%">$8.00</Td>
+            <Td width="20%">$8.00</Td>
+          </Tr>
+          <Tr>
+            <Td width="40%">Certificado PDF</Td>
+            <Td width="20%">3</Td>
+            <Td width="20%">$12.00</Td>
+            <Td width="20%">$36.00</Td>
+          </Tr>
+        </Tbody>
+      </Table>
+
+      <P>
+        Gracias por usar <Strong>react-pdf-levelup</Strong>. Explora el Playground y crea tu propio template.
+      </P>
+    </LayoutPDF>
+  )
+}
+
+export default Component
