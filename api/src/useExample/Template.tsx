@@ -1,3 +1,4 @@
+import React from "react";
 import { LayoutPDF, P } from "react-pdf-levelup";
 
 const Demo = ({ data }: { data: any }) => (

@@ -6,25 +6,28 @@ dotenv.config({ debug: false });
 
 const data = {
     nombre: "Juan Pérez",
-    edad: 30,
-    ciudad: "Madrid",
 };
 
-const generateAndSavePDF = async () => {
+const generateAndSavePDF = async ({ template, data }: { template: string, data: any }) => {
     try {
         console.log("Generando PDF vía API...");
 
         const BACKEND_PORT = Number(process.env.BACKEND_PORT) || 4000;
         const url = `http://localhost:${BACKEND_PORT}/api/pdf`;
 
-        const templatePath = path.join(process.cwd(), "src", "useExample", "Template.tsx");
+        const templatePath = path.join(process.cwd(), "src", "useExample", template);
         const tsxCode = fs.readFileSync(templatePath, "utf-8");
         const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
+
+        const body = JSON.stringify({ template: templateBase64, data });
+        console.log("url:");
+        console.log("body:", body);
+        console.log("url:");
 
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ template: templateBase64, data }),
+            body,
         });
 
         if (!res.ok) {
@@ -54,6 +57,4 @@ const generateAndSavePDF = async () => {
     }
 };
 
-generateAndSavePDF();
-
-export { generateAndSavePDF };
+generateAndSavePDF({ template: "template.tsx", data });
