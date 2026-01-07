@@ -21,14 +21,71 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   }
 
   const handleEditorChange = debounce((value: string | undefined) => {
-    if (value !== undefined) {
-      onChange(value)
+    if (value === undefined) return
+    const sanitizeAll = (text: string) => {
+      let s = text
+      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
+      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
+      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
+      return s
     }
+    const sanitized = sanitizeAll(value)
+    if (editorRef.current) {
+      const current = editorRef.current.getValue()
+      if (sanitized !== current) {
+        const model = editorRef.current.getModel()
+        if (model) {
+          const fullRange = model.getFullModelRange()
+          editorRef.current.executeEdits("sanitize-change", [{ range: fullRange, text: sanitized, forceMoveMarkers: true }])
+        } else {
+          editorRef.current.setValue(sanitized)
+        }
+      }
+    }
+    onChange(sanitized)
   }, 1000)
 
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
+
+    const sanitizePastedText = (text: string) => {
+      let s = text
+      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
+      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
+      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
+      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+      return s
+    }
+
+    const pasteHandler = (e: ClipboardEvent) => {
+      const text = e.clipboardData?.getData("text/plain")
+      if (!text) return
+      const sanitized = sanitizePastedText(text)
+      if (sanitized !== text) {
+        e.preventDefault()
+        const selections = editor.getSelections() || [editor.getSelection()]
+        const edits = selections.map((sel: any) => ({
+          range: sel,
+          text: sanitized,
+          forceMoveMarkers: true,
+        }))
+        editor.executeEdits("paste-sanitize", edits)
+      }
+    }
+
+    const domNode = editor.getDomNode()
+    if (domNode) {
+      domNode.addEventListener("paste", pasteHandler as any)
+      editorRef.current.__pasteHandler = pasteHandler
+    }
 
     const kind = monaco.languages.CompletionItemKind
     const insertTextRules = monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
@@ -229,6 +286,10 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       if (editorRef.current) {
         // Paso 1: Obtener el modelo actual
         const model = editorRef.current.getModel()
+        const domNode = editorRef.current.getDomNode()
+        if (domNode && editorRef.current.__pasteHandler) {
+          domNode.removeEventListener("paste", editorRef.current.__pasteHandler as any)
+        }
 
         // Paso 2: Desasociar el modelo del editor antes de eliminarlo
         if (model) {

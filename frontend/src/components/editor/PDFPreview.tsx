@@ -70,12 +70,28 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         return
       }
 
+
       let modifiedCode = sourceCode
+      const originalCode = sourceCode
+      modifiedCode = modifiedCode.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+      modifiedCode = modifiedCode.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+      const defaultFuncMatch = originalCode.match(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/)
+      if (defaultFuncMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
+        modifiedCode += `\nconst result = ${defaultFuncMatch[1]};`
+      }
+      const defaultClassMatch = originalCode.match(/export\s+default\s+class\s+([A-Z]\w*)\s*/)
+      if (defaultClassMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
+        modifiedCode += `\nconst result = ${defaultClassMatch[1]};`
+      }
+      modifiedCode = modifiedCode.replace(/(^|\n)\s*export\s+default\s+([^;]+);?/g, "\nconst result = $2;")
+      modifiedCode = modifiedCode.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+      modifiedCode = modifiedCode.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
 
       // Verificar si hay un componente exportable
       const hasExport = 
         modifiedCode.includes("const result =") ||
-        modifiedCode.includes("export default") ||
         modifiedCode.includes("const Component =") ||
         modifiedCode.includes("const InvoiceTemplate =") ||
         modifiedCode.includes("const ReporteFinanciero =") ||
