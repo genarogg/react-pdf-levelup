@@ -28,6 +28,7 @@
     "@react-pdf/renderer": "^4.3.2",
     "accounting": "^0.4.1",
     "argon2": "^0.44.0",
+    "canvas": "^3.2.0",
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",
     "console-clear": "^1.1.1",
@@ -35,7 +36,12 @@
     "ejs": "^3.1.10",
     "fastify": "^5.0.0",
     "fastify-slow-down": "^2.0.1",
-    "react-pdf-levelup": "latest"
+    "jsdom": "^27.4.0",
+    "qr-code-styling": "^1.9.2",
+    "qrcode": "^1.5.4",
+    "react-pdf-levelup": "latest",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
   },
   "devDependencies": {
     "@types/accounting": "^0.4.5",
@@ -46,6 +52,8 @@
     "rimraf": "^6.1.2",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@types/react": ">=18 <=19",
+    "@types/react-dom": ">=18 <=19"
   }
 }

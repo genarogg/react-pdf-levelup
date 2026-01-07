@@ -48,7 +48,7 @@ const generateAndSavePDF = async () => {
     try {
         const data = {
             nombre: "Juan Pérez",
-        };
+        }
 
         const resultBase64 = await petition({ template: "template.tsx", data });
         savePDF(resultBase64);
