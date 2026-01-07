@@ -5,7 +5,7 @@ services:
       dockerfile: api/Dockerfile
     container_name: monorepo-backend
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${API_PORT}:${API_PORT}"
     env_file:
       - .env
     networks:
