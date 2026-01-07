@@ -57,9 +57,9 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 <a href="#faq" className={linkStyles}>FAQ</a>
                             </nav>
                         ) : null}
-                        <a href="/playground" className={linkStyles}>
+                        <Link to="/playground" className={linkStyles}>
                             <Play className={iconStyles} />
-                        </a>
+                        </Link>
                         <a
                             href="https://github.com/genarogg/react-pdf-levelup"
                             target="_blank"
