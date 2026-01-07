@@ -4,53 +4,76 @@ import { successResponse, errorResponse } from "@/func/response"
 import * as fs from "fs/promises"
 import * as path from "path"
 
+/* =========================
+   Utils
+========================= */
+
 type AnyData = any
 
 export function decodeBase64File(templateBase64: string): string {
     try {
-        const buffer = Buffer.from(templateBase64, "base64")
-        const tsxCode = buffer.toString("utf-8")
-        return tsxCode
+        return Buffer.from(templateBase64, "base64").toString("utf-8")
     } catch (error) {
         throw new Error(`Error al decodificar archivo base64: ${error}`)
     }
 }
 
 /**
- * Guarda el código TSX en un archivo temporal
+ * Guarda código JS en archivo temporal
  */
-async function saveTsxToFile(tsxCode: string): Promise<string> {
+async function saveJsToFile(jsCode: string): Promise<string> {
     const tempDir = path.join(process.cwd(), "temp")
-
-    // Crear directorio temp si no existe
     await fs.mkdir(tempDir, { recursive: true })
 
-    // Generar nombre único para el archivo
-    const fileName = `template-${Date.now()}-${Math.random().toString(36).substring(7)}.tsx`
-    const filePath = path.join(tempDir, fileName)
+    const fileName = `template-${Date.now()}-${Math.random()
+        .toString(36)
+        .substring(7)}.js`
 
-    // Guardar el archivo
-    await fs.writeFile(filePath, tsxCode, "utf-8")
+    const filePath = path.join(tempDir, fileName)
+    await fs.writeFile(filePath, jsCode, "utf-8")
 
     return filePath
 }
 
 /**
- * Carga el componente dinámicamente desde el archivo TSX usando import()
+ * Compila TSX → JS (sin JSX)
  */
-async function loadComponentFromFile(filePath: string): Promise<React.ComponentType<any>> {
+async function compileTSXToJS(tsxCode: string): Promise<string> {
     try {
-        // Convertir a URL absoluta para import dinámico
-        const fileUrl = `file://${filePath}`
+        const { transform } = await import("@babel/standalone")
 
-        // Importar dinámicamente el módulo
+        const result = transform(tsxCode, {
+            presets: [
+                "typescript",
+                ["react", { runtime: "classic" }],
+            ],
+            filename: "template.tsx",
+            sourceType: "module",
+        })
+
+        if (!result?.code) {
+            throw new Error("Babel no generó código")
+        }
+
+        return result.code
+    } catch (error) {
+        throw new Error(`Error al compilar TSX a JS: ${error}`)
+    }
+}
+
+/**
+ * Importa componente React desde archivo JS
+ */
+async function loadComponentFromFile(
+    filePath: string
+): Promise<React.ComponentType<any>> {
+    try {
+        const fileUrl = `file://${filePath}`
         const module = await import(fileUrl)
 
-        // Obtener el componente (export default o named export)
         const Component = module.default || module
 
-        // Verificar que sea un componente válido
-        if (!Component || (typeof Component !== 'function' && typeof Component !== 'object')) {
+        if (typeof Component !== "function") {
             throw new Error("El archivo no exporta un componente React válido")
         }
 
@@ -61,15 +84,19 @@ async function loadComponentFromFile(filePath: string): Promise<React.ComponentT
 }
 
 /**
- * Limpia el archivo temporal después de usarlo
+ * Limpia archivo temporal
  */
-async function cleanupTempFile(filePath: string): Promise<void> {
+async function cleanupTempFile(filePath: string) {
     try {
         await fs.unlink(filePath)
-    } catch (error) {
-        console.error(`Error al eliminar archivo temporal: ${error}`)
+    } catch {
+        // silencioso
     }
 }
+
+/* =========================
+   Controller
+========================= */
 
 type BodyInput = {
     template: string
@@ -91,35 +118,39 @@ const generatePdfController = async (
             )
         }
 
-        // Decodificar template
+        // 1️⃣ Decodificar TSX
         const tsxCode = decodeBase64File(template)
 
-        // Guardar en archivo temporal
-        tempFilePath = await saveTsxToFile(tsxCode)
-        console.log(`Template guardado en: ${tempFilePath}`)
+        // 2️⃣ Compilar TSX → JS
+        const jsCode = await compileTSXToJS(tsxCode)
 
-        // Cargar el componente dinámicamente desde el archivo
-        const ComponentFromString = await loadComponentFromFile(tempFilePath)
+        // 3️⃣ Guardar como .js
+        tempFilePath = await saveJsToFile(jsCode)
+        console.log("Template JS:", tempFilePath)
 
-        // Generar PDF con el componente cargado dinámicamente
+        // 4️⃣ Importar componente
+        const TemplateComponent = await loadComponentFromFile(tempFilePath)
+
+        // 5️⃣ Generar PDF
         const pdf = await generatePDF({
-            template: ComponentFromString,
+            template: TemplateComponent,
             data,
         })
 
-        console.log("PDF generado exitosamente")
-
-        return reply.status(200).send(successResponse({ data: { pdf } }))
+        return reply
+            .status(200)
+            .send(successResponse({ data: { pdf } }))
     } catch (e: any) {
         console.error("Error en generatePdfController:", e)
+
         return reply.status(500).send(
-            errorResponse({ message: e?.message || "Error interno" })
+            errorResponse({
+                message: e?.message || "Error interno",
+            })
         )
     } finally {
-        // Limpiar archivo temporal
-        // if (tempFilePath) {
-        //     await cleanupTempFile(tempFilePath)
-        // }
+        // Limpieza (opcional)
+        // if (tempFilePath) await cleanupTempFile(tempFilePath)
     }
 }
 

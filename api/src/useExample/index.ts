@@ -55,8 +55,10 @@ const generateAndSavePDF = async () => {
             nombre: "Genaro Gonzalez",
         }
 
-        const resultBase64 = await petition({ template: "template.tsx", data });
+        const resultBase64 = await petition({ template: "template.tsx", data })
         savePDF(resultBase64);
+
+        console.log(resultBase64)
 
     } catch (error) {
         console.error("Error generating/saving PDF:", error);
