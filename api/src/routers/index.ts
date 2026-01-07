@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { generatePdfController } from '@/controllers';
+import { generatePdfController } from '../controllers/index';
 
 const controller = (request: FastifyRequest, reply: FastifyReply) => {
     return reply.view("home");

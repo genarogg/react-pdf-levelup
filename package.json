@@ -12,6 +12,10 @@
     "lib",
     "api"
   ],
+  "overrides": {
+    "react": "19",
+    "react-dom": "19"
+  },
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build  --filter=frontend --filter=docs --filter=backend --only",
