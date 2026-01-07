@@ -1,9 +1,15 @@
+<p align="center">
+  <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
+</p>
+
 # react-pdf-levelup
 
 Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para etiquetas, facturas, reportes, certificados, tablas y más.
 
 # 🌐 **Playground en vivo:** 
 [https://react-pdf-levelup.netlify.app](https://react-pdf-levelup.netlify.app)
+or
+[https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
 
 ## 📦 Instalación
 
@@ -13,7 +19,7 @@ npm install react-pdf-levelup
 
 ## 🚀 Características
 
-- 🧱 Construye PDFs con componentes de React usando `@react-pdf/renderer`
+- 🧱 Construye PDFs con componentes de React usando los componentes de `react-pdf-levelup` (LayoutPDF, texto, listas, QR, tablas, columnas, etc.)
 - 🖼 Vista previa en tiempo real de los documentos generados
 - 🎨 Editor en vivo con Monaco Editor para personalizar código JSX
 - 📦 Plantillas predefinidas listas para usar
@@ -68,43 +74,53 @@ decodeBase64Pdf(pdfBase64, 'mi-documento.pdf');
 - Abre el PDF en una nueva pestaña del navegador
 - Limpia automáticamente los recursos de memoria
 
-## 💡 Ejemplo de Uso Completo
+## 💡 Ejemplo de Uso con componentes levelup
 
 ```typescript
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import { generatePDF, decodeBase64Pdf } from 'react-pdf-levelup';
+import { generatePDF, decodeBase64Pdf, LayoutPDF, H1, P, Strong, Em, HR, Container, Row, Col6, UL, LI, QR, Table, Thead, Tbody, Tr, Th, Td } from 'react-pdf-levelup';
 
-// Definir estilos para el PDF
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#E4E4E4',
-    padding: 30,
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 10,
-  },
-});
-
-// Crear template del PDF
 const MyPDFTemplate = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.title}>{data?.title || 'Documento PDF'}</Text>
-        {data?.items?.map((item, index) => (
-          <Text key={index}>• {item}</Text>
-        ))}
-      </View>
-    </Page>
-  </Document>
+  <LayoutPDF>
+    <H1>Documento de Presentación</H1>
+    <P>
+      Bienvenido a <Strong>react-pdf-levelup</Strong>. Construye PDFs con componentes de React de forma <Em>rápida</Em> y <Em>tipada</Em>.
+    </P>
+    <HR />
+    <Container>
+      <Row>
+        <Col6>
+          <UL>
+            <LI>Plantillas listas</LI>
+            <LI>Componentes composables</LI>
+            <LI>TypeScript</LI>
+            <LI>Integración moderna</LI>
+          </UL>
+        </Col6>
+        <Col6>
+          <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+        </Col6>
+      </Row>
+    </Container>
+    <Table cellHeight={24}>
+      <Thead>
+        <Tr>
+          <Th width="40%">Producto</Th>
+          <Th width="20%">Cantidad</Th>
+          <Th width="20%">Precio</Th>
+          <Th width="20%">Total</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        <Tr>
+          <Td width="40%">Etiqueta Térmica 50x30</Td>
+          <Td width="20%">2</Td>
+          <Td width="20%">$5.00</Td>
+          <Td width="20%">$10.00</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  </LayoutPDF>
 );
 
 // Función para generar y descargar PDF
@@ -231,7 +247,7 @@ Esta librería utiliza internamente:
 ## 📝 Notas Importantes
 
 - La función `decodeBase64Pdf` solo funciona en contexto de navegador (requiere `document`)
-- Los templates deben ser componentes válidos de `@react-pdf/renderer`
+- Los templates deben usar los componentes de `react-pdf-levelup` y retornar JSX válido
 - El PDF se genera de forma asíncrona, asegúrate de usar `await` o `.then()`
 - Los recursos de memoria se limpian automáticamente después de la descarga
 

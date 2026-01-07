@@ -35,11 +35,12 @@ export default function Home() {
             <main>
                 <HeroSection />
                 <ValueProposition />
+                <TemplatesSection />
+                <DeveloperFeatures />
                 <ComparisonSection />
                 <HowItWorks />
                 <WhyLevelupSection />
-                <DeveloperFeatures />
-                <TemplatesSection />
+
                 <UseCasesSection />
                 <TechStackSection />
                 <RoadmapSection />

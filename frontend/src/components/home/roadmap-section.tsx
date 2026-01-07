@@ -3,8 +3,8 @@ import { Check, Clock, Sparkles } from "lucide-react"
 const roadmapItems = [
   {
     status: "completed",
-    title: "Componentes Principales",
-    description: "Componentes Document, Page, View, Text, Image y Link",
+    title: "Componentes Core",
+    description: "LayoutPDF, Header, texto (H1–H6, P, Strong, Em), listas, QR y columnas (Container, Row, Col1–Col12)",
     icon: Check,
   },
   {
@@ -16,25 +16,25 @@ const roadmapItems = [
   {
     status: "completed",
     title: "Fuentes Personalizadas",
-    description: "Soporte para familias de fuentes y pesos personalizados",
+    description: "Registro y uso de familias de fuentes con distintos pesos",
     icon: Check,
   },
   {
     status: "in-progress",
-    title: "Componente de Tabla",
-    description: "Soporte nativo de tablas con paginación automática",
+    title: "Tablas",
+    description: "Thead, Tbody, Tr, Th y Td con paginación automática",
     icon: Clock,
   },
   {
     status: "planned",
     title: "Gráficos y Diagramas",
-    description: "Componentes de gráficos integrados para visualización de datos",
+    description: "Componentes para visualización de datos integrados",
     icon: Sparkles,
   },
   {
     status: "planned",
     title: "Campos de Formulario",
-    description: "Campos de formulario y entradas PDF interactivas",
+    description: "Inputs PDF interactivos y elementos de formulario",
     icon: Sparkles,
   },
 ]

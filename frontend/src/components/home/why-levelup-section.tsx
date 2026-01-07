@@ -5,7 +5,7 @@ export function WhyLevelupSection() {
     <section id="por-que-levelup" className="py-4 bg-gradient-to-b from-background to-muted/20">
       <div className="container px-4 mx-auto max-w-6xl">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">¿Por qué React PDF Levelup?</h2>
+          <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">¿React pdf levelup vs React PDF?</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-balance">
             Hemos simplificado la complejidad de React PDF para que tú no tengas que hacerlo.
             <br />

@@ -36,12 +36,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                     <div className="flex items-center gap-4">
 
-                        {context === "docs" ? (
-                            <a href="/" className={linkStyles}>
-                                <Play className={iconStyles} />
-                                <span className="hidden sm:inline">Playground</span>
-                            </a>
-                        ) : null}
+
 
                         {context === "playgroud" ? (
                             <a href="/docs" className={linkStyles}>
@@ -51,18 +46,20 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                         {context === "home" ? (
                             <nav className="hidden md:flex items-center gap-4">
-                                <a href="#features" className={linkStyles}>Características</a>
+                                <a href="#features" className={linkStyles}>Porque</a>
+                                <a href="#templates" className={linkStyles}>Plantillas</a>
                                 <a href="#comparacion" className={linkStyles}>Comparación</a>
                                 <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                                <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
-                                <a href="#templates" className={linkStyles}>Plantillas</a>
+                                <a href="#por-que-levelup" className={linkStyles}>vs</a>
                                 <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                                 <a href="#stack" className={linkStyles}>Stack</a>
                                 <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
                                 <a href="#faq" className={linkStyles}>FAQ</a>
                             </nav>
                         ) : null}
-
+                        <a href="/playground" className={linkStyles}>
+                            <Play className={iconStyles} />
+                        </a>
                         <a
                             href="https://github.com/genarogg/react-pdf-levelup"
                             target="_blank"
@@ -72,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             <Github className={iconStyles} />
 
                         </a>
+
 
                         <a
                             href="https://www.paypal.com/paypalme/genaroggpaypal"
@@ -103,11 +101,11 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
             {context === "home" && mobileOpen ? (
                 <aside className="md:hidden bg-black/80 border-t border-gray-800/50 px-3 py-4">
                     <nav className="flex flex-col gap-2">
-                        <a href="#features" className={linkStyles}>Características</a>
+                        <a href="#features" className={linkStyles}>Porque</a>
+                        <a href="#templates" className={linkStyles}>Plantillas</a>
                         <a href="#comparacion" className={linkStyles}>Comparación</a>
                         <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                        <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
-                        <a href="#templates" className={linkStyles}>Plantillas</a>
+                        <a href="#por-que-levelup" className={linkStyles}>vs</a>
                         <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                         <a href="#stack" className={linkStyles}>Stack</a>
                         <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
@@ -118,6 +116,12 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             <Github className={iconStyles} />
                             <span>GitHub</span>
                         </a>
+
+                        <a href="/playground" className={linkStyles}>
+                            <Play className={iconStyles} />
+                            <span className="hidden sm:inline">Playground</span>
+                        </a>
+
                         <a href="/docs" className={linkStyles}>
                             <FileText className={iconStyles} />
                             <span>Documentación</span>

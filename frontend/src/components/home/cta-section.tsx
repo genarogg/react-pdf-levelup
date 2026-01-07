@@ -21,12 +21,12 @@ export function CtaSection() {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link to="/docs/get-started">
+              <a href="/docs/get-started">
                 <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                   Comenzar
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </Link>
+              </a>
               <a href="https://github.com/genarogg/react-pdf-levelup" target="_blank" rel="noopener noreferrer">
                 <Button
                   size="lg"

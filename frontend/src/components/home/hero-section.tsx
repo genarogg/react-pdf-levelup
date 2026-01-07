@@ -96,7 +96,7 @@ export function HeroSection() {
           <div className="relative" style={{ maxWidth: "90vw" }} >
             <div className="absolute -inset-4 rounded-2xl bg-accent/5 blur-2xl" />
             <div className="relative" >
-              <CodeBlock code={heroCode} language="tsx" filename="invoice-pdf.tsx" />
+              <CodeBlock code={heroCode} language="tsx" filename="Template.tsx" />
             </div>
           </div>
         </div>

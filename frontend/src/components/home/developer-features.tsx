@@ -60,7 +60,7 @@ const Component = ({ data }) => {
 
 export function DeveloperFeatures() {
   return (
-    <section id="caracteristicas" className="py-24 px-4 bg-muted/30">
+    <section id="caracteristicas" className="py-24 px-4 ">
       <div className="container max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left side - Features */}
