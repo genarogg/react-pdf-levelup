@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200pt" height="200pt" viewBox="0 0 200 200" version="1.1">
+<defs>
+<clipPath id="clip1">
+  <path d="M 67 99 L 166 99 L 166 124 L 67 124 Z "/>
+</clipPath>
+<clipPath id="clip2">
+  <path d="M 60.125 75.4375 L 59.875 99.640625 L 204.328125 99.625 L 204.078125 75.453125 L 60.125 75.4375 M 66 99 L 166 99 L 166 125 L 66 125 L 66 99 "/>
+</clipPath>
+<clipPath id="clip3">
+  <path d="M 86.71875 151.890625 L 103.90625 134.859375 L 54.890625 85.84375 L 37.859375 103.03125 L 86.71875 151.890625 M 66 99 L 166 99 L 166 125 L 66 125 L 66 99 "/>
+</clipPath>
+<image id="image5" width="100" height="26" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAaCAIAAADOqG6yAAAABmJLR0QA/wD/AP+gvaeTAAADKUlEQVRYhc2Ya5LjMAiEW8qt9qp71hH7w+LRiPiRzcRJTaU0wkjQgi+225+/A5Am2L4bBIK2jUUapIn+QbqOu9h46Hg8hv474uSIgz7GY4wm0mV0kcf46UP6tI4+RAdqVZd5/c9P33yHWjffYfvqLjL6SAFIlzGD10lLxEz23SBtBAWADgCC6kOzDWji4zkQaTYwq/npJFmjrwgwD0atErYT3WIbzBmetEWCr0YFaHi8hV4ZL1slEMzgPea+XDR3bZvDXN2FsPwhFC6p44uQiEEd843agazHIrqvC8FR0WUIcSIHH11C4rRvhx9I0Cvk4ErbgQipOSd1A1ghRGvKgQ5gKZOcw56IoXi1xIJvpc4isWZGvi6G69Jj2k1rb5torlJWJ6wF7URqhCxELHVK9UqvlYWgiyD6riLSyhkpsQ0dOIEnKta7gaWh18AqSuwEsFAeQNTu94GFlVnfCSxfuQJWEGUVkfKacZYHwMCKLrZvt2RcrxPA0sk5SMCi4O4Dltd4BSxrzxJYVoAuC6S/BqxwYlNfagTL4QqwcNhrtwIL5a3DXcCqeq1ok0vAAgW/AouU8vQrYEFYrAQsVicDC7FPF2BRlPcBK/BB46QqzgTYARbmrcMTYIW+LYCl4xpYjV1q6B732gkRPwWsTayPAiv8UF7stR1gUapZRPZ9HVitYlbu4R1gkfVGYPnxzBQKelwEVszXVHGxSmB57VTAyuqcAxZbc6+R9T5gpX03//55YO33WkLMgYi7ffpeYMEr6zmwovlGYOV7VyTrGRELpARFFmCxFfognUXxi1S7q8Ai6wIstt4GrIVZDCy/MZqrdfNURd4DLCv1EljXeo3bxAPA6vuLwAIBfg9Y5HYXsNLPaPZN25E6WC4LD17ngIX8WvkpsETXsiXyWiuwaKf7gBVqPAdv4zPAAtD/B1gaXA0sa+1LwEI+gEJZv+yDwAKkBvyNwMq9ltqE77bOAosPAEvxngEW4vssf4twBVh5p+Wm7CuAlR4eGFi68gGwQK+VXwJWzpCBpaFnYMU4Dnrta4AVnw0/CqzdXstlchpY2AVWccbhcwwsAP8ABxzkGzOrxOwAAAAASUVORK5CYII="/>
+<pattern id="pattern0" patternUnits="userSpaceOnUse" width="100" height="26"  patternTransform="matrix(1,0,0,1,66,99)">
+  <use xlink:href="#image5"/>
+</pattern>
+<clipPath id="clip4">
+  <path d="M 60.125 75.4375 L 59.875 99.640625 L 204.328125 99.625 L 204.078125 75.453125 L 60.125 75.4375 M -1 -1 L 201 -1 L 201 200 L -1 200 L -1 -1 "/>
+</clipPath>
+<clipPath id="clip5">
+  <path d="M 86.71875 151.890625 L 103.90625 134.859375 L 54.890625 85.84375 L 37.859375 103.03125 L 86.71875 151.890625 M -1 -1 L 201 -1 L 201 200 L -1 200 L -1 -1 "/>
+</clipPath>
+<clipPath id="clip6">
+  <path d="M 34.6875 99.640625 L 99.875 165.0625 L 165.28125 99.640625 L 99.875 34.46875 L 34.6875 99.640625 M -1 -1 L 201 -1 L 201 200 L -1 200 L -1 -1 "/>
+</clipPath>
+<image id="image8" width="202" height="201" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMoAAADJCAIAAADtkzpRAAAABmJLR0QA/wD/AP+gvaeTAAACs0lEQVR4nO3SQY6jMBRAwW+ONVfts7Y8C0gCUW/frkooAsc2CN769/M7e2ZmzczsmVnX5Z73yTW418zs98j1ey5c+1qyZl+T917PaWvva+be67Vk7X2bc16+xs/B83gs/Awee97ns/dx2/M8juflmn3s11Z7H7PnPHnufHxu+j3/+Ui3yZ/N73ef+54zX/f6a9vbv+8l71fxWPt4mLmtna9Va2a+3/kf3+j83K+/bh/0Wv76vU2eK4lHPFcqM8dARl6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E5EVIXoTkRUhehORFSF6E/gMIwwggI4UshAAAAABJRU5ErkJggg=="/>
+<pattern id="pattern1" patternUnits="userSpaceOnUse" width="202" height="201"  patternTransform="matrix(1,0,0,1,-1,-1)">
+  <use xlink:href="#image8"/>
+</pattern>
+</defs>
+<g id="surface1">
+<g clip-path="url(#clip1)" clip-rule="nonzero">
+<g clip-path="url(#clip2)" clip-rule="nonzero">
+<g clip-path="url(#clip3)" clip-rule="nonzero">
+<path style=" stroke:none;fill-rule:nonzero;fill:url(#pattern1);" d="M 0.265625 99.578125 L 99.796875 199.46875 L 199.6875 99.578125 L 99.796875 0.046875 L 0.265625 99.578125 "/>
+</g>
+</g>
+</g>
+<g clip-path="url(#clip4)" clip-rule="nonzero">
+<g clip-path="url(#clip5)" clip-rule="nonzero">
+<g clip-path="url(#clip6)" clip-rule="nonzero">
+<path style=" stroke:none;fill-rule:nonzero;fill:url(#pattern1);" d="M 0.265625 99.578125 L 99.796875 199.46875 L 199.6875 99.578125 L 99.796875 0.046875 L 0.265625 99.578125 "/>
+</g>
+</g>
+</g>
+</g>
+</svg>

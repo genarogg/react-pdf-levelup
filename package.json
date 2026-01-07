@@ -9,11 +9,12 @@
   "workspaces": [
     "frontend",
     "docs",
-    "lib"
+    "lib",
+    "api"
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "build": "turbo run build  --filter=frontend --filter=docs",
+    "build": "turbo run build  --filter=frontend --filter=docs --only",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",

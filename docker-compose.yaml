@@ -1,4 +1,17 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: monorepo-backend
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - backend_data:/app/prisma
+    networks:
+      - monorepo-network
   frontend:
     build:
       context: .
