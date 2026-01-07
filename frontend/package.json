@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "start": "vite preview"
+    "start": "vite preview",
+    "demo": "tsx ./api/src/useExample/index.ts"
   },
   "peerDependencies": {
     "@react-pdf/renderer": "^4.3.2",

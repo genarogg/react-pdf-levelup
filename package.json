@@ -19,7 +19,8 @@
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
     "publicar": "cd lib && npm run publicar",
-    "demo": "tsx ./api/src/useExample/index.ts"
+    "demo:frontend": "cd frontend && npm run demo",
+    "demo:api": "cd api && npm run demo"
   },
   "dependencies": {
     "turbo": "^2.7.2"
