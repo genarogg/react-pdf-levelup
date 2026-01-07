@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Github } from "lucide-react"
-import { Link } from "react-router-dom"
+
 
 export function CtaSection() {
   return (
