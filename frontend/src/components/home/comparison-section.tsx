@@ -41,7 +41,7 @@ function MobileComparisonCard({ row }: { row: (typeof comparisonData)[0] }) {
 
 export function ComparisonSection() {
   return (
-    <section className="border-t border-border px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
+    <section id="comparacion" className="border-t border-border px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground lg:text-4xl text-balance">

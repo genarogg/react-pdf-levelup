@@ -4,29 +4,29 @@ import { Button } from "@/components/ui/button"
 import { CodeBlock } from "./code-block"
 import { ArrowRight, Copy, Check } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
-const heroCode = `import { Document, Page, Text, View } from 'react-pdf-levelup'
+const heroCode = `
+import { P, LayoutPDF, HR, Strong, H4, Em} from 'react-pdf-levelup'
 
-export function InvoicePDF({ invoice }) {
+const Component = ({ data }) => {
   return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Invoice #{invoice.id}</Text>
-          <Text style={styles.date}>{invoice.date}</Text>
-        </View>
-        <View style={styles.items}>
-          {invoice.items.map((item) => (
-            <ItemRow key={item.id} item={item} />
-          ))}
-        </View>
-        <View style={styles.total}>
-          <Text>Total: \${invoice.total}</Text>
-        </View>
-      </Page>
-    </Document>
+    <LayoutPDF>
+      <H4>Documento de Presentación</H4>
+      <P>
+        Bienvenido a <Strong style={{color:"#3d65fd"}}>react-pdf-levelup</Strong>.
+        Con esta librería puedes construir PDFs usando componentes de
+        React de forma <Em>rápida</Em> y <Em>tipada</Em>.
+      </P>
+      <HR />
+      <P>
+        Gracias por usar <Strong>react-pdf-levelup</Strong>. 
+        Explora el Playground y crea tu propio template.
+      </P>
+    </LayoutPDF>
   )
-}`
+}
+`
 
 export function HeroSection() {
   const [copied, setCopied] = useState(false)
@@ -49,30 +49,34 @@ export function HeroSection() {
           <div className="flex flex-col gap-4 sm:gap-6">
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm text-muted-foreground">
               <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent" />
-              Open Source & Free
+              Código abierto y gratuito
             </div>
 
             <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl text-balance">
-              Build Beautiful PDFs with <span className="text-accent">React Components</span>
+              Crea PDFs hermosos con <span className="text-accent">Componentes de React</span>
             </h1>
 
             <p className="text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl">
-              The modern way to create PDF documents using React components. Type-safe, performant, and
-              developer-friendly. No more fighting with low-level PDF libraries.
+              La forma moderna de crear documentos PDF usando componentes de React. Tipado seguro, alto rendimiento y
+              una experiencia pensada para desarrolladores. Olvídate de pelear con librerías de bajo nivel.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <Button size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary"
-              >
-                View Documentation
-              </Button>
+              <Link to="/playground">
+                <Button size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+                  Ir al Playground
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <a href="/docs">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary"
+                >
+                  Ver documentación
+                </Button>
+              </a>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3 rounded-lg border border-border bg-card p-2.5 sm:p-3 font-mono text-xs sm:text-sm">

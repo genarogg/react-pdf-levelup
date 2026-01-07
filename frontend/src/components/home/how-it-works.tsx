@@ -86,7 +86,7 @@ writeFileSync('reporte.pdf', buffer)`,
 
 export function HowItWorks() {
   return (
-    <section className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+    <section id="como-funciona" className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-12 sm:mb-16 lg:mb-20">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance mb-3 sm:mb-4">

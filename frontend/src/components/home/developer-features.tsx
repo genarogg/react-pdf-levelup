@@ -51,7 +51,7 @@ export const InvoicePDF = ({ data }) => (
 
 export function DeveloperFeatures() {
   return (
-    <section className="py-24 px-4 bg-muted/30">
+    <section id="caracteristicas" className="py-24 px-4 bg-muted/30">
       <div className="container max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left side - Features */}
@@ -80,7 +80,7 @@ export function DeveloperFeatures() {
 
           {/* Right side - Code example */}
           <div className="lg:sticky lg:top-8">
-            <div className="shadow-lg">
+            <div className="shadow-lg" style={{maxWidth: "90vw"}}>
                 <CodeBlock 
                   code={exampleCode} 
                   language="tsx" 

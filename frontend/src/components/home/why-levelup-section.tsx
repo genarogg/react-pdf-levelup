@@ -2,7 +2,7 @@ import { Check, X } from "lucide-react"
 
 export function WhyLevelupSection() {
   return (
-    <section className="py-24 bg-gradient-to-b from-background to-muted/20">
+    <section id="por-que-levelup" className="py-24 bg-gradient-to-b from-background to-muted/20">
       <div className="container px-4 mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">¿Por qué React PDF Levelup?</h2>

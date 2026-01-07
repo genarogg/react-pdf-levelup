@@ -39,7 +39,7 @@ const TemplateSelector: React.FC = () => {
   const handleSelectTemplate = (templateId: string) => {
     setSelectedTemplate(templateId)
     // Navigate to the template page with the selected template
-    window.location.href = `/template/${templateId}`
+    window.location.href = `/playground/template/${templateId}`
   }
 
   return (

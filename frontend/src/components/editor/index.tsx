@@ -8,8 +8,6 @@ import CodeEditor from "./CodeEditor"
 import ToolBar from "../toolbar/ToolBar"
 import { loadTemplateFile } from "../../utils/templateLoader"
 
-
-
 import Header from '../header'
 
 type TemplateMeta = {

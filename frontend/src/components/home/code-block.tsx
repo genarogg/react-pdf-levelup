@@ -12,8 +12,6 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
 
-  console.log("Rendering CodeBlock with language:", language)
-
   const handleCopy = () => {
     navigator.clipboard.writeText(code)
     setCopied(true)
@@ -21,10 +19,10 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   }
 
   return (
-    <div className="relative rounded-xl border border-border bg-card">
+    <div className="relative rounded-xl border border-border bg-card shadow-sm">
       {filename && (
-        <div className="flex items-center justify-between border-b border-border bg-secondary/30 px-3 py-2 sm:px-4">
-          <span className="text-xs sm:text-sm text-muted-foreground truncate">{filename}</span>
+        <div className="flex items-center justify-between border-b border-border bg-secondary/40 px-3 py-2 sm:px-4">
+          <span className="text-xs sm:text-sm text-muted-foreground truncate font-mono">{filename}</span>
           <button
             onClick={handleCopy}
             className="shrink-0 ml-2 text-muted-foreground transition-colors hover:text-foreground"
@@ -34,15 +32,15 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
           </button>
         </div>
       )}
-      <div className="overflow-x-auto p-3 sm:p-4">
-        <pre className="text-xs sm:text-sm leading-relaxed min-w-max">
-          <code className="font-mono text-foreground block">
+      <div className="overflow-auto p-3 sm:p-4">
+        <pre className="font-mono text-[13px] sm:text-sm leading-relaxed min-w-full">
+          <code className="text-foreground block">
             {code.split("\n").map((line, i) => (
               <div key={i} className="flex">
-                <span className="mr-4 w-6 sm:w-8 select-none text-right text-muted-foreground/50 shrink-0">
+                <span className="mr-4 w-8 sm:w-10 select-none text-right text-muted-foreground/50 shrink-0">
                   {i + 1}
                 </span>
-                <span className="whitespace-pre whitespace-nowrap">{highlightSyntax(line)}</span>
+                <span className="whitespace-pre">{highlightSyntax(line)}</span>
               </div>
             ))}
           </code>
@@ -54,22 +52,45 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
 
 function highlightSyntax(line: string) {
   const keywords = ["import", "export", "function", "return", "const", "from"]
-  const components = ["Document", "Page", "Text", "View", "ItemRow"]
+  const components = ["Document", "Page", "Text", "View", "ItemRow", "Image", "Link", "StyleSheet", "QR", "Header", "H1", "H2", "P", "Strong", "Em", "Table", "Thead", "Tbody", "Tr", "Th", "Td"]
 
-  let result = line
+  // Escape HTML so that JSX tags render as text, not HTML
+  const escapeHtml = (str: string) =>
+    str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
 
+  let result = escapeHtml(line)
+
+  // Comments
+  result = result.replace(/(\/\/.*)$/g, `<span class="text-gray-400">$1</span>`)
+  result = result.replace(/\/\*.*?\*\//g, (m) => `<span class="text-gray-400">${m}</span>`)
+
+  // Keywords
   keywords.forEach((keyword) => {
     const regex = new RegExp(`\\b${keyword}\\b`, "g")
-    result = result.replace(regex, `<span class="text-pink-400">${keyword}</span>`)
+    result = result.replace(regex, `<span class="text-fuchsia-400">${keyword}</span>`)
   })
 
+  // Components (match &lt;Component, &lt;/Component or standalone word)
   components.forEach((component) => {
-    const regex = new RegExp(`<${component}|</${component}|\\b${component}\\b`, "g")
+    const regex = new RegExp(`(&lt;\\/?${component}\\b|\\b${component}\\b)`, "g")
     result = result.replace(regex, (match) => `<span class="text-cyan-400">${match}</span>`)
   })
 
-  result = result.replace(/'[^']*'/g, (match) => `<span class="text-green-400">${match}</span>`)
-  result = result.replace(/\{[^}]*\}/g, (match) => `<span class="text-yellow-400">${match}</span>`)
+  // Strings and template pieces
+  result = result.replace(/&#39;[^&#39;]*&#39;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
+  result = result.replace(/&quot;[^&quot;]*&quot;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
+
+  // Template braces (solo colorear las llaves, no el contenido)
+  result = result.replace(/\{/g, `<span class="text-amber-400">{</span>`)
+  result = result.replace(/\}/g, `<span class="text-amber-400">}</span>`)
+
+  // Arrow functions
+  result = result.replace(/=&gt;/g, `<span class="text-fuchsia-400">=&gt;</span>`)
 
   return <span dangerouslySetInnerHTML={{ __html: result }} />
 }

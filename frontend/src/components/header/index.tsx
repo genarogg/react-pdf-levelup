@@ -1,6 +1,6 @@
 "use client"
-import React from "react"
-import { Github, Coffee, FileText, Play } from "lucide-react"
+import React, { useState } from "react"
+import { Github, Coffee, FileText, Play, Menu, X } from "lucide-react"
 
 import TemplateSelector from "./TemplateSelector"
 
@@ -15,6 +15,7 @@ const linkStyles =
 const iconStyles = "w-4 h-4"
 
 const Header: React.FC<HeaderProps> = ({ context }) => {
+    const [mobileOpen, setMobileOpen] = useState(false)
     return (
         <>
             <header className="relative bg-gradient-to-r from-black via-gray-900 to-black border-b border-gray-800/50 px-2.5 py-3 shadow-2xl backdrop-blur-sm h-[70px]">
@@ -32,7 +33,6 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                     <div className="flex items-center gap-4">
 
-
                         {context === "docs" ? (
                             <a href="/" className={linkStyles}>
                                 <Play className={iconStyles} />
@@ -46,9 +46,19 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             </a>
                         ) : null}
 
-
-
-
+                        {context === "home" ? (
+                            <nav className="hidden md:flex items-center gap-4">
+                                <a href="#features" className={linkStyles}>Características</a>
+                                <a href="#templates" className={linkStyles}>Plantillas</a>
+                                <a href="#como-funciona" className={linkStyles}>Cómo funciona</a>
+                                <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
+                                <a href="#comparacion" className={linkStyles}>Comparación</a>
+                                <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
+                                <a href="#stack" className={linkStyles}>Stack</a>
+                                <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
+                                <a href="#faq" className={linkStyles}>FAQ</a>
+                            </nav>
+                        ) : null}
 
                         <a
                             href="https://github.com/genarogg/react-pdf-levelup"
@@ -70,17 +80,48 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                         </a>
                         {context === "playgroud" ? (
-                            <>
+                            <TemplateSelector />
+                        ) : null}
 
-                                <TemplateSelector />
-
-                            </>
+                        {context === "home" ? (
+                            <button
+                                className="md:hidden text-gray-300 hover:text-white transition-colors"
+                                aria-label="Abrir menú"
+                                onClick={() => setMobileOpen(!mobileOpen)}
+                            >
+                                {mobileOpen ? <X className={iconStyles} /> : <Menu className={iconStyles} />}
+                            </button>
                         ) : null}
                     </div>
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
             </header>
+            {context === "home" && mobileOpen ? (
+                <aside className="md:hidden bg-black/80 border-t border-gray-800/50 px-3 py-4">
+                    <nav className="flex flex-col gap-2">
+                        <a href="#features" className={linkStyles}>Características</a>
+                        <a href="#templates" className={linkStyles}>Plantillas</a>
+                        <a href="#como-funciona" className={linkStyles}>Cómo funciona</a>
+                        <a href="#por-que-levelup" className={linkStyles}>Por qué Levelup</a>
+                        <a href="#comparacion" className={linkStyles}>Comparación</a>
+                        <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
+                        <a href="#stack" className={linkStyles}>Stack</a>
+                        <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
+                        <a href="#faq" className={linkStyles}>FAQ</a>
+                    </nav>
+                    <div className="mt-3 flex items-center gap-3">
+                        <a href="https://github.com/genarogg/react-pdf-levelup" target="_blank" rel="noopener noreferrer" className={linkStyles}>
+                            <Github className={iconStyles} />
+                            <span>GitHub</span>
+                        </a>
+                        <a href="/docs" className={linkStyles}>
+                            <FileText className={iconStyles} />
+                            <span>Documentación</span>
+                        </a>
+                    </div>
+                </aside>
+            ) : null}
         </>
     )
 }
