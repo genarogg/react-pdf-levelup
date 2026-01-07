@@ -12,6 +12,10 @@ RUN npm install
 # Copiamos el código fuente del api
 COPY api ./api
 
+# Construimos el API para generar /app/api/dist
+WORKDIR /app/api
+RUN npm run build
+
 # Stage deproducción
 FROM node:22 AS runner
 
