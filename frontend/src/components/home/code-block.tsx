@@ -52,7 +52,46 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
 
 function highlightSyntax(line: string) {
   const keywords = ["import", "export", "function", "return", "const", "from"]
-  const components = ["Document", "Page", "Text", "View", "ItemRow", "Image", "Link", "StyleSheet", "QR", "Header", "H1", "H2", "P", "Strong", "Em", "Table", "Thead", "Tbody", "Tr", "Th", "Td"]
+  const components = [
+    "LayoutPDF",
+    "Document",
+    "Page",
+    "Text",
+    "View",
+    "ItemRow",
+    "Image",
+    "Link",
+    "StyleSheet",
+    "QR",
+    "Header",
+    "HR",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5",
+    "H6",
+    "P",
+    "Strong",
+    "Em",
+    "Span",
+    "Small",
+    "U",
+    "Mark",
+    "Blockquote",
+    "Table",
+    "Thead",
+    "Tbody",
+    "Tr",
+    "Th",
+    "Td",
+    "A",
+    "Container",
+    "Row",
+    "Col6",
+    "UL",
+    "LI",
+  ]
 
   // Escape HTML so that JSX tags render as text, not HTML
   const escapeHtml = (str: string) =>
@@ -77,7 +116,7 @@ function highlightSyntax(line: string) {
 
   // Components (match &lt;Component, &lt;/Component or standalone word)
   components.forEach((component) => {
-    const regex = new RegExp(`(&lt;\\/?${component}\\b|\\b${component}\\b)`, "g")
+    const regex = new RegExp(`(&lt;\\/?${component}\\b)`, "g")
     result = result.replace(regex, (match) => `<span class="text-cyan-400">${match}</span>`)
   })
 

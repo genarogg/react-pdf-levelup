@@ -23,6 +23,7 @@ const Component = ({ data }) => {
         Gracias por usar <Strong>react-pdf-levelup</Strong>. 
         Explora el Playground y crea tu propio template.
       </P>
+      <QR value="https://react-pdf-levelup.netlify.app" size={120} />
     </LayoutPDF>
   )
 }
