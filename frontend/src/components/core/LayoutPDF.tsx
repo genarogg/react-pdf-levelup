@@ -141,7 +141,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
     // Validar lines
     if (typeof lines !== "number" || lines < 1) {
       console.warn(`Invalid lines value: ${lines}. Using 1 as default.`)
- 
+
     }
   } catch (e) {
     console.warn("Error processing props in LayoutPDF:", e)
@@ -215,7 +215,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
 
     // 1 cm = 28.3465 points
     const cmToPoints = 28.3465
-    
+
     // Get page dimensions in points
     const pageDimensions: Record<string, { width: number; height: number }> = {
       A0: { width: 841 * 2.834645669, height: 1189 * 2.834645669 },
@@ -285,9 +285,11 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   const pageStyle = {
     ...styles.page,
     backgroundColor: safeBackgroundColor,
-    ...margins,
-    paddingBottom: margins.paddingBottom + footerHeight,
-    ...style,
+    paddingTop: (style?.paddingTop ?? style?.padding ?? margins.paddingTop),
+    paddingRight: (style?.paddingRight ?? style?.padding ?? margins.paddingRight),
+    paddingLeft: (style?.paddingLeft ?? style?.padding ?? margins.paddingLeft),
+    paddingBottom: (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight,
+    ...( (() => { const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...rest } = style || {}; return rest })() ),
   }
 
   const footerStyle = {
@@ -309,14 +311,16 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
         <View style={{ paddingBottom: footerHeight }}>
           {children}
         </View>
-        {pagination ? (
-          <View style={footerStyle} fixed>
-            {footer}
+
+        <View style={footerStyle} fixed>
+          {footer && (footer)}
+          {pagination && (
             <Text style={{ fontSize: footerStyle.fontSize }} render={({ pageNumber, totalPages }) => (
               `${pageNumber} / ${totalPages}`
             )} />
-          </View>
-        ) : null}
+          )}
+        </View>
+
       </Page>
     </Document>
   )

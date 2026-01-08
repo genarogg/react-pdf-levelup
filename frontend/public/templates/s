@@ -1,34 +1,24 @@
-Font.register({
-  family: "BebasNeue",
-  fonts: [
-    {
-      src: "https://genarogg.github.io/react-pdf-levelup/public/font/BebasNeue-Regular.ttf",
-      fontWeight: "normal",
-    },
- 
-  ],
-});
+import React from "react";
+import {
+  A,
+  BR,
+  Div,
+  H2,
+  ImgBg,
+  LayoutPDF,
+  P
+} from "react-pdf-levelup";
 
-
-Font.register({
-  family: "Lobster",
-  fonts: [
-    {
-      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
-      fontWeight: "normal",
-    },
- 
-  ],
-});
 
 const Component = () => {
+
   return (
     <LayoutPDF
       size="A4"
       orientation="h"
       pagination={false}
       padding={0}
-      style={{ fontFamily: "BebasNeue" }}
+      style={{ fontFamily: "Times-Roman" }}
     >
       <ImgBg
         src="/certificado.png"
@@ -41,11 +31,11 @@ const Component = () => {
         }}
       >
         <BR /><BR /><BR />
-        <Div style={{ lineHeight: "2.2" }}>
+        <Div style={{ lineHeight: "1.5" }}>
           <H2 style={{
             width: "100%",
             textAlign: "center",
-            fontSize: "62px",
+            fontSize: "42px",
             textTransform: "uppercase",
             color: "#383838"
           }}>
@@ -54,7 +44,7 @@ const Component = () => {
           <H2 style={{
             width: "100%",
             textAlign: "center",
-            fontSize: "65px",
+            fontSize: "45px",
             textTransform: "uppercase",
             color: "#282828",
 
@@ -62,21 +52,20 @@ const Component = () => {
             OF ACHIEVEMENT
           </H2>
         </Div>
-        <BR /><BR /><BR /><BR /><BR /><BR /><BR /><BR /> <BR />
+        <BR /><BR /><BR /><BR /><BR /><BR /><BR /><BR /> <BR /><BR /><BR />
         <P style={{ textAlign: "center", fontSize: "16px", }}>This Certificate Presented to</P>
         <H2 style={{
           width: "100%",
           textAlign: "center",
           fontSize: "42px",
           textTransform: "uppercase",
-          color: "#0b74f2",
-          fontFamily:"Lobster"
+          color: "#0b74f2"
         }}>
           Charles Torres
         </H2>
-        <BR /><BR /><BR />
+        <BR /> <BR /><BR />
         <Div style={{ width: "100%", alignItems: "center" }}>
-          <P style={{ width: 400, textAlign: "center" ,fontSize: "14px" }}>
+          <P style={{ width: 400, textAlign: "center" }}>
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud
           </P>
         </Div>
@@ -88,3 +77,5 @@ const Component = () => {
     </LayoutPDF>
   );
 };
+
+export default Component;
