@@ -32,11 +32,16 @@ const downloadTemplate = (templateCode: string) => {
 
             const isUsed = patterns.some(pattern => pattern.test(templateCode));
 
-            if (isUsed) {
-                usedComponents.add(component);
-            }
-        }
-    });
+            if (isUsed) { 
+                 usedComponents.add(component); 
+             } 
+         } 
+     }); 
+ 
+     // Detectar si se está usando Font.register 
+     if (/\bFont\.register\b/.test(templateCode)) { 
+         usedComponents.add("Font"); 
+     }
 
     // Construir el import solo con los componentes utilizados
     let importsSection = 'import React from "react";\n';
