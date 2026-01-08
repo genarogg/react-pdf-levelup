@@ -251,6 +251,86 @@ Esta librería utiliza internamente:
 - El PDF se genera de forma asíncrona, asegúrate de usar `await` o `.then()`
 - Los recursos de memoria se limpian automáticamente después de la descarga
 
+## 🌐 API REST para generar PDFs
+
+- Genera PDFs vía HTTP desde cualquier lenguaje usando un template TSX en base64 y un objeto de datos.
+- Devuelve un JSON con `data.pdf` que es el PDF en base64.
+
+### Endpoints
+
+- Cloud: [https://react-pdf-levelup-api.nimbux.cloud/api/pdf](https://react-pdf-levelup-api.nimbux.cloud/api/pdf)
+- Auto‑hospedado ZIP: [https://genarogg.github.io/react-pdf-levelup/public/api.zip](https://genarogg.github.io/react-pdf-levelup/public/api.zip)
+
+```text
+https://react-pdf-levelup-api.nimbux.cloud/api/pdf
+```
+
+```text
+https://genarogg.github.io/react-pdf-levelup/public/api.zip
+```
+
+### Request
+
+POST con `Content-Type: application/json`:
+
+```json
+{
+  "template": "<TSX_EN_BASE64>",
+  "data": { "campo": "valor" }
+}
+```
+
+### Response
+
+```json
+{
+  "data": {
+    "pdf": "<PDF_EN_BASE64>"
+  }
+}
+```
+
+### Ejemplo rápido con Node.js (fetch)
+
+```ts
+import fs from "fs";
+import path from "path";
+
+type ApiResponse = { data?: { pdf?: string } };
+const ENDPOINT_API = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+
+const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
+  const templatePath = path.join(process.cwd(), "src", "useExample", template);
+  const tsxCode = fs.readFileSync(templatePath, "utf-8");
+  const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
+
+  const res = await fetch(ENDPOINT_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ template: templateBase64, data }),
+  });
+  if (!res.ok) throw new Error(`API error (${res.status}): ${await res.text()}`);
+  const json = await res.json() as ApiResponse;
+  return json?.data?.pdf ?? "";
+}
+
+const savePDF = (base64: string) => {
+  const buffer = Buffer.from(base64, "base64");
+  const outputPath = path.join(process.cwd(), "example.pdf");
+  fs.writeFileSync(outputPath, buffer);
+  console.log("PDF guardado:", outputPath);
+}
+```
+
+### Self‑hosting propio
+
+- Descarga el paquete ZIP y despliega en tu infraestructura (Node/Docker/PaaS).
+- Expón el endpoint `/api/pdf` con el mismo contrato JSON.
+- Usa el mismo cliente mostrado arriba apuntando a tu URL.
+
+Más detalles y ejemplos en la documentación:  
+[Guía API REST (fetch)](https://react-pdf-levelup-docs.nimbux.cloud/docs/guides/api-rest)
+
 ## 🤝 Contribuir
 
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.

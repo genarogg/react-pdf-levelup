@@ -51,6 +51,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 <a href="#comparacion" className={linkStyles}>Comparación</a>
                                 <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
                                 <a href="#por-que-levelup" className={linkStyles}>vs</a>
+                                <a href="#api" className={linkStyles}>API</a>
                                 <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                                 <a href="#stack" className={linkStyles}>Stack</a>
                                 <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>

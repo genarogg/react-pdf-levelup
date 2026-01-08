@@ -17,7 +17,11 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'react pdf levelup',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/genarogg/react-pdf-levelup' }],
+			social: [{
+				icon: 'github',
+				label: 'GitHub',
+				href: 'https://github.com/genarogg/react-pdf-levelup'
+			}],
 			sidebar: [
 				{
 					label: 'Inicio',
@@ -31,6 +35,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Tu Primer Template', slug: 'guides/first-template' },
 						{ label: 'Integración Backend', slug: 'guides/backend-integration' },
+						{ label: 'API REST (fetch)', slug: 'guides/api-rest' },
 					],
 				},
 				{

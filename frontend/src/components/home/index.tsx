@@ -11,6 +11,7 @@ import { DeveloperFeatures } from "./developer-features"
 import { TemplatesSection } from "./templates-section"
 import { UseCasesSection } from "./use-cases-section"
 import { TechStackSection } from "./tech-stack-section"
+import { ApiSection } from "./api-section"
 import { RoadmapSection } from "./roadmap-section"
 import { FaqSection } from "./faq-section"
 import { CtaSection } from "./cta-section"
@@ -41,6 +42,7 @@ export default function Home() {
                 <HowItWorks />
                 <WhyLevelupSection />
 
+                <ApiSection />
                 <UseCasesSection />
                 <TechStackSection />
                 <RoadmapSection />
