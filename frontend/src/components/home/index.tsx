@@ -42,9 +42,9 @@ export default function Home() {
                 <HowItWorks />
                 <WhyLevelupSection />
 
-                <ApiSection />
                 <UseCasesSection />
                 <TechStackSection />
+                <ApiSection />
                 <RoadmapSection />
                 <FaqSection />
                 <CtaSection />

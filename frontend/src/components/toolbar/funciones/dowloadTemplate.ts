@@ -51,7 +51,40 @@ const downloadTemplate = (templateCode: string) => {
     importsSection += '\n\n';
 
     // Crear el contenido completo del template con imports
-    const fullTemplateContent = importsSection + templateCode;
+    let fullTemplateContent = importsSection + templateCode;
+
+    const hasDefaultExport = /\bexport\s+default\b/.test(templateCode);
+    if (!hasDefaultExport) {
+        const preferredNames = [
+            "Component",
+            "InvoiceTemplate",
+            "ReporteFinanciero",
+            "CertificadoTemplate",
+            "MyDocument",
+            "PDFDocument"
+        ];
+        const declPatterns = (name: string) => [
+            new RegExp(`\\b(?:const|let|var)\\s+${name}\\s*=`),
+            new RegExp(`\\bfunction\\s+${name}\\s*\\(`),
+            new RegExp(`\\bclass\\s+${name}\\b`)
+        ];
+        let componentName: string | null = null;
+        for (const n of preferredNames) {
+            if (declPatterns(n).some(r => r.test(templateCode))) {
+                componentName = n;
+                break;
+            }
+        }
+        if (!componentName) {
+            const genericConst = templateCode.match(/\bconst\s+([A-Z][A-Za-z0-9_]*)\s*=/);
+            const genericFunc = templateCode.match(/\bfunction\s+([A-Z][A-Za-z0-9_]*)\s*\(/);
+            const genericClass = templateCode.match(/\bclass\s+([A-Z][A-Za-z0-9_]*)\b/);
+            componentName = genericConst?.[1] || genericFunc?.[1] || genericClass?.[1] || null;
+        }
+        if (componentName) {
+            fullTemplateContent = `${fullTemplateContent}\n\nexport default ${componentName};\n`;
+        }
+    }
 
     // Crear un blob con el contenido
     const blob = new Blob([fullTemplateContent], { type: "text/plain" });

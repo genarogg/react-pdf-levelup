@@ -115,9 +115,14 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
     }
 
     // Validar orientation
-    if (orientation !== "vertical" && orientation !== "horizontal") {
+    const validOrientations = ["vertical", "horizontal", "portrait", "landscape", "h", "v"]
+    const normalizedOrientation = typeof orientation === "string" ? orientation.toLowerCase() : "vertical"
+    if (!validOrientations.includes(normalizedOrientation)) {
       console.warn(`Invalid orientation: ${orientation}. Using vertical as default.`)
       safeOrientation = "vertical"
+    } else {
+      // Mantener el valor original si es válido, respetando alias
+      safeOrientation = orientation
     }
 
     // Validar backgroundColor
