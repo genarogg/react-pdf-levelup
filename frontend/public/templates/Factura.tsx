@@ -1,6 +1,4 @@
-// Plantilla de Factura
 const InvoiceTemplate = () => {
-  // Datos de ejemplo
   const invoiceData = {
     number: 'F-2024-001',
     date: new Date().toLocaleDateString(),
@@ -22,17 +20,24 @@ const InvoiceTemplate = () => {
 
   return (
     <LayoutPDF size="A4" padding={30} showPageNumbers={false}>
-      {/* Encabezado */}
       <View style={{ marginBottom: 20, borderBottom: "1px solid #ccc", padding: 10 }}>
         <Row>
           <Col6>
-            <H2>FACTURA</H2>
+            <H2 style={{color:"#3366cc"}}>FACTURA</H2>
             <P>Nº: {invoiceData.number}</P>
             <P>Fecha: {invoiceData.date}</P>
           </Col6>
           <Col6>
-            <Right>
-              <QR value={`https://verificar-factura.com/${invoiceData.number}`} size={100} />
+            <Right style={{position:"absolute", right:"10px", top: "-10px"}}>
+              <QRV2
+                value={`https://verificar-factura.com/${invoiceData.number}`}
+                size={80}
+                dotsOptions={{ color: "#3366cc", type: "rounded" }}
+                backgroundOptions={{ color: "#ffffff" }}
+                imageOptions={{ margin: 0, imageSize: 0.35 }}
+                cornersSquareOptions={{ type: "extra-rounded", color: "#3366cc" }}
+                cornersDotOptions={{ type: "dot", color: "#3366cc" }}
+              />
             </Right>
           </Col6>
         </Row>
@@ -101,20 +106,18 @@ const InvoiceTemplate = () => {
       </View>
 
       {/* Firmas */}
-      <View style={{ marginTop: 50, borderTop: "1px dashed #ccc", paddingTop: 10 }}>
+      <View style={{  borderTop: "1px dashed #ccc", paddingTop: 200 }}>
         <Row>
           <Col6>
             <Center>
-              <View style={{ width: 150, borderTop: "1px solid #000", marginTop: 40 }}>
+            <HR style={{ borderTop: "1px solid #000", marginTop: 40 }}/>
                 <Text style={{ textAlign: "center", fontSize: 10 }}>Firma Autorizada</Text>
-              </View>
             </Center>
           </Col6>
           <Col6>
             <Center>
-              <View style={{ width: 150, borderTop: "1px solid #000", marginTop: 40 }}>
+             <HR style={{ borderTop: "1px solid #000", marginTop: 40 }}/>
                 <Text style={{ textAlign: "center", fontSize: 10 }}>Firma Cliente</Text>
-              </View>
             </Center>
           </Col6>
         </Row>
@@ -122,7 +125,3 @@ const InvoiceTemplate = () => {
     </LayoutPDF>
   );
 };
-
-// Asignar el componente a result
-result = InvoiceTemplate;
-

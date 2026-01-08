@@ -1,0 +1,51 @@
+---
+title: Gestión de Fuentes
+description: Fuentes disponibles por defecto y cómo registrar fuentes personalizadas.
+---
+
+## Fuentes por defecto
+
+Las siguientes fuentes están disponibles por defecto en `react-pdf-levelup` y no requieren registro:
+
+- `Courier`
+- `Courier-Bold`
+- `Courier-Oblique`
+- `Courier-BoldOblique`
+- `Helvetica`
+- `Helvetica-Bold`
+- `Helvetica-Oblique`
+- `Helvetica-BoldOblique`
+- `Times-Roman`
+- `Times-Bold`
+- `Times-Italic`
+- `Times-BoldItalic`
+
+## Fuentes Personalizadas
+
+Puedes registrar fuentes adicionales utilizando `Font.register`.
+
+> **⚠️ IMPORTANTE**: Para asegurar que el PDF se genere correctamente en todos los entornos (especialmente al usar la API REST), las fuentes **DEBEN** cargarse desde **URLs remotas absolutas** (https://...). No utilices rutas locales del sistema de archivos.
+
+### Ejemplo de registro
+
+```ts
+Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});
+```
+
+### Uso en estilos
+
+Una vez registrada, puedes usar la fuente en tus estilos (`StyleSheet.create` o estilos en línea):
+
+```tsx
+<Text style={{ fontFamily: 'Lobster' }}>
+  Texto con fuente personalizada
+</Text>
+```

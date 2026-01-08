@@ -459,6 +459,33 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 </LayoutPDF>`,
       },
     ],
+    fonts: [
+      {
+        name: "Fuentes por defecto",
+        description: "Fuentes disponibles sin registro previo.",
+        props: [],
+        example: `// Courier, Courier-Bold, Courier-Oblique, Courier-BoldOblique
+// Helvetica, Helvetica-Bold, Helvetica-Oblique, Helvetica-BoldOblique
+// Times-Roman, Times-Bold, Times-Italic, Times-BoldItalic`,
+      },
+      {
+        name: "Font.register",
+        description: "Registra fuentes personalizadas. IMPORTANTE: Deben ser URLs remotas (https://) para asegurar la generación correcta en todos los entornos.",
+        props: [
+          { name: "family", type: "string", default: "", description: "Nombre de la familia de la fuente" },
+          { name: "fonts", type: "object[]", default: "[]", description: "Array de fuentes con src y propiedades" },
+        ],
+        example: `Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});`,
+      },
+    ],
   }
 
   // @ts-ignore
@@ -488,7 +515,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 
             {/* Tabs */}
             <div className="flex flex-wrap gap-1.5 mb-4 pb-3 border-b border-gray-800/50">
-              {["layout", "text", "table", "position", "lists", "media", "page"].map((tab) => (
+              {["layout", "text", "table", "position", "lists", "media", "page", "fonts"].map((tab) => (
                 <button
                   key={tab}
                   className={`px-3.5 py-2 text-sm font-medium rounded-md transition-all duration-200 ${

@@ -158,6 +158,30 @@ export function ApiSection() {
                 <li>Guarda o entrega el PDF según tu caso de uso.</li>
               </ol>
             </div>
+
+            <div className="rounded-lg border border-border bg-card p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold text-foreground">Fuentes Personalizadas</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Para asegurar el correcto renderizado en el servidor, las fuentes deben cargarse desde{" "}
+                <span className="font-semibold text-accent">URLs remotas absolutas</span> (https://...).
+                No utilices rutas locales.
+              </p>
+              <div className="mt-4" style={{ maxWidth: "82vw" }}>
+                <CodeBlock
+                  code={`Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});`}
+                  language="typescript"
+                  filename="FontRegistration.ts"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="lg:sticky lg:top-8">

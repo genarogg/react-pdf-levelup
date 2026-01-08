@@ -1,248 +1,153 @@
-
 const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "column",
+    padding: 20,
   },
   title: {
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 15,
+    marginBottom: 20,
     textAlign: "center",
+    color: "#333",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 20,
+    marginBottom: 10,
+    borderBottom: "1px solid #eee",
+    paddingBottom: 5,
   },
   grid: {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 20,
     justifyContent: "space-between",
   },
   qrItem: {
     width: "30%",
-    marginBottom: 10,
+    marginBottom: 20,
     display: "flex",
     alignItems: "center",
+    flexDirection: "column",
+    padding: 10,
+    backgroundColor: "#f9fafb",
+    borderRadius: 8,
   },
   qrLabel: {
-    fontSize: 10,
-    marginTop: 3,
+    fontSize: 12,
+    marginTop: 8,
     textAlign: "center",
+    color: "#555",
   },
 })
 
-// Componente principal sin datos de reporte
 const Component = () => {
   return (
-    <LayoutPDF size="A4" padding={10} showPageNumbers={false}>
+    <LayoutPDF size="A4" showPageNumbers={true}>
       <View style={styles.container}>
-        <Text style={styles.title}>Catálogo de Códigos QR</Text>
-        <View style={styles.grid}>
-          {/* Primera fila */}
-          <View style={styles.qrItem}>
-            <QR
-              url="https://example.com"
-              size={150} colorData="#3794ff"
-              logo="https://genarogg.github.io/media/genarogg/favicon.png"
-              dotType="extra-rounded" 
-              cornerSquareType="extra-rounded"
-              cornerDotType="dot"
-              cornerSquareColor="#3794ff"
-              cornerDotColor="#e13e83"
-            />
-            <P>example logo</P>
-          </View>
-          <View style={styles.qrItem}>
-            <QR
-              url="https://vercel.com"
-              size={150}
-              colorData="#000000"
-              colorDataBG="#ffffff"
-              dotType="square"
-              cornerSquareType="square"
-              cornerDotType="square"
-              logo="https://assets.vercel.com/image/upload/v1607554385/repositories/vercel/logo.png"
-            />
-            <Text style={styles.qrLabel}>Vercel con Logo</Text>
-          </View>
-            <View style={styles.qrItem}>
-            <QR
-              url="https://vercel.com"
-              size={150}
-              colorData="#000000"
-              colorDataBG="#ffffff"
-              dotType="classy"
-              cornerSquareType="square"
-              cornerDotType="square"
-
-              textColor="#000000"
-              textBackgroundColor="#ffffff"
-              fontSize={24}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>simple QR</Text>
-          </View>
-         {/* Segunda fila */}
-          <View style={styles.qrItem}>
-            <QR
-              url="https://example.com"
-              size={150} 
-              colorData="#28a745"
-              fontSize={14}
-              moveText={-25}
-              logoText="GENAROGG"
-              colortText="#fff"
-              dotType="extra-rounded" 
-              cornerSquareType="extra-rounded"
-              cornerDotType="dot"
-              cornerSquareColor="#28a745"
-              cornerDotColor="#e13e83"
-            />
-            <P>example logo (texto)</P>
-          </View>
-  
-          
-
-          <View style={styles.qrItem}>
-            <QR
-              url="https://instagram.com"
-              size={150}
-           
-              colorDataBG="#ffffff"
-              dotType="dots"
-              cornerSquareType="dot"
-              cornerSquareColor="#E1306C"
-              cornerDotType="dot"
-              cornerDotColor="#F77737"
-              logo="/logo-instagram.png"
-              logoBG="transparent"
-            />
-            <Text style={styles.qrLabel}>Instagram con Logo</Text>
-          </View>
-
+        <Text style={styles.title}>QR Code Showcase</Text>
         
- 
-          <View style={styles.qrItem}>
-            <QR
-              url="https://facebook.com"
-              size={150}
-              colorData="#1877f2"
-              colorDataBG="#ffffff"
-              dotType="rounded"
-              cornerSquareType="extra-rounded"
-              cornerDotType="dot"
-              logo="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png"
-            />
-            <Text style={styles.qrLabel}>Facebook con Logo</Text>
-          </View>
+        <Text style={styles.sectionTitle}>Standard QR (QR Component)</Text>
+        <View style={styles.grid}>
+           <View style={styles.qrItem}>
+             <QR 
+               value="https://example.com" 
+               size={120} 
+             /> 
+             <Text style={styles.qrLabel}>Basic QR</Text> 
+           </View>
+           <View style={styles.qrItem}>
+             <QR 
+               value="https://example.com" 
+               size={120} 
+               colorDark="#3794ff"
+             /> 
+             <Text style={styles.qrLabel}>Colored QR</Text> 
+           </View>
+        </View>
 
-          <View style={styles.qrItem}>
-            <QR
-              url="https://facebook.com"
-              size={150}
-              colorData="#1877F2"
-              colorDataBG="#ffffff"
-              dotType="rounded"
-              cornerSquareType="extra-rounded"
-              cornerDotType="dot"
-              logoText="FB"
-              textColor="#ffffff"
-              textBackgroundColor="#1877F2"
-              fontSize={24}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>Facebook con Texto</Text>
-          </View>
+        <Text style={styles.sectionTitle}>Styled QR (QRV2 Component)</Text>
+        <View style={styles.grid}>
+           <View style={styles.qrItem}>
+             <QRV2 
+               value="https://vercel.com" 
+               size={120} 
+               dotsOptions={{
+                 type: "rounded",
+                 color: "#000000"
+               }}
+               backgroundOptions={{
+                 color: "#ffffff"
+               }}
+               cornersSquareOptions={{
+                 type: "extra-rounded",
+                 color: "#000000"
+               }}
+             /> 
+             <Text style={styles.qrLabel}>Rounded Dots</Text> 
+           </View>
 
-          <View style={styles.qrItem}>
-            <QR
-              url="https://instagram.com"
-              size={150}
-              colorData="#C13584"
-              colorDataBG="#ffffff"
-              dotType="dots"
-              cornerSquareType="dot"
-              cornerSquareColor="#E1306C"
-              cornerDotType="dot"
-              cornerDotColor="#F77737"
-              logoText="IG"
-              textColor="#ffffff"
-              textBackgroundColor="#C13584"
-              fontSize={24}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>Instagram con Texto</Text>
-          </View>
+           <View style={styles.qrItem}>
+             <QRV2 
+               value="https://instagram.com" 
+               size={120} 
+               dotsOptions={{
+                 type: "dots",
+                 color: "#C13584"
+               }}
+               cornersSquareOptions={{
+                 type: "dot",
+                 color: "#E1306C"
+               }}
+               cornersDotOptions={{
+                 type: "dot",
+                 color: "#F77737"
+               }}
+             /> 
+             <Text style={styles.qrLabel}>Instagram Style</Text> 
+           </View>
+           
+           <View style={styles.qrItem}>
+             <QRV2 
+               value="https://facebook.com" 
+               size={120} 
+               image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png"
+               imageOptions={{
+                 imageSize: 0.4,
+                 margin: 2
+               }}
+               dotsOptions={{
+                 type: "classy",
+                 color: "#1877f2"
+               }}
+               cornersSquareOptions={{
+                 type: "extra-rounded",
+                 color: "#1877f2"
+               }}
+             /> 
+             <Text style={styles.qrLabel}>With Logo</Text> 
+           </View>
 
-          {/* Tercera fila */}
-          <View style={styles.qrItem}>
-            <QR
-              url="https://example.com/wave-pattern"
-              size={150}
-              colorData="#4a5568"
-              colorDataBG="#ffffff"
-              dotType="dots"
-              cornerSquareType="square"
-              cornerSquareColor="#0d9488"
-              cornerDotType="dot"
-              cornerDotColor="#0d9488"
-            />
-            <Text style={styles.qrLabel}>Patrón de Ondas</Text>
-          </View>
-
-          <View style={styles.qrItem}>
-            <QR
-              url="https://example.com/eco"
-              size={150}
-              colorData="#16a34a"
-              colorDataBG="#f0fdf4"
-              dotType="classy-rounded"
-              cornerSquareType="extra-rounded"
-              cornerSquareColor="#15803d"
-              logoText="ECO"
-              textColor="#ffffff"
-              textBackgroundColor="#16a34a"
-              fontSize={18}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>Eco</Text>
-          </View>
-
-          <View style={styles.qrItem}>
-            <QR
-              url="https://example.com/corporate"
-              size={150}
-              colorData="#1e3a8a"
-              colorDataBG="#ffffff"
-              dotType="square"
-              cornerSquareType="square"
-              cornerDotType="square"
-              logoText="CORP"
-              textColor="#1e3a8a"
-              textBackgroundColor="#ffffff"
-              fontSize={16}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>Corporativo</Text>
-          </View>
-               <View style={styles.qrItem}>
-            <QR
-              url="https://example.com/corporate"
-              size={150}
-              colorData="#1e3a8a"
-              colorDataBG="#ffffff"
-              dotType="square"
-              cornerSquareType="square"
-              cornerDotType="square"
-              logoText="CORP"
-              textColor="#1e3a8a"
-              textBackgroundColor="#ffffff"
-              fontSize={16}
-              textBold={true}
-            />
-            <Text style={styles.qrLabel}>Corporativo</Text>
-          </View>
+           <View style={styles.qrItem}>
+             <QRV2 
+               value="https://example.com/eco" 
+               size={120} 
+               dotsOptions={{
+                 type: "classy-rounded",
+                 color: "#16a34a"
+               }}
+               cornersSquareOptions={{
+                 type: "extra-rounded",
+                 color: "#15803d"
+               }}
+             /> 
+             <Text style={styles.qrLabel}>Eco Friendly</Text> 
+           </View>
         </View>
       </View>
     </LayoutPDF>
   )
 }
-

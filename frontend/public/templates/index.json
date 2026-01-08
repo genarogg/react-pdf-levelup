@@ -5,14 +5,9 @@
     "path": "/templates/Default.tsx"
   },
   {
-    "id": "invoice",
+    "id": "factura",
     "name": "Factura",
-    "path": "/templates/Invoice.tsx"
-  },
-  {
-    "id": "report",
-    "name": "Reporte Financiero",
-    "path": "/templates/Report.tsx"
+    "path": "/templates/Factura.tsx"
   },
   {
     "id": "certificate",
@@ -28,10 +23,5 @@
     "id": "QRTemplate",
     "name": "QR Template",
     "path": "/templates/QR.tsx"
-  },
-  {
-    "id": "tablaMinimal",
-    "name": "Tabla Minimal",
-    "path": "/templates/TablaMinimal.tsx"
   }
 ]

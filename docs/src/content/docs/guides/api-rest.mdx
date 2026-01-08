@@ -47,6 +47,30 @@ https://genarogg.github.io/react-pdf-levelup/public/api.zip
 }
 ```
 
+## Consideraciones sobre Fuentes
+
+### Registro de Fuentes Personalizadas
+
+Si tu template utiliza fuentes personalizadas, debes registrarlas usando `Font.register`.
+**IMPORTANTE**: La API no puede acceder a archivos locales. Las fuentes deben cargarse desde **URLs remotas absolutas** (https://...).
+
+```ts
+Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});
+```
+
+### Fuentes por defecto
+
+Las siguientes fuentes están disponibles sin necesidad de registro:
+`Courier`, `Courier-Bold`, `Courier-Oblique`, `Courier-BoldOblique`, `Helvetica`, `Helvetica-Bold`, `Helvetica-Oblique`, `Helvetica-BoldOblique`, `Times-Roman`, `Times-Bold`, `Times-Italic`, `Times-BoldItalic`.
+
 ## Respuesta
 
 ```json
