@@ -6,10 +6,8 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
-
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
@@ -47,6 +45,18 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
+      '/@id': {
+        target: 'http://localhost:4321',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@fs': {
+        target: 'http://localhost:4321',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
     }
   },
   preview: {
@@ -71,6 +81,18 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
-    }
-  }
+      '/@id': {
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@fs': {
+        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+    },
+  },
 })
