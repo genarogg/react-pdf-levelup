@@ -10,7 +10,6 @@ const { BACKEND_PORT, PRODUCTION } = process.env;
 const server: FastifyInstance = Fastify()
 
 import {
-
   caching,
   helmet,
   rateLimit,
