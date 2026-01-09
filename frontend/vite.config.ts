@@ -47,18 +47,6 @@ export default defineConfig({
         secure: false,
         ws: true,
       },
-      '/@id': {
-        target: 'http://localhost:4321',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-      '/@fs': {
-        target: 'http://localhost:4321',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
     }
   },
   preview: {
@@ -78,18 +66,6 @@ export default defineConfig({
         ws: true,
       },
       '/_astro': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-      '/@id': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
-        changeOrigin: true,
-        secure: false,
-        ws: true,
-      },
-      '/@fs': {
         target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
         changeOrigin: true,
         secure: false,

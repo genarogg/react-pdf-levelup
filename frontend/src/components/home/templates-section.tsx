@@ -19,13 +19,13 @@ const templates = [
     title: "tablas basicas",
     category: "tablas",
     image: "/imgTemplates/tablas-basicas.webp",
-    href: "/",
+    href: "/playground/template/tablasTemplateBasico",
   },
   {
     title: "Qr example",
     category: "qr",
     image: "/imgTemplates/qr.webp",
-    href: "/",
+    href: "/playground/template/QRTemplate",
   },
  
 ]
