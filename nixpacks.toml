@@ -1,7 +1,10 @@
 [build]
-command = "rm -rf node_modules package-lock.json && npm install && npm run build && npm run start"
+command = "npm install && npm run build && npm run build:api && npm run start"
 publish = "frontend/dist"
 
 [build.environment]
 NODE_VERSION = "22"
 NPM_FLAGS = "--legacy-peer-deps"
+
+[start]
+run = "node api/dist/index.js"

@@ -19,8 +19,9 @@
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "build": "turbo run build  --filter=frontend --filter=docs --filter=backend --only",
-    "start": "turbo run start",
+    "build": "turbo run build --filter=frontend --filter=lib",
+    "build:api": "cd api && npm run build",
+    "start": "cd api && npm run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
     "publicar": "cd lib && npm run publicar",
