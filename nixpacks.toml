@@ -1,5 +1,5 @@
 [build]
-command = "npm install && npm run build && npm run build:api && npm run start"
+command = "npm install && npm run build && npm run start"
 publish = "frontend/dist"
 
 [build.environment]
