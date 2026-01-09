@@ -3,12 +3,12 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { generatePdfController } from '../controllers/index';
 
 const controller = (request: FastifyRequest, reply: FastifyReply) => {
-    return reply.view("home");
+    return reply.send({ message: "Hello from the API!" });
 }
 
 const router = async (fastify: FastifyInstance) => {
-    fastify.get('/', controller);
-    fastify.post('/api/pdf', generatePdfController);
+    fastify.post('/', generatePdfController);
+    // fastify.post('/api/pdf', controller);
 }
 
 export default router;

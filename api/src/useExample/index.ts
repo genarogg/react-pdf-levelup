@@ -19,7 +19,7 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
     const tsxCode = fs.readFileSync(templatePath, "utf-8");
     const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
 
-    const res = await fetch(`${ENDPOINT_API}`, {
+    const res = await fetch(`http://localhost:5173/api`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ template: templateBase64, data }),

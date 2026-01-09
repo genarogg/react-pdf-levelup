@@ -22,11 +22,18 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@monaco-editor/react"],
   },
-
+  
   server: {
     host: '0.0.0.0',
     allowedHosts: true,
     proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
       '/docs': {
         target: 'http://localhost:4321',
         changeOrigin: true,
@@ -63,32 +70,39 @@ export default defineConfig({
     host: '0.0.0.0',
     allowedHosts: true,
     proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
       '/docs': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        target: 'http://localhost:4321',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/docs/_astro': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        target: 'http://localhost:4321',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/_astro': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        target: 'http://localhost:4321',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@id': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        target: 'http://localhost:4321',
         changeOrigin: true,
         secure: false,
         ws: true,
       },
       '/@fs': {
-        target: 'https://react-pdf-levelup-docs.nimbux.cloud/',
+        target: 'http://localhost:4321',
         changeOrigin: true,
         secure: false,
         ws: true,
