@@ -13,13 +13,13 @@ import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 ## Endpoints disponibles
 
-- Cloud (Self‑hosting gestionado): `https://react-pdf-levelup-api.nimbux.cloud/api/pdf`
+- Cloud (Self‑hosting gestionado): `https://react-pdf-levelup.nimbux.cloud/api`
 - Auto‑hospedado (Self‑hosting propio): descarga el paquete desde `https://genarogg.github.io/react-pdf-levelup/public/api.zip` y despliega tu servidor. El endpoint expuesto es `/api/pdf`.
 
 ### Copiar endpoints rápidos
 
 ```text
-https://react-pdf-levelup-api.nimbux.cloud/api/pdf
+https://react-pdf-levelup.nimbux.cloud/api
 ```
 
 ```text
@@ -93,7 +93,7 @@ type ApiResponse = {
   data?: { pdf?: string }
 }
 
-const ENDPOINT_API = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api";
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
   const templatePath = path.join(process.cwd(), "src", "useExample", template);
@@ -143,7 +143,7 @@ Estos ejemplos muestran que el API puede usarse desde cualquier lenguaje.
 ### curl
 
 ```bash
-curl -X POST https://react-pdf-levelup-api.nimbux.cloud/api/pdf \
+curl -X POST https://react-pdf-levelup.nimbux.cloud/api \
   -H "Content-Type: application/json" \
   -d '{"template":"BASE64_TSX","data":{"nombre":"Genaro Gonzalez"}}'
 ```
@@ -154,7 +154,7 @@ curl -X POST https://react-pdf-levelup-api.nimbux.cloud/api/pdf \
 import requests
 import base64
 
-endpoint = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf"
+endpoint = "https://react-pdf-levelup.nimbux.cloud/api"
 payload = {
     "template": "BASE64_TSX",
     "data": {"nombre": "Genaro Gonzalez"}
@@ -176,7 +176,7 @@ using System.Text;
 using System.Text.Json;
 
 var client = new HttpClient();
-var endpoint = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+var endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
 
 var body = new {
   template = "BASE64_TSX",
@@ -200,7 +200,7 @@ await File.WriteAllBytesAsync("example.pdf", bytes);
 import okhttp3.*;
 
 OkHttpClient client = new OkHttpClient();
-String endpoint = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+String endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
 String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"nombre\":\"Genaro Gonzalez\"}}";
 
 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
@@ -217,7 +217,7 @@ try (Response response = client.newCall(request).execute()) {
 
 ```php
 <?php
-$endpoint = 'https://react-pdf-levelup-api.nimbux.cloud/api/pdf';
+$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api';
 $payload = [
   'template' => 'BASE64_TSX',
   'data' => ['nombre' => 'Genaro Gonzalez']

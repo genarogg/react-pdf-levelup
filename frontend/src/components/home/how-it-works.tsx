@@ -46,7 +46,7 @@ const Component = ({ data }) => {
           </Col6>
           <Col6>
             <H2>Acceso Rápido</H2>
-            <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+            <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
             <P>Escanea el código para ir al Playground.</P>
           </Col6>
         </Row>

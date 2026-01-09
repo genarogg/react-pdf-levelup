@@ -10,7 +10,7 @@ import fs from "fs";
 import path from "path";
 
 type ApiResponse = { data?: { pdf?: string } }
-const ENDPOINT_API = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api";
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
   const templatePath = path.join(process.cwd(), "src", "useExample", template);
@@ -41,12 +41,12 @@ const generateAndSavePDF = async () => {
 `.trim()
 
 const endpointsText = `
-https://react-pdf-levelup-api.nimbux.cloud/api/pdf
+https://react-pdf-levelup.nimbux.cloud/api
 https://genarogg.github.io/react-pdf-levelup/public/api.zip
 `.trim()
 
 export function ApiSection() {
-  const cloudUrl = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf"
+  const cloudUrl = "https://react-pdf-levelup.nimbux.cloud/api"
   const zipUrl = "https://genarogg.github.io/react-pdf-levelup/public/api.zip"
   const [copiedCloud, setCopiedCloud] = useState(false)
   const [copiedZip, setCopiedZip] = useState(false)

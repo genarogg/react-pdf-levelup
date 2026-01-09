@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build --filter=frontend --filter=docs --filter=api",
-    "start": "cd api && npm run start",
+    "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
     "publicar": "cd lib && npm run publicar",

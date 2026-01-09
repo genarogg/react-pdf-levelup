@@ -1,8 +1,16 @@
-[build]
-command = "npm install && npm run build && npm run start"
-publish = "frontend/dist"
+[phases.setup]
+nixPkgs = ['nodejs_22', 'npm-9_x']
 
-[build.environment]
-NODE_VERSION = "22"
-NPM_FLAGS = "--legacy-peer-deps"
+[phases.install]
+cmds = [
+    'rm -rf node_modules package-lock.json lib',
+    'npm install --legacy-peer-deps'
+]
 
+[phases.build]
+cmds = [
+    'npx turbo run build'
+]
+
+[start]
+cmd = 'npm run start'

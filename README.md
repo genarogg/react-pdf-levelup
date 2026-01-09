@@ -7,7 +7,7 @@
 Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para etiquetas, facturas, reportes, certificados, tablas y más.
 
 # 🌐 **Playground en vivo:** 
-[https://react-pdf-levelup.netlify.app](https://react-pdf-levelup.netlify.app)
+[https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
 or
 [https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
 
@@ -98,7 +98,7 @@ const MyPDFTemplate = ({ data }) => (
           </UL>
         </Col6>
         <Col6>
-          <QR value="https://react-pdf-levelup.netlify.app" size={120} />
+          <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
         </Col6>
       </Row>
     </Container>
@@ -258,11 +258,11 @@ Esta librería utiliza internamente:
 
 ### Endpoints
 
-- Cloud: [https://react-pdf-levelup-api.nimbux.cloud/api/pdf](https://react-pdf-levelup-api.nimbux.cloud/api/pdf)
+- Cloud: [https://react-pdf-levelup.nimbux.cloud/api](https://react-pdf-levelup.nimbux.cloud/api)
 - Auto‑hospedado ZIP: [https://genarogg.github.io/react-pdf-levelup/public/api.zip](https://genarogg.github.io/react-pdf-levelup/public/api.zip)
 
 ```text
-https://react-pdf-levelup-api.nimbux.cloud/api/pdf
+https://react-pdf-levelup.nimbux.cloud/api
 ```
 
 ```text
@@ -297,7 +297,7 @@ import fs from "fs";
 import path from "path";
 
 type ApiResponse = { data?: { pdf?: string } };
-const ENDPOINT_API = "https://react-pdf-levelup-api.nimbux.cloud/api/pdf";
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api";
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
   const templatePath = path.join(process.cwd(), "src", "useExample", template);

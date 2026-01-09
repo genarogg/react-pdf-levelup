@@ -12,8 +12,8 @@
     "dist"
   ],
   "scripts": {
-    "publicar": "node scripts/index.js",
-    "build": "tsup --config tsup.config.ts",
+    "publicar": "npm run build:lib && node scripts/index.js",
+    "build:lib": "tsup --config tsup.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
