@@ -7,4 +7,4 @@ NODE_VERSION = "22"
 NPM_FLAGS = "--legacy-peer-deps"
 
 [start]
-run = "node api/dist/index.js"
+run = "npx http-server frontend/dist -p 5987"
