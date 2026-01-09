@@ -30,8 +30,7 @@ pnpm-debug.log*
 .pnpm-debug.log*
 
 # environment variables
-.env*
-example.env
+.env
 # macOS-specific files
 .DS_Store
 

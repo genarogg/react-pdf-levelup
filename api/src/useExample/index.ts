@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
+import log from "../func/log";
 
 dotenv.config({ debug: false });
 
@@ -13,13 +14,14 @@ type ApiResponse = {
 }
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
+    console.log("Using API endpoint:", ENDPOINT_API);
     //ruta de los templates
     const templatePath = path.join(process.cwd(), "src", "useExample", template);
     //convertir a base64
     const tsxCode = fs.readFileSync(templatePath, "utf-8");
     const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
 
-    const res = await fetch(`http://localhost:5173/api`, {
+    const res = await fetch(`${ENDPOINT_API}/api`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ template: templateBase64, data }),
@@ -56,9 +58,11 @@ const generateAndSavePDF = async () => {
         }
 
         const resultBase64 = await petition({ template: "template.tsx", data })
+
         savePDF(resultBase64);
 
-        console.log(resultBase64)
+        console.log("\n")
+        log.success(resultBase64)
 
     } catch (error) {
         console.error("Error generating/saving PDF:", error);
