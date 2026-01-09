@@ -10,7 +10,7 @@ const { BACKEND_PORT, PRODUCTION } = process.env;
 const server: FastifyInstance = Fastify()
 
 import {
-  staticFiles,
+
   caching,
   helmet,
   rateLimit,
@@ -18,7 +18,7 @@ import {
   corsFastify,
   compressFastify,
   multipart,
-  viewEJS,
+
 } from "./src/config"
 
 const PRODUCTIONS = PRODUCTION !== "false"
@@ -32,12 +32,10 @@ const registerPlugins = async () => {
   }
 
   // Plugins de configuración básica primero
-  await viewEJS(server);
   await helmet(server);
   await corsFastify(server);
   await compressFastify(server);
   await multipart(server);
-  await staticFiles(server);
 }
 
 import router from '@/routers';
