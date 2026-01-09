@@ -15,18 +15,19 @@ const templates = [
     image: "/imgTemplates/factura.webp",
     href: "/playground/template/factura",
   },
-  {
-    title: "Report",
-    category: "Business",
-    image: "/imgTemplates/certificado.webp",
+   {
+    title: "tablas basicas",
+    category: "tablas",
+    image: "/imgTemplates/tablas-basicas.webp",
     href: "/",
   },
   {
-    title: "Letter",
-    category: "Personal",
-    image: "/imgTemplates/certificado.webp",
+    title: "Qr example",
+    category: "qr",
+    image: "/imgTemplates/qr.webp",
     href: "/",
   },
+ 
 ]
 
 export function TemplatesSection() {
