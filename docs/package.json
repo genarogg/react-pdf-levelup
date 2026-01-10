@@ -6,10 +6,8 @@
     "node": "22"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host 0.0.0.0 --port 4500",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
     "start": "astro preview --host 0.0.0.0 --port 4500"
   },
   "dependencies": {
