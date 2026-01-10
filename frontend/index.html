@@ -1,11 +1,104 @@
-<!doctype html>
-<html lang="es">
-
 <head>
+  <!-- ========================= -->
+  <!-- Básico -->
+  <!-- ========================= -->
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="favicon-32x32.png" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>React-pdf-levelup</title>
+
+  <title>React PDF LevelUp | Generador moderno de PDFs con React</title>
+
+  <!-- ========================= -->
+  <!-- SEO -->
+  <!-- ========================= -->
+  <meta
+    name="description"
+    content="La forma moderna de crear documentos PDF usando componentes React. Ideal para facturas, certificados, reportes y etiquetas."
+  />
+  <meta
+    name="keywords"
+    content="react pdf, react-pdf, generador pdf, pdf react, certificados pdf, facturas pdf, react components pdf, jsx pdf"
+  />
+  <meta name="author" content="Genaro Gonzalez" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://react-pdf-levelup.nimbux.cloud" />
+
+  <!-- ========================= -->
+  <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
+  <!-- ========================= -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="React PDF LevelUp" />
+  <meta property="og:url" content="https://react-pdf-levelup.nimbux.cloud" />
+  <meta
+    property="og:title"
+    content="React PDF LevelUp | Generador moderno de PDFs con React"
+  />
+  <meta
+    property="og:description"
+    content="Crea PDFs dinámicos con componentes React y vista previa en tiempo real."
+  />
+  <meta
+    property="og:image"
+    content="https://react-pdf-levelup.nimbux.cloud/wallpaper.webp"
+  />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- ========================= -->
+  <!-- Twitter Card -->
+  <!-- ========================= -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="React PDF LevelUp" />
+  <meta
+    name="twitter:description"
+    content="Genera PDFs con React usando componentes reutilizables y preview en vivo."
+  />
+  <meta
+    name="twitter:image"
+    content="https://react-pdf-levelup.nimbux.cloud/wallpaper.webp"
+  />
+
+  <!-- ========================= -->
+  <!-- Favicons -->
+  <!-- ========================= -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- ========================= -->
+  <!-- PWA / Theme -->
+  <!-- ========================= -->
+  <meta name="theme-color" content="#020817" />
+  <meta name="color-scheme" content="dark light" />
+
+  <!-- ========================= -->
+  <!-- Performance -->
+  <!-- ========================= -->
+  <link rel="preload" as="image" href="/wallpaper.webp" />
+
+  <!-- ========================= -->
+  <!-- Schema.org (Google Rich Results) -->
+  <!-- ========================= -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "React PDF LevelUp",
+      "applicationCategory": "DeveloperTool",
+      "operatingSystem": "Web",
+      "url": "https://react-pdf-levelup.nimbux.cloud",
+      "author": {
+        "@type": "Person",
+        "name": "Genaro Gonzalez"
+      },
+      "description": "Generador moderno de PDFs usando componentes React."
+    }
+  </script>
+
+  <!-- ========================= -->
+  <!-- Tailwind CDN -->
+  <!-- ========================= -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -27,37 +120,12 @@
     }
   </script>
 
+  <!-- ========================= -->
+  <!-- UX -->
+  <!-- ========================= -->
   <style>
     html {
       scroll-behavior: smooth;
     }
   </style>
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="La forma moderna de crear documentos PDF utilizando componentes React." />
-  <meta name="keywords"
-    content="react, pdf, generador, etiquetas, facturas, reportes, certificados, tablas, templates, JSX, editor, monaco, vista previa" />
-  <meta name="author" content="Genaro GG" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://react-pdf-levelup.nimbux.cloud" />
-  <meta property="og:title" content="React-pdf-levelup | Generador de PDFs dinámicos con React" />
-  <meta property="og:description"
-    content="Crea PDFs personalizados con componentes React y previsualízalos en tiempo real. Ideal para etiquetas, facturas, reportes y más." />
-  <meta property="og:image" content="https://react-pdf-levelup.nimbux.cloud/public/logo.webp" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://react-pdf-levelup.nimbux.cloud" />
-  <meta name="twitter:title" content="React-pdf-levelup | Generador de PDFs dinámicos con React" />
-  <meta name="twitter:description"
-    content="Crea PDFs personalizados con componentes React y previsualízalos en tiempo real. Ideal para etiquetas, facturas, reportes y más." />
-  <meta name="twitter:image" content="https://react-pdf-levelup.nimbux.cloud/public/logo.webp" />
 </head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
-</html>
