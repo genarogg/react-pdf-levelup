@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-levelup",
-  "version": "3.1.63",
+  "version": "3.2.7",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -9,7 +9,8 @@
   "types": "dist/index.d.ts",
   "private": false,
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "publicar": "npm run build:lib && node scripts/index.js",
@@ -19,13 +20,13 @@
   "peerDependencies": {
     "@react-pdf/renderer": "^4.3.2",
     "react": ">=18 <=19",
-    "react-dom": ">=18 <=19"
-  },
-  "dependencies": {
+    "react-dom": ">=18 <=19",
     "canvas": "^3.2.0",
     "jsdom": "^27.4.0",
     "qr-code-styling": "^1.9.2",
-    "qrcode": "^1.5.4",
+    "qrcode": "^1.5.4"
+  },
+  "dependencies": {
     "tsup": "^8.5.1"
   },
   "devDependencies": {
