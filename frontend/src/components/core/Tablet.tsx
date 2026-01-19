@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
   },
   textBold: {
     fontSize: 10,
-    fontFamily: "Helvetica",
     fontWeight: "bold",
     paddingLeft: 8,
     paddingRight: 8,
@@ -58,7 +57,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 10,
-    fontFamily: "Helvetica",
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",

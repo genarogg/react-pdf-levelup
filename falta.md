@@ -1,0 +1,1 @@
+** la tipografia no se hereda
