@@ -10,11 +10,13 @@ import QRV2 from "./QRV2"
 
 import { UL, OL, LI } from "./Lista"
 
-import { View, Text, StyleSheet, Font, renderToStream } from "@react-pdf/renderer"
+import { View, Text, StyleSheet, Font, renderToStream, Document, Page } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
 import ImgBg from "./ImgBg"
+
+
 export {
   ImgBg,
   LayoutPDF,
@@ -66,6 +68,8 @@ export {
   LI,
   View,
   Text,
+  Document, 
+  Page,
   StyleSheet,
   Font,
   decodeBase64Pdf,
