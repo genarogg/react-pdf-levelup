@@ -1,14 +1,20 @@
 
 // react pdf renderer
-import { View, Text, StyleSheet, Font, renderToStream } from "@react-pdf/renderer"
+import {
+    View,
+    Text,
+    StyleSheet,
+    Font,
+    renderToStream
+} from "@react-pdf/renderer"
 
 // funciones
-import { decodeBase64Pdf, generatePDF } from "../frontend/src/functions"
+import { decodeBase64Pdf, generatePDF } from "../../frontend/src/functions"
 
 import {
     ImgBg,
-    LayoutPDF,
     Img,
+    LayoutPDF,
     Left,
     Right,
     Center,
@@ -56,9 +62,7 @@ import {
     LI,
     Div,
     HR
-} from "../frontend/src/components/core"
-
-
+} from "../../frontend/src/components/core"
 
 export {
     // react pdf renderer

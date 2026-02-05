@@ -12,15 +12,15 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "outDir": "dist",
-    "rootDir": "..",
+    "rootDir": "../../",
     "sourceMap": true,
     "strict": false,
     "jsx": "react-jsx"
   },
   "include": [
     "./index.ts",
-    "../frontend/src/**/*.ts",
-    "../frontend/src/**/*.tsx"
+    "../../frontend/src/**/*.ts",
+    "../../frontend/src/**/*.tsx"
   ],
   "exclude": [
     "dist",
