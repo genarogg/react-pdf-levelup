@@ -1,6 +1,6 @@
 {
   "name": "react-pdf-levelup",
-  "version": "3.2.10",
+  "version": "4.1.1",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -20,16 +20,16 @@
   "peerDependencies": {
     "@react-pdf/renderer": "^4.3.2",
     "react": ">=18 <=19",
-    "react-dom": ">=18 <=19",
-    "canvas": "^3.2.0",
-    "jsdom": "^27.4.0",
-    "qr-code-styling": "^1.9.2",
-    "qrcode": "^1.5.4"
+    "react-dom": ">=18 <=19"
   },
   "dependencies": {
-    "tsup": "^8.5.1"
+    "jsdom": "^27.4.0",
+    "qr-code-styling": "^1.9.2",
+    "qrcode": "^1.5.4",
+    "canvas": "^3.2.0"
   },
   "devDependencies": {
-    "json": "^11.0.0"
+    "json": "^11.0.0",
+    "tsup": "^8.5.1"
   }
 }

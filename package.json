@@ -2,7 +2,7 @@
   "name": "monorepo",
   "version": "1.0.0",
   "private": false,
-  "description": "Monorepo con Turborepo: Astro (docs), React.js (frontend)",
+  "description": "react-pdf-levelup: Generador dinámico de PDFs con componentes React. Incluye editor en vivo, plantillas predefinidas y API REST. Stack: Turborepo, React + Vite (frontend), Fastify (API), Astro (documentación)",
   "type": "module",
   "engines": {
     "node": "22"
