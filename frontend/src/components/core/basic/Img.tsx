@@ -19,4 +19,3 @@ const Img: React.FC<ImgProps> = ({ src, style }) => {
 }
 
 export default Img
-

@@ -10,7 +10,7 @@ interface ImgBgProps {
     style?: any
     fixed?: boolean
     objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down"
-    objectPosition?: string // ej: "center", "top", "left top"
+    objectPosition?: "center" | "top" | "left" | "right" | "bottom"
 }
 
 const styles = StyleSheet.create({

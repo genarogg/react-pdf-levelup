@@ -46,6 +46,10 @@ export default defineConfig({
 					label: 'Funciones',
 					autogenerate: { directory: 'functions' },
 				},
+				{
+					label: 'Plugins',
+					autogenerate: { directory: 'plugin' },
+				},
 			],
 		}),
 	],

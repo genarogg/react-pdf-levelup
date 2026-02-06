@@ -1,4 +1,4 @@
-import  React from "react"
+import React from "react"
 import { View, StyleSheet } from "@react-pdf/renderer"
 
 interface ContainerProps {
@@ -19,16 +19,12 @@ interface ColProps {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingHorizontal: 20,
   },
   row: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginHorizontal: -5,
   },
-  col: {
-    paddingHorizontal: 5,
-  },
+
   col1: { width: "8.33%" },
   col2: { width: "16.66%" },
   col3: { width: "25%" },
@@ -52,50 +48,50 @@ export const Row: React.FC<RowProps> = ({ children, style }) => {
 }
 
 export const Col1: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col1, style]}>{children}</View>
+  return <View style={[styles.col1, style]}>{children}</View>
 }
 
 export const Col2: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col2, style]}>{children}</View>
+  return <View style={[styles.col2, style]}>{children}</View>
 }
 
 export const Col3: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col3, style]}>{children}</View>
+  return <View style={[styles.col3, style]}>{children}</View>
 }
 
 export const Col4: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col4, style]}>{children}</View>
+  return <View style={[styles.col4, style]}>{children}</View>
 }
 
 export const Col5: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col5, style]}>{children}</View>
+  return <View style={[styles.col5, style]}>{children}</View>
 }
 
 export const Col6: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col6, style]}>{children}</View>
+  return <View style={[styles.col6, style]}>{children}</View>
 }
 
 export const Col7: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col7, style]}>{children}</View>
+  return <View style={[styles.col7, style]}>{children}</View>
 }
 
 export const Col8: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col8, style]}>{children}</View>
+  return <View style={[styles.col8, style]}>{children}</View>
 }
 
 export const Col9: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col9, style]}>{children}</View>
+  return <View style={[styles.col9, style]}>{children}</View>
 }
 
 export const Col10: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col10, style]}>{children}</View>
+  return <View style={[styles.col10, style]}>{children}</View>
 }
 
 export const Col11: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col11, style]}>{children}</View>
+  return <View style={[styles.col11, style]}>{children}</View>
 }
 
 export const Col12: React.FC<ColProps> = ({ children, style }) => {
-  return <View style={[styles.col, styles.col12, style]}>{children}</View>
+  return <View style={[styles.col12, style]}>{children}</View>
 }
 

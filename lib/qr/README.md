@@ -1,8 +1,10 @@
 # `@react-pdf-levelup/qr`
 
-Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas PDF (React + `@react-pdf/renderer`) y en el frontend.
+Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas de @react-pdf-levelup/core e incluso funciona con @react-pdf/renderer puro
 
-## NOTA IMPORTANTE esta libreria es un complemento de @react-pdf-levelup/core
+### NOTA: esta libreria es un complemento de @react-pdf-levelup/core
+
+### NOTA: este complemento solo funciona en el back
 
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
@@ -11,13 +13,13 @@ Paquete de componentes y utilidades para generar códigos QR estilizados dentro 
 ## Instalación
 
 ```bash
-npm install @react-pdf-levelup/qr
+npm install @react-pdf-levelup/core @react-pdf-levelup/qr
 ```
 
 ## Componentes principales
 
-- `QR`: componente para insertar un código QR en una plantilla PDF.
-- `QRStyle`: utilidades/constructores para generar estilos personalizados de QR (colores, forma de puntos, máscaras, etc.).
+- `QR`: Componente basico para insertar un código QR en una plantilla PDF.
+- `QRstyle`: Componente avanzado para generar estilos personalizados de QR (colores, forma de puntos, máscaras, etc.).
 
 ## Uso en plantillas PDF (ejemplo mínimo)
 
@@ -62,35 +64,3 @@ const style = QRStyle({
 // <QR value="https://example.com" size={140} style={style} />
 ```
 
-## Ejemplo avanzado (preview + export)
-
-Frontend (vista previa y generación):
-
-```tsx
-import React from "react";
-import { QRGenerator, QRstyleGenerator } from "@react-pdf-levelup/qr";
-
-function Preview() {
-  const qrValue = "https://react-pdf-levelup.nimbux.cloud";
-  const previewStyle = QRstyleGenerator({
-    dotColor: "#222",
-    eyeColor: "#ff6b6b",
-  });
-
-  return (
-    <div>
-      <h3>Previsualización QR</h3>
-      <QRGenerator value={qrValue} size={180} style={previewStyle} />
-    </div>
-  );
-}
-
-export default Preview;
-```
-
-## Notes
-
-- Asegúrate de compilar el paquete (`dist/`) antes de publicar.
-- `QRStyle`/`QRGenerator` APIs pueden variar según la versión; revisa los archivos fuente `frontend/src/components/core/qr` si necesitas adaptar propiedades concretas.
-
-Si quieres, puedo actualizar README con la API exacta detectada en `frontend/src/components/core/qr` y añadir ejemplos concretos basados en las props reales.
