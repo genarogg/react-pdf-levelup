@@ -23,7 +23,7 @@ Font.register({
 
 const Component = () => {
   return (
-    <LayoutPDF
+    <Layout
       size="A4"
       orientation="h"
       pagination={false}
@@ -85,6 +85,6 @@ const Component = () => {
           <A href="www.yoursite.com" style={{ fontSize: "14px" }}>Contact Info: www.yoursite.com</A>
         </Div>
       </ImgBg>
-    </LayoutPDF>
+    </Layout>
   );
 };

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
 const Component = () => {
   return (
-    <LayoutPDF size="A4" showPageNumbers={true}>
+    <Layout size="A4" showPageNumbers={true}>
       <View style={styles.container}>
         <Text style={styles.title}>QR Code Showcase</Text>
         
@@ -69,10 +69,10 @@ const Component = () => {
            </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Styled QR (QRV2 Component)</Text>
+        <Text style={styles.sectionTitle}>Styled QR (QRstyle Component)</Text>
         <View style={styles.grid}>
            <View style={styles.qrItem}>
-             <QRV2 
+             <QRstyle 
                value="https://vercel.com" 
                size={120} 
                dotsOptions={{
@@ -91,7 +91,7 @@ const Component = () => {
            </View>
 
            <View style={styles.qrItem}>
-             <QRV2 
+             <QRstyle 
                value="https://instagram.com" 
                size={120} 
                dotsOptions={{
@@ -111,7 +111,7 @@ const Component = () => {
            </View>
            
            <View style={styles.qrItem}>
-             <QRV2 
+             <QRstyle 
                value="https://facebook.com" 
                size={120} 
                image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png"
@@ -132,7 +132,7 @@ const Component = () => {
            </View>
 
            <View style={styles.qrItem}>
-             <QRV2 
+             <QRstyle 
                value="https://example.com/eco" 
                size={120} 
                dotsOptions={{
@@ -148,6 +148,6 @@ const Component = () => {
            </View>
         </View>
       </View>
-    </LayoutPDF>
+    </Layout>
   )
 }

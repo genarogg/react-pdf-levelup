@@ -19,7 +19,7 @@ import {
     // lists
     UL, OL, LI,
     // misc
-    Div, HR, Header, Layout
+    Div, HR, Layout, BreakPage
 } from "../../frontend/src/components/core"
 
 export {
@@ -42,5 +42,5 @@ export {
     // lists
     UL, OL, LI,
     // misc
-    Div, HR, Header, Layout
+    Div, HR, Layout, BreakPage
 }

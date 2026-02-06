@@ -1,7 +1,7 @@
 
 const Component = ({ data }) => {
     return (
-        <LayoutPDF size="A4" padding={20} showPageNumbers={false}>
+        <Layout size="A4" padding={20} showPageNumbers={false}>
             <H5>Tabla Simple</H5>
             <Table>
                 <Thead textAlign="center">
@@ -172,6 +172,6 @@ const Component = ({ data }) => {
                     </Tr>
                 </Tbody>
             </Table>
-        </LayoutPDF>
+        </Layout>
     );
 };

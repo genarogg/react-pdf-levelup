@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: "white",
     padding: 30,
-    fontFamily: "Helvetica",
+
     fontSize: 14,
   },
   footer: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 interface LayoutProps {
   children: React.ReactNode
-  size?: string
+  size?: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
   orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
   backgroundColor?: string
   padding?: number
@@ -289,7 +289,7 @@ const Layout: React.FC<LayoutProps> = ({
     paddingRight: (style?.paddingRight ?? style?.padding ?? margins.paddingRight),
     paddingLeft: (style?.paddingLeft ?? style?.padding ?? margins.paddingLeft),
     paddingBottom: (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight,
-    ...( (() => { const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...rest } = style || {}; return rest })() ),
+    ...((() => { const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...rest } = style || {}; return rest })()),
   }
 
   const footerStyle = {

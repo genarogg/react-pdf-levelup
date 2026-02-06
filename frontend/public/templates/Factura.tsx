@@ -19,7 +19,7 @@ const InvoiceTemplate = () => {
   };
 
   return (
-    <LayoutPDF size="A4" padding={30} showPageNumbers={false}>
+    <Layout size="A4" padding={30} showPageNumbers={false}>
       <View style={{ marginBottom: 20, borderBottom: "1px solid #ccc", padding: 10 }}>
         <Row>
           <Col6>
@@ -29,7 +29,7 @@ const InvoiceTemplate = () => {
           </Col6>
           <Col6>
             <Right style={{position:"absolute", right:"10px", top: "-10px"}}>
-              <QRV2
+              <QRstyle
                 value={`https://verificar-factura.com/${invoiceData.number}`}
                 size={80}
                 dotsOptions={{ color: "#3366cc", type: "rounded" }}
@@ -122,6 +122,6 @@ const InvoiceTemplate = () => {
           </Col6>
         </Row>
       </View>
-    </LayoutPDF>
+    </Layout>
   );
 };

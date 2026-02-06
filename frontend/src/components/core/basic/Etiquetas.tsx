@@ -175,16 +175,8 @@ const Span: React.FC<TextProps> = ({ children, style }) => {
   return <Text style={[style]}>{children}</Text>
 }
 
-const Header: React.FC<HeaderProps> = ({ children, style, fixed = false }) => {
-  return (
-    <View style={[styles.header, style]} fixed={fixed}>
-      {typeof children === "string" ? <Text>{children}</Text> : children}
-    </View>
-  )
-}
-
 const Div: React.FC<DivProps> = ({ children, style }) => {
   return <View style={style}>{children}</View>
 }
 
-export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, HR, Header, Div }
+export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, HR, Div }

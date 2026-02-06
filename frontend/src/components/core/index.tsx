@@ -1,7 +1,8 @@
-import Layout from "./basic/Layout"
+import Layout from "./basic/layout/Layout"
+import BreakPage from "./basic/layout/BreakPage"
 import Img from "./basic/Img"
 import { Left, Right, Center } from "./basic/Position"
-import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div } from "./basic/Etiquetas"
+import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "./basic/Etiquetas"
 import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/Tablet"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
 
@@ -20,6 +21,7 @@ import ImgBg from "./basic/ImgBg"
 export {
   ImgBg,
   Layout,
+  BreakPage,
   Img,
   Left,
   Right,
@@ -60,7 +62,6 @@ export {
   Col10,
   Col11,
   Col12,
-  Header,
   QR,
   QRstyle,
   UL,
