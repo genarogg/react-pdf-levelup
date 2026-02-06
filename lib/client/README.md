@@ -2,88 +2,51 @@
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
 </p>
 
-# `@react-pdf-levelup/qr`
+# `@react-pdf-levelup/client`
 
-> Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas PDF (React + `@react-pdf/renderer`) y en el frontend.
+Utilidad de frontend para decodificar un PDF en base64 y descargarlo/abrirlo en el navegador.
 
 ## Instalación
 
 ```bash
-npm install @react-pdf-levelup/qr
+npm install @react-pdf-levelup/client
 ```
 
-## Componentes principales
+## API
 
-- `QR`: componente para insertar un código QR en una plantilla PDF.
-- `QRStyle`: utilidades/constructores para generar estilos personalizados de QR (colores, forma de puntos, máscaras, etc.).
+### decodeBase64Pdf
 
-## Uso en plantillas PDF (ejemplo mínimo)
+Decodifica un string en base64 correspondiente a un PDF, genera un Blob tipo `application/pdf`, dispara la descarga y abre el documento en una nueva pestaña. Limpia automáticamente el `ObjectURL` creado.
 
-```tsx
-import React from 'react';
-import { Document, Page } from '@react-pdf/renderer';
-import { QR } from '@react-pdf-levelup/qr';
-
-const MyPdfTemplate = ({ data }) => (
-  <Document>
-    <Page size="A4">
-      {/* QR simple */}
-      <QR value={data.url} size={120} />
-    </Page>
-  </Document>
-);
-
-export default MyPdfTemplate;
-```
-
-Props comunes de `QR` (ejemplos):
-- `value` (string): contenido del QR (URL, texto).
-- `size` (number): tamaño en px.
-- `style` (object): estilo generado por `QRStyle` o un objeto inline con colores y forma.
-
-## Personalizar apariencia con `QRStyle` (ejemplos)
+Firma:
 
 ```ts
-import { QRStyle } from '@react-pdf-levelup/qr';
-
-// Genera un objeto estilo reutilizable
-const style = QRStyle({
-  dotColor: '#0b74de',
-  backgroundColor: '#ffffff',
-  eyeColor: '#0b74de',
-  eyeRadius: 4,
-  dotShape: 'rounded'
-});
-
-// Usarlo en el componente QR
-// <QR value="https://example.com" size={140} style={style} />
+decodeBase64Pdf(base64: string, fileName: string): void
 ```
 
-## Ejemplo avanzado (preview + export)
+Parámetros:
+- `base64`: contenido del PDF en base64 (sin prefijo `data:application/pdf;base64,`).
+- `fileName`: nombre del archivo a descargar, por ejemplo `documento.pdf`.
 
-Frontend (vista previa y generación):
+### Ejemplo básico (frontend)
 
-```tsx
-import React from 'react';
-import { QRGenerator, QRstyleGenerator } from '@react-pdf-levelup/qr';
+```ts
+import { decodeBase64Pdf } from '@react-pdf-levelup/client'
 
-function Preview() {
-  const qrValue = 'https://react-pdf-levelup.nimbux.cloud';
-  const previewStyle = QRstyleGenerator({ dotColor: '#222', eyeColor: '#ff6b6b' });
-
-  return (
-    <div>
-      <h3>Previsualización QR</h3>
-      <QRGenerator value={qrValue} size={180} style={previewStyle} />
-    </div>
-  );
-}
-
-export default Preview;
+const base64 = '...'; // PDF en base64
+decodeBase64Pdf(base64, 'mi-documento.pdf')
 ```
 
-## Notes
-- Asegúrate de compilar el paquete (`dist/`) antes de publicar.
-- `QRStyle`/`QRGenerator` APIs pueden variar según la versión; revisa los archivos fuente `frontend/src/components/core/qr` si necesitas adaptar propiedades concretas.
+### Ejemplo tras generar el PDF
 
-Si quieres, puedo actualizar README con la API exacta detectada en `frontend/src/components/core/qr` y añadir ejemplos concretos basados en las props reales.
+Si ya generaste el PDF en base64 (por ejemplo con `react-pdf-levelup`):
+
+```ts
+import { generatePDF } from 'react-pdf-levelup'
+import { decodeBase64Pdf } from '@react-pdf-levelup/client'
+import Template from './MyTemplate'
+
+const pdfBase64 = await generatePDF({ template: Template, data: { title: 'Demo' } })
+decodeBase64Pdf(pdfBase64, 'demo.pdf')
+```
+
