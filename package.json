@@ -23,7 +23,7 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
-    "publicar": "cd lib && npm run publicar",
+    "publish-all": "cd lib && npm run publish-all",
     "demo:frontend": "cd frontend && npm run demo",
     "demo:api": "cd api && npm run demo",
     "zip:api": "node ./global/zip-api.js",
