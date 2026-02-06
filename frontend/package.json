@@ -32,6 +32,7 @@
     "lucide-react": "^0.562.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
+    "react-pdf": "^10.3.0",
     "react-pdf-levelup": "latest",
     "react-router-dom": "^7.11.0",
     "tailwind-merge": "^3.4.0"
@@ -52,9 +53,9 @@
     "globals": "^16.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-     "vite": "^6.0.0"
+    "vite": "^6.0.0"
   },
   "overrides": {
-     "vite": "^6.0.0"
+    "vite": "^6.0.0"
   }
 }
