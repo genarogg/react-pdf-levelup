@@ -13,3 +13,8 @@ declare module "@babel/standalone" {
   }
 }
 
+declare module "*.pdf" {
+  const content: string;
+  export default content;
+}
+
