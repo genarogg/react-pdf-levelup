@@ -1,10 +1,12 @@
+# `@react-pdf-levelup/qr`
+
+Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas PDF (React + `@react-pdf/renderer`) y en el frontend.
+
+## NOTA IMPORTANTE esta libreria es un complemento de @react-pdf-levelup/core
+
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
 </p>
-
-# `@react-pdf-levelup/qr`
-
-> Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas PDF (React + `@react-pdf/renderer`) y en el frontend.
 
 ## Instalación
 
@@ -20,9 +22,9 @@ npm install @react-pdf-levelup/qr
 ## Uso en plantillas PDF (ejemplo mínimo)
 
 ```tsx
-import React from 'react';
-import { Document, Page } from '@react-pdf/renderer';
-import { QR } from '@react-pdf-levelup/qr';
+import React from "react";
+import { Document, Page } from "@react-pdf/renderer";
+import { QR } from "@react-pdf-levelup/qr";
 
 const MyPdfTemplate = ({ data }) => (
   <Document>
@@ -37,6 +39,7 @@ export default MyPdfTemplate;
 ```
 
 Props comunes de `QR` (ejemplos):
+
 - `value` (string): contenido del QR (URL, texto).
 - `size` (number): tamaño en px.
 - `style` (object): estilo generado por `QRStyle` o un objeto inline con colores y forma.
@@ -44,15 +47,15 @@ Props comunes de `QR` (ejemplos):
 ## Personalizar apariencia con `QRStyle` (ejemplos)
 
 ```ts
-import { QRStyle } from '@react-pdf-levelup/qr';
+import { QRStyle } from "@react-pdf-levelup/qr";
 
 // Genera un objeto estilo reutilizable
 const style = QRStyle({
-  dotColor: '#0b74de',
-  backgroundColor: '#ffffff',
-  eyeColor: '#0b74de',
+  dotColor: "#0b74de",
+  backgroundColor: "#ffffff",
+  eyeColor: "#0b74de",
   eyeRadius: 4,
-  dotShape: 'rounded'
+  dotShape: "rounded",
 });
 
 // Usarlo en el componente QR
@@ -64,12 +67,15 @@ const style = QRStyle({
 Frontend (vista previa y generación):
 
 ```tsx
-import React from 'react';
-import { QRGenerator, QRstyleGenerator } from '@react-pdf-levelup/qr';
+import React from "react";
+import { QRGenerator, QRstyleGenerator } from "@react-pdf-levelup/qr";
 
 function Preview() {
-  const qrValue = 'https://react-pdf-levelup.nimbux.cloud';
-  const previewStyle = QRstyleGenerator({ dotColor: '#222', eyeColor: '#ff6b6b' });
+  const qrValue = "https://react-pdf-levelup.nimbux.cloud";
+  const previewStyle = QRstyleGenerator({
+    dotColor: "#222",
+    eyeColor: "#ff6b6b",
+  });
 
   return (
     <div>
@@ -83,6 +89,7 @@ export default Preview;
 ```
 
 ## Notes
+
 - Asegúrate de compilar el paquete (`dist/`) antes de publicar.
 - `QRStyle`/`QRGenerator` APIs pueden variar según la versión; revisa los archivos fuente `frontend/src/components/core/qr` si necesitas adaptar propiedades concretas.
 

@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
   br: {
     width: "100%",
     height: 1,
-    marginTop: 7,
-    marginBottom: 7,
+    marginTop: 6,
+    marginBottom: 6,
   },
   header: {
     position: "absolute",
@@ -93,14 +93,13 @@ const styles = StyleSheet.create({
     right: 0,
     textAlign: "center",
     fontSize: 10,
-    color: "#666",
     paddingHorizontal: 40,
   },
   hr: {
     width: "100%",
     borderTop: "1px solid #000",
-    marginTop: 8,
-    marginBottom: 8,
+    marginTop: 6,
+    marginBottom: 6,
   },
 })
 
