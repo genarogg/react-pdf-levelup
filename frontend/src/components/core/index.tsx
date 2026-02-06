@@ -1,25 +1,25 @@
-import LayoutPDF from "./LayoutPDF"
-import Img from "./Img"
-import { Left, Right, Center } from "./Position"
-import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div } from "./Etiquetas"
-import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet"
-import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./Grid"
+import Layout from "./basic/Layout"
+import Img from "./basic/Img"
+import { Left, Right, Center } from "./basic/Position"
+import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Header, Div } from "./basic/Etiquetas"
+import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/Tablet"
+import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
 
-import QR from "./QR"
-import QRV2 from "./QRV2"
+import QR from "./qr/QR"
+import QRstyle from "./qr/QRstyle"
 
-import { UL, OL, LI } from "./Lista"
+import { UL, OL, LI } from "./basic/Lista"
 
 import { View, Text, StyleSheet, Font, renderToStream, Document, Page } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
-import ImgBg from "./ImgBg"
+import ImgBg from "./basic/ImgBg"
 
 
 export {
   ImgBg,
-  LayoutPDF,
+  Layout,
   Img,
   Left,
   Right,
@@ -62,13 +62,13 @@ export {
   Col12,
   Header,
   QR,
-  QRV2,
+  QRstyle,
   UL,
   OL,
   LI,
   View,
   Text,
-  Document, 
+  Document,
   Page,
   StyleSheet,
   Font,

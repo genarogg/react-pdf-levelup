@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   }
 })
 
-interface LayoutPDFProps {
+interface LayoutProps {
   children: React.ReactNode
   size?: string
   orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
@@ -30,7 +30,7 @@ interface LayoutPDFProps {
   rule?: boolean
 }
 
-const LayoutPDF: React.FC<LayoutPDFProps> = ({
+const Layout: React.FC<LayoutProps> = ({
   children,
   size = "A4",
   orientation = "vertical",
@@ -144,7 +144,7 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
 
     }
   } catch (e) {
-    console.warn("Error processing props in LayoutPDF:", e)
+    console.warn("Error processing props in Layout:", e)
   }
 
   // Transform orientation from "vertical"/"horizontal" to "portrait"/"landscape"
@@ -326,4 +326,4 @@ const LayoutPDF: React.FC<LayoutPDFProps> = ({
   )
 }
 
-export default LayoutPDF
+export default Layout

@@ -78,7 +78,8 @@ decodeBase64Pdf(pdfBase64, 'mi-documento.pdf');
 
 ```typescript
 import React from 'react';
-import { generatePDF, decodeBase64Pdf, LayoutPDF, H1, P, Strong, Em, HR, Container, Row, Col6, UL, LI, QR, Table, Thead, Tbody, Tr, Th, Td } from 'react-pdf-levelup';
+import { generatePDF, decodeBase64Pdf, LayoutPDF, H1, P, Strong, Em, HR, Container, Row, Col6, UL, LI, Table, Thead, Tbody, Tr, Th, Td } from 'react-pdf-levelup';
+import { QR } from '@react-pdf-levelup/qr';
 
 const MyPDFTemplate = ({ data }) => (
   <LayoutPDF>

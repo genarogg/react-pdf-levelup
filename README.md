@@ -4,12 +4,12 @@
 
 # react-pdf-levelup
 
-Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para etiquetas, facturas, reportes, certificados, tablas y más.
+Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para facturas, reportes, certificados y más.
 
 # 🌐 **Playground en vivo:** 
 [https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
-or
-[https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
+
+---
 
 ## 📦 Instalación
 
@@ -17,15 +17,31 @@ or
 npm install react-pdf-levelup
 ```
 
+---
+
 ## 🚀 Características
 
-- 🧱 Construye PDFs con componentes de React usando los componentes de `react-pdf-levelup` (LayoutPDF, texto, listas, QR, tablas, columnas, etc.)
+- 🧱 Construye PDFs con componentes de React usando los componentes de `react-pdf-levelup` (Layout, texto, listas, tablas, columnas, etc.)
+- 🧩 Sistema de plugins para extender funcionalidades sin sobrecargar el core
+- 🔳 Soporte para códigos QR y estilos avanzados mediante el plugin `@react-pdf-levelup/qr`
 - 🖼 Vista previa en tiempo real de los documentos generados
 - 🎨 Editor en vivo con Monaco Editor para personalizar código JSX
 - 📦 Plantillas predefinidas listas para usar
-- 📄 Soporte para códigos QR, tablas, imágenes, listas, layout dinámico, etc.
+- 📄 Soporte para tablas, imágenes, listas, layout dinámico, etc.
 - 🔄 Generación de PDFs desde templates de React
 - 📥 Descarga automática y vista previa de PDFs generados
+
+---
+
+## 🔌 Plugins
+
+`react-pdf-levelup` cuenta con un sistema de plugins que permite agregar nuevas capacidades sin sobrecargar el núcleo de la librería, manteniendo el core ligero y modular.
+
+### Plugins oficiales
+
+| Plugin | Instalación | Docs |
+|-------------------------|------------------------------|------|
+| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [🔗](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
 
 ## 📋 Funciones Principales
 
@@ -33,12 +49,13 @@ npm install react-pdf-levelup
 
 Genera un PDF en formato base64 a partir de un componente de React.
 
-```typescript
+```ts
 import { generatePDF } from 'react-pdf-levelup';
+import Template from "./Template"
 
 const pdfBase64 = await generatePDF({
-  template: MyPDFTemplate,
-  data: {
+  template: Template,
+  data: { // opcional
     title: 'Mi Documento',
     items: ['Item 1', 'Item 2', 'Item 3']
   }
@@ -46,16 +63,18 @@ const pdfBase64 = await generatePDF({
 ```
 
 **Parámetros:**
-- `template`: Componente de React que define la estructura del PDF
-- `data`: Datos opcionales que se pasarán al template
+- `template`: Componente de React que define la estructura del PDF  
+- `data`: Datos opcionales que se pasarán al template  
 
-**Retorna:** Promise que resuelve a un string en base64 del PDF generado
+**Retorna:** Promise que resuelve a un string en base64 del PDF generado.
+
+---
 
 ### `decodeBase64Pdf`
 
 Decodifica un PDF en base64 y permite descargarlo o abrirlo en una nueva pestaña.
 
-```typescript
+```ts
 import { decodeBase64Pdf } from 'react-pdf-levelup';
 
 // Después de generar el PDF
@@ -66,19 +85,43 @@ decodeBase64Pdf(pdfBase64, 'mi-documento.pdf');
 ```
 
 **Parámetros:**
-- `base64`: String del PDF en formato base64
-- `fileName`: Nombre del archivo para la descarga
+- `base64`: String del PDF en formato base64  
+- `fileName`: Nombre del archivo para la descarga  
 
 **Funcionalidad:**
-- Descarga automática del archivo PDF
-- Abre el PDF en una nueva pestaña del navegador
-- Limpia automáticamente los recursos de memoria
+- Descarga automática del archivo PDF  
+- Abre el PDF en una nueva pestaña del navegador  
+- Limpia automáticamente los recursos de memoria  
+
+---
 
 ## 💡 Ejemplo de Uso con componentes levelup
 
-```typescript
+```ts
 import React from 'react';
-import { generatePDF, decodeBase64Pdf, LayoutPDF, H1, P, Strong, Em, HR, Container, Row, Col6, UL, LI, QR, Table, Thead, Tbody, Tr, Th, Td } from 'react-pdf-levelup';
+import { 
+  generatePDF, 
+  decodeBase64Pdf, 
+  LayoutPDF, 
+  H1, 
+  P, 
+  Strong, 
+  Em, 
+  HR, 
+  Container, 
+  Row, 
+  Col6, 
+  UL, 
+  LI, 
+  Table, 
+  Thead, 
+  Tbody, 
+  Tr, 
+  Th, 
+  Td 
+} from 'react-pdf-levelup';
+
+import { QR, QRstyle } from '@react-pdf-levelup/qr';
 
 const MyPDFTemplate = ({ data }) => (
   <LayoutPDF>
@@ -98,7 +141,10 @@ const MyPDFTemplate = ({ data }) => (
           </UL>
         </Col6>
         <Col6>
-          <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
+          <QR 
+            value="https://react-pdf-levelup.nimbux.cloud"
+            size={120}
+          />
         </Col6>
       </Row>
     </Container>
@@ -139,7 +185,6 @@ const handleGeneratePDF = async () => {
       }
     });
     
-    // Descargar y abrir el PDF
     decodeBase64Pdf(pdfBase64, 'lista-tareas.pdf');
     
   } catch (error) {
@@ -162,10 +207,12 @@ const App = () => {
 export default App;
 ```
 
+---
+
 ## 🎨 Templates Avanzados
 
-```typescript
-import { StyleSheet, Font } from '@react-pdf/renderer';
+```ts
+import { StyleSheet, Font, Document, Page, View, Text } from '@react-pdf/renderer';
 
 // Ejemplo de template para factura
 const InvoiceTemplate = ({ data }) => (
@@ -199,11 +246,13 @@ const InvoiceTemplate = ({ data }) => (
 );
 ```
 
+---
+
 ## 🔧 Configuración Avanzada
 
 ### Manejo de Errores
 
-```typescript
+```ts
 const handlePDFGeneration = async () => {
   try {
     const pdfBase64 = await generatePDF({
@@ -223,26 +272,36 @@ const handlePDFGeneration = async () => {
 };
 ```
 
+---
+
 ### Solo Generar Base64 (sin descargar)
 
-```typescript
+```ts
 const generatePDFOnly = async () => {
   const pdfBase64 = await generatePDF({
     template: MyTemplate,
     data: myData
   });
   
-  // Usar el base64 para otros propósitos (envío por API, almacenamiento, etc.)
   console.log('PDF generado:', pdfBase64);
   return pdfBase64;
 };
 ```
 
+---
+
 ## 🛠 Dependencias
 
 Esta librería utiliza internamente:
-- `@react-pdf/renderer` - Para la generación de PDFs
-- `react` - Para los componentes JSX
+
+- `@react-pdf/renderer` — Para la generación de PDFs  
+- `react` — Para los componentes JSX  
+
+### Plugins oficiales
+
+- `@react-pdf-levelup/qr` — Componentes para generación y personalización de códigos QR  
+
+---
 
 ## 📝 Notas Importantes
 
@@ -251,23 +310,30 @@ Esta librería utiliza internamente:
 - El PDF se genera de forma asíncrona, asegúrate de usar `await` o `.then()`
 - Los recursos de memoria se limpian automáticamente después de la descarga
 
+---
+
 ## 🌐 API REST para generar PDFs
 
-- Genera PDFs vía HTTP desde cualquier lenguaje usando un template TSX en base64 y un objeto de datos.
-- Devuelve un JSON con `data.pdf` que es el PDF en base64.
+Genera PDFs vía HTTP desde cualquier lenguaje usando un template TSX en base64 y un objeto de datos.  
+Devuelve un JSON con `data.pdf` que es el PDF en base64.
 
 ### Endpoints
 
-- Cloud: [https://react-pdf-levelup.nimbux.cloud/api](https://react-pdf-levelup.nimbux.cloud/api)
-- Auto‑hospedado ZIP: [https://genarogg.github.io/react-pdf-levelup/public/api.zip](https://genarogg.github.io/react-pdf-levelup/public/api.zip)
+- Cloud:  
+https://react-pdf-levelup.nimbux.cloud/api
 
-```text
+- Auto-hospedado ZIP:  
+https://genarogg.github.io/react-pdf-levelup/public/api.zip
+
+```
 https://react-pdf-levelup.nimbux.cloud/api
 ```
 
-```text
+```
 https://genarogg.github.io/react-pdf-levelup/public/api.zip
 ```
+
+---
 
 ### Request
 
@@ -280,6 +346,8 @@ POST con `Content-Type: application/json`:
 }
 ```
 
+---
+
 ### Response
 
 ```json
@@ -289,6 +357,8 @@ POST con `Content-Type: application/json`:
   }
 }
 ```
+
+---
 
 ### Ejemplo rápido con Node.js (fetch)
 
@@ -309,7 +379,9 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ template: templateBase64, data }),
   });
+
   if (!res.ok) throw new Error(`API error (${res.status}): ${await res.text()}`);
+
   const json = await res.json() as ApiResponse;
   return json?.data?.pdf ?? "";
 }
@@ -322,18 +394,24 @@ const savePDF = (base64: string) => {
 }
 ```
 
-### Self‑hosting propio
+---
 
-- Descarga el paquete ZIP y despliega en tu infraestructura (Node/Docker/PaaS).
-- Expón el endpoint `/api/pdf` con el mismo contrato JSON.
-- Usa el mismo cliente mostrado arriba apuntando a tu URL.
+### Self-hosting propio
+
+- Descarga el paquete ZIP y despliega en tu infraestructura (Node/Docker/PaaS)
+- Expón el endpoint `/api/pdf` con el mismo contrato JSON
+- Usa el mismo cliente mostrado arriba apuntando a tu URL
 
 Más detalles y ejemplos en la documentación:  
-[Guía API REST (fetch)](https://react-pdf-levelup-docs.nimbux.cloud/docs/guides/api-rest)
+https://react-pdf-levelup-docs.nimbux.cloud/docs/guides/api-rest
+
+---
 
 ## 🤝 Contribuir
 
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
+
+---
 
 ## 📄 Licencia
 

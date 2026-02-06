@@ -1,0 +1,30 @@
+{
+  "name": "react-pdf-levelup",
+  "version": "4.1.1",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "publicar": "npm run build:lib && node ../scripts/index.js",
+    "build:lib": "tsup --config tsup.config.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "@react-pdf/renderer": "^4.3.2",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "json": "^11.0.0",
+    "tsup": "^8.5.1"
+  }
+}

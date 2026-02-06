@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
-import { generateQRV2AsBase64, type QRV2Options } from "./QRGeneratorV2"
+import { generateQRV2AsBase64, type QRV2Options } from "./QRstyleGenerator"
 
 // Define props
 export interface QRV2Props {
