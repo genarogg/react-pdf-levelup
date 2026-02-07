@@ -53,7 +53,7 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
 function highlightSyntax(line: string) {
   const keywords = ["import", "export", "function", "return", "const", "from"]
   const components = [
-    "LayoutPDF",
+    "Layout",
     "Document",
     "Page",
     "Text",

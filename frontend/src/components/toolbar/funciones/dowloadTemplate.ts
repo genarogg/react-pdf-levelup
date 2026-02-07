@@ -50,7 +50,7 @@ const downloadTemplate = (templateCode: string) => {
         const sortedComponents = Array.from(usedComponents).sort();
         importsSection += `import { \n`;
         importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
-        importsSection += `    } from "react-pdf-levelup";\n`;
+        importsSection += `    } from "@react-pdf-levelup/core";\n`;
     }
 
     importsSection += '\n\n';

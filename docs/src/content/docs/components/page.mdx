@@ -22,9 +22,9 @@ Encabezado de página que se puede repetir en todas las páginas.
 
 ## Pie de página (Footer)
 
-El pie de página se configura a través del componente `LayoutPDF`.
+El pie de página se configura a través del componente `Layout`.
 
-### Props (en LayoutPDF)
+### Props (en Layout)
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
@@ -34,7 +34,7 @@ El pie de página se configura a través del componente `LayoutPDF`.
 ### Ejemplo
 
 ```tsx
-<LayoutPDF footer={<P>Pie de página personalizado</P>} lines={2}>
+<Layout footer={<P>Pie de página personalizado</P>} lines={2}>
   <P>Contenido del documento</P>
-</LayoutPDF>
+</Layout>
 ```

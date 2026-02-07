@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutPDF, P } from "react-pdf-levelup";
+import { Layout, P } from "@react-pdf-levelup/core";
 
 // Define una interfaz para los datos
 interface ComponentProps {
@@ -9,9 +9,9 @@ interface ComponentProps {
 }
 
 const Component = ({ data }: ComponentProps) => (
-  <LayoutPDF>
+  <Layout>
     <P>Hola, {data?.nombre || "Usuario"}</P>
-  </LayoutPDF>
+  </Layout>
 );
 
 export default Component;

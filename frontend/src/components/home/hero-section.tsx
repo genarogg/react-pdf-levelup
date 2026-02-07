@@ -7,11 +7,11 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 
 const heroCode = `
-import { P, LayoutPDF, HR, Strong, H4, Em} from 'react-pdf-levelup'
+import { P, Layout, HR, Strong, H4, Em} from 'react-pdf-levelup'
 
 const Component = ({ data }) => {
   return (
-    <LayoutPDF>
+    <Layout>
       <H4>Documento de Presentación</H4>
       <P>
         Bienvenido a <Strong style={{color:"#3d65fd"}}>react-pdf-levelup</Strong>.
@@ -24,7 +24,7 @@ const Component = ({ data }) => {
         Explora el Playground y crea tu propio template.
       </P>
       <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
-    </LayoutPDF>
+    </Layout>
   )
 }
 `

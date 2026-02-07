@@ -9,16 +9,16 @@ En esta guía, aprenderás a crear un template básico para una factura. Utiliza
 
 ## Estructura Básica
 
-Todo template debe ser un componente funcional de React que retorne un componente `LayoutPDF`.
+Todo template debe ser un componente funcional de React que retorne un componente `Layout`.
 
 ```tsx
-import { LayoutPDF, P } from 'react-pdf-levelup';
+import { Layout, P } from 'react-pdf-levelup';
 
 const MyTemplate = ({ data }) => {
   return (
-    <LayoutPDF>
+    <Layout>
       <P>Hola Mundo</P>
-    </LayoutPDF>
+    </Layout>
   );
 };
 
@@ -48,12 +48,12 @@ export default MyTemplate;
 
 2.  **Configura el Layout**
 
-    Usa `LayoutPDF` como contenedor principal. Puedes configurar el tamaño de papel, márgenes y otros metadatos.
+    Usa `Layout` como contenedor principal. Puedes configurar el tamaño de papel, márgenes y otros metadatos.
 
     ```tsx
-    <LayoutPDF size="A4" padding={30}>
+    <Layout size="A4" padding={30}>
       {/* Contenido aquí */}
-    </LayoutPDF>
+    </Layout>
     ```
 
 3.  **Crea el Encabezado**
@@ -105,12 +105,12 @@ Aquí tienes el código completo del template de factura:
 ```tsx
 import React from 'react';
 import { 
-  LayoutPDF, Row, Col6, H1, P, Right, Table, Thead, Tbody, Tr, Th, Td 
+  Layout, Row, Col6, H1, P, Right, Table, Thead, Tbody, Tr, Th, Td 
 } from 'react-pdf-levelup';
 
 const InvoiceTemplate = ({ data }) => {
   return (
-    <LayoutPDF size="A4">
+    <Layout size="A4">
       <Row>
         <Col6>
           <H1>Factura #{data.number}</H1>
@@ -139,7 +139,7 @@ const InvoiceTemplate = ({ data }) => {
           ))}
         </Tbody>
       </Table>
-    </LayoutPDF>
+    </Layout>
   );
 };
 

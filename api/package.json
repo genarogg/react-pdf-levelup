@@ -21,9 +21,7 @@
     "@fastify/helmet": "^13.0.2",
     "@fastify/multipart": "^9.3.0",
     "@fastify/rate-limit": "^10.3.0",
-
     "@fastify/under-pressure": "^9.0.3",
-
     "@react-pdf/renderer": "^4.3.2",
     "accounting": "^0.4.1",
     "canvas": "^3.2.0",
@@ -31,13 +29,12 @@
     "colors": "^1.4.0",
     "console-clear": "^1.1.1",
     "dotenv": "^17.2.3",
-  
     "fastify": "^5.0.0",
     "fastify-slow-down": "^2.0.1",
     "jsdom": "^27.4.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
-    "react-pdf-levelup": "latest",
+    "@react-pdf-levelup/core": "latest",
     "react": ">=18 <=19",
     "react-dom": ">=18 <=19"
   },

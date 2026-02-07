@@ -1,4 +1,4 @@
-import { generatePDF } from "react-pdf-levelup";
+import { generatePDF } from "@react-pdf-levelup/core";
 import Template from "./Template";
 import fs from "fs";
 import path from "path";

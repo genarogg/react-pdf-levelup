@@ -40,7 +40,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
   const componentDocs = {
     layout: [
       {
-        name: "LayoutPDF",
+        name: "Layout",
         description: "Componente principal para configurar el documento PDF",
         props: [
           {
@@ -79,10 +79,10 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             description: "Mostrar rejilla de referencia en la página",
           },
         ],
-        example: `<LayoutPDF pagination rule footer={<P>Pie de página</P>} lines={2}>
+        example: `<Layout pagination rule footer={<P>Pie de página</P>} lines={2}>
   <H1>Título</H1>
   <P>Contenido de ejemplo</P>
-</LayoutPDF>`,
+</Layout>`,
       },
       {
         name: "Container",
@@ -448,15 +448,15 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         example: `<Header fixed>Encabezado</Header>`,
       },
       {
-        name: "Pie de página (LayoutPDF.footer)",
-        description: "Contenido del pie de página en LayoutPDF",
+        name: "Pie de página (Layout.footer)",
+        description: "Contenido del pie de página en Layout",
         props: [
           { name: "footer", type: "ReactNode", default: "", description: "Contenido del pie de página" },
           { name: "lines", type: "number", default: "1", description: "Número de líneas reservadas" },
         ],
-        example: `<LayoutPDF footer={<P>Pie</P>} lines={2}>
+        example: `<Layout footer={<P>Pie</P>} lines={2}>
   <P>Contenido</P>
-</LayoutPDF>`,
+</Layout>`,
       },
     ],
     fonts: [

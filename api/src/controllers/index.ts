@@ -1,4 +1,4 @@
-import { generatePDF } from "react-pdf-levelup"
+import { generatePDF } from "@react-pdf-levelup/core"
 import type { FastifyRequest, FastifyReply } from "fastify"
 import { successResponse, errorResponse } from "@/func/response"
 import * as fs from "fs/promises"

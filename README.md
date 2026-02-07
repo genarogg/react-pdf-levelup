@@ -102,7 +102,7 @@ import React from 'react';
 import { 
   generatePDF, 
   decodeBase64Pdf, 
-  LayoutPDF, 
+  Layout, 
   H1, 
   P, 
   Strong, 
@@ -124,7 +124,7 @@ import {
 import { QR, QRstyle } from '@react-pdf-levelup/qr';
 
 const MyPDFTemplate = ({ data }) => (
-  <LayoutPDF>
+  <Layout>
     <H1>Documento de Presentación</H1>
     <P>
       Bienvenido a <Strong>react-pdf-levelup</Strong>. Construye PDFs con componentes de React de forma <Em>rápida</Em> y <Em>tipada</Em>.
@@ -166,7 +166,7 @@ const MyPDFTemplate = ({ data }) => (
         </Tr>
       </Tbody>
     </Table>
-  </LayoutPDF>
+  </Layout>
 );
 
 // Función para generar y descargar PDF

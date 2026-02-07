@@ -24,11 +24,11 @@ const features = [
   },
 ]
 
-const exampleCode = `import { H1, LayoutPDF, Table, Tbody, Td, Th, Thead, Tr } from "react-pdf-levelup";';
+const exampleCode = `import { H1, Layout, Table, Tbody, Td, Th, Thead, Tr } from "@react-pdf-levelup/core";';
 
 const Component = ({ data }) => {
   return (
-    <LayoutPDF>
+    <Layout>
       <H1>Tabla</H1>
       <Table cellHeight={24}>
         <Thead >
@@ -54,7 +54,7 @@ const Component = ({ data }) => {
           </Tr>
         </Tbody>
       </Table>
-    </LayoutPDF>
+    </Layout>
   )
 }`
 

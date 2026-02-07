@@ -4,7 +4,7 @@ const roadmapItems = [
   {
     status: "completed",
     title: "Componentes Core",
-    description: "LayoutPDF, Header, texto (H1–H6, P, Strong, Em), listas, QR y columnas (Container, Row, Col1–Col12)",
+    description: "Layout, Header, texto (H1–H6, P, Strong, Em), listas, QR y columnas (Container, Row, Col1–Col12)",
     icon: Check,
   },
   {

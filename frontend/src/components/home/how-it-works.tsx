@@ -18,14 +18,14 @@ yarn add react-pdf-levelup`,
     step: "02",
     title: "Crea tu template en el Playground",
     description:
-      "Abre /playground y define un componente de React para tu PDF usando los componentes de react-pdf-levelup (LayoutPDF, texto, tablas, QR, etc.).",
+      "Abre /playground y define un componente de React para tu PDF usando los componentes de react-pdf-levelup (Layout, texto, tablas, QR, etc.).",
     blocks: [
       {
-        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, LayoutPDF, P, QR, Row, Strong, UL } from "react-pdf-levelup";
+        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, Layout, P, QR, Row, Strong, UL } from "@react-pdf-levelup/core";
 
 const Component = ({ data }) => {
   return (
-    <LayoutPDF>
+    <Layout>
       <H1>Documento de Presentación</H1>
       <P>
         Bienvenido a <Strong>react-pdf-levelup</Strong>. Con esta librería puedes construir PDFs usando componentes de
@@ -51,7 +51,7 @@ const Component = ({ data }) => {
           </Col6>
         </Row>
       </Container>
-    </LayoutPDF>
+    </Layout>
   )
 }`,
         language: "tsx" as const,

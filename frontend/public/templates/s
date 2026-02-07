@@ -5,15 +5,15 @@ import {
   Div,
   H2,
   ImgBg,
-  LayoutPDF,
+  Layout,
   P
-} from "react-pdf-levelup";
+} from "@react-pdf-levelup/core";
 
 
 const Component = () => {
 
   return (
-    <LayoutPDF
+    <Layout
       size="A4"
       orientation="h"
       pagination={false}
@@ -74,7 +74,7 @@ const Component = () => {
           <A href="www.yoursite.com" style={{ fontSize: "14px" }}>Contact Info: www.yoursite.com</A>
         </Div>
       </ImgBg>
-    </LayoutPDF>
+    </Layout>
   );
 };
 

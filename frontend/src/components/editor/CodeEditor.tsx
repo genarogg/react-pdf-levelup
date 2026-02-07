@@ -139,8 +139,8 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     const customTags = [
       // Componentes de layout
       {
-        label: "LayoutPDF",
-        insertText: '<LayoutPDF size="A4" orientation="v" showPageNumbers={true}>\n\n</LayoutPDF>',
+        label: "Layout",
+        insertText: '<Layout size="A4" orientation="v" showPageNumbers={true}>\n\n</Layout>',
         kind,
       },
 

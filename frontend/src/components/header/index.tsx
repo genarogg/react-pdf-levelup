@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                 <div className="flex justify-between items-center relative z-10 h-full w-full">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8from-gray-600 rounded-lg flex items-center justify-center shadow-lg">
-                            <img src="/android-chrome-192x192.png" alt="react-pdf-levelup" />
+                            <img src="/android-chrome-192x192.png" alt="@react-pdf-levelup/core" />
                         </div>
                         <Link to="/" >
                             <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 bg-clip-text text-transparent">

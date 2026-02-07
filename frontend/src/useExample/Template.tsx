@@ -1,9 +1,9 @@
 import React from 'react'
-import { P, LayoutPDF, HR, Strong, H4, Em, QR } from 'react-pdf-levelup'
+import { P, Layout, HR, Strong, H4, Em, QR } from 'react-pdf-levelup'
 
 const Component = () => {
   return (
-    <LayoutPDF>
+    <Layout>
       <H4>Documento de Presentación</H4>
       <P>
         Bienvenido a <Strong style={{ color: "#3d65fd" }}>react-pdf-levelup</Strong>.
@@ -16,7 +16,7 @@ const Component = () => {
         Explora el Playground y crea tu propio template.
       </P>
       <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
-    </LayoutPDF>
+    </Layout>
   )
 }
 
