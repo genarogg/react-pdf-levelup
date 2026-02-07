@@ -1,34 +1,73 @@
-import  React from "react"
-import { View, StyleSheet } from "@react-pdf/renderer"
+import React from "react";
+import { View, StyleSheet } from "@react-pdf/renderer";
 
 interface PositionProps {
-  children: React.ReactNode
-  style?: any
+  children: React.ReactNode;
+  style?: any;
+
+  // opcional -> centra vertical también
+  vertical?: boolean;
 }
 
 const styles = StyleSheet.create({
   left: {
+    alignItems: "flex-start",
     textAlign: "left",
   },
   right: {
+    alignItems: "flex-end",
     textAlign: "right",
   },
   center: {
+    alignItems: "center",
     textAlign: "center",
   },
-})
 
-const Left: React.FC<PositionProps> = ({ children, style }) => {
-  return <View style={[styles.left, style]}>{children}</View>
-}
+  vertical: {
+    justifyContent: "center",
+  },
+});
 
-const Right: React.FC<PositionProps> = ({ children, style }) => {
-  return <View style={[styles.right, style]}>{children}</View>
-}
+/* ================= LEFT ================= */
 
-const Center: React.FC<PositionProps> = ({ children, style }) => {
-  return <View style={[styles.center, style]}>{children}</View>
-}
+const Left: React.FC<PositionProps> = ({
+  children,
+  style,
+  vertical,
+}) => {
+  return (
+    <View style={[styles.left, vertical && styles.vertical, style]}>
+      {children}
+    </View>
+  );
+};
 
-export { Left, Right, Center }
+/* ================= RIGHT ================= */
 
+const Right: React.FC<PositionProps> = ({
+  children,
+  style,
+  vertical,
+}) => {
+  return (
+    <View style={[styles.right, vertical && styles.vertical, style]}>
+      {children}
+    </View>
+  );
+};
+
+/* ================= CENTER ================= */
+
+const Center: React.FC<PositionProps> = ({
+  children,
+  style,
+  vertical,
+}) => {
+  return (
+    <View style={[styles.center, vertical && styles.vertical, style]}>
+      {children}
+    </View>
+  );
+};
+
+export { Left, Right, Center };
