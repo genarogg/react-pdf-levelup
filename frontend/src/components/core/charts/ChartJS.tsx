@@ -67,7 +67,7 @@ const ChartJS: React.FC<ChartJSProps> = ({
           setError(errorMsg)
           setChartDataUrl(transparentPixel)
         } else {
-          console.log("✅ Gráfico generado. Tamaño:", url.length, "bytes")
+          console.log("Gráfico generado. Tamaño:", url.length, "bytes")
           setChartDataUrl(url)
         }
         
@@ -95,7 +95,7 @@ const ChartJS: React.FC<ChartJSProps> = ({
   // Para debugging
   useEffect(() => {
     if (chartDataUrl && chartDataUrl !== transparentPixel) {
-      console.log("📊 Chart.tsx - URL actualizada:", chartDataUrl.substring(0, 50) + "...")
+      console.log("Chart.tsx - URL actualizada:", chartDataUrl.substring(0, 50) + "...")
     }
   }, [chartDataUrl])
 

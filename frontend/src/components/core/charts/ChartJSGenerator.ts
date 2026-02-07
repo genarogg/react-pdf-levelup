@@ -17,7 +17,7 @@ export const generateChartAsBase64 = async (
     }: ChartRenderOptions = {},
 ): Promise<string> => {
     try {
-        // Importar Chart.js y sus componentes
+        // Importar Chart.js y sus componentes <- importante NO TOCAR
         const { Chart, registerables } = await import("chart.js")
         
         // Registrar todos los componentes necesarios
@@ -53,7 +53,7 @@ export const generateChartAsBase64 = async (
                 maintainAspectRatio: false,
                 ...(chartConfig.options || {}),
                 devicePixelRatio,
-                animation: false, // Desactivar animación para renderizado inmediato
+                animation: false, 
             } as any,
         }
         
@@ -76,7 +76,7 @@ export const generateChartAsBase64 = async (
             return ""
         }
         
-        console.log("✅ Gráfico generado correctamente. Tamaño:", dataUrl.length, "bytes")
+        console.log("Gráfico generado correctamente. Tamaño:", dataUrl.length, "bytes")
         
         return dataUrl
         
