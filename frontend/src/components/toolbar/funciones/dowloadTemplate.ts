@@ -2,11 +2,12 @@
 import * as ReactPdfLevelup from "../../core";
 
 const downloadTemplate = (templateCode: string) => {
-    // Obtener automáticamente todos los componentes disponibles
-    const availableComponents = Object.keys(ReactPdfLevelup).filter(key => {
-        // Filtrar solo los que empiezan con mayúscula (componentes de React)
-        return /^[A-Z]/.test(key);
-    });
+    // Configurar componentes por librería
+    const libraryComponents = {
+        core: Object.keys(ReactPdfLevelup).filter(key => /^[A-Z]/.test(key)),
+        qr: ['QR', 'QRStyle'],
+        chart: ['ChartJS']
+    };
 
     // Detectar componentes declarados localmente (const/function/let/var)
     const localDeclarationRegex = /(?:const|function|let|var)\s+([A-Z]\w*)\s*=/g;
@@ -17,40 +18,82 @@ const downloadTemplate = (templateCode: string) => {
         localComponents.add(match[1]);
     }
 
-    // Detectar qué componentes se están usando en el código
-    const usedComponents = new Set<string>();
+    // Detectar qué componentes se están usando en el código, organizados por librería
+    const usedComponents = {
+        core: new Set<string>(),
+        qr: new Set<string>(),
+        chart: new Set<string>()
+    };
 
-    availableComponents.forEach(component => {
-        // Verificar si el componente NO está declarado localmente
-        if (!localComponents.has(component)) {
-            // Buscar uso del componente como etiqueta JSX
-            // Patrones: <Component>, <Component/>, <Component >, </Component>
-            const patterns = [
-                new RegExp(`<${component}[\\s/>]`),
-                new RegExp(`<${component}>`)
-            ];
+    // Función para verificar si un componente se usa en el código
+    const isComponentUsed = (component: string, code: string): boolean => {
+        if (localComponents.has(component)) {
+            return false;
+        }
 
-            const isUsed = patterns.some(pattern => pattern.test(templateCode));
+        const patterns = [
+            new RegExp(`<${component}[\\s/>]`),
+            new RegExp(`<${component}>`)
+        ];
 
-            if (isUsed) { 
-                 usedComponents.add(component); 
-             } 
-         } 
-     }); 
- 
-     // Detectar si se está usando Font.register 
-     if (/\bFont\.register\b/.test(templateCode)) { 
-         usedComponents.add("Font"); 
-     }
+        return patterns.some(pattern => pattern.test(code));
+    };
 
-    // Construir el import solo con los componentes utilizados
+    // Detectar componentes de QR
+    libraryComponents.qr.forEach(component => {
+        if (isComponentUsed(component, templateCode)) {
+            usedComponents.qr.add(component);
+        }
+    });
+
+    // Detectar componentes de Chart
+    libraryComponents.chart.forEach(component => {
+        if (isComponentUsed(component, templateCode)) {
+            usedComponents.chart.add(component);
+        }
+    });
+
+    // Detectar componentes de Core (excluyendo los de QR y Chart)
+    const qrAndChartComponents = [...libraryComponents.qr, ...libraryComponents.chart];
+    libraryComponents.core.forEach(component => {
+        // Solo agregar a core si no pertenece a qr o chart
+        if (!qrAndChartComponents.includes(component)) {
+            if (isComponentUsed(component, templateCode)) {
+                usedComponents.core.add(component);
+            }
+        }
+    });
+
+    // Detectar si se está usando Font.register
+    if (/\bFont\.register\b/.test(templateCode)) {
+        usedComponents.core.add("Font");
+    }
+
+    // Construir los imports organizados por librería
     let importsSection = 'import React from "react";\n';
 
-    if (usedComponents.size > 0) {
-        const sortedComponents = Array.from(usedComponents).sort();
+    // Import de @react-pdf-levelup/core
+    if (usedComponents.core.size > 0) {
+        const sortedComponents = Array.from(usedComponents.core).sort();
         importsSection += `import { \n`;
         importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
         importsSection += `    } from "@react-pdf-levelup/core";\n`;
+    }
+
+    // Import de @react-pdf-levelup/qr
+    if (usedComponents.qr.size > 0) {
+        const sortedComponents = Array.from(usedComponents.qr).sort();
+        importsSection += `import { \n`;
+        importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
+        importsSection += `    } from "@react-pdf-levelup/qr";\n`;
+    }
+
+    // Import de @react-pdf-levelup/chart
+    if (usedComponents.chart.size > 0) {
+        const sortedComponents = Array.from(usedComponents.chart).sort();
+        importsSection += `import { \n`;
+        importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
+        importsSection += `    } from "@react-pdf-levelup/chart";\n`;
     }
 
     importsSection += '\n\n';
@@ -58,6 +101,7 @@ const downloadTemplate = (templateCode: string) => {
     // Crear el contenido completo del template con imports
     let fullTemplateContent = importsSection + templateCode;
 
+    // Detectar y agregar export default si no existe
     const hasDefaultExport = /\bexport\s+default\b/.test(templateCode);
     if (!hasDefaultExport) {
         const preferredNames = [
