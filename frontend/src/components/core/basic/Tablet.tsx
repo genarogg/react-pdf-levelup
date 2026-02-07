@@ -1,16 +1,24 @@
 import React, { createContext, useContext } from "react";
 import { View, Text, StyleSheet } from "@react-pdf/renderer";
 
+/* ================= TYPES ================= */
+
 interface TableProps {
   children: React.ReactNode;
   style?: any;
   cellHeight?: number;
+  borderColor?: string;
+  textColor?: string;
+  headerBackground?: string;
+  zebraColor?: string;
 }
 
 interface TheadProps {
   children: React.ReactNode;
   style?: any;
-  textAlign?: "left" | "center" | "right" | any;
+  textAlign?: "left" | "center" | "right";
+  borderColor?: string;
+  textColor?: string;
 }
 
 interface CellProps {
@@ -22,85 +30,134 @@ interface CellProps {
   isLast?: boolean;
   isLastRow?: boolean;
   isOdd?: boolean;
-  textAlign?: "left" | "center" | "right" | any;
+  textAlign?: "left" | "center" | "right";
 }
 
-// Context para pasar cellHeight y textAlign a los componentes hijos
-const TableContext = createContext<{
-  cellHeight: number;
-  textAlign?: "left" | "center" | "right" | any;
-}>({
+/* ================= CONTEXT ================= */
+
+const TableContext = createContext({
   cellHeight: 22,
-  textAlign: "left",
+  textAlign: "left" as "left" | "center" | "right",
+  borderColor: "#000",
+  textColor: "#000",
+  headerBackground: "#ccc",
+  zebraColor: "#eeeeee",
 });
+
+/* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
   table: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#000",
     marginBottom: 20,
-  },
-  thead: {
-    backgroundColor: "#ccc",
   },
   tr: {
     flexDirection: "row",
   },
-  textBold: {
+  th: {
     fontSize: 10,
     fontWeight: "bold",
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
-
   },
-  text: {
+  td: {
     fontSize: 10,
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
-
-  },
-  zebraOdd: {
-    backgroundColor: "#eeeeee",
   },
 });
 
-const Table: React.FC<TableProps> = ({ children, style, cellHeight = 22 }) => (
-  <TableContext.Provider value={{ cellHeight, textAlign: "left" }}>
-    <View style={[styles.table, style]}>{children}</View>
+/* ================= TABLE ================= */
+
+const Table: React.FC<TableProps> = ({
+  children,
+  style,
+  cellHeight = 22,
+  borderColor = "#000",
+  textColor = "#000",
+  headerBackground = "#ccc",
+  zebraColor = "#eeeeee",
+}) => (
+  <TableContext.Provider
+    value={{
+      cellHeight,
+      textAlign: "left",
+      borderColor,
+      textColor,
+      headerBackground,
+      zebraColor,
+    }}
+  >
+    <View style={[styles.table, { borderColor }, style]}>
+      {children}
+    </View>
   </TableContext.Provider>
 );
+
+/* ================= THEAD ================= */
 
 const Thead: React.FC<TheadProps> = ({
   children,
   style,
   textAlign = "left",
+  borderColor,
+  textColor,
 }) => {
-  const { cellHeight } = useContext(TableContext);
+  const context = useContext(TableContext);
 
   return (
-    <TableContext.Provider value={{ cellHeight, textAlign }}>
-      <View style={[styles.thead, style]}>{children}</View>
+    <TableContext.Provider
+      value={{
+        ...context,
+        textAlign,
+        borderColor: borderColor ?? context.borderColor,
+        textColor: textColor ?? context.textColor,
+      }}
+    >
+      <View
+        style={[
+          { backgroundColor: context.headerBackground },
+          style,
+        ]}
+      >
+        {children}
+      </View>
     </TableContext.Provider>
   );
 };
 
-const Tbody: React.FC<TableProps> = ({ children }) => {
+/* ================= TBODY ================= */
+
+const Tbody: React.FC<TableProps> = ({ children, borderColor, textColor }) => {
+  const context = useContext(TableContext);
+
   const rows = React.Children.toArray(children) as React.ReactElement<any>[];
   const count = rows.length;
+
   return (
-    <>
-      {rows.map((row, idx) =>
-        React.cloneElement(row, {
-          isLastRow: idx === count - 1,
-          isOdd: idx % 2 === 1,
-        })
-      )}
-    </>
+    <TableContext.Provider
+      value={{
+        ...context,
+        borderColor: borderColor ?? context.borderColor,
+        textColor: textColor ?? context.textColor,
+      }}
+    >
+      <>
+        {rows.map((row, idx) =>
+          React.cloneElement(row, {
+            isLastRow: idx === count - 1,
+            isOdd: idx % 2 === 1,
+          })
+        )}
+      </>
+    </TableContext.Provider>
   );
 };
+
+/* ================= TR ================= */
 
 const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   children,
@@ -111,17 +168,27 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   const elements = React.Children.toArray(
     children
   ) as React.ReactElement<CellProps>[];
+
   const count = elements.length;
+
   return (
     <View style={[styles.tr, style]}>
       {elements.map((child, idx) => {
         const isLast = idx === count - 1;
         const width = `${(100 / count).toFixed(2)}%`;
-        return React.cloneElement(child, { width, isLast, isLastRow, isOdd });
+
+        return React.cloneElement(child, {
+          width,
+          isLast,
+          isLastRow,
+          isOdd,
+        });
       })}
     </View>
   );
 };
+
+/* ================= TH ================= */
 
 const Th: React.FC<CellProps> = ({
   children,
@@ -133,40 +200,39 @@ const Th: React.FC<CellProps> = ({
   isLastRow = false,
   textAlign: propTextAlign,
 }) => {
-  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext);
+  const { cellHeight, textAlign, borderColor, textColor } =
+    useContext(TableContext);
 
-  // Usar textAlign del prop si está definido, sino el del contexto
-  const finalTextAlign = propTextAlign || contextTextAlign || "left";
+  const finalTextAlign = propTextAlign || textAlign || "left";
 
   const baseWidth =
     typeof width === "string" && colSpan
       ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
       : width;
 
-  const cellHeightValue = height !== undefined ? height : cellHeight;
-
-  const borders = {
-    borderRightWidth: isLast ? 0 : 1,
-    borderBottomWidth: isLastRow ? 0 : 1,
-    borderColor: "#000",
-    minHeight: cellHeightValue,
-  };
-
   return (
     <View
       style={[
-        styles.textBold,
+        styles.th,
         {
           width: baseWidth,
+          borderRightWidth: isLast ? 0 : 1,
+          borderBottomWidth: isLastRow ? 0 : 1,
+          borderColor,
+          minHeight: height ?? cellHeight,
+          justifyContent: "center",
         },
-        borders,
         style,
       ]}
     >
-      <Text style={{ textAlign: finalTextAlign }}>{children}</Text>
+      <Text style={{ textAlign: finalTextAlign, color: textColor }}>
+        {children}
+      </Text>
     </View>
   );
 };
+
+/* ================= TD ================= */
 
 const Td: React.FC<CellProps> = ({
   children,
@@ -179,38 +245,40 @@ const Td: React.FC<CellProps> = ({
   isOdd = false,
   textAlign: propTextAlign,
 }) => {
-  const { cellHeight, textAlign: contextTextAlign } = useContext(TableContext);
+  const {
+    cellHeight,
+    textAlign,
+    borderColor,
+    textColor,
+    zebraColor,
+  } = useContext(TableContext);
 
-  // Usar textAlign del prop si está definido, sino el del contexto, sino 'left'
-  const finalTextAlign = propTextAlign || contextTextAlign || "left";
+  const finalTextAlign = propTextAlign || textAlign || "left";
 
   const baseWidth =
     typeof width === "string" && colSpan
       ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
       : width;
 
-  const cellHeightValue = height !== undefined ? height : cellHeight;
-
-  const borders = {
-    borderRightWidth: isLast ? 0 : 1,
-    borderBottomWidth: isLastRow ? 0 : 1,
-    borderColor: "#000",
-    minHeight: cellHeightValue,
-  };
-
   return (
     <View
       style={[
-        styles.text,
-        isOdd && styles.zebraOdd,
+        styles.td,
         {
           width: baseWidth,
+          borderRightWidth: isLast ? 0 : 1,
+          borderBottomWidth: isLastRow ? 0 : 1,
+          borderColor,
+          minHeight: height ?? cellHeight,
+          backgroundColor: isOdd ? zebraColor : undefined,
+          justifyContent: "center",
         },
-        borders,
         style,
       ]}
     >
-      <Text style={{ textAlign: finalTextAlign }}>{children}</Text>
+      <Text style={{ textAlign: finalTextAlign, color: textColor }}>
+        {children}
+      </Text>
     </View>
   );
 };
