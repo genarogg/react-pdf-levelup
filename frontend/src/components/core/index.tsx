@@ -8,6 +8,7 @@ import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, C
 
 import QR from "./qr/QR"
 import QRstyle from "./qr/QRstyle"
+import ChartJS from "./charts/ChartJS"
 
 import { UL, OL, LI } from "./basic/Lista"
 
@@ -64,6 +65,7 @@ export {
   Col12,
   QR,
   QRstyle,
+  ChartJS,
   UL,
   OL,
   LI,

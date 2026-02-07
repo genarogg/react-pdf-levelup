@@ -23,5 +23,10 @@
     "id": "QRTemplate",
     "name": "QR Template",
     "path": "/templates/QR.tsx"
+  },
+  {
+    "id": "charts",
+    "name": "Gráficos (ChartJS)",
+    "path": "/templates/Charts.tsx"
   }
 ]
