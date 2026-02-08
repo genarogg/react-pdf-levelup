@@ -1,31 +1,36 @@
 import React from "react";
-import {
-  A,
-  BR,
-  Center,
-  Col6,
-  Container,
-  Div,
-  Em,
-  Font,
-  H1,
-  H4,
-  Img,
-  Layout,
-  P,
-  Right,
-  Row,
-  Strong,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr
-} from "@react-pdf-levelup/core";
+import { 
+      A,
+      BR,
+      Center,
+      Col6,
+      Container,
+      Div,
+      Em,
+      Font,
+      H1,
+      H4,
+      Img,
+      Layout,
+      P,
+      Right,
+      Row,
+      Strong,
+      Table,
+      Tbody,
+      Td,
+      Th,
+      Thead,
+      Tr
+    } from "@react-pdf-levelup/core";
 
 
-const Component = ({ data }: any) => {
+
+
+
+
+
+const Component = ({ data }:any) => {
   getFuentes()
   return (
     <FathonLayout>
@@ -39,7 +44,7 @@ const Component = ({ data }: any) => {
   )
 }
 
-const FathonLayout = ({ children }: any) => {
+const FathonLayout = ({ children }:any) => {
   return (
     <Layout
       pagination={false}
@@ -230,6 +235,7 @@ const getFuentes = () => {
     ]
   });
 }
+Component;
 
 
 export default Component;

@@ -44,6 +44,7 @@ import router from '@/routers';
   try {
     await registerPlugins()
     server.register(router, { prefix: '/' })
+    server.register(router, { prefix: '/api' })
     const port = Number(BACKEND_PORT) || 4000
     await server.listen({ port, host: '0.0.0.0' });
 
