@@ -31,6 +31,7 @@ import {
 
 
 const Component = ({ data }:any) => {
+  console.log(data)
   getFuentes()
   return (
     <FathonLayout>
