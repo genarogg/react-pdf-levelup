@@ -183,9 +183,9 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaConSalto("Center"),
 
       //header y footer
-      etiquetaConSalto("Header"),
-      etiquetaConSalto("Main"),
-      etiquetaConSalto("Footer"),
+      //etiquetaConSalto("Header"),
+      //etiquetaConSalto("Main"),
+      //etiquetaConSalto("Footer"),
       etiquetaConSalto("ImgBg"),
 
 

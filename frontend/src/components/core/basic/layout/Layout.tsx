@@ -22,7 +22,7 @@ interface LayoutProps {
   orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
   backgroundColor?: string
   padding?: number
-  margen?: "apa" | "normal" | "estrecho" | "ancho"
+  margin?: "apa" | "normal" | "estrecho" | "ancho"
   style?: any
   pagination?: boolean
   footer?: React.ReactNode
@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({
   orientation = "vertical",
   backgroundColor = "white",
   padding = 30,
-  margen = "normal",
+  margin = "normal",
   style = {},
   pagination = true,
   footer,
@@ -50,10 +50,10 @@ const Layout: React.FC<LayoutProps> = ({
   const footerHeight = (lines * LINE_HEIGHT) + FOOTER_PADDING
 
   // Función para obtener márgenes según las normas APA y otros estándares
-  const getMargins = (margen: string, pageSize: string) => {
+  const getMargins = (margin: string, pageSize: string) => {
     const normalizedSize = pageSize.toUpperCase()
 
-    switch (margen) {
+    switch (margin) {
       case "apa":
         // Normas APA: 1 pulgada en todos los lados (72 puntos)
         if (normalizedSize === "LETTER" || normalizedSize === "LEGAL") {
@@ -104,7 +104,7 @@ const Layout: React.FC<LayoutProps> = ({
   let safeOrientation = orientation
   let safeBackgroundColor = backgroundColor
 
-  let safeMargen = margen
+  let safeMargin = margin
 
   try {
     // Validar size
@@ -131,11 +131,11 @@ const Layout: React.FC<LayoutProps> = ({
       safeBackgroundColor = "white"
     }
 
-    // Validar margen
+    // Validar margin
     const validMargins = ["apa", "normal", "estrecho", "ancho"]
-    if (!validMargins.includes(margen)) {
-      console.warn(`Invalid margin type: ${margen}. Using normal as default.`)
-      safeMargen = "normal"
+    if (!validMargins.includes(margin)) {
+      console.warn(`Invalid margin type: ${margin}. Using normal as default.`)
+      safeMargin = "normal"
     }
 
     // Validar lines
@@ -204,7 +204,7 @@ const Layout: React.FC<LayoutProps> = ({
   const pdfOrientation = transformOrientation(safeOrientation)
 
   // Obtener márgenes según el tipo seleccionado
-  const margins = getMargins(safeMargen, safeSize)
+  const margins = getMargins(safeMargin, safeSize)
 
   // Calculate footer position based on calculated footer height
   const footerTop = getFooterPosition(safeSize, pdfOrientation, footerHeight)

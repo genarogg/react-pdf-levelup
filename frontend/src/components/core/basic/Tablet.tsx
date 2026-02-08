@@ -215,7 +215,7 @@ const Th: React.FC<CellProps> = ({
       style={[
         styles.th,
         {
-          width: baseWidth,
+          width: baseWidth || width,
           borderRightWidth: isLast ? 0 : 1,
           borderBottomWidth: isLastRow ? 0 : 1,
           borderColor,

@@ -4,3 +4,5 @@
 ** add breakPage a la documentacion
 
 ** add ChartJS a la documentacion
+
+** agregar los nuevos atributos de las tablas a la documentacion
