@@ -35,7 +35,7 @@ const Component = () => {
   }
 
   return (
-    <Layout size="A4" showPageNumbers={true}>
+    <Layout size="A4" >
       <View style={styles.container}>
         <Text style={styles.title}>Charts con ChartJS</Text>
         <ChartJS data={data} width={500} height={300} />
