@@ -1,6 +1,5 @@
-import React from "react"
-import { Layout, View, Text, StyleSheet, ChartJS } from "react-pdf-levelup"
-import type { ChartConfiguration } from "chart.js"
+import { Layout, View, Text, StyleSheet } from "@react-pdf-levelup/core"
+import { ChartJS } from "@react-pdf-levelup/chart"
 
 const styles = StyleSheet.create({
   container: {
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
 })
 
 const Component = () => {
-  const data: ChartConfiguration = {
+  const data = {
     type: "bar",
     data: {
       labels: ["Enero", "Febrero", "Marzo", "Abril"],
