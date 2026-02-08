@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from "@react-pdf/renderer";
 
 /* ================= TYPES ================= */
 
+type GridMode = "grid" | "modern";
+
 interface TableProps {
   children: React.ReactNode;
   style?: any;
@@ -11,6 +13,7 @@ interface TableProps {
   textColor?: string;
   headerBackground?: string;
   zebraColor?: string;
+  grid?: GridMode;
 }
 
 interface TheadProps {
@@ -42,6 +45,7 @@ const TableContext = createContext({
   textColor: "#000",
   headerBackground: "#ccc",
   zebraColor: "#eeeeee",
+  grid: "grid" as GridMode,
 });
 
 /* ================= STYLES ================= */
@@ -49,7 +53,6 @@ const TableContext = createContext({
 const styles = StyleSheet.create({
   table: {
     width: "100%",
-    borderWidth: 1,
     marginBottom: 20,
   },
   tr: {
@@ -80,6 +83,7 @@ const Table: React.FC<TableProps> = ({
   textColor = "#000",
   headerBackground = "#ccc",
   zebraColor = "#eeeeee",
+  grid = "grid",
 }) => (
   <TableContext.Provider
     value={{
@@ -89,9 +93,19 @@ const Table: React.FC<TableProps> = ({
       textColor,
       headerBackground,
       zebraColor,
+      grid,
     }}
   >
-    <View style={[styles.table, { borderColor }, style]}>
+    <View
+      style={[
+        styles.table,
+        grid === "grid" && {
+          borderWidth: 1,
+          borderColor,
+        },
+        style,
+      ]}
+    >
       {children}
     </View>
   </TableContext.Provider>
@@ -120,6 +134,10 @@ const Thead: React.FC<TheadProps> = ({
       <View
         style={[
           { backgroundColor: context.headerBackground },
+          context.grid === "modern" && {
+            borderBottomWidth: 1,
+            borderColor: context.borderColor,
+          },
           style,
         ]}
       >
@@ -165,6 +183,8 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   isLastRow = false,
   isOdd = false,
 }) => {
+  const { grid, borderColor } = useContext(TableContext);
+
   const elements = React.Children.toArray(
     children
   ) as React.ReactElement<CellProps>[];
@@ -172,7 +192,16 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   const count = elements.length;
 
   return (
-    <View style={[styles.tr, style]}>
+    <View
+      style={[
+        styles.tr,
+        grid === "modern" && {
+          borderBottomWidth: isLastRow ? 0 : 1,
+          borderColor,
+        },
+        style,
+      ]}
+    >
       {elements.map((child, idx) => {
         const isLast = idx === count - 1;
         const width = `${(100 / count).toFixed(2)}%`;
@@ -200,7 +229,7 @@ const Th: React.FC<CellProps> = ({
   isLastRow = false,
   textAlign: propTextAlign,
 }) => {
-  const { cellHeight, textAlign, borderColor, textColor } =
+  const { cellHeight, textAlign, borderColor, textColor, grid } =
     useContext(TableContext);
 
   const finalTextAlign = propTextAlign || textAlign || "left";
@@ -216,11 +245,12 @@ const Th: React.FC<CellProps> = ({
         styles.th,
         {
           width: baseWidth || width,
-          borderRightWidth: isLast ? 0 : 1,
-          borderBottomWidth: isLastRow ? 0 : 1,
           borderColor,
           minHeight: height ?? cellHeight,
-          justifyContent: "center",
+        },
+        grid === "grid" && {
+          borderRightWidth: isLast ? 0 : 1,
+          borderBottomWidth: isLastRow ? 0 : 1,
         },
         style,
       ]}
@@ -251,6 +281,7 @@ const Td: React.FC<CellProps> = ({
     borderColor,
     textColor,
     zebraColor,
+    grid,
   } = useContext(TableContext);
 
   const finalTextAlign = propTextAlign || textAlign || "left";
@@ -266,12 +297,13 @@ const Td: React.FC<CellProps> = ({
         styles.td,
         {
           width: baseWidth,
-          borderRightWidth: isLast ? 0 : 1,
-          borderBottomWidth: isLastRow ? 0 : 1,
           borderColor,
           minHeight: height ?? cellHeight,
           backgroundColor: isOdd ? zebraColor : undefined,
-          justifyContent: "center",
+        },
+        grid === "grid" && {
+          borderRightWidth: isLast ? 0 : 1,
+          borderBottomWidth: isLastRow ? 0 : 1,
         },
         style,
       ]}

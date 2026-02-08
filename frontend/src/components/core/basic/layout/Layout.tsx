@@ -1,5 +1,5 @@
 import React from "react"
-import { Page, Document, StyleSheet, Text, View } from "@react-pdf/renderer"
+import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
 
 const styles = StyleSheet.create({
   page: {
@@ -13,6 +13,14 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: "center",
+  },
+  backgroundImage: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
   }
 })
 
@@ -21,6 +29,8 @@ interface LayoutProps {
   size?: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
   orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
   backgroundColor?: string
+  backgroundImage?: string
+  backgroundImageOpacity?: number
   padding?: number
   margin?: "apa" | "normal" | "estrecho" | "ancho"
   style?: any
@@ -36,6 +46,8 @@ const Layout: React.FC<LayoutProps> = ({
   size = "A4",
   orientation = "vertical",
   backgroundColor = "white",
+  backgroundImage,
+  backgroundImageOpacity = 1,
   padding = 30,
   margin = "normal",
   style = {},
@@ -309,6 +321,16 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <Document>
       <Page debug={debug} size={safeSize as any} orientation={pdfOrientation} style={pageStyle} wrap>
+        {backgroundImage && (
+          <Image
+            src={backgroundImage}
+            style={{
+              ...styles.backgroundImage,
+              opacity: backgroundImageOpacity,
+            }}
+            fixed
+          />
+        )}
         {renderGrid()}
         {children}
         <View style={{ paddingBottom: footerHeight }}></View>

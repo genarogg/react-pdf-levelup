@@ -11,7 +11,7 @@
     "-----Product-----": "-----------------------------------------",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc-alias -p tsconfig.json && node scripts/add-js-ext.js",
     "start": "set PRODUCTION=false && node dist/index.js",
-    "demo": "tsx ./src/useExample/index.ts"   
+    "demo": "tsx ./src/useExample/index.ts"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",
@@ -22,6 +22,10 @@
     "@fastify/multipart": "^9.3.0",
     "@fastify/rate-limit": "^10.3.0",
     "@fastify/under-pressure": "^9.0.3",
+    "@react-pdf-levelup/chart": "latest",
+    "@react-pdf-levelup/client": "latest",
+    "@react-pdf-levelup/core": "latest",
+    "@react-pdf-levelup/qr": "latest",
     "@react-pdf/renderer": "^4.3.2",
     "accounting": "^0.4.1",
     "canvas": "^3.2.0",
@@ -34,7 +38,6 @@
     "jsdom": "^27.4.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
-    "@react-pdf-levelup/core": "latest",
     "react": ">=18 <=19",
     "react-dom": ">=18 <=19"
   },
@@ -44,11 +47,11 @@
     "@types/console-clear": "^1.1.4",
     "@types/ejs": "^3.1.5",
     "@types/node": "^22.0.0",
+    "@types/react": ">=18 <=19",
+    "@types/react-dom": ">=18 <=19",
     "rimraf": "^6.1.2",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.3",
-    "@types/react": ">=18 <=19",
-    "@types/react-dom": ">=18 <=19"
+    "typescript": "^5.6.3"
   }
 }

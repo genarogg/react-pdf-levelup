@@ -19,7 +19,7 @@ import {
     // lists
     UL, OL, LI,
     // misc
-    Div, HR, Layout, BreakPage,
+    Div, HR, Layout, NextPage,
     ChartJS
 } from "../../frontend/src/components/core"
 
@@ -43,6 +43,6 @@ export {
     // lists
     UL, OL, LI,
     // misc
-    Div, HR, Layout, BreakPage,
+    Div, HR, Layout, NextPage,
     ChartJS
 }

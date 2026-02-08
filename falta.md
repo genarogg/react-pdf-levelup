@@ -6,3 +6,4 @@
 ** add ChartJS a la documentacion
 
 ** agregar los nuevos atributos de las tablas a la documentacion
+** agregar el nuevo props de layout a la documentacion (bgImg)
