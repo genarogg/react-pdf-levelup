@@ -1,5 +1,5 @@
 import Layout from "./basic/layout/Layout"
-import BreakPage from "./basic/layout/BreakPage"
+import NextPage from "./basic/layout/NextPage"
 import Img from "./basic/Img"
 import { Left, Right, Center } from "./basic/Position"
 import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "./basic/Etiquetas"
@@ -22,7 +22,7 @@ import ImgBg from "./basic/ImgBg"
 export {
   ImgBg,
   Layout,
-  BreakPage,
+  NextPage,
   Img,
   Left,
   Right,
