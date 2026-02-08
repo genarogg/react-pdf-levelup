@@ -43,7 +43,7 @@ const ImgBg: React.FC<ImgBgProps> = ({
     objectPosition = "center",
 }) => {
     return (
-        <View style={[styles.container, style]}>
+        <View style={[styles.container, style]} >
             <Image
                 src={src}
                 style={[
