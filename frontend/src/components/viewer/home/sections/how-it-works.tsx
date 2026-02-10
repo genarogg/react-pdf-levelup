@@ -4,10 +4,12 @@ const steps = [
   {
     step: "01",
     title: "Instala la librería",
-    description: "Agrega react-pdf-levelup a tu proyecto con npm o yarn.",
+    description: "Agrega react-pdf-levelup a tu proyecto con npm.",
     blocks: [
       {
-        code: `npm install @react-pdf-levelup/core`,
+        code: `npm install @react-pdf-levelup/core
+npm install @react-pdf-levelup/qr // opcional para códigos QR
+npm install @react-pdf-levelup/chart  // opcional para gráficos`,
         language: "bash" as const,
         filename: "terminal",
       },

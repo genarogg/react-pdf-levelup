@@ -15,6 +15,10 @@ const features = [
     description: "Construye diseños complejos combinando bloques de construcción simples y reutilizables.",
   },
   {
+    title: "Plugins Poderosos y Extensibles",
+    description: "Añade códigos QR, gráficos y más con plugins oficiales como @react-pdf-levelup/qr y @react-pdf-levelup/chart.",
+  },
+  {
     title: "Temas y Personalización Fáciles",
     description: "Sobrescribe colores, fuentes y espaciado con un objeto de tema simple o sintaxis tipo CSS.",
   },

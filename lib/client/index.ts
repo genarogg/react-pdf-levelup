@@ -1,3 +1,3 @@
-import decodeBase64Pdf from "../../frontend/src/functions/decodeBase64Pdf"
+import { decodeBase64Pdf, generatePDF } from "../../frontend/src/functions"
 
-export { decodeBase64Pdf }
+export { decodeBase64Pdf, generatePDF }
