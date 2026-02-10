@@ -1,6 +1,3 @@
-import { Layout, View, Text, StyleSheet } from "@react-pdf-levelup/core"
-import { ChartJS } from "@react-pdf-levelup/chart"
-
 const styles = StyleSheet.create({
   container: {
     padding: 24,

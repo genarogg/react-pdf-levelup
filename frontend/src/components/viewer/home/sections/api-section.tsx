@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CodeBlock } from "./code-block"
-import { ArrowRight, ExternalLink, Globe, Server, Shield, Zap } from "lucide-react"
+import { ArrowRight, ExternalLink, Globe, Server, Shield, Zap,Copy } from "lucide-react"
 
 const fetchCode = `
 import fs from "fs";
@@ -42,14 +42,13 @@ const generateAndSavePDF = async () => {
 
 const endpointsText = `
 https://react-pdf-levelup.nimbux.cloud/api
+// o descarga el ZIP con la API para desplegar tu propia instancia
 https://genarogg.github.io/react-pdf-levelup/public/api.zip
 `.trim()
 
 export function ApiSection() {
   const cloudUrl = "https://react-pdf-levelup.nimbux.cloud/api"
-  const zipUrl = "https://genarogg.github.io/react-pdf-levelup/public/api.zip"
   const [copiedCloud, setCopiedCloud] = useState(false)
-  const [copiedZip, setCopiedZip] = useState(false)
 
   const handleCopyCloud = () => {
     navigator.clipboard.writeText(cloudUrl)
@@ -57,18 +56,15 @@ export function ApiSection() {
     setTimeout(() => setCopiedCloud(false), 1500)
   }
 
-  const handleCopyZip = () => {
-    navigator.clipboard.writeText(zipUrl)
-    setCopiedZip(true)
-    setTimeout(() => setCopiedZip(false), 1500)
-  }
-
   return (
     <section id="api" className="border-t border-border px-4 py-16 sm:py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm text-muted-foreground">
-            <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent" />
+          <div className="inline-flex w-fit items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm font-medium text-accent">
+            <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-accent"></span>
+            </span>
             Multi‑lenguaje • HTTP • Self‑hosting
           </div>
           <h2 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground lg:text-4xl text-balance">
@@ -100,7 +96,7 @@ export function ApiSection() {
               <Server className="h-5 w-5 text-accent" />
               <h3 className="text-sm font-semibold text-foreground">Cloud o Self‑hosting</h3>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">Usa el endpoint gestionado o despliega el ZIP.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Usa el endpoint gestionado o despliega tu propia instancia.</p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center gap-2">
@@ -121,28 +117,29 @@ export function ApiSection() {
               <div className="mt-4" style={{ maxWidth: "82vw" }}>
                 <CodeBlock code={endpointsText} language="text" filename="Endpoints" />
               </div>
-              <div className="mt-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
-                <div className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto" onClick={handleCopyCloud} aria-label="Copiar Cloud API">
-                    {copiedCloud ? "Copiado" : "Usar Cloud API"}
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="w-full sm:w-auto">
+              <div className="mt-4 flex flex-col sm:flex-row sm:flex-wrap sm:justify-center gap-3">
+                <Button size="default" className="w-full sm:w-auto" onClick={handleCopyCloud} aria-label="Copiar Cloud API">
+                  {copiedCloud ? "Copiado" : "Copiar Endpoint Cloud"}
+                  <Copy className="ml-2 h-4 w-4" />
+                </Button>
+                <a
+                  href="https://genarogg.github.io/react-pdf-levelup/public/api.zip"
+                  download="api.zip"
+                  className="w-full sm:w-auto"
+                >
                   <Button
-                    size="lg"
+                    size="default"
                     variant="secondary"
                     className="w-full sm:w-auto font-semibold text-white"
-                    onClick={handleCopyZip}
-                    aria-label="Copiar enlace ZIP"
+                    aria-label="Descargar ZIP"
                   >
-                    {copiedZip ? "Copiado" : "Descargar API ZIP"}
+                    Descargar ZIP
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
-                </div>
-                <a href="/docs/guides/api-rest" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="secondary" className="w-full sm:w-auto font-semibold text-white">
-                    Ver documentación
+                </a>
+                <a href="/docs/guides/api-rest" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                  <Button size="default" variant="secondary" className="w-full font-semibold text-white">
+                    Documentación
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </a>

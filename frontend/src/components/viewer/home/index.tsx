@@ -39,15 +39,16 @@ export default function Home() {
                 <TemplatesSection />
                 <DeveloperFeatures />
                 <HowItWorks />
-                <WhyLevelupSection />
-                <ComparisonSection />
-
-                <UseCasesSection />
-                <TechStackSection />
                 <ApiSection />
-                <RoadmapSection />
-                <FaqSection />
-                <CtaSection />
+                {/* <WhyLevelupSection /> */}
+                {/* <UseCasesSection /> */}
+                {/* <TechStackSection /> */}
+                {/* <RoadmapSection /> */}
+                {/* <FaqSection /> */}
+                {/* <CtaSection /> */}
+
+                {/* secciones irrelevantes */}
+                {/* <ComparisonSection />  */}
             </main>
             <Footer />
             {showTop && (
