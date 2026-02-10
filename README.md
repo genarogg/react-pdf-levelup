@@ -1,10 +1,11 @@
+# react-pdf-levelup
+
+Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para facturas, reportes, certificados y más.
+
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
 </p>
 
-# react-pdf-levelup
-
-Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para facturas, reportes, certificados y más.
 
 # 🌐 **Playground en vivo:** 
 [https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
@@ -14,7 +15,7 @@ Generador de PDFs dinámicos con React. Esta herramienta te permite crear planti
 ## 📦 Instalación
 
 ```bash
-npm install react-pdf-levelup
+npm install @react-pdf-levelup/core
 ```
 
 ---
@@ -50,7 +51,7 @@ npm install react-pdf-levelup
 Genera un PDF en formato base64 a partir de un componente de React.
 
 ```ts
-import { generatePDF } from 'react-pdf-levelup';
+import { generatePDF } from '@react-pdf-levelup/core';
 import Template from "./Template"
 
 const pdfBase64 = await generatePDF({
@@ -75,7 +76,7 @@ const pdfBase64 = await generatePDF({
 Decodifica un PDF en base64 y permite descargarlo o abrirlo en una nueva pestaña.
 
 ```ts
-import { decodeBase64Pdf } from 'react-pdf-levelup';
+import { decodeBase64Pdf } from '@react-pdf-levelup/client';
 
 // Después de generar el PDF
 const pdfBase64 = await generatePDF({ template: MyTemplate });
@@ -119,7 +120,7 @@ import {
   Tr, 
   Th, 
   Td 
-} from 'react-pdf-levelup';
+} from '@react-pdf-levelup/core';
 
 import { QR, QRstyle } from '@react-pdf-levelup/qr';
 

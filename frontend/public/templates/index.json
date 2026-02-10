@@ -7,7 +7,12 @@
   {
     "id": "factura",
     "name": "Factura",
-    "path": "/templates/Factura.tsx"
+    "path": "/templates/facturas/Factura.tsx"
+  },
+  {
+    "id": "facturaInvoice",
+    "name": "facturaInvoice",
+    "path": "/templates/facturas/facturaInvoice.tsx"
   },
   {
     "id": "certificate",

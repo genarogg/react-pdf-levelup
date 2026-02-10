@@ -7,7 +7,7 @@ const steps = [
     description: "Agrega react-pdf-levelup a tu proyecto con npm o yarn.",
     blocks: [
       {
-        code: `npm install react-pdf-levelup
+        code: `npm install @react-pdf-levelup/core
 yarn add react-pdf-levelup`,
         language: "bash" as const,
         filename: "terminal",

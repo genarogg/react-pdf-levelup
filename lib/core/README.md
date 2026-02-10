@@ -14,7 +14,7 @@ or
 ## 📦 Instalación
 
 ```bash
-npm install react-pdf-levelup
+npm install @react-pdf-levelup/core
 ```
 
 ## 🚀 Características

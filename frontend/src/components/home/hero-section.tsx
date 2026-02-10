@@ -31,7 +31,7 @@ const Component = ({ data }) => {
 
 export function HeroSection() {
   const [copied, setCopied] = useState(false)
-  const installCommand = "npm install react-pdf-levelup"
+  const installCommand = "npm install @react-pdf-levelup/core"
 
   const handleCopy = () => {
     navigator.clipboard.writeText(installCommand)
