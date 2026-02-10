@@ -7,8 +7,7 @@ const steps = [
     description: "Agrega react-pdf-levelup a tu proyecto con npm o yarn.",
     blocks: [
       {
-        code: `npm install @react-pdf-levelup/core
-yarn add react-pdf-levelup`,
+        code: `npm install @react-pdf-levelup/core`,
         language: "bash" as const,
         filename: "terminal",
       },
@@ -21,7 +20,8 @@ yarn add react-pdf-levelup`,
       "Abre /playground y define un componente de React para tu PDF usando los componentes de react-pdf-levelup (Layout, texto, tablas, QR, etc.).",
     blocks: [
       {
-        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, Layout, P, QR, Row, Strong, UL } from "@react-pdf-levelup/core";
+        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, Layout, P,  Row, Strong, UL } from "@react-pdf-levelup/core";
+import { QR } from "@react-pdf-levelup/qr";
 
 const Component = ({ data }) => {
   return (

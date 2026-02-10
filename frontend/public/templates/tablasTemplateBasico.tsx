@@ -2,8 +2,88 @@
 const Component = ({ data }) => {
     return (
         <Layout size="A4" padding={20} showPageNumbers={false}>
-            <H5>Tabla Simple</H5>
+           <H5>Tabla con tamaños ajustados</H5>
             <Table>
+                <Thead  textColor="#282828">
+                    <Tr>
+                        <Th style={{ backgroundColor: "#14b8a6", width: "100%" }}>DOCUMENTO</Th>
+                        <Th style={{ backgroundColor: "#14b8a6", width: 150 }}>TIPO</Th>
+                        <Th style={{ backgroundColor: "#14b8a6", width: 120 }}>CANTIDAD</Th>
+                        <Th style={{ backgroundColor: "#14b8a6", width: 120 }}>COSTO</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr>
+                        <Td style={{ width: "100%" }}>Java</Td>
+                        <Td style={{ width: 150 }}>Simple</Td>
+                        <Td style={{ width: 120 }}>5</Td>
+                        <Td style={{ width: 120 }}>100</Td>
+                    </Tr>
+                    <Tr>
+                        <Td style={{ width: "100%" }}>JavaScript</Td>
+                        <Td style={{ width: 150 }}>Seguridad</Td>
+                        <Td style={{ width: 120 }}>6</Td>
+                        <Td style={{ width: 120 }}>100</Td>
+                    </Tr>
+                    <Tr>
+                        <Td style={{ width: "100%" }}>Python</Td>
+                        <Td style={{ width: 150 }}>Simple</Td>
+                        <Td style={{ width: 120 }}>7</Td>
+                        <Td style={{ width: 120 }}>100</Td>
+                    </Tr>
+                    <Tr>
+                        <Td style={{ width: "100%" }}>
+                            <Strong>
+                                Total
+                            </Strong>
+                        </Td>
+                        <Td style={{ width: 150 }}></Td>
+                        <Td style={{ width: 120, backgroundColor: "#14b8a6" }}>
+                            <Strong>
+                                300
+                            </Strong>
+                        </Td>
+                        <Td style={{ width: 120, backgroundColor: "#14b8a6" }}>
+                            <Strong>
+                                400
+                            </Strong>
+                        </Td>
+                    </Tr>
+                </Tbody>
+            </Table>
+              <H5>Tabla Coloreada</H5>
+            <Table style={{ width: "100%", borderRadius: "10px", overflow: "hidden" }}>
+                <Thead textColor="#fff">
+                    <Tr style={{ backgroundColor: "#8E44AD", textAlign: "left" }}>
+                        <Th>Empleado</Th>
+                        <Th>Días Asistidos</Th>
+                        <Th>Faltas</Th>
+                        <Th>Porcentaje de Asistencia</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr style={{ backgroundColor: "#F3E5F5" }}>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>Pedro Ramírez</Td>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>24</Td>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>2</Td>
+                        <Td style={{ fontWeight: "bold", color: "#27AE60" }}>92%</Td>
+                    </Tr>
+                    <Tr>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>Laura Fernández</Td>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>20</Td>
+                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>6</Td>
+                        <Td style={{ fontWeight: "bold", color: "#C0392B" }}>77%</Td>
+                    </Tr>
+                    <Tr style={{ backgroundColor: "#F3E5F5" }}>
+                        <Td>José García</Td>
+                        <Td>23</Td>
+                        <Td>3</Td>
+                        <Td style={{ fontWeight: "bold", color: "#27AE60" }}>88%</Td>
+                    </Tr>
+                </Tbody>
+            </Table>
+            <H5>Tabla Simple</H5>
+            <Table borderColor="#fff">
                 <Thead textAlign="center">
                     <Tr>
                         <Th>thead 1</Th>
@@ -92,86 +172,8 @@ const Component = ({ data }) => {
                     </Tr>
                 </Tbody>
             </Table>
-            <H5>Tabla con tamaños ajustados</H5>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th style={{ backgroundColor: "#14b8a6", width: "100%" }}>DOCUMENTO</Th>
-                        <Th style={{ backgroundColor: "#14b8a6", width: 150 }}>TIPO</Th>
-                        <Th style={{ backgroundColor: "#14b8a6", width: 120 }}>CANTIDAD</Th>
-                        <Th style={{ backgroundColor: "#14b8a6", width: 120 }}>COSTO</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    <Tr>
-                        <Td style={{ width: "100%" }}>Java</Td>
-                        <Td style={{ width: 150 }}>Simple</Td>
-                        <Td style={{ width: 120 }}>5</Td>
-                        <Td style={{ width: 120 }}>100</Td>
-                    </Tr>
-                    <Tr>
-                        <Td style={{ width: "100%" }}>JavaScript</Td>
-                        <Td style={{ width: 150 }}>Seguridad</Td>
-                        <Td style={{ width: 120 }}>6</Td>
-                        <Td style={{ width: 120 }}>100</Td>
-                    </Tr>
-                    <Tr>
-                        <Td style={{ width: "100%" }}>Python</Td>
-                        <Td style={{ width: 150 }}>Simple</Td>
-                        <Td style={{ width: 120 }}>7</Td>
-                        <Td style={{ width: 120 }}>100</Td>
-                    </Tr>
-                    <Tr>
-                        <Td style={{ width: "100%" }}>
-                            <Strong>
-                                Total
-                            </Strong>
-                        </Td>
-                        <Td style={{ width: 150 }}></Td>
-                        <Td style={{ width: 120, backgroundColor: "#14b8a6" }}>
-                            <Strong>
-                                300
-                            </Strong>
-                        </Td>
-                        <Td style={{ width: 120, backgroundColor: "#14b8a6" }}>
-                            <Strong>
-                                400
-                            </Strong>
-                        </Td>
-                    </Tr>
-                </Tbody>
-            </Table>
-            <H5>Tabla Coloreada</H5>
-            <Table style={{ width: "100%", borderRadius: "10px", overflow: "hidden" }}>
-                <Thead>
-                    <Tr style={{ backgroundColor: "#8E44AD", color: "white", textAlign: "left" }}>
-                        <Th>Empleado</Th>
-                        <Th>Días Asistidos</Th>
-                        <Th>Faltas</Th>
-                        <Th>Porcentaje de Asistencia</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    <Tr style={{ backgroundColor: "#F3E5F5" }}>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>Pedro Ramírez</Td>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>24</Td>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>2</Td>
-                        <Td style={{ fontWeight: "bold", color: "#27AE60" }}>92%</Td>
-                    </Tr>
-                    <Tr>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>Laura Fernández</Td>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>20</Td>
-                        <Td style={{ borderBottom: "1px solid #8E44AD" }}>6</Td>
-                        <Td style={{ fontWeight: "bold", color: "#C0392B" }}>77%</Td>
-                    </Tr>
-                    <Tr style={{ backgroundColor: "#F3E5F5" }}>
-                        <Td>José García</Td>
-                        <Td>23</Td>
-                        <Td>3</Td>
-                        <Td style={{ fontWeight: "bold", color: "#27AE60" }}>88%</Td>
-                    </Tr>
-                </Tbody>
-            </Table>
+         
+          
         </Layout>
     );
 };

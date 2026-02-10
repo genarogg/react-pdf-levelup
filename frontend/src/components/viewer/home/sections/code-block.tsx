@@ -19,7 +19,7 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
   }
 
   return (
-    <div className="relative rounded-xl border border-border bg-card shadow-sm">
+    <div className="relative rounded-xl border border-border bg-card shadow-sm code-block overflow-hidden">
       {filename && (
         <div className="flex items-center justify-between border-b border-border bg-secondary/40 px-3 py-2 sm:px-4">
           <span className="text-xs sm:text-sm text-muted-foreground truncate font-mono">{filename}</span>
@@ -33,11 +33,11 @@ export function CodeBlock({ code, language, filename }: CodeBlockProps) {
         </div>
       )}
       <div className="overflow-auto p-3 sm:p-4">
-        <pre className="font-mono text-[13px] sm:text-sm leading-relaxed min-w-full">
+        <pre className="font-mono text-[13px] sm:text-sm leading-[1.5] min-w-full">
           <code className="text-foreground block">
             {code.split("\n").map((line, i) => (
               <div key={i} className="flex">
-                <span className="mr-4 w-8 sm:w-10 select-none text-right text-muted-foreground/50 shrink-0">
+                <span className="line-number">
                   {i + 1}
                 </span>
                 <span className="whitespace-pre">{highlightSyntax(line)}</span>

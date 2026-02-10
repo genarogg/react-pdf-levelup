@@ -38,9 +38,9 @@ export default function Home() {
                 <ValueProposition />
                 <TemplatesSection />
                 <DeveloperFeatures />
-                <ComparisonSection />
                 <HowItWorks />
                 <WhyLevelupSection />
+                <ComparisonSection />
 
                 <UseCasesSection />
                 <TechStackSection />

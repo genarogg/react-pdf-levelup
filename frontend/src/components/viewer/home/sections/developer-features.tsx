@@ -24,9 +24,8 @@ const features = [
   },
 ]
 
-const exampleCode = `import { H1, Layout, Table, Tbody, Td, Th, Thead, Tr } from "@react-pdf-levelup/core";';
-
-const Component = ({ data }) => {
+const exampleCode = 
+`const Component = ({ data }) => {
   return (
     <Layout>
       <H1>Tabla</H1>
@@ -45,12 +44,6 @@ const Component = ({ data }) => {
             <Td width="20%">2</Td>
             <Td width="20%">$5.00</Td>
             <Td width="20%">$10.00</Td>
-          </Tr>
-          <Tr>
-            <Td width="40%">Item B</Td>
-            <Td width="20%">1</Td>
-            <Td width="20%">$8.00</Td>
-            <Td width="20%">$8.00</Td>
           </Tr>
         </Tbody>
       </Table>

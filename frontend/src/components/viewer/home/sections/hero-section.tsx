@@ -15,7 +15,8 @@ const Component = ({ data }) => {
     <Layout>
       <H4>Documento de Presentación</H4>
       <P>
-        Bienvenido a <Strong style={{color:"#3d65fd"}}>react-pdf-levelup</Strong>.
+        Bienvenido a <Strong style={{color:"#3d65fd"}}>react pdf
+        levelup</Strong>.
         Con esta librería puedes construir PDFs usando componentes de
         React de forma <Em>rápida</Em> y <Em>tipada</Em>.
       </P>
@@ -49,10 +50,15 @@ export function HeroSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 lg:items-center">
           <div className="flex flex-col gap-4 sm:gap-6">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/50 hero-badge px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm text-muted-foreground">
-              <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent" />
+            <div className="inline-flex w-fit items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm font-medium text-accent">
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-accent"></span>
+              </span>
               Código abierto y gratuito
             </div>
+
+            
 
             <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl text-balance">
               Crea PDFs hermosos con <span className="text-accent">Componentes de React</span>

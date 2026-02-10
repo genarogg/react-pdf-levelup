@@ -1,5 +1,62 @@
 @import "tailwindcss";
 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
 :root {
   --color-background: #020817;
   --color-foreground: #ffffff;
@@ -50,7 +107,7 @@ html, body, #root {
 }
 
 /* Suavizar bordes y estilos de tarjetas */
-.border-border { border-color: rgb(51 51 51 / 1); }
+
 .bg-card { background-color: rgba(255,255,255,0.01) !important; }
 
 /* Icon background (verde suavizado) */
@@ -77,7 +134,7 @@ table.w-full.border-collapse tr[class*="border-b"] {
 
 /* Selector para clases generadas con opacidad: border-border/50 */
 .border-border\/50 { border-color: rgb(51 51 51 / 1); }
-.border-border { border-color: rgb(51 51 51 / 0.16); }
+.border-border { border-color: rgb(255 255 255 / 0.16); }
 
 /* Asegurar que th/td no muestren bordes gruesos */
 table.w-full th, table.w-full td {
@@ -144,4 +201,54 @@ a, button, [role="button"], input[type="button"], input[type="submit"], label {
 /* Borde azul nativo para tarjeta Levelup */
 .levelup-card-border {
   border: 1px solid rgb(59 130 246 / 0.35);
+}
+
+/* CodeBlock estilos para Tailwind v4 - restaurar look original */
+.bg-secondary\/40 {
+  background-color: rgb(31 41 55 / 0.4);
+}
+
+/* Utilidades adicionales para Tailwind v4 */
+.blur-2xl {
+  --tw-blur: blur(40px);
+  /* filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow); */
+}
+
+.bg-accent\/5 {
+  background-color: rgb(16 185 129 / 0.05);
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.-inset-4 {
+  inset: -1rem;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.code-block pre {
+  line-height: 1.5;
+  font-size: 0.8125rem;
+}
+
+.code-block code {
+  display: block;
+}
+
+.code-block code div {
+  display: flex;
+  min-height: 1.5rem;
+}
+
+.code-block .line-number {
+  min-width: 0.5rem;
+  text-align: right;
+  margin-right: 1rem;
+  user-select: none;
+  color: rgb(156 163 175 / 0.5);
+  flex-shrink: 0;
 }
