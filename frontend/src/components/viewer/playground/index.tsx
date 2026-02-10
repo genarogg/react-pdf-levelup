@@ -5,10 +5,10 @@ import { useParams } from "react-router-dom"
 import PDFPreview from "./PDFPreview"
 
 import CodeEditor from "./CodeEditor"
-import ToolBar from "../toolbar/ToolBar"
-import { loadTemplateFile } from "../../utils/templateLoader"
+import ToolBar from "./toolbar/ToolBar"
+import { loadTemplateFile } from "./utils/templateLoader"
 
-import Header from '../header'
+import Header from '@/components/viewer/header'
 
 type TemplateMeta = {
   id: string
