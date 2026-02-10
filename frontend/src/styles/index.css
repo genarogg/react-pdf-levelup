@@ -50,7 +50,7 @@ html, body, #root {
 }
 
 /* Suavizar bordes y estilos de tarjetas */
-.border-border { border-color: rgba(255,255,255,0.06) !important; }
+.border-border { border-color: rgb(51 51 51 / 1); }
 .bg-card { background-color: rgba(255,255,255,0.01) !important; }
 
 /* Icon background (verde suavizado) */
@@ -72,17 +72,17 @@ table.w-full.border-collapse tr.border-b,
 table.w-full.border-collapse tr[class*="border-b"] {
   border-bottom-width: 1px !important;
   border-bottom-style: solid !important;
-  border-bottom-color: rgba(255,255,255,0.04) !important;
+  border-bottom-color: rgb(51 51 51 / 0.16) !important;
 }
 
 /* Selector para clases generadas con opacidad: border-border/50 */
-.border-border\/50 { border-color: rgba(255,255,255,0.04) !important; }
-.border-border { border-color: rgba(255,255,255,0.04) !important; }
+.border-border\/50 { border-color: rgb(51 51 51 / 1); }
+.border-border { border-color: rgb(51 51 51 / 0.16); }
 
 /* Asegurar que th/td no muestren bordes gruesos */
 table.w-full th, table.w-full td {
   border-bottom-width: 1px !important;
-  border-bottom-color: rgba(255,255,255,0.04) !important;
+  border-bottom-color: rgb(51 51 51 / 0.16) !important;
 }
 
 /* Hero badge overrides: fondo y borde más suaves */
@@ -111,7 +111,7 @@ a, button, [role="button"], input[type="button"], input[type="submit"], label {
 /* Suavizar bordes de tarjetas en why-levelup-section */
 .bg-card.border.border-border {
   border-width: 1px !important;
-  border-color: rgba(255,255,255,0.02) !important;
+  border-color: rgb(51 51 51 / 1);
 }
 
 /* Borde suave para tarjeta destacada (React PDF Levelup) */
@@ -139,4 +139,9 @@ a, button, [role="button"], input[type="button"], input[type="submit"], label {
 
 .built-on-badge > div {
   background-color: #3b82f6 !important;
+}
+
+/* Borde azul nativo para tarjeta Levelup */
+.levelup-card-border {
+  border: 1px solid rgb(59 130 246 / 0.35);
 }
