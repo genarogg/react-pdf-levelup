@@ -6,8 +6,9 @@ import { ArrowRight, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-const heroCode = `
-import { P, Layout, HR, Strong, H4, Em} from 'react-pdf-levelup'
+const heroCode = 
+`import { P, Layout, HR, Strong, H4, Em } from '@react-pdf-levelup/core'
+import { QR } from '@react-pdf-levelup/qr'
 
 const Component = ({ data }) => {
   return (
@@ -26,8 +27,8 @@ const Component = ({ data }) => {
       <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
     </Layout>
   )
-}
-`
+}`
+
 
 export function HeroSection() {
   const [copied, setCopied] = useState(false)
@@ -48,7 +49,7 @@ export function HeroSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16 lg:items-center">
           <div className="flex flex-col gap-4 sm:gap-6">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm text-muted-foreground">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-secondary/50 hero-badge px-3 py-1 text-xs sm:px-4 sm:py-1.5 sm:text-sm text-muted-foreground">
               <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent" />
               Código abierto y gratuito
             </div>

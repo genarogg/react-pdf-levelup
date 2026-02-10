@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --color-background: #020817;
+  --color-foreground: #ffffff;
+  --color-muted: #1a1a1a;
+  --color-muted-foreground: #9ca3af;
+  --color-border: #333333;
+  --color-primary: #3b82f6;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1f2937;
+  --color-accent: #10b981;
+}
+
+/* Colores personalizados con fallback */
+.text-accent { color: #10b981 !important; }
+.bg-accent { background-color: #10b981 !important; }
+.text-primary { color: #3b82f6 !important; }
+.bg-primary { background-color: #3b82f6 !important; }
+.text-secondary { color: #1f2937 !important; }
+.bg-secondary { background-color: #1f2937 !important; }
+.text-foreground { color: #ffffff !important; }
+.text-background { color: #020817 !important; }
+.bg-background { background-color: #020817 !important; }
+.text-muted { color: #1a1a1a !important; }
+.text-muted-foreground { color: #9ca3af !important; }
+.bg-muted { background-color: #1a1a1a !important; }
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+html, body, #root {
+  width: 100%;
+}
+
+/* Suavizar bordes y estilos de tarjetas */
+.border-border { border-color: rgba(255,255,255,0.06) !important; }
+.bg-card { background-color: rgba(255,255,255,0.01) !important; }
+
+/* Icon background (verde suavizado) */
+.bg-accent\/10 { background-color: rgba(16,185,129,0.12) !important; }
+.text-accent { color: #10b981 !important; }
+
+/* Card hover: borde verde tenue */
+.group:hover { border-color: rgba(16,185,129,0.45) !important; }
+
+/* Ajustes finos: bordes de secciones y separadores */
+.border-border-t { border-top-color: rgba(255,255,255,0.04) !important; }
+.border-border-b { border-bottom-color: rgba(255,255,255,0.04) !important; }
+
+/* Asegurar contraste en iconos dentro de cajas verdes */
+.group .rounded-lg > svg, .group .rounded-lg svg { color: #10b981; }
+
+/* Tablas de comparación: bordes más finos y menos contraste */
+table.w-full.border-collapse tr.border-b,
+table.w-full.border-collapse tr[class*="border-b"] {
+  border-bottom-width: 1px !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: rgba(255,255,255,0.04) !important;
+}
+
+/* Selector para clases generadas con opacidad: border-border/50 */
+.border-border\/50 { border-color: rgba(255,255,255,0.04) !important; }
+.border-border { border-color: rgba(255,255,255,0.04) !important; }
+
+/* Asegurar que th/td no muestren bordes gruesos */
+table.w-full th, table.w-full td {
+  border-bottom-width: 1px !important;
+  border-bottom-color: rgba(255,255,255,0.04) !important;
+}
+
+/* Hero badge overrides: fondo y borde más suaves */
+.hero-badge {
+  background-color: rgba(255,255,255,0.01) !important;
+  border-color: rgba(255,255,255,0.03) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.35) inset, 0 4px 18px rgba(2,8,23,0.6);
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.hero-badge > span {
+  width: 0.375rem !important;
+  height: 0.375rem !important;
+  background-color: #10b981 !important;
+  box-shadow: 0 0 0 6px rgba(16,185,129,0.03) inset, 0 0 8px rgba(16,185,129,0.02);
+}
+
+/* Ajuste para el texto dentro del badge si necesita mayor contraste */
+.hero-badge { color: rgba(255,255,255,0.92) !important; }

@@ -4,7 +4,7 @@ import fastifyCaching from '@fastify/caching';
 const caching = (server: FastifyInstance) => {
     return server.register(fastifyCaching, {
         privacy: fastifyCaching.privacy.PUBLIC,
-        expiresIn: 3600
+        expiresIn: 86400 // 24 horas para assets estáticos
     });
 }
 

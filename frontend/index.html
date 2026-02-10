@@ -1,30 +1,19 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-  <!-- ========================= -->
-  <!-- Básico -->
-  <!-- ========================= -->
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>React PDF LevelUp | Generador moderno de PDFs con React</title>
 
-  <!-- ========================= -->
   <!-- SEO -->
-  <!-- ========================= -->
-  <meta name="description"
-    content="La forma moderna de crear documentos PDF usando componentes React. Ideal para facturas, certificados, reportes y etiquetas." />
-  <meta name="keywords"
-    content="react pdf, react-pdf, generador pdf, pdf react, certificados pdf, facturas pdf, react components pdf, jsx pdf" />
+  <meta name="description" content="La forma moderna de crear documentos PDF usando componentes React. Ideal para facturas, certificados, reportes y etiquetas." />
+  <meta name="keywords" content="react pdf, react-pdf, generador pdf, pdf react, certificados pdf, facturas pdf, react components pdf, jsx pdf" />
   <meta name="author" content="Genaro Gonzalez" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://react-pdf-levelup.nimbux.cloud" />
 
-  <!-- ========================= -->
-  <!-- Open Graph (Facebook / WhatsApp / LinkedIn) -->
-  <!-- ========================= -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_ES" />
   <meta property="og:site_name" content="React PDF LevelUp" />
@@ -35,36 +24,30 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
-  <!-- ========================= -->
   <!-- Twitter Card -->
-  <!-- ========================= -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="React PDF LevelUp" />
-  <meta name="twitter:description"
-    content="Genera PDFs con React usando componentes reutilizables y preview en vivo." />
+  <meta name="twitter:description" content="Genera PDFs con React usando componentes reutilizables y preview en vivo." />
   <meta name="twitter:image" content="/asset/wallpaper.webp" />
 
-  <!-- ========================= -->
   <!-- Favicons -->
-  <!-- ========================= -->
   <link rel="icon" type="image/png" sizes="32x32" href="/iconos/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/iconos/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/iconos/favicon-192x192.png" />
 
-  <!-- ========================= -->
   <!-- PWA / Theme -->
-  <!-- ========================= -->
   <meta name="theme-color" content="#020817" />
   <meta name="color-scheme" content="dark light" />
 
-  <!-- ========================= -->
-  <!-- Performance -->
-  <!-- ========================= -->
-  <link rel="preload" as="image" href="/asset/wallpaper.webp" />
+  <!-- Performance & Preload -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="preload" as="image" href="/asset/wallpaper.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="/iconos/favicon-192x192.png" fetchpriority="high" />
+  <link rel="prefetch" as="image" href="/imgTemplates/qr.webp" />
+  <link rel="prefetch" as="image" href="/imgTemplates/certificado.webp" />
+  <link rel="prefetch" as="image" href="/imgTemplates/factura.webp" />
 
-  <!-- ========================= -->
-  <!-- Schema.org (Google Rich Results) -->
-  <!-- ========================= -->
+  <!-- Schema.org -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -81,54 +64,23 @@
     }
   </script>
 
-  <!-- ========================= -->
-  <!-- Tailwind CDN -->
-  <!-- ========================= -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            background: '#020817',
-            foreground: '#ffffff',
-            muted: '#1a1a1a',
-            'muted-foreground': '#9ca3af',
-            border: '#333333',
-            primary: '#3b82f6',
-            'primary-foreground': '#ffffff',
-            secondary: '#1f2937',
-            accent: '#10b981',
-          }
-        }
-      }
-    }
-  </script>
-
-
-  <!-- ========================= -->
-  <!-- UX -->
-  <!-- ========================= -->
   <style>
     html {
       scroll-behavior: smooth;
     }
   </style>
 </head>
-
-
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-  <!-- Google tag (gtag.js) -->
+
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1JBHGTPZ33"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-1JBHGTPZ33');
   </script>
 </body>
-
 </html>
