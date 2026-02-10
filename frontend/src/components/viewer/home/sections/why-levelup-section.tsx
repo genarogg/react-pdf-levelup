@@ -41,7 +41,7 @@ export function WhyLevelupSection() {
           </div>
 
           {/* React PDF Levelup */}
-          <div className="bg-gradient-to-br from-primary/5 via-cyan-500/5 to-primary/5 border-2 border-primary/20 rounded-2xl p-8 shadow-lg relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary/5 via-cyan-500/5 to-primary/5 border border-primary/50 rounded-2xl p-8 shadow-lg relative overflow-hidden">
             <div className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
               RECOMENDADO
             </div>
@@ -72,7 +72,7 @@ export function WhyLevelupSection() {
         </div>
 
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-3 bg-primary/10 border border-primary/20 rounded-full px-6 py-3">
+          <div className="inline-flex items-center gap-3 bg-primary/10 border border-primary/20 rounded-full px-6 py-3 built-on-badge">
             <div className="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
             <p className="text-sm font-medium text-foreground">Construido sobre React PDF - todo el poder, nada de dolor</p>
           </div>

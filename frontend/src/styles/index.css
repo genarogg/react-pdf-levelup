@@ -87,8 +87,8 @@ table.w-full th, table.w-full td {
 
 /* Hero badge overrides: fondo y borde más suaves */
 .hero-badge {
-  background-color: rgba(255,255,255,0.01) !important;
-  border-color: rgba(255,255,255,0.03) !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.09) !important;
   box-shadow: 0 1px 0 rgba(0,0,0,0.35) inset, 0 4px 18px rgba(2,8,23,0.6);
   padding-left: 0.75rem !important;
   padding-right: 0.75rem !important;
@@ -102,4 +102,41 @@ table.w-full th, table.w-full td {
 }
 
 /* Ajuste para el texto dentro del badge si necesita mayor contraste */
-.hero-badge { color: rgba(255,255,255,0.92) !important; }
+.hero-badge { color: rgba(255,255,255,0.5) !important; }
+/* Cursor pointer en links y elementos interactivos */
+a, button, [role="button"], input[type="button"], input[type="submit"], label {
+  cursor: pointer;
+}
+
+/* Suavizar bordes de tarjetas en why-levelup-section */
+.bg-card.border.border-border {
+  border-width: 1px !important;
+  border-color: rgba(255,255,255,0.02) !important;
+}
+
+/* Borde suave para tarjeta destacada (React PDF Levelup) */
+.border-2.border-primary\/20 {
+  border-width: 1px !important;
+  border-color: rgba(59,130,246,0.25) !important;
+}
+
+/* Borde azul más intenso para tarjeta Levelup actual */
+.border.border-primary\/10 {
+  border-color: rgba(59,130,246,0.35) !important;
+}
+
+/* Alternativa si se usa clase directa en div */
+[class*="border-primary"]:not(.border-primary-foreground) {
+  border-color: rgba(59,130,246,0.03) !important;
+}
+
+/* Badge "Construido sobre React PDF" */
+.built-on-badge {
+  background-color: rgba(59,130,246,0.08) !important;
+  border-color: rgba(59,130,246,0.15) !important;
+  backdrop-filter: blur(4px);
+}
+
+.built-on-badge > div {
+  background-color: #3b82f6 !important;
+}

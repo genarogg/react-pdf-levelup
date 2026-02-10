@@ -11,7 +11,7 @@
   },
   {
     "id": "facturaInvoice",
-    "name": "facturaInvoice",
+    "name": "factura invoice",
     "path": "/templates/facturas/facturaInvoice.tsx"
   },
   {
