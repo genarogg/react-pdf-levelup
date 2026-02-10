@@ -2,7 +2,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Home from "./components/viewer/home"
-import PdfViewer from "./components/viewer/PdfViewer"
+import PdfViewer from "./components/viewer/pdfViewer"
 import App from "./components/viewer/playground"
 
 createRoot(document.getElementById("root")!).render(

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react"
 import { PDFViewer, Document, Page, Text, View, StyleSheet, Font, Image, Link } from "@react-pdf/renderer"
 import * as React from "react"
 import * as Babel from "@babel/standalone"
-import * as CoreComponents from "../core"
+import * as CoreComponents from "@/components/core"
 
 // Componente de ejemplo predeterminado
 const DefaultDocument = () => (

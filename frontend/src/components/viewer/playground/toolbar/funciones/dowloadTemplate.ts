@@ -1,5 +1,5 @@
 // Importar todos los exports de react-pdf-levelup
-import * as ReactPdfLevelup from "../../core";
+import * as ReactPdfLevelup from "@/components/core";
 
 const downloadTemplate = (templateCode: string) => {
     // Configurar componentes por librería

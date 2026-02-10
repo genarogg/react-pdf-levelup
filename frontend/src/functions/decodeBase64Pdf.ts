@@ -28,7 +28,7 @@ const decodeBase64Pdf = (base64: string, fileName: string) => {
   // Revocar el objeto URL después de un tiempo
   setTimeout(() => {
     URL.revokeObjectURL(blobUrl);
-  }, 100);
+  }, 30000);
 };
 
 export default decodeBase64Pdf;
