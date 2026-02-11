@@ -1,6 +1,6 @@
 "use client"
-import React, { useState, useCallback, useMemo, Suspense, lazy } from "react"
-import { Github, Coffee, FileText, Play, Menu, X } from "lucide-react"
+import React, { useState, useCallback, Suspense, lazy } from "react"
+import { Github, FileText, Play, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
@@ -10,138 +10,267 @@ interface HeaderProps {
     context?: "playgroud" | "docs" | "home"
 }
 
-const linkStyles =
-    "text-gray-300 hover:text-white transition-colors duration-200 flex items-center gap-1.5 text-sm font-medium"
-const iconStyles = "w-4 h-4"
+// Configuración de enlaces de navegación
+const NAV_LINKS = [
+    { href: "#", label: "Inicio" },
+    { href: "#features", label: "Por qué" },
+    { href: "#templates", label: "Plantillas" },
+    { href: "#como-funciona", label: "Cómo funciona" },
+    { href: "#api", label: "API" },
+    { href: "#hoja-de-ruta", label: "Roadmap" },
+    { href: "#casos-uso", label: "Casos de uso" },
+    { href: "#support", label: "Soporte" },
+    { href: "#faq", label: "FAQ" },
+]
+
+// Componente de navegación reutilizable
+const Navigation: React.FC<{ className?: string }> = ({ className = "" }) => (
+    <nav className={className}>
+        {NAV_LINKS.map((link, index) => (
+            <a 
+                key={link.href} 
+                href={link.href} 
+                className="group relative text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium tracking-wide"
+                style={{ animationDelay: `${index * 50}ms` }}
+            >
+                <span className="relative z-10">{link.label}</span>
+                <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            </a>
+        ))}
+    </nav>
+)
+
+// Componente de enlaces de acción reutilizable
+const ActionLinks: React.FC<{ 
+    showPlayground?: boolean
+    showDocs?: boolean
+    className?: string
+    variant?: "default" | "mobile"
+}> = ({ 
+    showPlayground = true, 
+    showDocs = true,
+    className = "",
+    variant = "default"
+}) => (
+    <div className={`flex items-center ${variant === "mobile" ? "gap-3" : "gap-4"} ${className}`}>
+        {showDocs && (
+            <a 
+                href="/docs" 
+                className="group relative text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-2 text-sm font-medium"
+            >
+                {variant === "mobile" && <FileText className="w-4 h-4" />}
+                <span>Documentación</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+            </a>
+        )}
+        {showPlayground && (
+            <Link 
+                to="/playground" 
+                className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
+            >
+                <Play className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                {variant === "mobile" && <span className="ml-2">Playground</span>}
+            </Link>
+        )}
+        <a
+            href="https://github.com/genarogg/react-pdf-levelup"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
+        >
+            <Github className="w-4 h-4 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
+            {variant === "mobile" && <span className="ml-2">GitHub</span>}
+        </a>
+    </div>
+)
 
 const Header: React.FC<HeaderProps> = ({ context }) => {
     const [mobileOpen, setMobileOpen] = useState(false)
+    
     const handleMenuToggle = useCallback(() => {
         setMobileOpen(prev => !prev)
     }, [])
+
+    const isHome = context === "home"
+    const isPlayground = context === "playgroud"
+
     return (
         <>
-            <div className="h-[70px]"></div>
-            <header className="bg-gradient-to-r from-black via-gray-900 to-black border-b border-gray-800/50 px-2.5 py-3 shadow-2xl backdrop-blur-sm h-[70px] fixed top-0 left-0 right-0 z-50 will-change-auto">
-                {/* Gradiente de fondo con fixed para mejor rendimiento */}
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-800/5 via-gray-700/10 to-gray-800/5 pointer-events-none" style={{ willChange: 'auto' }}></div>
+            <div className="h-[70px]" />
+            <header className="fixed top-0 left-0 right-0 z-50 h-[70px]">
+                {/* Fondo con blur y gradiente */}
+                <div className="absolute inset-0 bg-black/80 backdrop-blur-xl border-b border-white/10" />
+                
+                {/* Gradiente decorativo superior */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+                
+                {/* Gradiente animado de fondo */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-50" />
+                
+                {/* Efecto de brillo en movimiento */}
+                <div 
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                        background: 'radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99, 102, 241, 0.15) 0%, transparent 50%)',
+                    }}
+                />
 
-                <div className="flex justify-between items-center relative z-10 h-full w-full">
-                    <div className="flex items-center gap-2">
-                        <Link to="/" className="flex items-center gap-2">
-                            <div className="w-8 h-8from-gray-600 rounded-lg flex items-center justify-center shadow-lg">
-                                <img src="/iconos/favicon-192x192.png" alt="@react-pdf-levelup/core" />
+                <div className="relative z-10 h-full px-4 md:px-6 lg:px-8">
+                    {/* Layout Desktop */}
+                    <div className="hidden lg:flex justify-between items-center h-full max-w-full">
+                        {/* Logo a la izquierda */}
+                        <Link 
+                            to="/" 
+                            className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
+                        >
+                            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-[3px] shadow-lg shadow-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300">
+                                <div className="w-full h-full bg-black rounded-[10px] flex items-center justify-center p-1">
+                                    <img 
+                                        src="/iconos/favicon-192x192.png" 
+                                        alt="@react-pdf-levelup/core"
+                                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                    />
+                                </div>
                             </div>
-
-                            <h1 className="text-xl md:text-2xl font-bold ">
+                            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap">
                                 React PDF Levelup
                             </h1>
                         </Link>
+
+                        {/* Enlaces a la derecha */}
+                        <div className="flex items-center gap-6">
+                            {isPlayground && (
+                                <a 
+                                    href="/docs" 
+                                    className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
+                                >
+                                    <FileText className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                                </a>
+                            )}
+
+                            {isHome && (
+                                <Navigation className="flex items-center gap-8" />
+                            )}
+                            
+                            <ActionLinks />
+
+                            {isPlayground && (
+                                <Suspense fallback={
+                                    <div className="w-8 h-8 rounded-lg bg-white/5 animate-pulse" />
+                                }>
+                                    <TemplateSelector />
+                                </Suspense>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    {/* Layout Mobile - Grid con columnas asimétricas */}
+                    <div className="lg:hidden grid grid-cols-[auto_1fr_auto] items-center h-full gap-3">
+                        {/* Columna Izquierda: Menú Hamburguesa */}
+                        <div className="flex justify-start">
+                            {isHome && (
+                                <button
+                                    className="relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5 group"
+                                    aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+                                    onClick={handleMenuToggle}
+                                >
+                                    <div className="relative w-5 h-5">
+                                        <Menu 
+                                            className={`absolute inset-0 transition-all duration-300 ${
+                                                mobileOpen 
+                                                    ? 'opacity-0 rotate-90 scale-0' 
+                                                    : 'opacity-100 rotate-0 scale-100'
+                                            }`} 
+                                        />
+                                        <X 
+                                            className={`absolute inset-0 transition-all duration-300 ${
+                                                mobileOpen 
+                                                    ? 'opacity-100 rotate-0 scale-100' 
+                                                    : 'opacity-0 -rotate-90 scale-0'
+                                            }`} 
+                                        />
+                                    </div>
+                                </button>
+                            )}
+                        </div>
 
-
-
-                        {context === "playgroud" ? (
-                            <a href="/docs" className={linkStyles}>
-                                <FileText className={iconStyles} />
-                            </a>
-                        ) : null}
-
-                        {context === "home" ? (
-                            <nav className="hidden md:flex items-center gap-4">
-                                <a href="#" className={linkStyles}>inicio</a>
-                                <a href="#features" className={linkStyles}>Porque</a>
-                                <a href="#templates" className={linkStyles}>Plantillas</a>
-                                <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                                <a href="#api" className={linkStyles}>API</a>
-                                <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
-                                <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
-                                <a href="#support" className={linkStyles}>suporte</a>
-                                <a href="#faq" className={linkStyles}>FAQ</a>
-                                {/* <a href="#comparacion" className={linkStyles}>Comparación</a> */}
-                                {/* <a href="#por-que-levelup" className={linkStyles}>vs</a> */}
-                            </nav>
-                        ) : null}
-                        <a href="/docs" className={linkStyles}>
-                            
-                            <span>Documentación</span>
-                        </a>
-                        <Link to="/playground" className={linkStyles}>
-                            <Play className={iconStyles} />
+                        {/* Columna Centro: Logo/Título - Ocupa todo el espacio disponible */}
+                        <Link 
+                            to="/" 
+                            className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
+                        >
+                            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-[3px] shadow-lg shadow-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300 flex-shrink-0">
+                                <div className="w-full h-full bg-black rounded-[9px] flex items-center justify-center p-1">
+                                    <img 
+                                        src="/iconos/favicon-192x192.png" 
+                                        alt="@react-pdf-levelup/core"
+                                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                    />
+                                </div>
+                            </div>
+                            <h1 className="text-xs xs:text-sm sm:text-base font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate">
+                                React PDF Levelup
+                            </h1>
                         </Link>
-                        <a
-                            href="https://github.com/genarogg/react-pdf-levelup"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={linkStyles}
-                        >
-                            <Github className={iconStyles} />
 
-                        </a>
-
-
-                        {/* <a
-                            href="https://www.paypal.com/paypalme/genaroggpaypal"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className=" hover:text-amber-300 transition-colors duration-200 flex items-center gap-1.5 text-sm font-medium"
-                        >
-                            <Coffee className={iconStyles} />
-
-                        </a> */}
-                        {context === "playgroud" ? (
-                            <Suspense fallback={<div className="w-4 h-4" />}>
-                                <TemplateSelector />
-                            </Suspense>
-                        ) : null}
-
-                        {context === "home" ? (
-                            <button
-                                className="md:hidden text-gray-300 hover:text-white transition-colors"
-                                aria-label="Abrir menú"
-                                onClick={handleMenuToggle}
+                        {/* Columna Derecha: Solo GitHub */}
+                        <div className="flex justify-end items-center flex-shrink-0">
+                            <a
+                                href="https://github.com/genarogg/react-pdf-levelup"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
                             >
-                                {mobileOpen ? <X className={iconStyles} /> : <Menu className={iconStyles} />}
-                            </button>
-                        ) : null}
+                                <Github className="w-5 h-5 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+                {/* Línea inferior decorativa */}
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             </header>
-            {context === "home" && mobileOpen ? (
-                <aside className="md:hidden bg-black/80 border-t border-gray-800/50 px-3 py-4">
-                    <nav className="flex flex-col gap-2">
-                        <a href="#" className={linkStyles}>inicio</a>
-                        <a href="#features" className={linkStyles}>Porque</a>
-                        <a href="#templates" className={linkStyles}>Plantillas</a>
-                        <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                        <a href="#api" className={linkStyles}>API</a>
-                        <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
-                        <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
-                        <a href="#support" className={linkStyles}>suporte</a>
-                        <a href="#faq" className={linkStyles}>FAQ</a>
-                    </nav>
-                    <div className="mt-3 flex items-center gap-3">
-                        <a href="https://github.com/genarogg/react-pdf-levelup" target="_blank" rel="noopener noreferrer" className={linkStyles}>
-                            <Github className={iconStyles} />
-                            <span>GitHub</span>
-                        </a>
 
-                        <a href="/playground" className={linkStyles}>
-                            <Play className={iconStyles} />
-                            <span className="hidden sm:inline">Playground</span>
-                        </a>
-
-                        <a href="/docs" className={linkStyles}>
-                          
-                            <span>Documentación</span>
-                        </a>
+            {/* Menú móvil mejorado */}
+            {isHome && (
+                <aside 
+                    className={`lg:hidden fixed top-[70px] left-0 right-0 z-40 transition-all duration-500 ease-out ${
+                        mobileOpen 
+                            ? 'opacity-100 translate-y-0' 
+                            : 'opacity-0 -translate-y-4 pointer-events-none'
+                    }`}
+                >
+                    <div className="bg-black/95 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+                        {/* Gradiente decorativo */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-purple-500/5 to-transparent pointer-events-none" />
+                        
+                        <div className="relative px-4 py-6 max-w-7xl mx-auto">
+                            <Navigation className="flex flex-col gap-4 mb-6" />
+                            
+                            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+                            
+                            <ActionLinks variant="mobile" className="justify-start" />
+                        </div>
                     </div>
                 </aside>
-            ) : null}
+            )}
+
+            <style>{`
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                nav a {
+                    animation: slideIn 0.5s ease-out backwards;
+                }
+            `}</style>
         </>
     )
 }
