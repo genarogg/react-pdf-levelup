@@ -5,7 +5,7 @@
   "description": "react-pdf-levelup: Generador dinámico de PDFs con componentes React. Incluye editor en vivo, plantillas predefinidas y API REST. Stack: Turborepo, React + Vite (frontend), Fastify (API), Astro (documentación)",
   "type": "module",
   "engines": {
-    "node": "22"
+    "node": ">=20"
   },
   "workspaces": [
     "frontend",
@@ -16,7 +16,8 @@
   "overrides": {
     "react": "19",
     "react-dom": "19",
-    "@react-pdf/renderer": "^4.3.2"
+    "@react-pdf/renderer": "^4.3.2",
+    "glob": "^13.0.0"
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
