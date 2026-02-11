@@ -53,14 +53,14 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             <nav className="hidden md:flex items-center gap-4">
                                 <a href="#features" className={linkStyles}>Porque</a>
                                 <a href="#templates" className={linkStyles}>Plantillas</a>
-                                <a href="#comparacion" className={linkStyles}>Comparación</a>
+                                {/* <a href="#comparacion" className={linkStyles}>Comparación</a>
                                 <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
                                 <a href="#por-que-levelup" className={linkStyles}>vs</a>
                                 <a href="#api" className={linkStyles}>API</a>
                                 <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
                                 <a href="#stack" className={linkStyles}>Stack</a>
                                 <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
-                                <a href="#faq" className={linkStyles}>FAQ</a>
+                                <a href="#faq" className={linkStyles}>FAQ</a> */}
                             </nav>
                         ) : null}
                         <Link to="/playground" className={linkStyles}>
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         </a>
 
 
-                        <a
+                        {/* <a
                             href="https://www.paypal.com/paypalme/genaroggpaypal"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         >
                             <Coffee className={iconStyles} />
 
-                        </a>
+                        </a> */}
                         {context === "playgroud" ? (
                             <Suspense fallback={<div className="w-4 h-4" />}>
                                 <TemplateSelector />

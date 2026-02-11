@@ -40,7 +40,7 @@ export function FaqSection() {
     <section id="faq" className="border-t border-border px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+          <h2 className="text-3xl font-bold tracking-tight  sm:text-4xl text-balance">
             Preguntas Frecuentes
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
@@ -51,7 +51,7 @@ export function FaqSection() {
         <Accordion type="single" collapsible className="mt-12">
           {faqs.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-border">
-              <AccordionTrigger className="text-left text-foreground hover:text-accent hover:no-underline">
+              <AccordionTrigger className="text-left  hover:text-accent hover:no-underline">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-muted-foreground">

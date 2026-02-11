@@ -123,6 +123,9 @@ html, body, #root {
 
 /* Asegurar contraste en iconos dentro de cajas verdes */
 .group .rounded-lg > svg, .group .rounded-lg svg { color: #10b981; }
+.bg-accent\/5{
+  color: #10b981;
+}
 
 /* Tablas de comparación: bordes más finos y menos contraste */
 table.w-full.border-collapse tr.border-b,
@@ -131,6 +134,7 @@ table.w-full.border-collapse tr[class*="border-b"] {
   border-bottom-style: solid !important;
   border-bottom-color: rgb(51 51 51 / 0.16) !important;
 }
+
 
 /* Selector para clases generadas con opacidad: border-border/50 */
 .border-border\/50 { border-color: rgb(51 51 51 / 1); }
@@ -228,6 +232,17 @@ a, button, [role="button"], input[type="button"], input[type="submit"], label {
 
 .absolute {
   position: absolute;
+}
+
+/* Hover states para Tailwind v4 */
+.hover\:no-underline:hover {
+  text-decoration: none !important;
+}
+
+/* Sobrescribir hover:underline en AccordionTrigger */
+[data-slot="accordion-trigger"].hover\:no-underline:hover {
+  text-decoration: none !important;
+  color: rgb(16 185 129);
 }
 
 .code-block pre {

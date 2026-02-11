@@ -4,18 +4,20 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { HeroSection } from "./sections/hero-section"
 import { ValueProposition } from "./sections/value-proposition"
-import { ComparisonSection } from "./sections/comparison-section"
 import { HowItWorks } from "./sections/how-it-works"
-import { WhyLevelupSection } from "./sections/why-levelup-section"
 import { DeveloperFeatures } from "./sections/developer-features"
 import { TemplatesSection } from "./sections/templates-section"
 import { UseCasesSection } from "./sections/use-cases-section"
-import { TechStackSection } from "./sections/tech-stack-section"
 import { ApiSection } from "./sections/api-section"
 import { RoadmapSection } from "./sections/roadmap-section"
 import { FaqSection } from "./sections/faq-section"
-import { CtaSection } from "./sections/cta-section"
+import { SupportAndDonationsSection } from "./sections/support-donations-section"
 import { Footer } from "./sections/footer"
+
+import { ComparisonSection } from "./sections/comparison-section"
+import { CtaSection } from "./sections/cta-section"
+import { TechStackSection } from "./sections/tech-stack-section"
+import { WhyLevelupSection } from "./sections/why-levelup-section"
 
 import { ArrowUp } from "lucide-react"
 
@@ -40,14 +42,15 @@ export default function Home() {
                 <DeveloperFeatures />
                 <HowItWorks />
                 <ApiSection />
-                {/* <WhyLevelupSection /> */}
-                {/* <UseCasesSection /> */}
-                {/* <TechStackSection /> */}
-                {/* <RoadmapSection /> */}
-                {/* <FaqSection /> */}
-                {/* <CtaSection /> */}
+                <RoadmapSection />
+                <UseCasesSection />
+                <SupportAndDonationsSection />
+                <FaqSection />
 
+                {/* <CtaSection /> */}
+                {/* <TechStackSection /> */}
                 {/* secciones irrelevantes */}
+                {/* <WhyLevelupSection /> */}
                 {/* <ComparisonSection />  */}
             </main>
             <Footer />
