@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Mail, MessageCircle, Heart, ExternalLink, Send, Sparkles, Crown } from "lucide-react"
+import { Mail, MessageCircle, Heart, ExternalLink, Send, Sparkles, Crown, MessageSquareShare } from "lucide-react"
 
 export function SupportAndDonationsSection() {
   return (
@@ -76,16 +76,16 @@ export function SupportAndDonationsSection() {
                 </a>
 
                 <a 
-                  href="https://discord.gg/jRRZJRjjCU" 
+                  href="https://MessageSquareShare.gg/jRRZJRjjCU" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-4 rounded-xl bg-secondary/50 hover:bg-secondary border border-transparent hover:border-indigo-500/20 transition-all duration-300 group/link"
                 >
                   <div className="p-2 rounded-lg bg-background group-hover/link:bg-indigo-50 dark:group-hover/link:bg-indigo-950/30 transition-colors">
-                    <Send className="h-5 w-5 text-indigo-600 group-hover/link:text-indigo-700 transition-colors flex-shrink-0" />
+                    <MessageSquareShare className="h-5 w-5 text-indigo-600 group-hover/link:text-indigo-700 transition-colors flex-shrink-0" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">Servidor Discord</p>
+                    <p className="font-medium text-foreground">Servidor MessageSquareShare</p>
                     <p className="text-sm text-muted-foreground">Únete a la comunidad</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />

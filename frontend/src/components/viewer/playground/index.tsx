@@ -3,10 +3,11 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 import PDFPreview from "./PDFPreview"
-
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
 import { loadTemplateFile } from "./utils/templateLoader"
+import { useMobileDetection } from "./hooks/useMobileDetection"
+import { MobileWarning } from "./MobileWarning"
 
 import Header from '@/components/viewer/header'
 
@@ -22,6 +23,8 @@ function Editor() {
   const { templateId } = useParams<{ templateId: string }>()
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [templatesLoaded, setTemplatesLoaded] = useState(false)
+  const [showMobileWarning, setShowMobileWarning] = useState(true)
+  const isMobile = useMobileDetection()
 
   // Clave para localStorage
   const STORAGE_KEY = "react-pdf-levelup-code"
@@ -93,6 +96,11 @@ function Editor() {
   }, [code, isLoading])
 
 
+
+  // Show mobile warning for mobile devices
+  if (isMobile && showMobileWarning) {
+    return <MobileWarning onContinue={() => setShowMobileWarning(false)} />
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">

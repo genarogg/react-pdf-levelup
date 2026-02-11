@@ -123,13 +123,18 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             to="/" 
                             className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
                         >
-                            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-[3px] shadow-lg shadow-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300">
-                                <div className="w-full h-full bg-black rounded-[10px] flex items-center justify-center p-1">
-                                    <img 
-                                        src="/iconos/favicon-192x192.png" 
-                                        alt="@react-pdf-levelup/core"
-                                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                    />
+                            <div className="relative w-10 h-10">
+                                {/* Glow effect exterior */}
+                                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] blur-md opacity-75"></div>
+                                {/* Borde con gradiente */}
+                                <div className="relative rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] p-[2px] shadow-lg shadow-blue-500/50 group-hover:shadow-xl group-hover:shadow-blue-400/70 transition-all duration-300">
+                                    <div className="w-full h-full bg-black rounded-[10px] flex items-center justify-center p-1">
+                                        <img 
+                                            src="/iconos/favicon-192x192.png" 
+                                            alt="@react-pdf-levelup/core"
+                                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap">
@@ -199,13 +204,18 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             to="/" 
                             className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
                         >
-                            <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-[3px] shadow-lg shadow-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300 flex-shrink-0">
-                                <div className="w-full h-full bg-black rounded-[9px] flex items-center justify-center p-1">
-                                    <img 
-                                        src="/iconos/favicon-192x192.png" 
-                                        alt="@react-pdf-levelup/core"
-                                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                    />
+                            <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
+                                {/* Glow effect exterior */}
+                                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] blur-md opacity-75"></div>
+                                {/* Borde con gradiente */}
+                                <div className="relative rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] p-[2px] shadow-lg shadow-blue-500/50 group-hover:shadow-xl group-hover:shadow-blue-400/70 transition-all duration-300">
+                                    <div className="w-full h-full bg-black rounded-[9px] flex items-center justify-center p-1">
+                                        <img 
+                                            src="/iconos/favicon-192x192.png" 
+                                            alt="@react-pdf-levelup/core"
+                                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <h1 className="text-xs xs:text-sm sm:text-base font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate">
