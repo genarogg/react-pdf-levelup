@@ -52,5 +52,91 @@ export default defineConfig({
     // Chunksize warning
     chunkSizeWarningLimit: 1000,
   },
-
+ 
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/docs': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/docs/_astro': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/_astro': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@id': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@fs': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+    }
+  },
+  preview: {
+    host: '0.0.0.0',
+    allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/docs': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/docs/_astro': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/_astro': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@id': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/@fs': {
+        target: 'http://localhost:4500',
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+    },
+  },
 })
