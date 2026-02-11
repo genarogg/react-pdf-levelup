@@ -15,12 +15,13 @@
   ],
   "overrides": {
     "react": "19",
-    "react-dom": "19"
+    "react-dom": "19",
+    "@react-pdf/renderer": "^4.3.2"
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
     "prebuild": "node ./global/clean-build.js",
-    "build": "npm run prebuild && turbo run build --filter=frontend --filter=docs --filter=api",
+    "build": "turbo run build  --filter=frontend --filter=docs --filter=api  --no-daemon --output-logs=full",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
