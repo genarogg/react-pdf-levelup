@@ -19,7 +19,8 @@
   },
   "scripts": {
     "dev": "turbo run dev --parallel",
-    "build": "turbo run build --filter=frontend --filter=docs --filter=api",
+    "prebuild": "node ./global/clean-build.js",
+    "build": "npm run prebuild && turbo run build --filter=frontend --filter=docs --filter=api",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
