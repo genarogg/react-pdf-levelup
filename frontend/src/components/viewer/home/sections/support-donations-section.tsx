@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Mail, MessageCircle, Heart, ExternalLink, Send, Sparkles } from "lucide-react"
+import { Mail, MessageCircle, Heart, ExternalLink, Send, Sparkles, Crown } from "lucide-react"
 
 export function SupportAndDonationsSection() {
   return (
@@ -144,6 +144,22 @@ export function SupportAndDonationsSection() {
                     </li>
                   </ul>
                 </div>
+
+                <a 
+                  href="https://patreon.com/genarogg" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full block group/patreon"
+                >
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white hover:from-orange-700 hover:to-red-700 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group/btn"
+                  >
+                    <Crown className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
+                    Apoyar en Patreon
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                </a>
 
                 <a 
                   href="https://www.paypal.com/paypalme/genaroggpaypal" 

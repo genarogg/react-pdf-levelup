@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
             <div className="h-[70px]"></div>
             <header className="bg-gradient-to-r from-black via-gray-900 to-black border-b border-gray-800/50 px-2.5 py-3 shadow-2xl backdrop-blur-sm h-[70px] fixed top-0 left-0 right-0 z-50 will-change-auto">
                 {/* Gradiente de fondo con fixed para mejor rendimiento */}
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-800/5 via-gray-700/10 to-gray-800/5 pointer-events-none" style={{willChange: 'auto'}}></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-800/5 via-gray-700/10 to-gray-800/5 pointer-events-none" style={{ willChange: 'auto' }}></div>
 
                 <div className="flex justify-between items-center relative z-10 h-full w-full">
                     <div className="flex items-center gap-2">
@@ -51,18 +51,23 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                         {context === "home" ? (
                             <nav className="hidden md:flex items-center gap-4">
+                                <a href="#" className={linkStyles}>inicio</a>
                                 <a href="#features" className={linkStyles}>Porque</a>
                                 <a href="#templates" className={linkStyles}>Plantillas</a>
-                                {/* <a href="#comparacion" className={linkStyles}>Comparación</a>
                                 <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                                <a href="#por-que-levelup" className={linkStyles}>vs</a>
                                 <a href="#api" className={linkStyles}>API</a>
-                                <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
-                                <a href="#stack" className={linkStyles}>Stack</a>
                                 <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
-                                <a href="#faq" className={linkStyles}>FAQ</a> */}
+                                <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
+                                <a href="#support" className={linkStyles}>suporte</a>
+                                <a href="#faq" className={linkStyles}>FAQ</a>
+                                {/* <a href="#comparacion" className={linkStyles}>Comparación</a> */}
+                                {/* <a href="#por-que-levelup" className={linkStyles}>vs</a> */}
                             </nav>
                         ) : null}
+                        <a href="/docs" className={linkStyles}>
+                            
+                            <span>Documentación</span>
+                        </a>
                         <Link to="/playground" className={linkStyles}>
                             <Play className={iconStyles} />
                         </Link>
@@ -109,14 +114,14 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
             {context === "home" && mobileOpen ? (
                 <aside className="md:hidden bg-black/80 border-t border-gray-800/50 px-3 py-4">
                     <nav className="flex flex-col gap-2">
+                        <a href="#" className={linkStyles}>inicio</a>
                         <a href="#features" className={linkStyles}>Porque</a>
                         <a href="#templates" className={linkStyles}>Plantillas</a>
-                        <a href="#comparacion" className={linkStyles}>Comparación</a>
                         <a href="#como-funciona" className={linkStyles}>funcionamiento</a>
-                        <a href="#por-que-levelup" className={linkStyles}>vs</a>
-                        <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
-                        <a href="#stack" className={linkStyles}>Stack</a>
+                        <a href="#api" className={linkStyles}>API</a>
                         <a href="#hoja-de-ruta" className={linkStyles}>Hoja de ruta</a>
+                        <a href="#casos-uso" className={linkStyles}>Casos de uso</a>
+                        <a href="#support" className={linkStyles}>suporte</a>
                         <a href="#faq" className={linkStyles}>FAQ</a>
                     </nav>
                     <div className="mt-3 flex items-center gap-3">
@@ -131,7 +136,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         </a>
 
                         <a href="/docs" className={linkStyles}>
-                            <FileText className={iconStyles} />
+                          
                             <span>Documentación</span>
                         </a>
                     </div>

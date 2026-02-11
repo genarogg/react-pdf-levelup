@@ -38,8 +38,8 @@ export default function Home() {
             <main>
                 <HeroSection />
                 <ValueProposition />
-                <TemplatesSection />
                 <DeveloperFeatures />
+                <TemplatesSection />
                 <HowItWorks />
                 <ApiSection />
                 <RoadmapSection />
@@ -47,9 +47,9 @@ export default function Home() {
                 <SupportAndDonationsSection />
                 <FaqSection />
 
+                {/* secciones irrelevantes */}
                 {/* <CtaSection /> */}
                 {/* <TechStackSection /> */}
-                {/* secciones irrelevantes */}
                 {/* <WhyLevelupSection /> */}
                 {/* <ComparisonSection />  */}
             </main>
