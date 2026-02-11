@@ -1,0 +1,62 @@
+---
+title: Lists
+description: Componentes para crear listas ordenadas y desordenadas.
+---
+
+## UL
+
+Lista desordenada (Unordered List).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `type` | `string` | `"disc"` | Tipo de viñeta (disc, circle, square). |
+
+### Ejemplo
+
+```tsx
+<UL type="square">
+  <LI>Elemento 1</LI>
+  <LI>Elemento 2</LI>
+</UL>
+```
+
+## OL
+
+Lista ordenada (Ordered List).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `type` | `string` | `"decimal"` | Tipo de numeración (decimal, lower-alpha, upper-alpha, lower-roman, upper-roman). |
+| `start` | `number` | `1` | Número inicial de la lista. |
+
+### Ejemplo
+
+```tsx
+<OL type="upper-roman" start={3}>
+  <LI>Item III</LI>
+  <LI>Item IV</LI>
+</OL>
+```
+
+## LI
+
+Elemento de lista (List Item).
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `value` | `number\|string` | `""` | Valor específico para este elemento (solo para OL). |
+
+### Ejemplo
+
+```tsx
+<LI value={10}>Valor específico</LI>
+```

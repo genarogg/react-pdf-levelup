@@ -1,0 +1,147 @@
+---
+title: Creando tu Primer Template
+description: Aprende a construir un template PDF desde cero usando React PDF Level Up.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+En esta guía, aprenderás a crear un template básico para una factura. Utilizaremos los componentes de layout y tabla para estructurar la información.
+
+## Estructura Básica
+
+Todo template debe ser un componente funcional de React que retorne un componente `Layout`.
+
+```tsx
+import { Layout, P } from 'react-pdf-levelup';
+
+const MyTemplate = ({ data }) => {
+  return (
+    <Layout>
+      <P>Hola Mundo</P>
+    </Layout>
+  );
+};
+
+export default MyTemplate;
+```
+
+<Steps>
+
+1.  **Define los datos**
+
+    Es buena práctica definir una interfaz para los datos que tu template espera recibir. Esto te ayudará con el autocompletado y validación de tipos.
+
+    ```tsx
+    interface InvoiceData {
+      number: string;
+      date: string;
+      client: {
+        name: string;
+        address: string;
+      };
+      items: {
+        description: string;
+        total: number;
+      }[];
+    }
+    ```
+
+2.  **Configura el Layout**
+
+    Usa `Layout` como contenedor principal. Puedes configurar el tamaño de papel, márgenes y otros metadatos.
+
+    ```tsx
+    <Layout size="A4" padding={30}>
+      {/* Contenido aquí */}
+    </Layout>
+    ```
+
+3.  **Crea el Encabezado**
+
+    Usa el sistema de Grid (`Row`, `Col`) para alinear elementos como el logo y la información de la empresa.
+
+    ```tsx
+    <Row>
+      <Col6>
+        <H1>FACTURA</H1>
+      </Col6>
+      <Col6>
+        <Right>
+          <P>Fecha: {data.date}</P>
+        </Right>
+      </Col6>
+    </Row>
+    ```
+
+4.  **Añade la Tabla de Items**
+
+    Utiliza los componentes `Table`, `Thead`, `Tbody`, `Tr`, `Th` y `Td` para listar los productos o servicios.
+
+    ```tsx
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Descripción</Th>
+          <Th textAlign="right">Total</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.items.map((item, index) => (
+          <Tr key={index}>
+            <Td>{item.description}</Td>
+            <Td textAlign="right">{item.total} €</Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+    ```
+
+</Steps>
+
+## Resultado Final
+
+Aquí tienes el código completo del template de factura:
+
+```tsx
+import React from 'react';
+import { 
+  Layout, Row, Col6, H1, P, Right, Table, Thead, Tbody, Tr, Th, Td 
+} from 'react-pdf-levelup';
+
+const InvoiceTemplate = ({ data }) => {
+  return (
+    <Layout size="A4">
+      <Row>
+        <Col6>
+          <H1>Factura #{data.number}</H1>
+          <P>Cliente: {data.client.name}</P>
+        </Col6>
+        <Col6>
+          <Right>
+            <P>{data.date}</P>
+          </Right>
+        </Col6>
+      </Row>
+      
+      <Table style={{ marginTop: 20 }}>
+        <Thead>
+          <Tr>
+            <Th>Descripción</Th>
+            <Th textAlign="right">Precio</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.items.map((item, i) => (
+            <Tr key={i}>
+              <Td>{item.description}</Td>
+              <Td textAlign="right">{item.total}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Layout>
+  );
+};
+
+export default InvoiceTemplate;
+```

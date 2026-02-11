@@ -1,0 +1,36 @@
+---
+title: QR
+description: Generador de código QR básico.
+---
+
+## QR
+
+Generador de código QR básico.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `value` | `string` | `""` | Texto o URL para el código QR. |
+| `size` | `number` | `150` | Tamaño en píxeles. |
+| `colorDark` | `string` | `"#000000"` | Color de los puntos. |
+| `colorLight` | `string` | `"#ffffff"` | Color de fondo. |
+| `margin` | `number` | `0` | Margen alrededor del QR. |
+| `errorCorrectionLevel` | `string` | `"M"` | Nivel de corrección (L, M, Q, H). |
+| `logo` | `string` | `""` | URL de la imagen del logo. |
+| `logoWidth` | `number` | `30` | Ancho del logo en píxeles. |
+| `logoHeight` | `number` | `30` | Alto del logo en píxeles. |
+
+### Ejemplo
+
+```tsx
+<QR 
+  value="https://example.com" 
+  size={150} 
+  colorDark="#000" 
+  colorLight="#fff" 
+  logo="https://picsum.photos/80" 
+  logoWidth={30} 
+  logoHeight={30} 
+/>
+```

@@ -1,0 +1,47 @@
+---
+title: Media
+description: Componentes para imágenes y códigos QR.
+---
+
+## Img
+
+Componente para mostrar imágenes.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `src` | `string` | `""` | URL de la imagen. |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<Img src="https://picsum.photos/400/200" style={{ width: 200 }} />
+```
+
+## ImgBg
+
+Imagen de fondo con contenido superpuesto.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `src` | `string` | `""` | URL de la imagen de fondo. |
+| `width` | `number\|string` | `"100%"` | Ancho del fondo. |
+| `height` | `number\|string` | `"100%"` | Alto del fondo. |
+| `opacity` | `number` | `0.2` | Opacidad del fondo (0-1). |
+| `objectFit` | `string` | `"cover"` | Ajuste de la imagen (cover, contain, fill, none, scale-down). |
+| `objectPosition` | `string` | `"center"` | Posición de la imagen. |
+| `fixed` | `boolean` | `false` | Fijar en todas las páginas. |
+| `style` | `object` | `{}` | Estilos adicionales. |
+
+### Ejemplo
+
+```tsx
+<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
+  <P>Texto sobre imagen de fondo</P>
+</ImgBg>
+```
+
