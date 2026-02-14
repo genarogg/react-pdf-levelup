@@ -10,7 +10,6 @@ interface InputProps {
   label?: string
   placeholder?: string
   value?: string
-  type?: "text" | "email" | "number" | "date" | "tel"
   width?: string | number
   height?: number
   style?: any
@@ -198,7 +197,6 @@ const Input: React.FC<InputProps> = ({
   label,
   placeholder,
   value,
-  type = "text",
   width = "100%",
   height,
   style,
@@ -257,7 +255,6 @@ const Textarea: React.FC<TextareaProps> = ({
 const Select: React.FC<SelectProps> = ({
   label,
   value,
-  options = [],
   width = "100%",
   height,
   style,
