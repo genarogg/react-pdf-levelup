@@ -18,6 +18,8 @@ import {
     Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12,
     // lists
     UL, OL, LI,
+    // form
+    Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label,
     // misc
     Div, HR, Layout, NextPage,
     ChartJS
@@ -42,6 +44,8 @@ export {
     Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12,
     // lists
     UL, OL, LI,
+    // form
+    Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label,
     // misc
     Div, HR, Layout, NextPage,
     ChartJS

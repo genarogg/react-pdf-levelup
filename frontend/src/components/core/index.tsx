@@ -18,6 +18,8 @@ import { decodeBase64Pdf, generatePDF } from "../../functions"
 
 import ImgBg from "./basic/ImgBg"
 
+import {Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label} from "./basic/Form"
+
 
 export {
   ImgBg,
@@ -79,6 +81,7 @@ export {
   generatePDF,
   renderToStream,
   Div,
-  HR
+  HR,
+  Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label
 }
 
