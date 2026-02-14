@@ -299,15 +299,17 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
       {error && !isCompiling && (
         <div style={{
           position: "absolute",
-          top: 10,
-          left: 10,
-          right: 10,
-          background: "#fff5f5",
+          top: "90%",
+          left: "20%",
+          
+          transform: "translate(-50%, -50%)",
+          background: "#131313",
           border: "1px solid #ff0000",
-          padding: 10,
+          padding: 15,
           borderRadius: 4,
           zIndex: 1000,
-          maxHeight: 100,
+          maxHeight: "60vh",
+          maxWidth: "80%",
           overflow: "auto"
         }}>
           <strong style={{ color: "#ff0000" }}>Error:</strong>

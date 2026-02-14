@@ -1,4 +1,4 @@
-import { Check, Clock, Sparkles } from "lucide-react"
+import { Check } from "lucide-react"
 
 const roadmapItems = [
   {
@@ -20,22 +20,22 @@ const roadmapItems = [
     icon: Check,
   },
   {
-    status: "in-progress",
+    status: "completed",
     title: "Tablas",
     description: "Thead, Tbody, Tr, Th y Td con paginación automática",
-    icon: Clock,
+    icon: Check,
   },
   {
-    status: "planned",
+    status: "completed",
     title: "Gráficos y Diagramas",
     description: "Componentes para visualización de datos integrados",
-    icon: Sparkles,
+    icon: Check,
   },
   {
-    status: "planned",
+    status: "completed",
     title: "Campos de Formulario",
     description: "Inputs PDF interactivos y elementos de formulario",
-    icon: Sparkles,
+    icon: Check,
   },
 ]
 
@@ -70,7 +70,7 @@ export function RoadmapSection() {
             Hoja de Ruta
           </h2>
           <p className="mt-3 sm:mt-4 text-base sm:text-lg text-muted-foreground">
-            Lo que hemos construido y lo que viene después.
+            Todas las características principales han sido implementadas.
           </p>
         </div>
 

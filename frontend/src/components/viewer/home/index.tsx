@@ -14,10 +14,10 @@ import { FaqSection } from "./sections/faq-section"
 import { SupportAndDonationsSection } from "./sections/support-donations-section"
 import { Footer } from "./sections/footer"
 
-import { ComparisonSection } from "./sections/comparison-section"
-import { CtaSection } from "./sections/cta-section"
-import { TechStackSection } from "./sections/tech-stack-section"
-import { WhyLevelupSection } from "./sections/why-levelup-section"
+// import { ComparisonSection } from "./sections/comparison-section"
+// import { CtaSection } from "./sections/cta-section"
+// import { TechStackSection } from "./sections/tech-stack-section"
+// import { WhyLevelupSection } from "./sections/why-levelup-section"
 
 import { ArrowUp } from "lucide-react"
 
