@@ -48,11 +48,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@monaco-editor/react"],
   },
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> funcional
   server: {
     host: '0.0.0.0',
     allowedHosts: true,

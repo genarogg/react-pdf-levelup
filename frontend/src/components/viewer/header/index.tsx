@@ -24,20 +24,13 @@ const NAV_LINKS = [
 ]
 
 // Componente de navegación reutilizable
-<<<<<<< HEAD
-const Navigation: React.FC<{ className?: string }> = ({ className = "" }) => (
-=======
 const Navigation: React.FC<{ className?: string, onNavigate?: () => void }> = ({ className = "", onNavigate }) => (
->>>>>>> funcional
     <nav className={className}>
         {NAV_LINKS.map((link, index) => (
             <a 
                 key={link.href} 
                 href={link.href} 
-<<<<<<< HEAD
-=======
                 onClick={() => onNavigate?.()}
->>>>>>> funcional
                 className="group relative text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium tracking-wide"
                 style={{ animationDelay: `${index * 50}ms` }}
             >
@@ -48,60 +41,19 @@ const Navigation: React.FC<{ className?: string, onNavigate?: () => void }> = ({
     </nav>
 )
 
-<<<<<<< HEAD
-// Componente de enlaces de acción reutilizable
-=======
 
 // Componente de enlaces de acción reutilizable (mejor soporte responsive)
->>>>>>> funcional
 const ActionLinks: React.FC<{ 
     showPlayground?: boolean
     showDocs?: boolean
     className?: string
     variant?: "default" | "mobile"
-<<<<<<< HEAD
-=======
     onActionClick?: () => void
->>>>>>> funcional
 }> = ({ 
     showPlayground = true, 
     showDocs = true,
     className = "",
     variant = "default"
-<<<<<<< HEAD
-}) => (
-    <div className={`flex items-center ${variant === "mobile" ? "gap-3" : "gap-4"} ${className}`}>
-        {showDocs && (
-            <a 
-                href="/docs" 
-                className="group relative text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-2 text-sm font-medium"
-            >
-                {variant === "mobile" && <FileText className="w-4 h-4" />}
-                <span>Documentación</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
-            </a>
-        )}
-        {showPlayground && (
-            <Link 
-                to="/playground" 
-                className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
-            >
-                <Play className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                {variant === "mobile" && <span className="ml-2">Playground</span>}
-            </Link>
-        )}
-        <a
-            href="https://github.com/genarogg/react-pdf-levelup"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
-        >
-            <Github className="w-4 h-4 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
-            {variant === "mobile" && <span className="ml-2">GitHub</span>}
-        </a>
-    </div>
-)
-=======
 }) => {
     const isMobile = variant === "mobile"
 
@@ -155,7 +107,6 @@ const ActionLinks: React.FC<{
         </div>
     )
 }
->>>>>>> funcional
 
 const Header: React.FC<HeaderProps> = ({ context }) => {
     const [mobileOpen, setMobileOpen] = useState(false)
@@ -196,38 +147,6 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             to="/" 
                             className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
                         >
-<<<<<<< HEAD
-                            <div className="relative w-10 h-10">
-                                {/* Glow effect exterior */}
-                                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] blur-md opacity-75"></div>
-                                {/* Borde con gradiente */}
-                                <div className="relative rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] p-[2px] shadow-lg shadow-blue-500/50 group-hover:shadow-xl group-hover:shadow-blue-400/70 transition-all duration-300">
-                                    <div className="w-full h-full bg-black rounded-[10px] flex items-center justify-center p-1">
-                                        <img 
-                                            src="/iconos/favicon-192x192.png" 
-                                            alt="@react-pdf-levelup/core"
-                                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap">
-                                React PDF Levelup
-                            </h1>
-                        </Link>
-
-                        {/* Enlaces a la derecha */}
-                        <div className="flex items-center gap-6">
-                            {isPlayground && (
-                                <a 
-                                    href="/docs" 
-                                    className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
-                                >
-                                    <FileText className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                                </a>
-                            )}
-
-=======
                            
                             <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap uppercase tracking-wide">
                                 React PDF Levelup
@@ -245,7 +164,6 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 </a>
                             )} */}
 
->>>>>>> funcional
                             {isHome && (
                                 <Navigation className="flex items-center gap-8" />
                             )}
@@ -297,26 +215,8 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             to="/" 
                             className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
                         >
-<<<<<<< HEAD
-                            <div className="relative w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0">
-                                {/* Glow effect exterior */}
-                                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] blur-md opacity-75"></div>
-                                {/* Borde con gradiente */}
-                                <div className="relative rounded-xl bg-gradient-to-br from-[#00d4ff] via-[#0099ff] to-[#0066ff] p-[2px] shadow-lg shadow-blue-500/50 group-hover:shadow-xl group-hover:shadow-blue-400/70 transition-all duration-300">
-                                    <div className="w-full h-full bg-black rounded-[9px] flex items-center justify-center p-1">
-                                        <img 
-                                            src="/iconos/favicon-192x192.png" 
-                                            alt="@react-pdf-levelup/core"
-                                            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <h1 className="text-xs xs:text-sm sm:text-base font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate">
-=======
                           
                             <h1 className="font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate uppercase tracking-wide">
->>>>>>> funcional
                                 React PDF Levelup
                             </h1>
                         </Link>
@@ -353,19 +253,11 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-purple-500/5 to-transparent pointer-events-none" />
                         
                         <div className="relative px-4 py-6 max-w-7xl mx-auto">
-<<<<<<< HEAD
-                            <Navigation className="flex flex-col gap-4 mb-6" />
-                            
-                            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
-                            
-                            <ActionLinks variant="mobile" className="justify-start" />
-=======
                             <Navigation className="flex flex-col gap-4 mb-6" onNavigate={() => setMobileOpen(false)} />
                             
                             <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
                             
                             <ActionLinks variant="mobile" className="justify-start" onActionClick={() => setMobileOpen(false)} />
->>>>>>> funcional
                         </div>
                     </div>
                 </aside>

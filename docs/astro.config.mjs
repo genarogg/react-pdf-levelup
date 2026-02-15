@@ -22,7 +22,6 @@ export default defineConfig({
 				label: 'GitHub',
 				href: 'https://github.com/genarogg/react-pdf-levelup'
 			}],
-			disable404Route: true,
 			sidebar: [
 				{
 					label: 'Inicio',
