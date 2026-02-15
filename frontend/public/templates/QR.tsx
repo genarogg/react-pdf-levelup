@@ -9,14 +9,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
-    color: "#333",
+  
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     marginTop: 20,
     marginBottom: 10,
-    borderBottom: "1px solid #eee",
+    borderBottom: "1px solid #adadadff",
     paddingBottom: 5,
   },
   grid: {
@@ -46,7 +46,12 @@ const styles = StyleSheet.create({
 
 const Component = () => {
   return (
-    <Layout size="A4" showPageNumbers={true}>
+    <Layout size="A4" showPageNumbers={true} style={{
+      paddingBottom:0,
+      paddingTop:0,
+      backgroundColor:"#34296a",
+        color: "#ffffffff",
+      }}>
       <View style={styles.container}>
         <Text style={styles.title}>QR Code Showcase</Text>
         
