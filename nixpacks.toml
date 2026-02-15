@@ -9,7 +9,7 @@ cmds = [
 
 [phases.build]
 cmds = [
-    'npx turbo run build --filter=frontend --filter=docs --filter=api --no-daemon --output-logs=full --ui=stream --log-order=stream --concurrency=1'
+    'npx turbo run build'
 ]
 
 [start]
