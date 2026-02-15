@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "engines": {
     "node": ">=20"

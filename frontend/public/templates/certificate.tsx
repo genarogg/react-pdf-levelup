@@ -31,13 +31,12 @@ const Component = () => {
       style={{ fontFamily: "BebasNeue" }}
     >
       <ImgBg
-        src="/certificado.png"
+        src="/asset/certificado.png"
         objectPosition="center"
         objectFit="cover"
         opacity={1}
         style={{
-          position: "absolute",
-          height: "600px"
+            height:530
         }}
       >
         <BR /><BR /><BR />

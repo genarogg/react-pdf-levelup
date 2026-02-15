@@ -6,25 +6,25 @@ const templates = [
   {
     title: "Certificate of Achievement",
     category: "Certificado",
-    image: "/imgTemplates/certificado.webp",
+    image: "/imgTemplates/certificado-mini.webp",
     href: "/playground/template/certificate",
     icon: FileText,
     color: "from-blue-500/20 to-cyan-500/20",
     borderColor: "group-hover:border-blue-500/50",
   },
-  {
-    title: "Factura Simple",
-    category: "Factura",
-    image: "/imgTemplates/factura.webp",
-    href: "/playground/template/factura",
-    icon: Receipt,
-    color: "from-emerald-500/20 to-green-500/20",
-    borderColor: "group-hover:border-emerald-500/50",
-  },
+  // {
+  //   title: "Factura Simple",
+  //   category: "Factura",
+  //   image: "/imgTemplates/factura.webp",
+  //   href: "/playground/template/factura",
+  //   icon: Receipt,
+  //   color: "from-emerald-500/20 to-green-500/20",
+  //   borderColor: "group-hover:border-emerald-500/50",
+  // },
   {
     title: "Tablas Básicas",
     category: "Tablas",
-    image: "/imgTemplates/tablas-basicas.webp",
+    image: "/imgTemplates/tablas-mini.webp",
     href: "/playground/template/tablasTemplateBasico",
     icon: Table,
     color: "from-purple-500/20 to-pink-500/20",
@@ -33,9 +33,18 @@ const templates = [
   {
     title: "QR Example",
     category: "QR Code",
-    image: "/imgTemplates/qr.webp",
+    image: "/imgTemplates/template-qr-mini.webp",
     href: "/playground/template/QRTemplate",
     icon: QrCode,
+    color: "from-orange-500/20 to-red-500/20",
+    borderColor: "group-hover:border-orange-500/50",
+  },
+  {
+    title: "Factura Avanzada",
+    category: "Factura",
+    image: "/imgTemplates/template-invoce-mini.webp",
+    href: "/playground/template/facturaInvoice",
+    icon: Receipt,
     color: "from-orange-500/20 to-red-500/20",
     borderColor: "group-hover:border-orange-500/50",
   },
@@ -63,7 +72,7 @@ export function TemplatesSection() {
               Formato optimizado y diseño moderno.
             </p>
           </div>
-           <Button
+          {/* <Button
             variant="outline"
             className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary"
             asChild
@@ -72,7 +81,7 @@ export function TemplatesSection() {
               View All Templates
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-          </Button>
+          </Button> */}
         </div>
 
         {/* Templates Grid */}
@@ -90,11 +99,11 @@ export function TemplatesSection() {
               >
                 {/* Gradient Overlay Background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${template.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                
+
                 {/* Image Container - 16/9 Aspect Ratio */}
                 <div className="relative aspect-video overflow-hidden bg-secondary/30">
                   {/* Decorative Corner Badge */}
-                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-background/90 backdrop-blur-sm px-3 py-1.5 shadow-lg border border-border">
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-background/90 backdrop-blur-sm px-3 py-1.5 shadow-lg border border-border" style={{ backgroundColor: "#ffffff50" }}>
                     <Icon className="h-3.5 w-3.5 text-accent" />
                     <span className="text-xs font-semibold text-accent uppercase tracking-wide">
                       {template.category}
@@ -120,7 +129,7 @@ export function TemplatesSection() {
                     </h3>
                     <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all duration-300 flex-shrink-0" />
                   </div>
-                  
+
                   {/* Progress bar effect */}
                   <div className="h-0.5 w-0 bg-gradient-to-r from-accent to-accent/50 group-hover:w-full transition-all duration-500 rounded-full mt-3" />
                 </div>

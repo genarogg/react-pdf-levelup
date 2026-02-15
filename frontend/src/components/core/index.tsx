@@ -4,6 +4,7 @@ import Img from "./basic/Img"
 import { Left, Right, Center } from "./basic/Position"
 import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "./basic/Etiquetas"
 import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/Tablet"
+
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
 
 import QR from "./qr/QR"
@@ -12,11 +13,16 @@ import ChartJS from "./charts/ChartJS"
 
 import { UL, OL, LI } from "./basic/Lista"
 
-import { View, Text, StyleSheet, Font, renderToStream, Document, Page } from "@react-pdf/renderer"
+import {
+  View, Text, StyleSheet, Font, renderToStream, Document, Page,
+  Svg, Defs, LinearGradient, Stop, Rect,
+} from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 
 import ImgBg from "./basic/ImgBg"
+
+import { Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label } from "./basic/Form"
 
 
 export {
@@ -73,12 +79,14 @@ export {
   Text,
   Document,
   Page,
+  Svg, Defs, LinearGradient, Stop, Rect,
   StyleSheet,
   Font,
   decodeBase64Pdf,
   generatePDF,
   renderToStream,
   Div,
-  HR
+  HR,
+  Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label
 }
 

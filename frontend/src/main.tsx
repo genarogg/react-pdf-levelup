@@ -6,7 +6,7 @@ import "./styles/index.css"
 // Importar componentes
 import Home from "./components/viewer/home"
 import PdfViewer from "./components/viewer/pdfViewer"
-import App from "./components/viewer/playground"
+import Playground from "./components/viewer/playground"
 
 const root = document.getElementById("root")
 if (!root) {
@@ -18,8 +18,8 @@ createRoot(root).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/playground" element={<App />} />
-        <Route path="/playground/template/:templateId" element={<App />} />
+        <Route path="/playground" element={<Playground />} />
+        <Route path="/playground/template/:templateId" element={<Playground />} />
         <Route path="/viewer" element={<PdfViewer />} />
       </Routes>
     </BrowserRouter>

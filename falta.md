@@ -9,3 +9,13 @@
 ** agregar el nuevo props de layout a la documentacion (bgImg)
 
 ** agregar etiquetas de formulario
+
+** agregar deepwiki [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/genarogg/react-pdf-levelup)
+
+** agregar Códigos de barras
+
+** agregar iconos
+
+** buscar la manera de crear gradiantes
+
+** agregar metadatos
