@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { Helmet } from "react-helmet-async"
+
 import PDFPreview from "./PDFPreview"
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
@@ -104,13 +104,7 @@ function Editor() {
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
-      <Helmet>
-        <title>React PDF Levelup - Playground</title>
-        <meta name="description" content="Interactive playground para crear PDFs con React" />
-        <meta name="keywords" content="React, PDF, Playground" />
-        <meta property="og:title" content="Playground - React PDF Levelup" />
-        <meta property="og:description" content="Interactive playground para crear PDFs con React" />
-      </Helmet>
+     
       <Header code={code} context="playgroud" />
 
       <main className="flex flex-1 overflow-hidden">

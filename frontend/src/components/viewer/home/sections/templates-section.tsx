@@ -72,7 +72,7 @@ export function TemplatesSection() {
               Formato optimizado y diseño moderno.
             </p>
           </div>
-          <Button
+          {/* <Button
             variant="outline"
             className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary"
             asChild
@@ -81,7 +81,7 @@ export function TemplatesSection() {
               View All Templates
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
-          </Button>
+          </Button> */}
         </div>
 
         {/* Templates Grid */}
