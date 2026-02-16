@@ -70,8 +70,8 @@ const ActionLinks: React.FC<{
                             <FileText className="w-4 h-4" />
                         </span>
                     )}
-                    <span className="truncate whitespace-nowrap">Documentación</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+                    {/* <span className="truncate whitespace-nowrap">Documentación</span> */}
+                    {/* <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" /> */}
                 </a>
             )}
 
