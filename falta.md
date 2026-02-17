@@ -10,7 +10,7 @@
 
 ** agregar etiquetas de formulario
 
-** agregar deepwiki [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/genarogg/react-pdf-levelup)
+
 
 ** agregar Códigos de barras
 
