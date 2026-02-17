@@ -7,7 +7,7 @@ const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
 interface HeaderProps {
     code?: any
-    context?: "playgroud" | "docs" | "home"
+    context?: String
 }
 
 // Configuración de enlaces de navegación
@@ -59,10 +59,10 @@ const ActionLinks: React.FC<{
 
     return (
         <div className={`flex items-center min-w-0 ${isMobile ? "gap-3" : "gap-4"} ${className}`}>
-            {showDocs && (
+            {/* {showDocs && (
                 <a
                     href="/docs"
-                    onClick={() => (/* noop, let parent override if needed */ null)}
+                    onClick={() => (null)}
                     className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
                 >
                     {!isMobile && (
@@ -70,22 +70,21 @@ const ActionLinks: React.FC<{
                             <FileText className="w-4 h-4" />
                         </span>
                     )}
-                    {/* <span className="truncate whitespace-nowrap">Documentación</span> */}
-                    {/* <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" /> */}
+            
                 </a>
-            )}
+            )} */}
 
             {showPlayground && (
                 <Link
                     to="/playground"
-                    onClick={() => (/* noop, parent may close menu via onActionClick prop */ null)}
+                    onClick={() => (null)}
                     className="group relative flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-purple-500/5 hover:bg-purple-500/10"
                 >
-                    {!isMobile && (
+                    {/* {!isMobile && (
                         <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md bg-transparent group-hover:bg-white/5 transition-colors duration-200">
                             <Play className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
                         </span>
-                    )}
+                    )} */}
                     {isMobile && <span className="truncate whitespace-nowrap">Playground</span>}
                 </Link>
             )}
@@ -97,11 +96,11 @@ const ActionLinks: React.FC<{
                 onClick={() => (/* noop, external link */ null)}
                 className="group relative flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-slate-500/6 hover:bg-slate-500/12"
             >
-                {!isMobile && (
+               {/*  {!isMobile && (
                     <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md bg-transparent group-hover:bg-white/5 transition-colors duration-200">
                         <Github className="w-4 h-4 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
                     </span>
-                )}
+                )} */}
                 {isMobile && <span className="truncate whitespace-nowrap">GitHub</span>}
             </a>
         </div>
@@ -155,14 +154,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
                         {/* Enlaces a la derecha */}
                         <div className="flex items-center gap-6">
-                            {/* {isPlayground && (
-                                <a 
-                                    href="/docs" 
-                                    className="group relative p-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-white/5"
-                                >
-                                    <FileText className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                                </a>
-                            )} */}
+                        
 
                             {isHome && (
                                 <Navigation className="flex items-center gap-8" />

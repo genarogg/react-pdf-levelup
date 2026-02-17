@@ -9,7 +9,7 @@ import { loadTemplateFile } from "./utils/templateLoader"
 import { useMobileDetection } from "./hooks/useMobileDetection"
 import { MobileWarning } from "./MobileWarning"
 
-import Header from '@/components/viewer/header'
+import Header from '@/components/viewer/layout/Header'
 
 type TemplateMeta = {
   id: string
