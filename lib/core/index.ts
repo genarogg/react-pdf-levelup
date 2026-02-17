@@ -22,7 +22,8 @@ import {
     Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label,
     // misc
     Div, HR, Layout, NextPage,
-    ChartJS
+    ChartJS,
+    Icon
 } from "../../frontend/src/components/core"
 
 export {
@@ -48,5 +49,6 @@ export {
     Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label,
     // misc
     Div, HR, Layout, NextPage,
-    ChartJS
+    ChartJS,
+    Icon
 }

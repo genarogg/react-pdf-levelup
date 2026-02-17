@@ -32,6 +32,7 @@
     "chartjs-node-canvas": "^5.0.0",
     "class-variance-authority": "^0.7.1",
     "jsdom": "^27.4.0",
+    "lucide": "^0.562.0",
     "lucide-react": "^0.562.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
