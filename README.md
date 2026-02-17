@@ -42,12 +42,15 @@ https://react-pdf-levelup.nimbux.cloud/playground
 
 | Plugin | Installation | Documentation |
 |--------|-------------|---------------|
-| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [Docs QR](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
-| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) || **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
-| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Docs Client](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
+| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 
+## 📚 Documentation
 
-## 🌐 API REST para generar PDFs
+- **Guides & API:**  
+  https://react-pdf-levelup.nimbux.cloud/docs
 
 - **REST API Guide:**  
   https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest
@@ -62,5 +65,15 @@ Returns a JSON response with `data.pdf`, which contains the generated PDF in bas
 - Cloud:  
   https://react-pdf-levelup.nimbux.cloud/api
 
-- Auto-hospedado ZIP:  
-https://genarogg.github.io/react-pdf-levelup/public/api.zip
+- Self-hosted ZIP:  
+  https://genarogg.github.io/react-pdf-levelup/public/api.zip
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome. Please open an issue or submit a pull request.
+
+## 📄 License
+
+MIT License
