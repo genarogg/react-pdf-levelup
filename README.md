@@ -44,7 +44,12 @@ npm install @react-pdf-levelup/core
 | **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [Docs QR](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
 | **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) || **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 | **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Docs Client](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Docs Icons](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 
+## 📚 Documentación
+
+- **Guías y API:** [https://react-pdf-levelup.nimbux.cloud/docs](https://react-pdf-levelup.nimbux.cloud/docs)
+- **API REST Guide:** [https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest](https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest)
 
 ## 🌐 API REST para generar PDFs
 
@@ -58,3 +63,14 @@ https://react-pdf-levelup.nimbux.cloud/api
 
 - Auto-hospedado ZIP:  
 https://genarogg.github.io/react-pdf-levelup/public/api.zip
+
+---
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
+
+
+## 📄 Licencia
+
+MIT License
