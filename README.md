@@ -1,6 +1,6 @@
 # react-pdf-levelup
 
-Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para facturas, reportes, certificados y más.
+Dynamic PDF generator built with React. This tool allows you to create PDF templates using custom JSX components and preview them in real time within a web application. Ideal for invoices, reports, certificates, and more.
 
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
@@ -8,71 +8,72 @@ Generador de PDFs dinámicos con React. Esta herramienta te permite crear planti
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/genarogg/react-pdf-levelup)
 
-## 📦 Instalación
+## 📦 Installation
 
 ```bash
 npm install @react-pdf-levelup/core
 ```
 
-## 🌐 Playground en vivo:
+## 🌐 Live Playground
 
-[https://react-pdf-levelup.nimbux.cloud/playground](https://react-pdf-levelup.nimbux.cloud/playground)
+https://react-pdf-levelup.nimbux.cloud/playground
 
-## ✨ Características
+## ✨ Features
 
-- 🧱 Componentes React para construir PDFs
-  - Layout 
-  - Text 
-  - Table
-  - Grid
-  - Lists 
-  - Form
-  - QR 
-  - ChartJS
+- 🧱 React components to build PDFs
+  - Layout  
+  - Text  
+  - Table  
+  - Grid  
+  - Lists  
+  - Form  
+  - QR  
+  - ChartJS  
 - Playground
-  - 🖼 Vista previa en tiempo real
-  - 🎨 Editor en vivo con Monaco
-  - 📥 Descarga automática de PDFs
-- 🧩 Sistema de plugins modular
-- 🔄 Generación asíncrona de PDFs en base64
-
+  - 🖼 Real-time preview  
+  - 🎨 Live editor powered by Monaco  
+  - 📥 Automatic PDF download  
+- 🧩 Modular plugin system  
+- 🔄 Asynchronous PDF generation in base64  
 
 ## 🔌 Plugins
 
-`react-pdf-levelup` cuenta con un sistema de plugins que permite agregar nuevas capacidades sin sobrecargar el núcleo de la librería, manteniendo el core ligero y modular.
+`react-pdf-levelup` includes a plugin system that allows you to extend functionality without overloading the core library, keeping it lightweight and modular.
 
-| Plugin | Instalación | Documentación |
+| Plugin | Installation | Documentation |
 |--------|-------------|---------------|
-| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [Docs QR](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
-| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) || **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
-| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Docs Client](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
-| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Docs Icons](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
+| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 
-## 📚 Documentación
+## 📚 Documentation
 
-- **Guías y API:** [https://react-pdf-levelup.nimbux.cloud/docs](https://react-pdf-levelup.nimbux.cloud/docs)
-- **API REST Guide:** [https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest](https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest)
+- **Guides & API:**  
+  https://react-pdf-levelup.nimbux.cloud/docs
 
-## 🌐 API REST para generar PDFs
+- **REST API Guide:**  
+  https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest
 
-Genera PDFs vía HTTP desde cualquier lenguaje usando un template TSX en base64 y un objeto de datos.  
-Devuelve un JSON con `data.pdf` que es el PDF en base64.
+## 🌐 REST API for PDF Generation
+
+Generate PDFs via HTTP from any language using a TSX template encoded in base64 and a data object.  
+Returns a JSON response with `data.pdf`, which contains the generated PDF in base64 format.
 
 ### Endpoints
 
 - Cloud:  
-https://react-pdf-levelup.nimbux.cloud/api
+  https://react-pdf-levelup.nimbux.cloud/api
 
-- Auto-hospedado ZIP:  
-https://genarogg.github.io/react-pdf-levelup/public/api.zip
+- Self-hosted ZIP:  
+  https://genarogg.github.io/react-pdf-levelup/public/api.zip
 
 ---
 
-## 🤝 Contribuir
+## 🤝 Contributing
 
-Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
+Contributions are welcome. Please open an issue or submit a pull request.
 
-
-## 📄 Licencia
+## 📄 License
 
 MIT License
