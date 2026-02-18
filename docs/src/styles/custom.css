@@ -1,0 +1,38 @@
+/* docs/src/styles/custom.css */
+:root {
+  /* Colores para el tema claro (light) */
+  --sl-color-accent-low: #d6eaff;
+  --sl-color-accent: #3080d6;
+  --sl-color-accent-high: #0054a3;
+
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f7fafc;
+  --sl-color-gray-2: #e2e8f0;
+  --sl-color-gray-3: #cbd5e0;
+  --sl-color-gray-4: #a0aec0;
+  --sl-color-gray-5: #718096;
+  --sl-color-gray-6: #4a5568;
+  --sl-color-gray-7: #2d3748;
+  --sl-color-black: #1a202c;
+}
+
+[data-theme='dark'] {
+  /* Colores para el tema oscuro (dark) */
+  --sl-color-accent-low: #30d6b233;
+  --sl-color-accent: #30d6b2;
+  --sl-color-accent-high: #8affd7;
+
+  /* Fondos */
+  --sl-color-white: #020817; /* Fondo principal */
+  --sl-color-gray-1: #0e121e; /* Fondo de la barra lateral */
+  --sl-color-gray-2: #1c2333; /* Bordes, fondo de bloques de código */
+
+  /* Texto */
+  --sl-color-black: #ffffff;
+  --sl-color-gray-3: #a0aec0;
+  --sl-color-gray-4: #cbd5e0;
+  --sl-color-gray-5: #e2e8f0;
+  --sl-color-gray-6: #f7fafc;
+  --sl-color-gray-7: #ffffff;
+}
+

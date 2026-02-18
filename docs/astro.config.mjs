@@ -17,11 +17,18 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'react pdf levelup',
+			customCss: [
+				//'./src/styles/custom.css',
+			],
 			social: [{
 				icon: 'github',
 				label: 'GitHub',
 				href: 'https://github.com/genarogg/react-pdf-levelup'
 			}],
+			components: {
+			//	ThemeProvider: './src/components/ForceDarkTheme.astro',
+			//	ThemeSelect: './src/components/EmptyComponent.astro',
+			},
 			sidebar: [
 				{
 					label: 'Inicio',
