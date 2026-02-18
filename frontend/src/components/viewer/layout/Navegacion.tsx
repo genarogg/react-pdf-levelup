@@ -11,6 +11,7 @@ interface NavProps {
 
 const Nav: React.FC<NavProps> = () => {
     const [showTop, setShowTop] = useState(false)
+    const [isHovering, setIsHovering] = useState(false)
     const { i18n } = useTranslation()
 
     useEffect(() => {
@@ -23,15 +24,17 @@ const Nav: React.FC<NavProps> = () => {
     return (
         <nav aria-label="acciones rápidas" className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50">
             <div
-                className={`rounded-2xl bg-neutral-900/60 backdrop-blur-md border border-white/10 shadow-lg px-2 py-1.5 overflow-hidden transition-all duration-300 ease-out md:px-3 md:py-2 ${showTop ? "max-w-[16rem] md:max-w-[28rem]" : "max-w-[14rem] md:max-w-[22rem]"}`}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                className={`rounded-xl bg-neutral-950/40 backdrop-blur-xl border border-white/15 shadow-2xl px-2 py-1.5 overflow-hidden transition-all duration-300 ease-out md:px-3 md:py-2 ${isHovering ? "opacity-100 bg-neutral-900/50" : "opacity-80"} ${showTop ? "max-w-[18rem] md:max-w-[28rem]" : "max-w-[14rem] md:max-w-[22rem]"}`}
             >
                 <ul className="flex items-center gap-1 md:gap-2">
                     <li>
-                        <div className="flex items-center gap-0.5 md:gap-1 rounded-md bg-white/5 p-0.5 md:p-1">
+                        <div className="flex items-center gap-0.5 md:gap-1 rounded-lg bg-white/8 p-0.5 md:p-1">
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className={`h-6 md:h-8 px-1.5 md:px-2 text-xs ${i18n.language.startsWith("es") ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-transparent text-gray-300 hover:text-white"}`}
+                                className={`h-6 md:h-8 px-1.5 md:px-2 text-xs font-medium transition-all duration-200 ${i18n.language.startsWith("es") ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md" : "bg-transparent text-gray-300 hover:bg-white/5 hover:text-white border-0"}`}
                                 aria-label="Cambiar a Español"
                                 onClick={() => i18n.changeLanguage("es")}
                             >
@@ -40,7 +43,7 @@ const Nav: React.FC<NavProps> = () => {
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className={`h-6 md:h-8 px-1.5 md:px-2 text-xs ${i18n.language.startsWith("en") ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-transparent text-gray-300 hover:text-white"}`}
+                                className={`h-6 md:h-8 px-1.5 md:px-2 text-xs font-medium transition-all duration-200 ${i18n.language.startsWith("en") ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md" : "bg-transparent text-gray-300 hover:bg-white/5 hover:text-white border-0"}`}
                                 aria-label="Change to English"
                                 onClick={() => i18n.changeLanguage("en")}
                             >
@@ -52,9 +55,9 @@ const Nav: React.FC<NavProps> = () => {
                         <Link
                             to="/playground"
                             onClick={() => (null)}
-                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-md px-1 md:px-2 py-1 bg-purple-500/5 hover:bg-purple-500/10"
+                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg px-1 md:px-2 py-1 hover:bg-purple-500/15"
                         >
-                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-md bg-transparent group-hover:bg-white/5 transition-colors duration-200">
+                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-all duration-200">
                                 <Play className="w-3.5 md:w-4 h-3.5 md:h-4 transition-transform duration-300 group-hover:scale-110" />
                             </span>
                         </Link>
@@ -63,9 +66,9 @@ const Nav: React.FC<NavProps> = () => {
                         <a
                             href="/docs"
                             onClick={() => (null)}
-                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-md px-1 md:px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
+                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg px-1 md:px-2 py-1 hover:bg-blue-500/15"
                         >
-                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-md">
+                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-all duration-200">
                                 <FileText className="w-3.5 md:w-4 h-3.5 md:h-4" />
                             </span>
                         </a>
@@ -76,9 +79,9 @@ const Nav: React.FC<NavProps> = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => (null)}
-                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-md px-1 md:px-2 py-1 bg-slate-500/10 hover:bg-slate-500/20"
+                            className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg px-1 md:px-2 py-1 hover:bg-slate-500/15"
                         >
-                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-md bg-transparent group-hover:bg-white/5 transition-colors duration-200">
+                            <span className="w-7 md:w-9 h-7 md:h-9 flex items-center justify-center flex-shrink-0 rounded-lg bg-slate-500/10 group-hover:bg-slate-500/20 transition-all duration-200">
                                 <Github className="w-3.5 md:w-4 h-3.5 md:h-4 transition-all duration-300 group-hover:rotate-12 group-hover:scale-110" />
                             </span>
                         </a>
@@ -90,7 +93,7 @@ const Nav: React.FC<NavProps> = () => {
                         <Button
                             aria-label="Volver arriba"
                             size="lg"
-                            className={`rounded-md shadow-lg bg-emerald-600 text-white hover:bg-emerald-700 p-0 transition-all duration-300 ${showTop ? "w-7 md:w-11 h-7 md:h-11" : "w-0 h-0 pointer-events-none"}`}
+                            className={`rounded-lg shadow-lg bg-emerald-500 text-white hover:bg-emerald-600 p-0 transition-all duration-300 font-medium ${showTop ? "w-7 md:w-11 h-7 md:h-11" : "w-0 h-0 pointer-events-none"}`}
                             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                         >
                             <ArrowUp className="w-3.5 md:w-5 h-3.5 md:h-5" />
