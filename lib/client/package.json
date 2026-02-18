@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/client",
-  "version": "1.1.43",
+  "version": "1.1.44",
   "description": "Utilidad de frontend para decodificar un PDF en base64 generados con @react-pdf-levelup/core y descargarlo/abrirlo en el navegador.",
   "keywords": [
     "javascript",

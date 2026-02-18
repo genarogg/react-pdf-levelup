@@ -11,7 +11,7 @@ const items = [
   'public',
   'scripts',
   'src',
-  '.env',
+  'example.env',
   'Dockerfile',
   'package.json',
   'tsconfig.json',
