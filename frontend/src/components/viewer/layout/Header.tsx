@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             {isPlayground && (
                                 <>
                                     <a
-                                        href="/docs"
+                                        href="/docs/get-started"
                                         onClick={() => (null)}
                                         className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
                                     >

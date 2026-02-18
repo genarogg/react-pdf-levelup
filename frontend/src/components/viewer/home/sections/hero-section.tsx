@@ -76,7 +76,7 @@ export function HeroSection() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <a href="/docs">
+              <a href="/docs/get-started">
                 <Button
                   size="lg"
                   variant="outline"
