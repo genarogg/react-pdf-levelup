@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Font, renderToStream, renderToFile } from "@react-pdf/renderer"
 
+
 import Layout from "../../frontend/src/components/core/basic/layout/Layout"
 import NextPage from "../../frontend/src/components/core/basic/layout/NextPage"
 import Img from "../../frontend/src/components/core/basic/Img"

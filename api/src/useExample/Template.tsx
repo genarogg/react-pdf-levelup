@@ -1,36 +1,31 @@
-import { 
-      A,
-      BR,
-      Center,
-      Col6,
-      Container,
-      Div,
-      Em,
-      Font,
-      H1,
-      H4,
-      Img,
-      Layout,
-      P,
-      Right,
-      Row,
-      Strong,
-      Table,
-      Tbody,
-      Td,
-      Th,
-      Thead,
-      Tr
-    } from "@react-pdf-levelup/core";
+import React from 'react'
+import {
+  A,
+  BR,
+  Center,
+  Col6,
+  Container,
+  Div,
+  Em,
+  Font,
+  H1,
+  H4,
+  Img,
+  Layout,
+  P,
+  Right,
+  Row,
+  Strong,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
 
-
-
-
-
-
-
-const Component = ({ data }:any) => {
-  console.log(data)
+const Component = ({ data }: any) => {
+  console.log("data PDF: ", data)
   getFuentes()
   return (
     <FathonLayout>
@@ -44,12 +39,12 @@ const Component = ({ data }:any) => {
   )
 }
 
-const FathonLayout = ({ children }:any) => {
+const FathonLayout = ({ children }: any) => {
   return (
     <Layout
       pagination={false}
       padding={60}
-      backgroundImage="https://genarogg.github.io/media/react-pdf-levelup/fathon/factura-bg.jpg"
+      backgroundImage={"https://genarogg.github.io/media/react-pdf-levelup/fathon/factura-bg.jpg"}
       style={{
         border: "1px",
         fontFamily: "Nunito",
@@ -235,7 +230,5 @@ const getFuentes = () => {
     ]
   });
 }
-Component;
-
 
 export default Component;
