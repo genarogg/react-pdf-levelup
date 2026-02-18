@@ -1,17 +1,17 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { hero } from "./translations/hero";
-import { value } from "./translations/value";
-import { templates } from "./translations/templates";
-import { how } from "./translations/how";
-import { dev } from "./translations/dev";
-import { use } from "./translations/use";
-import { api } from "./translations/api";
-import { roadmap } from "./translations/roadmap";
-import { support } from "./translations/support";
-import { faq } from "./translations/faq";
-import { nav } from "./translations/nav";
+import { hero } from "./home/hero";
+import { value } from "./home/value";
+import { templates } from "./home/templates";
+import { how } from "./home/how";
+import { dev } from "./home/dev";
+import { use } from "./home/use";
+import { api } from "./home/api";
+import { roadmap } from "./home/roadmap";
+import { support } from "./home/support";
+import { faq } from "./home/faq";
+import { nav } from "./home/nav";
 
 const resources = {
   es: {
