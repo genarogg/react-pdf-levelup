@@ -5,6 +5,7 @@ import { CodeBlock } from "./code-block"
 import { ArrowRight, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 const heroCode = 
 `import { P, Layout, HR, Strong, H4, Em } from '@react-pdf-levelup/core'
@@ -34,6 +35,7 @@ const Component = ({ data }) => {
 export function HeroSection() {
   const [copied, setCopied] = useState(false)
   const installCommand = "npm install @react-pdf-levelup/core"
+  const { t } = useTranslation()
 
   const handleCopy = () => {
     navigator.clipboard.writeText(installCommand)
@@ -55,24 +57,22 @@ export function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-accent"></span>
               </span>
-              Código abierto y gratuito
+              {t("hero.badge")}
             </div>
 
             
-
             <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl text-balance">
-              Crea PDFs hermosos con <span className="text-accent">Componentes de React</span>
+              {t("hero.title_start")} <span className="text-accent">{t("hero.title_highlight")}</span>
             </h1>
 
             <p className="text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl">
-              La forma moderna de crear documentos PDF usando componentes de React. Tipado seguro, alto rendimiento y
-              una experiencia pensada para desarrolladores. Olvídate de pelear con librerías de bajo nivel.
+              {t("hero.description")}
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Link to="/playground">
                 <Button size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
-                  Ir al Playground
+                  {t("hero.playground")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -82,7 +82,7 @@ export function HeroSection() {
                   variant="outline"
                   className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary"
                 >
-                  Ver documentación
+                  {t("hero.docs")}
                 </Button>
               </a>
             </div>
@@ -93,7 +93,7 @@ export function HeroSection() {
               <button
                 onClick={handleCopy}
                 className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
-                aria-label="Copy install command"
+                aria-label={t("hero.copy_aria")}
               >
                 {copied ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
               </button>
