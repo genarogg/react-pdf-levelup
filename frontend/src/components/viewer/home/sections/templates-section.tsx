@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, FileText, Receipt, Table, QrCode } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 const templates = [
   {
@@ -51,6 +52,7 @@ const templates = [
 ]
 
 export function TemplatesSection() {
+  const { t } = useTranslation()
   return (
     <section id="templates" className="border-t border-border px-4 py-16 sm:py-24 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-secondary/20">
       <div className="mx-auto max-w-7xl">
@@ -62,14 +64,13 @@ export function TemplatesSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
               </span>
-              Plantillas Profesionales
+              {t("templates.badge")}
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
-              Plantillas Listas para Usar
+              {t("templates.title")}
             </h2>
             <p className="mt-2 text-base sm:text-lg text-muted-foreground max-w-2xl">
-              Comienza con plantillas profesionales y personalízalas según tus necesidades.
-              Formato optimizado y diseño moderno.
+              {t("templates.desc")}
             </p>
           </div>
           {/* <Button
@@ -144,9 +145,9 @@ export function TemplatesSection() {
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground">
-            ¿No encuentras lo que buscas?{" "}
+            {t("templates.cta_line")}{" "}
             <Link to="/templates" className="font-medium text-accent hover:underline">
-              Explora más plantillas
+              {t("templates.cta_link")}
             </Link>
           </p>
         </div>

@@ -1,32 +1,8 @@
 import { Check } from "lucide-react"
 import { CodeBlock } from "./code-block"
+import { useTranslation } from "react-i18next"
 
-const features = [
-  {
-    title: "Tipado completo con TypeScript",
-    description: "IntelliSense, autocompletado y seguridad en tiempo de compilación para todos los componentes y props.",
-  },
-  {
-    title: "Funciona con Frameworks Modernos",
-    description: "Integración perfecta con Vite, Next.js, Remix y Create React App.",
-  },
-  {
-    title: "Componentes Componibles",
-    description: "Construye diseños complejos combinando bloques de construcción simples y reutilizables.",
-  },
-  {
-    title: "Plugins Poderosos y Extensibles",
-    description: "Añade códigos QR, gráficos y más con plugins oficiales como @react-pdf-levelup/qr y @react-pdf-levelup/chart.",
-  },
-  {
-    title: "Temas y Personalización Fáciles",
-    description: "Sobrescribe colores, fuentes y espaciado con un objeto de tema simple o sintaxis tipo CSS.",
-  },
-  {
-    title: "Diseñado para Escalar",
-    description: "Genera miles de PDFs eficientemente con renderizado y caché optimizados.",
-  },
-]
+const featureKeys = ["ts", "frameworks", "composable", "plugins", "theming", "scale"] as const
 
 const exampleCode = 
 `const Component = ({ data }) => {
@@ -56,19 +32,20 @@ const exampleCode =
 }`
 
 export function DeveloperFeatures() {
+  const { t } = useTranslation()
   return (
     <section id="caracteristicas" className="py-24 px-4 ">
       <div className="container max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left side - Features */}
           <div>
-            <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">Creado para Desarrolladores</h2>
+            <h2 className="text-4xl font-bold mb-4 text-balance text-foreground">{t("dev.heading")}</h2>
             <p className="text-muted-foreground mb-12 text-pretty leading-relaxed">
-              Nos obsesionamos con los pequeños detalles para que puedas concentrarte en programar. Cada decisión de la librería está pensada en la experiencia del desarrollador.
+              {t("dev.subheading")}
             </p>
 
             <div className="space-y-8">
-              {features.map((feature, index) => (
+              {featureKeys.map((key, index) => (
                 <div key={index} className="flex gap-4">
                   <div className="flex-shrink-0">
                     <div className="w-6 h-6 rounded-full bg-cyan-500/10 flex items-center justify-center">
@@ -76,8 +53,8 @@ export function DeveloperFeatures() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1 text-foreground">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                    <h3 className="font-semibold mb-1 text-foreground">{t(`dev.features.${key}.title`)}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{t(`dev.features.${key}.desc`)}</p>
                   </div>
                 </div>
               ))}

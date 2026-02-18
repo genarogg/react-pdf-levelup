@@ -2,6 +2,7 @@
 import React, { useState, useCallback, Suspense, lazy } from "react"
 import { Github, FileText, Play, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
@@ -10,36 +11,40 @@ interface HeaderProps {
     context?: String
 }
 
-// Configuración de enlaces de navegación
-const NAV_LINKS = [
-    { href: "#", label: "Inicio" },
-    { href: "#features", label: "Por qué" },
-    { href: "#templates", label: "Plantillas" },
-    { href: "#como-funciona", label: "Cómo funciona" },
-    { href: "#api", label: "API" },
-    { href: "#hoja-de-ruta", label: "Roadmap" },
-    { href: "#casos-uso", label: "Casos de uso" },
-    { href: "#support", label: "Soporte" },
-    { href: "#faq", label: "FAQ" },
+// Configuración base de enlaces de navegación (sin etiquetas, se traducen en render)
+const NAV_BASE = [
+    { href: "#", key: "home" },
+    { href: "#features", key: "why" },
+    { href: "#templates", key: "templates" },
+    { href: "#como-funciona", key: "how" },
+    { href: "#api", key: "api" },
+    { href: "#hoja-de-ruta", key: "roadmap" },
+    { href: "#casos-uso", key: "usecases" },
+    { href: "#support", key: "support" },
+    { href: "#faq", key: "faq" },
 ]
 
 // Componente de navegación reutilizable
-const Navigation: React.FC<{ className?: string, onNavigate?: () => void }> = ({ className = "", onNavigate }) => (
-    <nav className={className}>
-        {NAV_LINKS.map((link, index) => (
-            <a
-                key={link.href}
-                href={link.href}
-                onClick={() => onNavigate?.()}
-                className="group relative text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium tracking-wide"
-                style={{ animationDelay: `${index * 50}ms` }}
-            >
-                <span className="relative z-10">{link.label}</span>
-                <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-            </a>
-        ))}
-    </nav>
-)
+const Navigation: React.FC<{ className?: string, onNavigate?: () => void }> = ({ className = "", onNavigate }) => {
+    const { t } = useTranslation()
+    const links = NAV_BASE.map(l => ({ ...l, label: t(`nav.${l.key}`) }))
+    return (
+        <nav className={className}>
+            {links.map((link, index) => (
+                <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => onNavigate?.()}
+                    className="group relative text-gray-300 hover:text-white transition-all duration-300 text-sm font-medium tracking-wide"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                >
+                    <span className="relative z-10">{link.label}</span>
+                    <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </a>
+            ))}
+        </nav>
+    )
+}
 
 const Header: React.FC<HeaderProps> = ({ context }) => {
     const [mobileOpen, setMobileOpen] = useState(false)

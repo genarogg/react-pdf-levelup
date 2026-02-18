@@ -1,20 +1,22 @@
 import { Button } from "@/components/ui/button"
 import { Mail, MessageCircle, Heart, ExternalLink, Send, Sparkles, Crown, MessageSquare } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 export function SupportAndDonationsSection() {
+  const { t } = useTranslation()
   return (
     <section id="support" className="border-t border-border px-4 py-24 sm:px-6 lg:px-8 bg-gradient-to-b from-muted/30 to-background">
       <div className="mx-auto max-w-7xl">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <Sparkles className="h-4 w-4" />
-            Comunidad
+            {t("support.community_badge")}
           </div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
-            Apoya el Proyecto
+            {t("support.heading")}
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tu apoyo ayuda a mantener y mejorar esta herramienta gratuita para la comunidad
+            {t("support.subheading")}
           </p>
         </div>
 
@@ -36,12 +38,12 @@ export function SupportAndDonationsSection() {
                   <MessageCircle className="h-6 w-6 text-blue-600" />
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground">
-                  Soporte y Contacto
+                  {t("support.support_card.title")}
                 </h3>
               </div>
 
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                ¿Tienes preguntas, sugerencias o necesitas ayuda? Contáctame a través de cualquiera de estos canales. Estoy aquí para apoyarte.
+                {t("support.support_card.desc")}
               </p>
 
               <div className="space-y-3">
@@ -53,7 +55,7 @@ export function SupportAndDonationsSection() {
                     <Mail className="h-5 w-5 text-muted-foreground group-hover/link:text-blue-600 transition-colors flex-shrink-0" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">Correo Electrónico</p>
+                    <p className="font-medium text-foreground">{t("support.support_card.email")}</p>
                     <p className="text-sm text-muted-foreground truncate">genarrogg@gmail.com</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />
@@ -69,7 +71,7 @@ export function SupportAndDonationsSection() {
                     <MessageCircle className="h-5 w-5 text-green-600 group-hover/link:text-green-700 transition-colors flex-shrink-0" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">WhatsApp</p>
+                    <p className="font-medium text-foreground">{t("support.support_card.whatsapp")}</p>
                     <p className="text-sm text-muted-foreground">+58 412 7554970</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />
@@ -85,8 +87,8 @@ export function SupportAndDonationsSection() {
                     <MessageSquare className="h-5 w-5 text-indigo-600 group-hover/link:text-indigo-700 transition-colors flex-shrink-0" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-foreground">Servidor Discord</p>
-                    <p className="text-sm text-muted-foreground">Únete a la comunidad</p>
+                    <p className="font-medium text-foreground">{t("support.support_card.discord")}</p>
+                    <p className="text-sm text-muted-foreground">{t("support.support_card.join")}</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />
                 </a>
@@ -111,37 +113,27 @@ export function SupportAndDonationsSection() {
                   <Heart className="h-6 w-6 text-emerald-600 group-hover:fill-emerald-600/20 transition-all" />
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground">
-                  Donaciones
+                  {t("support.donations_card.title")}
                 </h3>
               </div>
 
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Si encuentras útil esta herramienta y quieres apoyar su desarrollo continuo, considera hacer una donación.
+                {t("support.donations_card.desc")}
               </p>
 
               <div className="space-y-4">
                 <div className="p-5 rounded-xl bg-gradient-to-br from-secondary/80 to-secondary/40 border border-emerald-500/10">
                   <p className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-emerald-600" />
-                    Tu donación ayuda a:
+                    {t("support.donations_card.helps")}
                   </p>
                   <ul className="space-y-3 text-sm text-foreground">
-                    <li className="flex items-center gap-3 group/item">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover/item:scale-125 transition-transform" />
-                      <span className="group-hover/item:text-emerald-600 transition-colors">Mantener el proyecto gratuito</span>
-                    </li>
-                    <li className="flex items-center gap-3 group/item">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover/item:scale-125 transition-transform" />
-                      <span className="group-hover/item:text-emerald-600 transition-colors">Agregar nuevas características</span>
-                    </li>
-                    <li className="flex items-center gap-3 group/item">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover/item:scale-125 transition-transform" />
-                      <span className="group-hover/item:text-emerald-600 transition-colors">Mejorar la documentación</span>
-                    </li>
-                    <li className="flex items-center gap-3 group/item">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover/item:scale-125 transition-transform" />
-                      <span className="group-hover/item:text-emerald-600 transition-colors">Brindar soporte a la comunidad</span>
-                    </li>
+                    {(t("support.donations_card.lines", { returnObjects: true }) as string[]).map((line, i) => (
+                      <li key={i} className="flex items-center gap-3 group/item">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover/item:scale-125 transition-transform" />
+                        <span className="group-hover/item:text-emerald-600 transition-colors">{line}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
@@ -156,7 +148,7 @@ export function SupportAndDonationsSection() {
                     className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white hover:from-orange-700 hover:to-red-700 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group/btn"
                   >
                     <Crown className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                    Apoyar en Patreon
+                    {t("support.donations_card.patreon")}
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
                 </a>
@@ -172,13 +164,13 @@ export function SupportAndDonationsSection() {
                     className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group/btn"
                   >
                     <Heart className="mr-2 h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-                    Donar vía PayPal
+                    {t("support.donations_card.paypal")}
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
                 </a>
 
                 <p className="text-xs text-center text-muted-foreground">
-                  Cada contribución hace la diferencia ✨
+                  {t("support.donations_card.thanks")}
                 </p>
               </div>
             </div>
@@ -188,7 +180,7 @@ export function SupportAndDonationsSection() {
         <div className="mt-12 text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20">
             <p className="text-sm text-foreground font-medium">
-              ¡Gracias por ser parte de la comunidad! 🙏
+              {t("support.thanks_banner")}
             </p>
           </div>
         </div>

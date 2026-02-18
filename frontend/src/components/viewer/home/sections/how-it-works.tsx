@@ -1,28 +1,7 @@
 import { CodeBlock } from "./code-block"
+import { useTranslation } from "react-i18next"
 
-const steps = [
-  {
-    step: "01",
-    title: "Instala la librería",
-    description: "Agrega react-pdf-levelup a tu proyecto con npm.",
-    blocks: [
-      {
-        code: `npm install @react-pdf-levelup/core
-npm install @react-pdf-levelup/qr // opcional para códigos QR
-npm install @react-pdf-levelup/chart  // opcional para gráficos`,
-        language: "bash" as const,
-        filename: "terminal",
-      },
-    ],
-  },
-  {
-    step: "02",
-    title: "Crea tu template en el Playground",
-    description:
-      "Abre /playground y define un componente de React para tu PDF usando los componentes de react-pdf-levelup (Layout, texto, tablas, QR, etc.).",
-    blocks: [
-      {
-        code: `import { A, Col6, Container, Em, H1, H2, HR, LI, Layout, P,  Row, Strong, UL } from "@react-pdf-levelup/core";
+const templateCode = `import { A, Col6, Container, Em, H1, H2, HR, LI, Layout, P,  Row, Strong, UL } from "@react-pdf-levelup/core";
 import { QR } from "@react-pdf-levelup/qr";
 
 const Component = ({ data }) => {
@@ -55,20 +34,9 @@ const Component = ({ data }) => {
       </Container>
     </Layout>
   )
-}`,
-        language: "tsx" as const,
-        filename: "MyTemplate.tsx",
-      },
-    ],
-  },
-  {
-    step: "03",
-    title: "Genera tu PDF (frontend o backend)",
-    description:
-      "Usa la librería para generar el PDF donde lo necesites. En navegador puedes previsualizar y descargar; en servidor guardas el archivo.",
-    blocks: [
-      {
-        code: `import { generatePDF, decodeBase64Pdf } from 'react-pdf-levelup'
+}`
+
+const frontendGen = `import { generatePDF, decodeBase64Pdf } from 'react-pdf-levelup'
 import { MyTemplate } from './MyTemplate'
 
 const pdfBase64 = await generatePDF({
@@ -76,12 +44,9 @@ const pdfBase64 = await generatePDF({
   data: { title: 'Mi Documento', items: ['Uno', 'Dos', 'Tres'] }
 })
 
-decodeBase64Pdf(pdfBase64, 'mi-documento.pdf')`,
-        language: "tsx" as const,
-        filename: "frontend.tsx",
-      },
-      {
-        code: `import { generatePDF } from 'react-pdf-levelup'
+decodeBase64Pdf(pdfBase64, 'mi-documento.pdf')`
+
+const backendGen = `import { generatePDF } from 'react-pdf-levelup'
 import { writeFileSync } from 'fs'
 import { MyTemplate } from './MyTemplate'
 
@@ -91,24 +56,64 @@ const pdfBase64 = await generatePDF({
 })
 
 const buffer = Buffer.from(pdfBase64, 'base64')
-writeFileSync('reporte.pdf', buffer)`,
-        language: "ts" as const,
-        filename: "backend.ts",
-      },
-    ],
-  },
-]
+writeFileSync('reporte.pdf', buffer)`
 
 export function HowItWorks() {
+  const { t } = useTranslation()
+  const steps = [
+    {
+      step: "01",
+      title: t("how.steps.s1.title"),
+      description: t("how.steps.s1.desc"),
+      blocks: [
+        {
+          code: `npm install @react-pdf-levelup/core
+npm install @react-pdf-levelup/qr // opcional para códigos QR
+npm install @react-pdf-levelup/chart  // opcional para gráficos`,
+          language: "bash" as const,
+          filename: "terminal",
+        },
+      ],
+    },
+    {
+      step: "02",
+      title: t("how.steps.s2.title"),
+      description: t("how.steps.s2.desc"),
+      blocks: [
+        {
+          code: templateCode,
+          language: "tsx" as const,
+          filename: "MyTemplate.tsx",
+        },
+      ],
+    },
+    {
+      step: "03",
+      title: t("how.steps.s3.title"),
+      description: t("how.steps.s3.desc"),
+      blocks: [
+        {
+          code: frontendGen,
+          language: "tsx" as const,
+          filename: "frontend.tsx",
+        },
+        {
+          code: backendGen,
+          language: "ts" as const,
+          filename: "backend.ts",
+        },
+      ],
+    },
+  ]
   return (
     <section id="como-funciona" className="border-t border-border px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-14">
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-12 sm:mb-16 lg:mb-20">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance mb-3 sm:mb-4">
-            Cómo Funciona
+            {t("how.heading")}
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-muted-foreground">
-            De cero a PDF en menos de 5 minutos
+            {t("how.subheading")}
           </p>
         </div>
 
