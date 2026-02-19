@@ -7,7 +7,7 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	base: '/docs',
 	redirects: {
-		'/': '/docs/get-started',
+		'/': '/docs/es/get-started',
 	},
 	server: {
 		host: '0.0.0.0',
@@ -34,6 +34,12 @@ export default defineConfig({
 				label: 'GitHub',
 				href: 'https://github.com/genarogg/react-pdf-levelup'
 			}],
+
+			defaultLocale: 'es',
+			locales: {
+				es: { label: 'Español', lang: 'es-ES' },
+				en: { label: 'English', lang: 'en-US' },
+			},
 
 			sidebar: [
 				{

@@ -21,7 +21,7 @@ export function CtaSection() {
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a href="/docs/get-started">
+              <a href="/docs/es/get-started">
                 <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
                   Comenzar
                   <ArrowRight className="ml-2 h-4 w-4" />
