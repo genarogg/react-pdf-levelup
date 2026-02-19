@@ -68,7 +68,6 @@ export {
   Col12,
   QR,
   QRstyle,
-  ChartJS,
   UL,
   OL,
   LI,
@@ -84,6 +83,7 @@ export {
   Div,
   HR,
   Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label,
-  Icon
+  Icon,
+  ChartJS,
 }
 

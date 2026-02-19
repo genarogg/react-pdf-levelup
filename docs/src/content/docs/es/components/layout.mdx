@@ -1,107 +1,145 @@
+
 ---
 title: Layout
-description: Componentes de estructura y maquetación para tus documentos PDF.
+description: Componente principal para configurar y renderizar documentos PDF con control avanzado de tamaño, márgenes, fondo y footer.
 ---
 
-## Layout
+# Layout
 
-Componente principal para configurar el documento PDF. Envuelve todo tu contenido.
+El componente **Layout** es el núcleo estructural del documento PDF.
 
-### Props
+Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/renderer` y gestiona automáticamente:
+
+- Tamaño de página
+- Orientación
+- Sistema de márgenes predefinidos
+- Fondo de color o imagen
+- Footer dinámico
+- Numeración automática
+- Rejilla de referencia en centímetros
+- Modo debug
+- Reserva automática de espacio para el footer
+
+---
+
+## Props
 
 | Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `size` | `string` | `"A4"` | Tamaño de la página (A0-A9, Letter, Legal, Tabloid). |
-| `orientation` | `string` | `"vertical"` | Orientación de la página (vertical, horizontal). |
+|--------|------|---------|-------------|
+| `size` | `"A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "A9" \| "LETTER" \| "LEGAL" \| "TABLOID"` | `"A4"` | Tamaño de página (ISO 216 y formatos americanos). |
+| `orientation` | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"` | `"vertical"` | Orientación de la página. Internamente se transforma a `portrait` o `landscape`. |
 | `backgroundColor` | `string` | `"white"` | Color de fondo de la página. |
-| `padding` | `number` | `30` | Padding interno de la página en puntos (solo si margen=normal). |
-| `margen` | `string` | `"normal"` | Tipo de margen (apa, normal, estrecho, ancho). |
-| `style` | `object` | `{}` | Estilos adicionales para la página. |
-| `footer` | `ReactNode` | `""` | Contenido del pie de página. |
-| `lines` | `number` | `1` | Número de líneas para el pie de página (1-10). |
-| `pagination` | `boolean` | `true` | Mostrar numeración de páginas. |
-| `rule` | `boolean` | `false` | Mostrar rejilla de referencia en la página. |
+| `backgroundImage` | `string` | `undefined` | URL de imagen de fondo que ocupa toda la página. |
+| `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo (0–1). |
+| `padding` | `number` | `30` | Padding base cuando `margin="normal"`. |
+| `margin` | `"apa" \| "normal" \| "estrecho" \| "ancho"` | `"normal"` | Sistema de márgenes predefinidos. |
+| `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
+| `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
+| `lines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
+| `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
+| `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
+| `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
 
-### Ejemplo
+---
+
+# Sistema de Márgenes
+
+El Layout incluye un sistema de márgenes predefinidos para facilitar la maquetación.
+
+## `margin="normal"`
+
+Utiliza el valor de `padding`.
 
 ```tsx
-<Layout pagination rule footer={<P>Pie de página</P>} lines={2}>
-  <H1>Título</H1>
-  <P>Contenido de ejemplo</P>
+<Layout padding={40} margin="normal" />
+```
+
+## `margin="estrecho"`
+
+Aplica 36pt en todos los lados.
+
+## `margin="ancho"`
+
+Aplica 108pt en todos los lados.
+
+## `margin="apa"`
+
+Aplica 72pt (1 pulgada) en todos los lados.
+
+Ideal para documentos académicos.
+
+---
+
+# Fondo de Página
+
+## Fondo de color
+
+```tsx
+<Layout backgroundColor="#f5f5f5">
+```
+
+## Imagen de fondo
+
+```tsx
+<Layout
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.2}
+>
+```
+
+---
+
+# Footer Inteligente
+
+```tsx
+<Layout
+  footer={<P>Documento confidencial</P>}
+  lines={2}
+>
+```
+
+---
+
+# Paginación Automática
+
+```tsx
+<Layout pagination={false}>
+```
+
+---
+
+# Rejilla de Referencia (`rule`)
+
+```tsx
+<Layout rule>
+```
+
+---
+
+# Debug Mode
+
+```tsx
+<Layout debug>
+```
+
+---
+
+# Ejemplo Completo
+
+```tsx
+<Layout
+  size="A4"
+  orientation="portrait"
+  margin="apa"
+  backgroundColor="#ffffff"
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.15}
+  footer={<P>Mi Empresa</P>}
+  lines={2}
+  pagination
+  rule={false}
+>
+  <H1>Título del Documento</H1>
+  <P>Contenido del documento...</P>
 </Layout>
-```
-
-## Container
-
-Contenedor principal con padding horizontal. Útil para centrar contenido o darle márgenes consistentes.
-
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales para el contenedor. |
-
-### Ejemplo
-
-```tsx
-<Container>
-  <Row>
-    <Col6><P>Columna 1</P></Col6>
-    <Col6><P>Columna 2</P></Col6>
-  </Row>
-</Container>
-```
-
-## Row
-
-Fila para el sistema de grid. Se utiliza para agrupar columnas.
-
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales para la fila. |
-
-### Ejemplo
-
-```tsx
-<Row>
-  <Col4><P>A</P></Col4>
-  <Col4><P>B</P></Col4>
-  <Col4><P>C</P></Col4>
-</Row>
-```
-
-## Col1-Col12
-
-Columnas para el sistema de grid (de 1 a 12 unidades). El sistema de grid se basa en 12 columnas.
-
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales para la columna. |
-
-### Ejemplo
-
-```tsx
-<Col12><P>Contenido a ancho completo</P></Col12>
-```
-
-## Div
-
-Contenedor genérico para agrupar elementos. Similar al `div` de HTML.
-
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-
-### Ejemplo
-
-```tsx
-<Div style={{ padding: 10 }}>
-  <P>Bloque con padding</P>
-</Div>
 ```
