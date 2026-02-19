@@ -21,7 +21,7 @@ export default defineConfig({
 				starlightThemeSix({
 					// Theme-specific options (all optional)
 					navLinks: [
-						{ label: 'Docs', link: '/getting-started' },
+						{ label: 'Docs', link: '/es/get-started' },
 					],
 				})
 			],
