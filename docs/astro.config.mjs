@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import starlightThemeSix from '@six-tech/starlight-theme-six';
 import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
@@ -16,6 +17,14 @@ export default defineConfig({
 
 	integrations: [
 		starlight({
+			plugins: [
+				starlightThemeSix({
+					// Theme-specific options (all optional)
+					navLinks: [
+						{ label: 'Docs', link: '/getting-started' },
+					],
+				})
+			],
 			title: 'react pdf levelup',
 			customCss: [
 				//'./src/styles/custom.css',
@@ -26,8 +35,8 @@ export default defineConfig({
 				href: 'https://github.com/genarogg/react-pdf-levelup'
 			}],
 			components: {
-			//	ThemeProvider: './src/components/ForceDarkTheme.astro',
-			//	ThemeSelect: './src/components/EmptyComponent.astro',
+				//	ThemeProvider: './src/components/ForceDarkTheme.astro',
+				//	ThemeSelect: './src/components/EmptyComponent.astro',
 			},
 			sidebar: [
 				{

@@ -61,7 +61,7 @@ export function SupportAndDonationsSection() {
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />
                 </a>
 
-                <a 
+                {/* <a 
                   href="https://wa.me/584127554970" 
                   target="_blank" 
                   rel="noopener noreferrer"
@@ -75,7 +75,7 @@ export function SupportAndDonationsSection() {
                     <p className="text-sm text-muted-foreground">+58 412 7554970</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover/link:opacity-100 transition-opacity" />
-                </a>
+                </a> */}
 
                 <a 
                   href="https://discord.gg/jRRZJRjjCU" 
