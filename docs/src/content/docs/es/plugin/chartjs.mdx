@@ -1,0 +1,86 @@
+---
+title: ChartJS
+description: Componente para renderizar gráficos Chart.js en documentos PDF.
+---
+
+# ChartJS
+
+El componente `ChartJS` permite integrar gráficos generados con la librería Chart.js directamente en tus documentos PDF. Utiliza un canvas interno para renderizar el gráfico y lo convierte en una imagen Base64 para ser incrustada, asegurando una alta calidad y personalización. Es ideal para visualizar datos de manera dinámica en tus reportes.
+
+### Props
+
+| Nombre               | Tipo                               | Default           | Descripción                                                                                                 |
+| :------------------- | :--------------------------------- | :---------------- | :---------------------------------------------------------------------------------------------------------- |
+| `data`               | `ChartConfiguration`               | `(requerido)`     | Objeto de configuración de Chart.js que define el tipo de gráfico, datos, opciones, etc. Consulta la [documentación de Chart.js](https://www.chartjs.org/docs/) para más detalles. |
+| `width`              | `number`                           | `600`             | Ancho del gráfico en píxeles.                                                                               |
+| `height`             | `number`                           | `400`             | Alto del gráfico en píxeles.                                                                                |
+| `backgroundColor`    | `string`                           | `"white"`         | Color de fondo del gráfico (ej. `"white"`, `"#F0F0F0"`). Por defecto es blanco para mejor visualización. |
+| `devicePixelRatio`   | `number`                           | `2`               | Multiplicador de píxeles para renderizar el gráfico con mayor calidad (útil para pantallas de alta densidad y exportación a PDF). |
+| `style`              | `any`                              | `{}`              | Estilos adicionales para el contenedor `View` del componente.                                               |
+
+### Ejemplo de Uso
+
+```tsx
+import { Page, View, Text, Document, StyleSheet } from '@react-pdf/renderer';
+import { ChartJS } from '@react-pdf-levelup/charts'; // Ajusta la importación según tu estructura
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#E4E4E4',
+    padding: 20,
+  },
+  container: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+});
+
+const MyChartDocument = () => {
+  const chartData = {
+    type: "bar",
+    data: {
+      labels: ["Enero", "Febrero", "Marzo", "Abril"],
+      datasets: [
+        {
+          label: "Ventas",
+          data: [50, 75, 40, 90],
+          backgroundColor: ["#4CAF50", "#2196F3", "#FFC107", "#F44336"],
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: true,
+        },
+      },
+    },
+  };
+
+  return (
+    <Document>
+      <Page style={styles.page}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Charts con ChartJS</Text>
+          <ChartJS data={chartData} width={500} height={300} />
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+export default MyChartDocument;
+```
+
+### Referencias
+
+La configuración del objeto `data` sigue la [documentación oficial de Chart.js](https://www.chartjs.org/). Puedes utilizar cualquier tipo de gráfico y opción soportada por la librería.
+
+Para ver este componente en acción y experimentar con diferentes configuraciones, visita nuestro [Playground de Charts](/playground/template/charts).
