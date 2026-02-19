@@ -4,14 +4,13 @@ import { View, Text, StyleSheet } from "@react-pdf/renderer"
 interface ListProps {
   children: React.ReactNode
   style?: any
-  start?: number // Para listas ordenadas, desde qué número empezar
+  start?: number
   type?: "disc" | "circle" | "square" | "decimal" | "lower-alpha" | "upper-alpha" | "lower-roman" | "upper-roman"
 }
 
 interface ListItemProps {
   children: React.ReactNode
   style?: any
-  value?: number | string // Valor específico para este elemento de lista
 }
 
 const styles = StyleSheet.create({
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
   },
 })
 
-// Función para generar marcadores de lista desordenada
+// Marcadores lista desordenada
 const getBulletPoint = (type = "disc") => {
   switch (type) {
     case "circle":
@@ -50,15 +49,15 @@ const getBulletPoint = (type = "disc") => {
   }
 }
 
-// Función para generar marcadores de lista ordenada
+// Marcadores lista ordenada
 const getOrderedMarker = (index: number, type = "decimal", start = 1) => {
   const actualIndex = start + index - 1
 
   switch (type) {
     case "lower-alpha":
-      return String.fromCharCode(97 + (actualIndex % 26)) + "."
+      return String.fromCharCode(97 + ((actualIndex - 1) % 26)) + "."
     case "upper-alpha":
-      return String.fromCharCode(65 + (actualIndex % 26)) + "."
+      return String.fromCharCode(65 + ((actualIndex - 1) % 26)) + "."
     case "lower-roman":
       return toRoman(actualIndex).toLowerCase() + "."
     case "upper-roman":
@@ -69,7 +68,7 @@ const getOrderedMarker = (index: number, type = "decimal", start = 1) => {
   }
 }
 
-// Función para convertir números a numerales romanos
+// Conversión a romano
 const toRoman = (num: number): string => {
   if (num <= 0 || num > 3999) return String(num)
 
@@ -88,9 +87,8 @@ const toRoman = (num: number): string => {
   )
 }
 
-// Componente de lista desordenada (UL)
+// UL
 export const UL: React.FC<ListProps> = ({ children, style, type = "disc" }) => {
-  // Clonar los hijos para añadir el tipo de marcador
   const childrenWithBullets = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
       return React.cloneElement(child as React.ReactElement<any>, {
@@ -105,9 +103,8 @@ export const UL: React.FC<ListProps> = ({ children, style, type = "disc" }) => {
   return <View style={[styles.ul, style]}>{childrenWithBullets}</View>
 }
 
-// Componente de lista ordenada (OL)
+// OL
 export const OL: React.FC<ListProps> = ({ children, style, type = "decimal", start = 1 }) => {
-  // Clonar los hijos para añadir el tipo de marcador y el índice
   const childrenWithNumbers = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
       return React.cloneElement(child as React.ReactElement<any>, {
@@ -123,7 +120,7 @@ export const OL: React.FC<ListProps> = ({ children, style, type = "decimal", sta
   return <View style={[styles.ol, style]}>{childrenWithNumbers}</View>
 }
 
-// Componente de elemento de lista (LI)
+// LI
 export const LI: React.FC<
   ListItemProps & {
     bulletType?: string
@@ -131,22 +128,17 @@ export const LI: React.FC<
     index?: number
     start?: number
   }
-> = ({ children, style, bulletType = "disc", isOrdered = false, index = 1, start = 1, value }) => {
-  // Determinar el marcador a mostrar
-  let marker
-  if (isOrdered) {
-    // Si se proporciona un valor específico, usarlo en lugar del índice
-    const actualIndex = value !== undefined ? Number(value) : index
-    marker = getOrderedMarker(actualIndex, bulletType, start)
-  } else {
-    marker = getBulletPoint(bulletType)
-  }
+> = ({ children, style, bulletType = "disc", isOrdered = false, index = 1, start = 1 }) => {
+  const marker = isOrdered
+    ? getOrderedMarker(index, bulletType, start)
+    : getBulletPoint(bulletType)
 
   return (
     <View style={[styles.li, style]}>
       <Text style={styles.bulletPoint}>{marker}</Text>
-      <View style={styles.itemContent}>{typeof children === "string" ? <Text>{children}</Text> : children}</View>
+      <View style={styles.itemContent}>
+        {typeof children === "string" ? <Text>{children}</Text> : children}
+      </View>
     </View>
   )
 }
-

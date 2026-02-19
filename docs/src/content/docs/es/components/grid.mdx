@@ -1,0 +1,75 @@
+---
+title: Columnas
+description: Componentes para la creación de diseños de cuadrícula responsivos en tus documentos PDF.
+---
+
+# Grid
+
+Los componentes `Container`, `Row` y `Col` proporcionan un sistema de cuadrícula flexible para organizar el contenido de tus documentos PDF, similar a los sistemas de cuadrícula basados en flexbox en desarrollo web.
+
+---
+
+## Container
+
+El componente `Container` es el contenedor principal para tu diseño de columnas. Ayuda a centrar y limitar el ancho de tu contenido.
+
+### Props
+
+| Nombre   | Tipo           | Default | Descripción                               |
+|----------|----------------|---------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro del contenedor. |
+| `style`    | `any`          | `{}`    | Estilos adicionales para el contenedor.   |
+
+## Row
+
+El componente `Row` se utiliza para crear filas dentro de un `Container`. Las filas envuelven las columnas y aseguran que se alineen correctamente.
+
+### Props
+
+| Nombre   | Tipo           | Default | Descripción                               |
+|----------|----------------|---------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro de la fila. |
+| `style`    | `any`          | `{}`    | Estilos adicionales para la fila.         |
+
+
+## Col (Col1 a Col12)
+
+Los componentes `Col` (desde `Col1` hasta `Col12`) representan columnas individuales dentro de una `Row`. Cada componente `Col` define el ancho de la columna en una escala de 12. Por ejemplo, `Col6` ocupará la mitad del ancho disponible.
+
+### Props
+
+| Nombre   | Tipo           | Default | Descripción                               |
+|----------|----------------|---------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro de la columna. |
+| `style`    | `any`          | `{}`    | Estilos adicionales para la columna.      |
+
+### Ejemplo de Uso
+
+```tsx
+import { Layout, Container, Row, Col6, Col3, P } from '@react-pdf-levelup/core';
+
+function MyDocument() {
+  return (
+    <Layout>
+        <Container>
+            <Row>
+                <Col6>
+                <P>Esta columna ocupa la mitad del ancho.</P>
+                </Col6>
+                <Col6>
+                <P>Esta columna también ocupa la mitad del ancho.</P>
+                </Col6>
+            </Row>
+            <Row>
+                <Col3>
+                <P>Un cuarto.</P>
+                </Col3>
+                <Col9>
+                <P>Tres cuartos.</P>
+                </Col9>
+            </Row>
+        </Container>
+    </Layout>
+  );
+}
+```
