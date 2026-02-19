@@ -27,7 +27,7 @@ export default defineConfig({
 			],
 			title: 'react pdf levelup',
 			customCss: [
-				//'./src/styles/custom.css',
+				'./src/styles/custom.css',
 			],
 			social: [{
 				icon: 'github',
