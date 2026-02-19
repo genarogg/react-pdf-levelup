@@ -1,0 +1,138 @@
+---
+title: Playground
+description: Interactive environment to design and test your PDF documents.
+---
+
+import { LinkButton, Card, CardGrid } from "@astrojs/starlight/components";
+
+The **Playground** is the heart of React PDF Level Up. It is an interactive development environment that allows you to write React PDF code and see the results in real time.
+
+<div style={{ display: "flex", justifyContent: "center", margin: "2rem 0" }}>
+  <LinkButton
+    href="https://react-pdf-levelup.nimbux.cloud/playground"
+    variant="primary"
+    icon="rocket"
+  >
+    Open Playground
+  </LinkButton>
+</div>
+
+## Main Features
+
+<CardGrid>
+  <Card title="Real-Time Editor" icon="pencil">
+    Write TypeScript/React code on the left and see the rendered PDF
+    instantly on the right.
+  </Card>
+  <Card title="Automatic Persistence" icon="seti:db">
+    Your work is automatically saved in the browser so you don't lose your
+    changes.
+  </Card>
+  <Card title="Predefined Templates" icon="document">
+    Load sample templates like invoices, reports, and certificates to
+    get started quickly.
+  </Card>
+</CardGrid>
+
+## Toolbar
+
+The floating toolbar at the bottom of the editor gives you quick access to essential utilities.
+
+### 1. QuickHelp
+
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    marginBottom: "1rem",
+  }}
+>
+  <div
+    style={{
+      background: "#333",
+      padding: "0.5rem",
+      borderRadius: "0.5rem",
+      color: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "2rem",
+      width: "2rem",
+    }}
+  >
+    ?
+  </div>
+  <span>Instant access to component documentation.</span>
+</div>
+
+- **Code Snippets**: Copy component usage examples with one click.
+- **Props Reference**: Check the available properties for each component without leaving the editor.
+
+### 2. ColorPicker
+
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    marginBottom: "1rem",
+  }}
+>
+  <div
+    style={{
+       background: "#333",
+      padding: "0.5rem",
+      borderRadius: "0.5rem",
+      color: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "2rem",
+      width: "2rem",
+    }}
+  >
+    🎨
+  </div>
+  <span>Complete tool for color management.</span>
+</div>
+
+- **Predefined Palette**: Common colors ready to use.
+- **Visual Selector**: Choose any color visually.
+- **History**: Quickly access the last used colors.
+- **Hex Copy**: Copy the hexadecimal code to the clipboard to paste it into your code.
+
+### 3. Download Template
+
+<div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    marginBottom: "1rem",
+  }}
+>
+  <div
+    style={{
+       background: "#333",
+      padding: "0.5rem",
+      borderRadius: "0.5rem",
+      color: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "2rem",
+      width: "2rem",
+    }}
+  >
+    ⬇️
+  </div>
+  <span>Export your work.</span>
+</div>
+
+- Download the current code from your editor as a `.tsx` file.
+- Useful for taking your design to your own project once finished.
+
+## Keyboard Shortcuts
+
+The editor supports standard keyboard shortcuts from code editors (like VS Code) to make editing easier.
