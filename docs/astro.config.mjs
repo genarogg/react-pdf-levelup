@@ -7,6 +7,7 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	base: '/docs',
 
+
 	server: {
 		host: '0.0.0.0',
 		allowedHosts: true,
@@ -17,10 +18,7 @@ export default defineConfig({
 		starlight({
 			plugins: [
 				 starlightThemeSix({
-					// Theme-specific options (all optional)
-				 	navLinks: [
-						{ label: 'Docs', link: '/es/get-started' },
-					]
+				
 				})
 			],
 			title: 'react pdf levelup',
@@ -44,7 +42,11 @@ export default defineConfig({
 					translations: {
 						en: 'Start'
 					},
-					autogenerate: { directory: '/' },
+					items: [
+						// { slug: 'index' },
+						{ slug: 'get-started' },
+						{ slug: 'playground' },
+					],
 				},
 				{
 					label: 'Guías',
