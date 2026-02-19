@@ -1,5 +1,5 @@
 ---
-title: Creando tu Primer Template
+title: Tu Primer Template
 description: Aprende a construir un template PDF desde cero usando React PDF Level Up.
 ---
 
@@ -58,19 +58,21 @@ export default MyTemplate;
 
 3.  **Crea el Encabezado**
 
-    Usa el sistema de Grid (`Row`, `Col`) para alinear elementos como el logo y la información de la empresa.
+    Usa el sistema de Grid (`Container`, `Row`, `Col`) para alinear elementos como el logo y la información de la empresa.
 
     ```tsx
-    <Row>
-      <Col6>
-        <H1>FACTURA</H1>
-      </Col6>
-      <Col6>
-        <Right>
-          <P>Fecha: {data.date}</P>
-        </Right>
-      </Col6>
-    </Row>
+    <Container>
+      <Row>
+        <Col6>
+          <H1>FACTURA</H1>
+        </Col6>
+        <Col6>
+          <Right>
+            <P>Fecha: {data.date}</P>
+          </Right>
+        </Col6>
+      </Row>
+    </Container>
     ```
 
 4.  **Añade la Tabla de Items**

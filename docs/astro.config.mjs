@@ -17,11 +17,16 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			plugins: [
-				 starlightThemeSix({
-				
+				starlightThemeSix({
+
 				})
 			],
-			title: 'react pdf levelup',
+			title: 'REACT PDF LEVELUP',
+			 favicon: './public/iconos/favicon-32x32.png',
+			logo: {
+				src: './public/iconos/favicon-192x192.png',
+				// replacesTitle: true,
+			},
 			customCss: [
 				'./src/styles/custom.css',
 			],
@@ -43,7 +48,6 @@ export default defineConfig({
 						en: 'Start'
 					},
 					items: [
-						// { slug: 'index' },
 						{ slug: 'get-started' },
 						{ slug: 'playground' },
 					],
@@ -53,7 +57,10 @@ export default defineConfig({
 					translations: {
 						en: 'Guides'
 					},
-					autogenerate: { directory: 'guides' },
+					items: [
+						{ slug: 'guides/first-template' },
+						{ slug: 'guides/backend-integration' },
+					],
 				},
 				{
 					label: 'Componentes',

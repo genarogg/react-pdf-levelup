@@ -162,7 +162,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
 
       // Componentes de columnas
-      etiquetaConSalto("Container"),
+      // etiquetaConSalto("Container"),
       etiquetaConSalto("Row"),
       etiquetaConSalto("Col1"),
       etiquetaConSalto("Col2"),
@@ -198,6 +198,9 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
       // Componentes de tabla
       etiquetaAvanzada("Table", "<Table>\n  <Thead>\n    <Tr>\n      <Th></Th>\n    </Tr>\n  </Thead>\n  <Tbody>\n    <Tr>\n      <Td></Td>\n    </Tr>\n  </Tbody>\n</Table>"),
+
+      // container 
+      etiquetaAvanzada("Container", "<Container>\n <Row>\n <Col6>\n  \n</Col6>\n<Col6>\n  \n</Col6> \n</Row> \n</Container>"),
 
       etiquetaConSalto("Thead"),
       etiquetaConSalto("Tbody"),
