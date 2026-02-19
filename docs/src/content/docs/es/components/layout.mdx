@@ -108,6 +108,33 @@ Ideal para documentos académicos.
 
 ---
 
+# NextPage
+
+El componente **NextPage** permite insertar un salto de página manual dentro del documento. Utiliza internamente `<View break />` de `@react-pdf/renderer` para forzar el inicio de una nueva página.
+
+## Uso
+
+```tsx
+<Layout>
+  <H1>Primera Página</H1>
+  <P>Contenido de la primera página...</P>
+  
+  <NextPage />
+  
+  <H1>Segunda Página</H1>
+  <P>Contenido de la segunda página...</P>
+</Layout>
+```
+
+## Casos de Uso
+
+- Separar secciones importantes del documento
+- Iniciar capítulos u apartados en nueva página
+- Controlar manualmente la distribución de contenido
+- Evitar que contenido importante se divida entre páginas
+
+---
+
 # Rejilla de Referencia (`rule`)
 
 ```tsx
@@ -138,6 +165,7 @@ Ideal para documentos académicos.
   lines={2}
   pagination
   rule={false}
+  style={{ fontFamily: 'Helvetica' }}
 >
   <H1>Título del Documento</H1>
   <P>Contenido del documento...</P>

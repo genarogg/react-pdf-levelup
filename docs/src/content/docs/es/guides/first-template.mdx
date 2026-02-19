@@ -12,7 +12,7 @@ En esta guía, aprenderás a crear un template básico para una factura. Utiliza
 Todo template debe ser un componente funcional de React que retorne un componente `Layout`.
 
 ```tsx
-import { Layout, P } from 'react-pdf-levelup';
+import { Layout, P } from '@react-pdf-levelup/core';
 
 const MyTemplate = ({ data }) => {
   return (
@@ -108,7 +108,7 @@ Aquí tienes el código completo del template de factura:
 import React from 'react';
 import { 
   Layout, Row, Col6, H1, P, Right, Table, Thead, Tbody, Tr, Th, Td 
-} from 'react-pdf-levelup';
+} from '@react-pdf-levelup/core';
 
 const InvoiceTemplate = ({ data }) => {
   return (

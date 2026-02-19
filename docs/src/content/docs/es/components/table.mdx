@@ -1,127 +1,226 @@
 ---
 title: Table
-description: Componentes para crear tablas estructuradas.
+description: Componentes para crear tablas estructuradas y personalizables.
 ---
 
-## Table (Tablet)
+# Table
 
-Componente principal de tabla.
+Los componentes `Table`, `Thead`, `Tbody`, `Tr`, `Th` y `Td` proporcionan un conjunto completo para construir tablas estructuradas en tus documentos PDF, con opciones de personalización para el diseño y la apariencia.
+
+---
+
+## Table
+
+El componente `Table` es el contenedor principal para la construcción de tablas. Permite definir estilos generales y comportamientos para todas las celdas y filas.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales para la tabla. |
+| Nombre           | Tipo                      | Default    | Descripción                                                                 |
+| :--------------- | :------------------------ | :--------- | :-------------------------------------------------------------------------- |
+| `children`       | `React.ReactNode`         | `undefined`| El contenido de la tabla (usualmente `Thead` y `Tbody`).                     |
+| `style`          | `any`                     | `{}`       | Estilos adicionales para la tabla.                                          |
+| `cellHeight`     | `number`                  | `22`       | Altura mínima de cada celda en la tabla.                                     |
+| `borderColor`    | `string`                  | `"#000"`   | Color del borde de la tabla y las celdas.                                   |
+| `textColor`      | `string`                  | `"#000"`   | Color del texto por defecto para todas las celdas.                          |
+| `headerBackground` | `string`                  | `"#ccc"`   | Color de fondo para las celdas del encabezado de la tabla.                  |
+| `zebraColor`     | `string`                  | `"#eeeeee"`| Color de fondo para las filas impares en el modo "modern".                   |
+| `grid`           | `"grid" \| "modern"` | `"grid"` | Define el estilo de la cuadrícula de la tabla ("grid" para bordes completos, "modern" para solo bordes inferiores). |
 
 ### Ejemplo
 
 ```tsx
-<Table>
-  <Thead>
-    <Tr>
-      <Th>Col A</Th>
-      <Th textAlign="right">Col B</Th>
-    </Tr>
-  </Thead>
-  <Tbody>
-    <Tr>
-      <Td>1</Td>
-      <Td>2</Td>
-    </Tr>
-    <Tr>
-      <Td>3</Td>
-      <Td>4</Td>
-    </Tr>
-  </Tbody>
-</Table>
+import { Table, Thead, Tbody, Tr, Th, Td } from './Tablet';
+import { Text } from '@react-pdf/renderer';
+
+function MyTable() {
+  return (
+    <Table
+      cellHeight={25}
+      borderColor="#FF0000"
+      textColor="#0000FF"
+      headerBackground="#ADD8E6"
+      zebraColor="#D3D3D3"
+      grid="modern"
+    >
+      <Thead>
+        <Tr>
+          <Th>Columna A</Th>
+          <Th textAlign="right">Columna B</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        <Tr>
+          <Td>Dato 1</Td>
+          <Td>Dato 2</Td>
+        </Tr>
+        <Tr>
+          <Td>Dato 3</Td>
+          <Td>Dato 4</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  );
+}
 ```
+
+---
 
 ## Thead
 
-Encabezado de la tabla.
+El componente `Thead` representa la sección del encabezado de la tabla.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| Nombre      | Tipo                               | Default     | Descripción                                         |
+| :---------- | :--------------------------------- | :---------- | :-------------------------------------------------- |
+| `children`  | `React.ReactNode`                  | `undefined` | El contenido del encabezado (usualmente componentes `Tr`). |
+| `style`     | `any`                              | `{}`        | Estilos adicionales para el encabezado.             |
+| `textAlign` | `"left" \| "center" \| "right"` | `"left"`  | Alineación del texto para las celdas del encabezado. |
+| `borderColor` | `string`                           | `(del contexto)` | Color del borde para el encabezado (sobrescribe el de `Table`). |
+| `textColor` | `string`                           | `(del contexto)` | Color del texto para el encabezado (sobrescribe el de `Table`). |
 
 ### Ejemplo
 
 ```tsx
-<Thead><Tr><Th>Columna</Th></Tr></Thead>
+import { Table, Thead, Tr, Th } from './Tablet';
+
+function MyTableWithHeader() {
+  return (
+    <Table>
+      <Thead textAlign="center" textColor="white" borderColor="darkgray">
+        <Tr>
+          <Th>Producto</Th>
+          <Th>Cantidad</Th>
+        </Tr>
+      </Thead>
+    </Table>
+  );
+}
 ```
+
+---
 
 ## Tbody
 
-Cuerpo de la tabla donde van los datos.
+El componente `Tbody` representa el cuerpo de la tabla, donde se encuentran los datos principales.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| Nombre      | Tipo              | Default        | Descripción                                         |
+| :---------- | :---------------- | :------------- | :-------------------------------------------------- |
+| `children`  | `React.ReactNode` | `undefined`    | El contenido del cuerpo (usualmente componentes `Tr`). |
+| `borderColor` | `string`          | `(del contexto)` | Color del borde para el cuerpo (sobrescribe el de `Table`). |
+| `textColor` | `string`          | `(del contexto)` | Color del texto para el cuerpo (sobrescribe el de `Table`). |
 
 ### Ejemplo
 
 ```tsx
-<Tbody><Tr><Td>Dato</Td></Tr></Tbody>
+import { Table, Tbody, Tr, Td } from './Tablet';
+
+function MyTableWithBody() {
+  return (
+    <Table>
+      <Tbody borderColor="lightgray" textColor="gray">
+        <Tr>
+          <Td>Item 1</Td>
+          <Td>10</Td>
+        </Tr>
+        <Tr>
+          <Td>Item 2</Td>
+          <Td>25</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  );
+}
 ```
+
+---
 
 ## Tr
 
-Fila de tabla (`TableRow`).
+El componente `Tr` representa una fila dentro de la tabla (tanto en `Thead` como en `Tbody`).
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| Nombre    | Tipo              | Default | Descripción                       |
+| :-------- | :---------------- | :------ | :-------------------------------- |
+| `children` | `React.ReactNode` | `undefined` | El contenido de la fila (usualmente `Th` o `Td`). |
+| `style`   | `any`             | `{}`    | Estilos adicionales para la fila. |
 
 ### Ejemplo
 
 ```tsx
-<Tr><Td>A</Td><Td>B</Td></Tr>
+import { Tr, Td } from './Tablet';
+
+function MyTableRow() {
+  return (
+    <Tr style={{ backgroundColor: '#F0F0F0' }}>
+      <Td>Fila personalizada</Td>
+      <Td>Valor</Td>
+    </Tr>
+  );
+}
 ```
+
+---
 
 ## Th
 
-Celda de encabezado (`TableHeader`).
+El componente `Th` representa una celda de encabezado individual dentro de una fila (`Tr`) en el `Thead`.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-| `width` | `string\|number` | `""` | Ancho de la celda. |
-| `height` | `string\|number` | `""` | Alto de la celda. |
-| `cellSize` | `string` | `"medium"` | Tamaño predefinido (small, medium, large). |
-| `colSpan` | `number` | `""` | Número de columnas que ocupa. |
-| `textAlign` | `string` | `"left"` | Alineación del texto (left, center, right). |
+| Nombre      | Tipo                               | Default        | Descripción                                       |
+| :---------- | :--------------------------------- | :------------- | :------------------------------------------------ |
+| `children`  | `React.ReactNode`                  | `undefined`    | El contenido de la celda de encabezado.           |
+| `style`     | `any`                              | `{}`           | Estilos adicionales para la celda.                |
+| `width`     | `string \| number`                | `undefined`    | Ancho de la celda (ej. "50%", 100).                 |
+| `height`    | `string \| number`                | `(del contexto)` | Alto de la celda. Si no se especifica, usa `cellHeight` del contexto. |
+| `colSpan`   | `number`                           | `undefined`    | Número de columnas que ocupa esta celda.          |
+| `textAlign` | `"left" \| "center" \| "right"` | `"left"`     | Alineación del texto dentro de la celda.          |
 
 ### Ejemplo
 
 ```tsx
-<Th textAlign="center">Encabezado</Th>
+import { Th } from './Tablet';
+
+function MyTableHeaderCell() {
+  return (
+    <Th width="30%" colSpan={2} textAlign="center" style={{ color: 'blue' }}>
+      Encabezado Combinado
+    </Th>
+  );
+}
 ```
+
+---
 
 ## Td
 
-Celda de datos (`TableData`).
+El componente `Td` representa una celda de datos individual dentro de una fila (`Tr`) en el `Tbody`.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-| `width` | `string\|number` | `""` | Ancho de la celda. |
-| `height` | `string\|number` | `""` | Alto de la celda. |
-| `cellSize` | `string` | `"medium"` | Tamaño predefinido (small, medium, large). |
-| `colSpan` | `number` | `""` | Número de columnas que ocupa. |
-| `textAlign` | `string` | `"left"` | Alineación del texto (left, center, right). |
+| Nombre      | Tipo                               | Default        | Descripción                                       |
+| :---------- | :--------------------------------- | :------------- | :------------------------------------------------ |
+| `children`  | `React.ReactNode`                  | `undefined`    | El contenido de la celda de datos.                |
+| `style`     | `any`                              | `{}`           | Estilos adicionales para la celda.                |
+| `width`     | `string \| number`                | `undefined`    | Ancho de la celda (ej. "25%", 50).                  |
+| `height`    | `string \| number`                | `(del contexto)` | Alto de la celda. Si no se especifica, usa `cellHeight` del contexto. |
+| `colSpan`   | `number`                           | `undefined`    | Número de columnas que ocupa esta celda.          |
+| `textAlign` | `"left" \| "center" \| "right"` | `"left"`     | Alineación del texto dentro de la celda.          |
 
 ### Ejemplo
 
 ```tsx
-<Td textAlign="right">Dato</Td>
+import { Td } from './Tablet';
+
+function MyTableDataCell() {
+  return (
+    <Td width="70" textAlign="right" style={{ fontSize: 12 }}>
+      Dato Importante
+    </Td>
+  );
+}
 ```
