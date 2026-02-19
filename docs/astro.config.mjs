@@ -49,6 +49,7 @@ export default defineConfig({
 					},
 					items: [
 						{ slug: 'get-started' },
+
 						{ slug: 'playground' },
 					],
 				},
@@ -60,6 +61,7 @@ export default defineConfig({
 					items: [
 						{ slug: 'guides/first-template' },
 						{ slug: 'guides/backend-integration' },
+						{ slug: 'guides/api-rest' },
 					],
 				},
 				{

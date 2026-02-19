@@ -1,5 +1,5 @@
 ---
-title: API REST para generar PDFs
+title: API REST
 description: Uso del API vía HTTP con fetch, opciones de self‑hosting y ejemplos en varios lenguajes.
 ---
 
@@ -26,10 +26,10 @@ https://react-pdf-levelup.nimbux.cloud/api
 https://genarogg.github.io/react-pdf-levelup/public/api.zip
 ```
 <CardGrid>
-  <Card title="Cloud" icon="globe">
+  <Card title="Cloud" icon="cloud-download">
     Ideal para empezar rápido. Solo realiza un POST al endpoint con tu template en base64 y los datos.
   </Card>
-  <Card title="Auto‑hospedado" icon="server">
+  <Card title="Auto‑hospedado" icon="laptop">
     Descarga el paquete, descomprímelo y despliega en tu infraestructura (VM, contenedor, PaaS). Ofrece control total.
   </Card>
 </CardGrid>
@@ -70,6 +70,43 @@ Font.register({
 
 Las siguientes fuentes están disponibles sin necesidad de registro:
 `Courier`, `Courier-Bold`, `Courier-Oblique`, `Courier-BoldOblique`, `Helvetica`, `Helvetica-Bold`, `Helvetica-Oblique`, `Helvetica-BoldOblique`, `Times-Roman`, `Times-Bold`, `Times-Italic`, `Times-BoldItalic`.
+
+## Consideraciones con Imágenes
+
+### Carga y acceso
+
+La API no puede acceder a archivos locales. Todas las imágenes utilizadas en un template deben referenciarse mediante **URLs remotas absolutas** (https://...). Evita rutas relativas o archivos locales en el paquete del cliente, ya que el servicio de renderizado no podrá resolverlos.
+
+Ejemplo de uso dentro de un template:
+
+```tsx
+import { Image } from 'react-pdf-levelup';
+
+const MyTemplate = ({ data }) => (
+  <Layout>
+    <Image
+      src="https://genarogg.github.io/react-pdf-levelup/public/img/logo/logo.png"
+      style={{ width: 120, height: 'auto' }}
+    />
+  </Layout>
+);
+```
+
+### Formatos y recomendaciones
+
+- Prefiere `JPEG` para fotografías (mejor compresión) y `PNG` para imágenes con transparencia o gráficos.
+- Evita imágenes excesivamente grandes; redimensiona y optimiza (herramientas de compresión) antes de servirlas.
+- Los data URLs (base64) funcionan técnicamente, pero aumentan mucho el tamaño de la carga útil — **no es recomendable para imágenes grandes.**
+
+### CORS y accesibilidad
+
+El servidor remoto que aloja las imágenes debe permitir el acceso desde el servicio de renderizado. Asegúrate de que el recurso esté públicamente accesible (sin autenticación) y no bloquee peticiones por CORS o IP. Si necesitas imágenes protegidas, utiliza URLs con tokens de acceso válidos y con tiempo de expiración adecuado.
+
+### SVG
+
+Los SVG pueden funcionar, pero comprueba que estén bien formateados y no incluyan referencias locales ni scripts. En ocasiones es preferible rasterizarlos a PNG si el renderizado no es consistente.
+
+Si quieres, puedo añadir ejemplos visuales de antes/después (optimización) o instrucciones para servir imágenes desde GitHub Pages / CDN.
 
 ## Respuesta
 
@@ -251,6 +288,6 @@ file_put_contents('example.pdf', base64_decode($pdfBase64));
   Descargar paquete API (ZIP)
 </LinkButton>
 
-<LinkButton href="/docs/guides/backend-integration" icon="right-arrow" variant="primary">
+{/* <LinkButton href="/docs/guides/backend-integration" icon="right-arrow" variant="primary">
   Ver guía de Integración Backend
-</LinkButton>
+</LinkButton> */}

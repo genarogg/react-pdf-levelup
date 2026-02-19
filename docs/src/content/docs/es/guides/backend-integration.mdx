@@ -7,11 +7,11 @@ React PDF Level Up no es solo para el frontend. Puedes utilizar la función `gen
 
 ## Requisitos
 
-Asegúrate de que tu entorno soporte React y SSR (Server Side Rendering). Generalmente esto funciona out-of-the-box en frameworks como Next.js o Remix, o en scripts simples de Node con configuración de Babel/TypeScript.
+Asegúrate de que tu entorno soporte React. Generalmente esto funciona out-of-the-box en frameworks como **Next.js**, **Remix**, **express**, **fastify**, o en scripts simples de Node, bun o cualquier entorno que soporte ES Modules.
 
 ## Ejemplo de Script
 
-El siguiente ejemplo muestra cómo generar un PDF, convertirlo a Buffer y guardarlo en el sistema de archivos.
+El siguiente ejemplo muestra cómo generar un PDF, convertirlo a Buffer y guardarlo en el sistema de archivos o enviarlo al frontend. 
 
 ```typescript
 import { generatePDF } from "@react-pdf-levelup/core";
@@ -41,6 +41,10 @@ const controllerX = async () => {
 
 ```
 
-## Uso en API Endpoints
+## Uso en API Endpoints (desde su backend).
 
 Si estás utilizando Express, Next.js API Routes u otro servidor HTTP, puedes enviar el buffer directamente al cliente y decodificarlo en el frontend.
+
+## No utilizo entorno de ejecucion javascript/typescript.
+
+¿puedo usar React PDF Level Up? Si, puedes utilizar el api rest disenada para generar los pdfs, puedes encontrar la documentacion de esta api en [este enlace](https://react-pdf-levelup.nimbux.cloud/docs/es/guides/api-rest/)
