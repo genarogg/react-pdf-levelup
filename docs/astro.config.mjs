@@ -34,10 +34,7 @@ export default defineConfig({
 				label: 'GitHub',
 				href: 'https://github.com/genarogg/react-pdf-levelup'
 			}],
-			components: {
-				//	ThemeProvider: './src/components/ForceDarkTheme.astro',
-				//	ThemeSelect: './src/components/EmptyComponent.astro',
-			},
+
 			sidebar: [
 				{
 					label: 'Inicio',
