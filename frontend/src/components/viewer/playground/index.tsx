@@ -1,7 +1,5 @@
-
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-
 import PDFPreview from "./PDFPreview"
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"

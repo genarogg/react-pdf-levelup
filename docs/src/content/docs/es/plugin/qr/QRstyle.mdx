@@ -1,0 +1,62 @@
+---
+title: QRStyle
+description: Código QR estilizado con opciones avanzadas de personalización.
+---
+
+# QRStyle
+
+El componente `QRStyle` (anteriormente `QRV2`) ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas. Este componente utiliza la librería `qr-code-styling` internamente.
+
+### Props
+
+| Nombre                   | Tipo                                       | Default        | Descripción                                                                                               |
+| :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
+| `value`                  | `string`                                   | `""`           | El texto o URL que se codificará en el código QR.                                                        |
+| `size`                   | `number`                                   | `300`          | Tamaño del código QR en píxeles (ancho y alto).                                                           |
+| `style`                  | `any`                                      | `{}`           | Estilos adicionales para el contenedor `View` que envuelve el código QR.                                |
+| `image`                  | `string`                                   | `undefined`    | URL de la imagen del logo a incrustar en el centro del QR.                                                |
+| `dotsOptions`            | `{ color?: string; type?: "rounded" \| "dots" \| "classy" \| "classy-rounded" \| "square" \| "extra-rounded"; }` | `undefined`    | Objeto de opciones para personalizar la forma y el color de los puntos del QR. Puede ser un color hexadecimal o un tipo predefinido. |
+| `backgroundOptions`      | `{ color?: string; }`                      | `undefined`    | Objeto de opciones para personalizar el color de fondo del QR. El color por defecto si no se especifica es `#ffffff`. |
+| `imageOptions`           | `{ crossOrigin?: string; margin?: number; imageSize?: number; }` | `{ margin: 0 }`| Objeto de opciones para controlar el margen alrededor de la imagen central (`margin` en píxeles, valor entre 0 y 1 para `imageSize`). `crossOrigin` es útil para imágenes de diferentes dominios. |
+| `cornersSquareOptions`   | `{ type?: "dot" \| "square" \| "extra-rounded"; color?: string; }` | `undefined`    | Objeto de opciones para personalizar la forma y el color de los marcadores de posición cuadrados en las esquinas del QR. |
+| `cornersDotOptions`      | `{ type?: "dot" \| "square"; color?: string; }` | `undefined`    | Objeto de opciones para personalizar la forma y el color de los puntos dentro de los marcadores de las esquinas del QR. |
+| `colorDark` (Fallback)   | `string`                                   | `undefined`    | **(Compatibilidad)** Color de los puntos. Se usa si `dotsOptions.color` no está definido.               |
+| `colorLight` (Fallback)  | `string`                                   | `undefined`    | **(Compatibilidad)** Color de fondo. Se usa si `backgroundOptions.color` no está definido.              |
+| `margin` (Fallback)      | `number`                                   | `undefined`    | **(Compatibilidad)** Margen alrededor del QR. Se usa si `imageOptions.margin` no está definido.       |
+| `errorCorrectionLevel` (Fallback) | `"L" \| "M" \| "Q" \| "H"` | `undefined`    | **(Compatibilidad)** Nivel de corrección de errores. Se usa si no se especifica en `dotsOptions` o propiedades de nivel superior. |
+
+### Ejemplo
+
+```tsx
+import QRStyle from './QRstyle'; // Nota: El componente se exporta como QRV2 pero se puede importar como QRStyle
+
+function MyStyledQRCode() {
+  return (
+    <QRStyle
+      value="https://react-pdf-levelup.com/docs/qrstyle"
+      size={300}
+      image="https://picsum.photos/id/66/200/200"
+      dotsOptions={{
+        color: "#4267B2", // Azul Facebook
+        type: "extra-rounded",
+      }}
+      backgroundOptions={{
+        color: "#E0E0E0", // Gris claro
+      }}
+      imageOptions={{
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        margin: 2,
+      }}
+      cornersSquareOptions={{
+        type: "dot",
+        color: "#FF0000", // Rojo
+      }}
+      cornersDotOptions={{
+        type: "square",
+        color: "#00FF00", // Verde
+      }}
+    />
+  );
+}
+```

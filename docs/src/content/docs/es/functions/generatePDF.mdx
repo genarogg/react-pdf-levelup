@@ -27,7 +27,7 @@ Retorna una promesa que resuelve a un `string` conteniendo el PDF codificado en 
 ### Ejemplo
 
 ```tsx
-import { generatePDF } from 'react-pdf-levelup';
+import { generatePDF } from '@react-pdf-levelup/core';
 import MyDocument from './MyDocument';
 
 const handleGenerate = async () => {
@@ -59,7 +59,7 @@ decodeBase64Pdf(base64: string, fileName: string): void
 ### Ejemplo
 
 ```tsx
-import { decodeBase64Pdf } from 'react-pdf-levelup';
+import { decodeBase64Pdf } from '@react-pdf-levelup/core';
 
 const handleDownload = () => {
   decodeBase64Pdf(base64String, "documento.pdf");

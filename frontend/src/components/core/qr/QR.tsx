@@ -4,7 +4,7 @@ import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
 
 // Define the props for the QR component
 interface QRProps {
-  value: string
+  url: string
   size?: number
   style?: any
   colorDark?: string
@@ -35,7 +35,7 @@ const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
 
 // Este componente funciona con React PDF
 const QR: React.FC<QRProps> = ({
-  value,
+  url,
   size = 150,
   style,
   colorDark = "#000000",
@@ -54,7 +54,7 @@ const QR: React.FC<QRProps> = ({
       try {
         // Primero generamos el QR básico
         const baseQrDataUrl = await generateQRAsBase64({
-          value,
+          url,
           size,
           colorDark,
           colorLight,
@@ -76,7 +76,7 @@ const QR: React.FC<QRProps> = ({
         console.error("Error generando QR:", error)
         // En caso de error, generamos un QR básico usando una API externa
         const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-          value,
+          url,
         )}&size=${size}x${size}&color=${encodeURIComponent(colorDark.replace("#", ""))}&bgcolor=${encodeURIComponent(
           colorLight.replace("#", ""),
         )}`
@@ -85,11 +85,11 @@ const QR: React.FC<QRProps> = ({
     }
 
     generateQR()
-  }, [value, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, errorCorrectionLevel])
+  }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, errorCorrectionLevel])
 
   // Mostrar un QR de respaldo mientras se genera el QR personalizado
   const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-    value,
+    url,
   )}&size=${size}x${size}`
 
   return (

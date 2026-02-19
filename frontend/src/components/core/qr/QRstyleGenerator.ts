@@ -1,7 +1,7 @@
 import { generateQRAsBase64 } from "./QRGenerator"
 
 export interface QRV2Options {
-  value: string
+  url: string
   width?: number
   height?: number
   image?: string
@@ -86,7 +86,7 @@ export const generateQRV2AsBase64 = async (options: QRV2Options): Promise<string
     const qrOptions = {
       width,
       height,
-      data: options.value,
+      data: options.url,
       image: options.image,
       dotsOptions: options.dotsOptions,
       backgroundOptions: {
@@ -154,7 +154,7 @@ export const generateQRV2AsBase64 = async (options: QRV2Options): Promise<string
     
     // Fallback to existing implementation
     return generateQRAsBase64({
-      value: options.value,
+      url: options.url,
       size: options.width,
       colorDark: options.fallbackColorDark || options.dotsOptions?.color,
       colorLight: options.fallbackColorLight || options.backgroundOptions?.color,

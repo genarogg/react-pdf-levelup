@@ -64,7 +64,7 @@ const Nav: React.FC<NavProps> = () => {
                     </li>
                     <li>
                         <a
-                            href="/docs/get-started"
+                            href="/docs/es/get-started"
                             onClick={() => (null)}
                             className="group flex items-center gap-1 md:gap-2 text-gray-300 hover:text-white transition-all duration-300 rounded-lg px-1 md:px-2 py-1 hover:bg-blue-500/15"
                         >

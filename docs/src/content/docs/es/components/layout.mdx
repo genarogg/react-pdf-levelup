@@ -1,0 +1,173 @@
+
+---
+title: Layout
+description: Componente principal para configurar y renderizar documentos PDF con control avanzado de tamaño, márgenes, fondo y footer.
+---
+
+# Layout
+
+El componente **Layout** es el núcleo estructural del documento PDF.
+
+Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/renderer` y gestiona automáticamente:
+
+- Tamaño de página
+- Orientación
+- Sistema de márgenes predefinidos
+- Fondo de color o imagen
+- Footer dinámico
+- Numeración automática
+- Rejilla de referencia en centímetros
+- Modo debug
+- Reserva automática de espacio para el footer
+
+---
+
+## Props
+
+| Nombre | Tipo | Default | Descripción |
+|--------|------|---------|-------------|
+| `size` | `"A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "A9" \| "LETTER" \| "LEGAL" \| "TABLOID"` | `"A4"` | Tamaño de página (ISO 216 y formatos americanos). |
+| `orientation` | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"` | `"vertical"` | Orientación de la página. Internamente se transforma a `portrait` o `landscape`. |
+| `backgroundColor` | `string` | `"white"` | Color de fondo de la página. |
+| `backgroundImage` | `string` | `undefined` | URL de imagen de fondo que ocupa toda la página. |
+| `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo (0–1). |
+| `padding` | `number` | `30` | Padding base cuando `margin="normal"`. |
+| `margin` | `"apa" \| "normal" \| "estrecho" \| "ancho"` | `"normal"` | Sistema de márgenes predefinidos. |
+| `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
+| `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
+| `lines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
+| `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
+| `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
+| `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
+
+---
+
+# Sistema de Márgenes
+
+El Layout incluye un sistema de márgenes predefinidos para facilitar la maquetación.
+
+## `margin="normal"`
+
+Utiliza el valor de `padding`.
+
+```tsx
+<Layout padding={40} margin="normal" />
+```
+
+## `margin="estrecho"`
+
+Aplica 36pt en todos los lados.
+
+## `margin="ancho"`
+
+Aplica 108pt en todos los lados.
+
+## `margin="apa"`
+
+Aplica 72pt (1 pulgada) en todos los lados.
+
+Ideal para documentos académicos.
+
+---
+
+# Fondo de Página
+
+## Fondo de color
+
+```tsx
+<Layout backgroundColor="#f5f5f5">
+```
+
+## Imagen de fondo
+
+```tsx
+<Layout
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.2}
+>
+```
+
+---
+
+# Footer Inteligente
+
+```tsx
+<Layout
+  footer={<P>Documento confidencial</P>}
+  lines={2}
+>
+```
+
+---
+
+# Paginación Automática
+
+```tsx
+<Layout pagination={false}>
+```
+
+---
+
+# NextPage
+
+El componente **NextPage** permite insertar un salto de página manual dentro del documento. Utiliza internamente `<View break />` de `@react-pdf/renderer` para forzar el inicio de una nueva página.
+
+## Uso
+
+```tsx
+<Layout>
+  <H1>Primera Página</H1>
+  <P>Contenido de la primera página...</P>
+  
+  <NextPage />
+  
+  <H1>Segunda Página</H1>
+  <P>Contenido de la segunda página...</P>
+</Layout>
+```
+
+## Casos de Uso
+
+- Separar secciones importantes del documento
+- Iniciar capítulos u apartados en nueva página
+- Controlar manualmente la distribución de contenido
+- Evitar que contenido importante se divida entre páginas
+
+---
+
+# Rejilla de Referencia (`rule`)
+
+```tsx
+<Layout rule>
+```
+
+---
+
+# Debug Mode
+
+```tsx
+<Layout debug>
+```
+
+---
+
+# Ejemplo Completo
+
+```tsx
+<Layout
+  size="A4"
+  orientation="portrait"
+  margin="apa"
+  backgroundColor="#ffffff"
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.15}
+  footer={<P>Mi Empresa</P>}
+  lines={2}
+  pagination
+  rule={false}
+  style={{ fontFamily: 'Helvetica' }}
+>
+  <H1>Título del Documento</H1>
+  <P>Contenido del documento...</P>
+</Layout>
+```

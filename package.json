@@ -31,7 +31,11 @@
     "clean:install": "node ./global/clean.js && npm install"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@six-tech/starlight-theme-six": "^1.0.16",
     "archiver": "^7.0.1",
+    "sharp": "^0.34.5",
     "turbo": "^2.7.2"
   },
   "packageManager": "npm@10.9.4"

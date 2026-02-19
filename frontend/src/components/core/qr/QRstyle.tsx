@@ -6,7 +6,7 @@ import { generateQRV2AsBase64, type QRV2Options } from "./QRstyleGenerator"
 
 // Define props
 export interface QRV2Props {
-  value: string
+  url: string
   size?: number
   style?: any
   image?: string
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 })
 
 const QRV2: React.FC<QRV2Props> = ({
-  value,
+  url,
   size = 300,
   style,
   image,
@@ -52,7 +52,7 @@ const QRV2: React.FC<QRV2Props> = ({
       <Image 
         style={{ width: size, height: size }} 
         src={generateQRV2AsBase64({
-          value,
+          url,
           width: size,
           height: size,
           image,

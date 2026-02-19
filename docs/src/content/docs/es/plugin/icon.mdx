@@ -1,0 +1,116 @@
+---
+title: Icon
+description: Componente para renderizar iconos de Lucide en documentos PDF.
+---
+
+# Icon
+
+El componente `Icon` permite integrar fácilmente los iconos de la popular librería [Lucide](https://lucide.dev/icons/) en tus documentos PDF generados con `@react-pdf/renderer`. Este componente toma el nombre de un icono de Lucide y lo renderiza como un gráfico vectorial (SVG), lo que garantiza una escalabilidad perfecta y una alta calidad en cualquier tamaño.
+
+### Props
+
+| Nombre  | Tipo     | Default        | Descripción                                                                               |
+| :------ | :------- | :------------- | :---------------------------------------------------------------------------------------- |
+| `ico`   | `string` | `(requerido)`  | Nombre del icono de Lucide en formato PascalCase (ej: `Home`, `FileText`, `Heart`). Puedes encontrar todos los iconos disponibles en la [galería de Lucide](https://lucide.dev/icons/). |
+| `color` | `string` | `"currentColor"` | Color del trazo (stroke) del icono. Puede ser cualquier valor de color CSS válido (ej: `"red"`, `"#007bff"`). |
+| `fill`  | `string` | `"none"`       | Color de relleno del icono. Por defecto, los iconos de Lucide no tienen relleno, pero puedes especificar uno (ej: `"red"`). |
+| `size`  | `number` | `18`           | Tamaño del icono en puntos (ancho y alto).                                                |
+| `style` | `any`    | `{}`           | Estilos adicionales para el contenedor `View` que envuelve el icono.                      |
+
+### Ejemplos de Uso
+
+#### Icono Básico
+
+```tsx
+import { Icon } from '@react-pdf-levelup/icons'; // Ajusta la importación
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#E4E4E4',
+    padding: 20,
+    alignItems: 'center',
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    border: '1px solid #333',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 12,
+    marginLeft: 5,
+  }
+});
+
+const MyIconDocument = () => (
+  <Document>
+    <Page style={styles.page}>
+      <View style={styles.section}>
+        <Icon ico="Home" />
+        <Text style={styles.text}>Icono Home por defecto</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
+export default MyIconDocument;
+```
+
+#### Icono Personalizado (Color, Tamaño, Relleno)
+
+```tsx
+import { Icon } from '@react-pdf-levelup/icons'; // Ajusta la importación
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#E4E4E4',
+    padding: 20,
+    alignItems: 'center',
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    border: '1px solid #333',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 12,
+    marginLeft: 5,
+  }
+});
+
+const MyStyledIconDocument = () => (
+  <Document>
+    <Page style={styles.page}>
+      <View style={styles.section}>
+        <Icon ico="Heart" size={24} color="red" fill="red" />
+        <Text style={styles.text}>Corazón rojo y relleno</Text>
+      </View>
+      <View style={styles.section}>
+        <Icon ico="CheckCircle" size={30} color="green" />
+        <Text style={styles.text}>Círculo de verificación verde</Text>
+      </View>
+      <View style={styles.section}>
+        <Icon ico="AlarmClock" size={28} color="orange" style={{ marginRight: 10 }} />
+        <Text style={styles.text}>Reloj de alarma naranja con estilo</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
+export default MyStyledIconDocument;
+```
+
+#### Icono con `strokeWidth` personalizado (Ajustando el grosor de línea)
+
+Aunque el componente `Icon` no expone directamente una prop `strokeWidth`, puedes influir en el grosor de línea a través de los estilos o modificando el `viewBox` si es necesario para casos muy específicos. Sin embargo, los iconos de Lucide están diseñados con un `strokeWidth` predeterminado que suele ser estético.
+
+### Encontrar Iconos
+
+Puedes explorar la biblioteca completa de iconos de Lucide y sus nombres (en PascalCase, que es el formato que necesitas para la prop `ico`) en la página oficial: [Lucide Icons Gallery](https://lucide.dev/icons/).

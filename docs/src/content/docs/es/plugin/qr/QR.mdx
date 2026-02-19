@@ -1,0 +1,45 @@
+---
+title: QR
+description: Generador de código QR básico con soporte para logo.
+---
+
+# QR
+
+El componente `QR` permite generar códigos QR simples con la opción de incrustar un logo en el centro. Es útil para añadir información codificada de forma rápida y sencilla a tus documentos PDF.
+
+### Props
+
+| Nombre               | Tipo                               | Default           | Descripción                                           |
+| :------------------- | :--------------------------------- | :---------------- | :---------------------------------------------------- |
+| `url`              | `string`                           | `""`              | El texto o URL que se codificará en el código QR.     |
+| `size`               | `number`                           | `150`             | Tamaño del código QR en píxeles (ancho y alto).       |
+| `style`              | `any`                              | `{}`              | Estilos adicionales para el contenedor del código QR. |
+| `colorDark`          | `string`                           | `"#000000"`       | Color de los módulos (puntos) oscuros del código QR.  |
+| `colorLight`         | `string`                           | `"#ffffff"`       | Color de fondo del código QR.                         |
+| `margin`             | `number`                           | `0`               | Margen alrededor del código QR en píxeles.           |
+| `logo`               | `string`                           | `""`              | URL de la imagen del logo a incrustar en el centro del QR. |
+| `logoWidth`          | `number`                           | `30`              | Ancho del logo en píxeles.                            |
+| `logoHeight`         | `number`                           | `30`              | Alto del logo en píxeles.                             |
+| `errorCorrectionLevel` | `"L" \| "M" \| "Q" \| "H"` | `"H" (con logo) / "M" (sin logo)` | Nivel de corrección de errores del código QR. Permite recuperar datos si el código está dañado. |
+
+### Ejemplo
+
+```tsx
+import { QR } from './QR';
+
+function MyQRCode() {
+  return (
+    <QR 
+      url="https://react-pdf-levelup.com"
+      size={200}
+      colorDark="#1a202c"
+      colorLight="#f7fafc"
+      margin={5}
+      logo="https://picsum.photos/id/237/200/200"
+      logoWidth={40}
+      logoHeight={40}
+      errorCorrectionLevel="H"
+    />
+  );
+}
+```

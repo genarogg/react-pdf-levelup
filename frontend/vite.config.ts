@@ -16,13 +16,6 @@ const proxy = {
     rewrite: (path: any) => path.replace(/^\/api/, ''),
   },
 
-  // ✅ GraphQL
-  '/graphql': {
-    target: 'http://localhost:4000',
-    changeOrigin: true,
-    secure: false,
-    ws: true,
-  },
 
   '/docs': {
     target: 'http://localhost:4500',
@@ -52,12 +45,16 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     allowedHosts: true,
-    proxy: proxy
+    proxy: proxy,
+    hmr: {
+      overlay: false
+    }
   },
 
   preview: {
     host: '0.0.0.0',
     allowedHosts: true,
-    proxy: proxy
+    proxy: proxy,
+    
   },
 })

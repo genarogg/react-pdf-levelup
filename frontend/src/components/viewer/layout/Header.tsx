@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
                         >
 
-                            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap uppercase tracking-wide">
+                            <h1 className="text-accent text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap uppercase tracking-wide">
                                 React PDF Levelup
                             </h1>
                         </Link>
@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             {isPlayground && (
                                 <>
                                     <a
-                                        href="/docs/get-started"
+                                        href="/docs/es/get-started"
                                         onClick={() => (null)}
                                         className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
                                     >
@@ -176,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
                         >
 
-                            <h1 className="font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate uppercase tracking-wide">
+                            <h1 className="text-accent font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate uppercase tracking-wide">
                                 React PDF Levelup
                             </h1>
                         </Link>
