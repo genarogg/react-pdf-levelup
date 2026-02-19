@@ -1,7 +1,7 @@
 import QRCode from "qrcode"
 
 interface QROptions {
-  value: string
+  url: string
   size?: number
   colorDark?: string
   colorLight?: string
@@ -13,7 +13,7 @@ interface QROptions {
 }
 
 export const generateQRAsBase64 = async ({
-  value,
+  url,
   size = 150,
   colorDark = "#000000",
   colorLight = "#ffffff",
@@ -35,7 +35,7 @@ export const generateQRAsBase64 = async ({
     }
 
     // Generar el código QR como base64
-    const qrDataUrl = QRCode.toDataURL(value, options)
+    const qrDataUrl = QRCode.toDataURL(url, options)
     return qrDataUrl
   } catch (error) {
     console.error("Error generando QR:", error)

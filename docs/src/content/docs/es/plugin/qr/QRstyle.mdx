@@ -1,41 +1,62 @@
 ---
 title: QRStyle
-description: Código QR estilizado con opciones avanzadas.
+description: Código QR estilizado con opciones avanzadas de personalización.
 ---
 
-## QRStyle
+# QRStyle
 
-Código QR estilizado con opciones avanzadas y soporte para imagen central.
+El componente `QRStyle` ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `value` | `string` | `""` | Texto o URL para el código QR. |
-| `size` | `number` | `300` | Tamaño del QR. |
-| `image` | `string` | `""` | URL del logo central. |
-| `dotsOptions` | `object` | `{}` | Opciones de puntos (color, tipo). |
-| `backgroundOptions` | `object` | `{ color: #ffffff }` | Opciones de fondo. |
-| `imageOptions` | `object` | `{ margin: 0, imageSize: 0.4 }` | Opciones de imagen central. |
-| `cornersSquareOptions` | `object` | `{}` | Opciones de esquinas cuadradas. |
-| `cornersDotOptions` | `object` | `{}` | Opciones de esquinas en punto. |
-| `colorDark` | `string` | `""` | Color de puntos (fallback). |
-| `colorLight` | `string` | `""` | Color de fondo (fallback). |
-| `margin` | `number` | `0` | Margen (fallback). |
-| `errorCorrectionLevel` | `string` | `"M"` | Corrección de errores (fallback L, M, Q, H). |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| Nombre                   | Tipo                                       | Default        | Descripción                                                                 |
+| :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------- |
+| `value`                  | `string`                                   | `""`           | El texto o URL para el código QR.                                           |
+| `size`                   | `number`                                   | `300`          | Tamaño del código QR en píxeles (ancho y alto).                             |
+| `style`                  | `any`                                      | `{}`           | Estilos adicionales para el contenedor del código QR.                       |
+| `image`                  | `string`                                   | `undefined`    | URL de la imagen del logo a incrustar en el centro del QR.                  |
+| `dotsOptions`            | `QRV2Options["dotsOptions"]`              | `undefined`    | Objeto de opciones para personalizar la forma y el color de los puntos del QR. |
+| `backgroundOptions`      | `QRV2Options["backgroundOptions"]`        | `undefined`    | Objeto de opciones para personalizar el color de fondo del QR.              |
+| `imageOptions`           | `QRV2Options["imageOptions"]`             | `{ margin: 0 }`| Objeto de opciones para controlar el margen y tamaño de la imagen central. |
+| `cornersSquareOptions`   | `QRV2Options["cornersSquareOptions"]`     | `undefined`    | Objeto de opciones para personalizar la forma y el color de las esquinas cuadradas. |
+| `cornersDotOptions`      | `QRV2Options["cornersDotOptions"]`        | `undefined`    | Objeto de opciones para personalizar la forma y el color de los puntos de las esquinas. |
+| `colorDark` (Fallback)   | `string`                                   | `undefined`    | Color de los puntos (se usa si `dotsOptions.color` no está definido).       |
+| `colorLight` (Fallback)  | `string`                                   | `undefined`    | Color de fondo (se usa si `backgroundOptions.color` no está definido).      |
+| `margin` (Fallback)      | `number`                                   | `undefined`    | Margen alrededor del QR (se usa si `imageOptions.margin` no está definido). |
+| `errorCorrectionLevel` (Fallback) | `"L" \| "M" \| "Q" \| "H"` | `undefined`    | Nivel de corrección de errores (se usa si no se especifica en `dotsOptions`). |
 
 ### Ejemplo
 
 ```tsx
-<QRV2
-  value="https://example.com"
-  size={300}
-  image="https://picsum.photos/80"
-  dotsOptions={{ color: "#1f2937", type: "rounded" }}
-  backgroundOptions={{ color: "#ffffff" }}
-  imageOptions={{ margin: 0, imageSize: 0.35 }}
-  cornersSquareOptions={{ type: "extra-rounded", color: "#1f2937" }}
-  cornersDotOptions={{ type: "dot", color: "#1f2937" }}
-/>
+import QRV2 from './QRstyle';
+
+function MyStyledQRCode() {
+  return (
+    <QRV2
+      value="https://react-pdf-levelup.com/docs/qrstyle"
+      size={300}
+      image="https://picsum.photos/id/66/200/200"
+      dotsOptions={{
+        color: "#4267B2",
+        type: "extra-rounded",
+      }}
+      backgroundOptions={{
+        color: "#E0E0E0",
+      }}
+      imageOptions={{
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        margin: 2,
+      }}
+      cornersSquareOptions={{
+        type: "dot",
+        color: "#FF0000",
+      }}
+      cornersDotOptions={{
+        type: "square",
+        color: "#00FF00",
+      }}
+    />
+  );
+}
 ```
