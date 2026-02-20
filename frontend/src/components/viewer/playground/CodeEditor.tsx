@@ -161,6 +161,12 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiqueta("Div"),
 
 
+      //Form
+      etiquetaConSalto("Form"),
+      etiquetaAutoConclusiva("Input", 'label="$1"'),
+      etiquetaAutoConclusiva("Textarea", 'label="$1"'),
+      etiquetaAutoConclusiva("Checkbox", 'label="$1"'),
+
       // Componentes de columnas
       // etiquetaConSalto("Container"),
       etiquetaConSalto("Row"),
@@ -219,7 +225,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
       etiquetaAvanzada("QR", `
         <QR 
-          value="https://example.com" 
+          url="https://example.com" 
           size={150} 
           colorDark="#3794ff" 
           colorLight="#ffffff"
