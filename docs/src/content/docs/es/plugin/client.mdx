@@ -1,0 +1,49 @@
+---
+title: Cliente
+description: Plugin para funciones de utilidad del cliente, incluyendo la generación y decodificación de PDFs.
+---
+
+# Plugin Cliente (`@react-pdf-levelup/client`)
+
+El plugin `@react-pdf-levelup/client` proporciona un conjunto de funciones de utilidad diseñadas para la interacción con PDFs en entornos de cliente (navegadores o Node.js). Exporta principalmente las funciones `generatePDF` y `decodeBase64Pdf`.
+
+## Funciones Exportadas
+
+### `generatePDF`
+
+Esta función te permite generar un documento PDF a partir de un componente React. Es la misma función que se describe en la documentación principal de funciones.
+
+- [Ver documentación detallada de `generatePDF`](/es/functions/generatePDF)
+
+### `decodeBase64Pdf`
+
+Esta función ayuda a decodificar una cadena Base64 que representa un PDF y a ofrecerlo para descarga al usuario. Es la misma función que se describe en la documentación principal de funciones.
+
+- [Ver documentación detallada de `decodeBase64Pdf`](/es/functions/decodeBase64Pdf)
+
+## Uso
+
+Para usar estas funciones, simplemente impórtalas desde el paquete `@react-pdf-levelup/client`:
+
+```tsx
+import { generatePDF, decodeBase64Pdf } from '@react-pdf-levelup/client';
+
+// Ejemplo de uso de generatePDF
+const myTemplate = ({ data }) => {
+  return (
+    <Layout>
+      <P>Hola, {data.name}</P>
+    </Layout>
+  );
+};
+
+async function createAndDownloadPdf() {
+  const data = { name: 'Mundo' };
+  const base64Pdf = await generatePDF({ template: myTemplate, data });
+  if (base64Pdf) {
+    decodeBase64Pdf(base64Pdf, 'mi-documento.pdf');
+  }
+}
+
+createAndDownloadPdf();
+```
