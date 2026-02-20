@@ -42,8 +42,8 @@ https://react-pdf-levelup.nimbux.cloud/playground
 
 | Plugin | Installation | Documentation |
 |--------|-------------|---------------|
-| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
-| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](http://react-pdf-levelup.nimbux.cloud/docs/en/plugin/qr/qr/) |
+| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/qr/qr/) |
+| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/components/position/) |
 | **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/client/) |
 | **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/icon/) |
 

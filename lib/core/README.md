@@ -1,15 +1,14 @@
-<p align="center">
-  <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
-</p>
-
 # react-pdf-levelup
 
 Generador de PDFs dinámicos con React. Esta herramienta te permite crear plantillas PDF con componentes JSX personalizados y previsualizarlas en tiempo real dentro de una aplicación web. Ideal para etiquetas, facturas, reportes, certificados, tablas y más.
 
+<p align="center">
+  <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
+</p>
+
+
 # 🌐 **Playground en vivo:** 
-[https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
-or
-[https://react-pdf-levelup.nimbux.cloud](https://react-pdf-levelup.nimbux.cloud)
+[https://react-pdf-levelup.nimbux.cloud/playground](https://react-pdf-levelup.nimbux.cloud/playground)
 
 ## 📦 Instalación
 
@@ -161,43 +160,6 @@ const App = () => {
 };
 
 export default App;
-```
-
-## 🎨 Templates Avanzados
-
-```typescript
-import { StyleSheet, Font } from '@react-pdf/renderer';
-
-// Ejemplo de template para factura
-const InvoiceTemplate = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.header}>
-        <Text style={styles.companyName}>{data.company}</Text>
-        <Text>Factura #{data.invoiceNumber}</Text>
-      </View>
-      
-      <View style={styles.customerInfo}>
-        <Text>Cliente: {data.customer.name}</Text>
-        <Text>Email: {data.customer.email}</Text>
-      </View>
-      
-      <View style={styles.itemsTable}>
-        {data.items.map((item, index) => (
-          <View key={index} style={styles.tableRow}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemQuantity}>{item.quantity}</Text>
-            <Text style={styles.itemPrice}>${item.price}</Text>
-          </View>
-        ))}
-      </View>
-      
-      <View style={styles.total}>
-        <Text>Total: ${data.total}</Text>
-      </View>
-    </Page>
-  </Document>
-);
 ```
 
 ## 🔧 Configuración Avanzada

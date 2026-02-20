@@ -1,0 +1,19 @@
+---
+title: Select your language
+description: Choose your preferred language to browse the documentation.
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 150px)' }}>
+  <h1>Welcome to React PDF LevelUp Documentation</h1>
+  <p>Please select your language:</p>
+  <div style={{ display: 'flex', gap: '1rem' }}>
+    <LinkButton href="/en/get-started" variant="primary" size="lg">
+      English
+    </LinkButton>
+    <LinkButton href="/es/get-started" variant="secondary" size="lg">
+      Español
+    </LinkButton>
+  </div>
+</div>

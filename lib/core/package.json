@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/core",
-  "version": "4.1.12",
+  "version": "4.1.13",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -18,12 +18,12 @@
     "build:lib": "tsup --config tsup.config.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "peerDependencies": {
-    "@react-pdf/renderer": "^4.3.2",
+  "peerDependencies": {},
+  "dependencies": {
+    "@react-pdf/renderer": "^4",
     "react": ">=18 <=19",
     "react-dom": ">=18 <=19"
   },
-  "dependencies": {},
   "devDependencies": {
     "json": "^11.0.0",
     "tsup": "^8.5.1"
