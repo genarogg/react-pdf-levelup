@@ -1,0 +1,294 @@
+---
+title: REST API
+description: API usage via HTTP with fetch, self-hosting options, and examples in various languages.
+---
+
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
+
+## What is this API?
+
+- Exposes an HTTP endpoint to generate PDFs from a React (TSX) template and a data object.
+- Returns a JSON with a `data.pdf` field containing the PDF in base64.
+- Can be consumed by any language capable of making HTTP requests.
+
+## Available Endpoints
+
+- Cloud (Managed Self-hosting): `https://react-pdf-levelup.nimbux.cloud/api`
+- Self-hosted (Your own Self-hosting): download the package from `https://genarogg.github.io/react-pdf-levelup/public/api.zip` and deploy your server. The exposed endpoint is `/api/pdf`.
+
+### Quick Endpoint Copy
+
+```text
+https://react-pdf-levelup.nimbux.cloud/api
+```
+
+```text
+https://genarogg.github.io/react-pdf-levelup/public/api.zip
+```
+<CardGrid>
+  <Card title="Cloud" icon="cloud-download">
+    Ideal for getting started quickly. Just make a POST request to the endpoint with your template in base64 and the data.
+  </Card>
+  <Card title="Self-hosted" icon="laptop">
+    Download the package, decompress it, and deploy it to your infrastructure (VM, container, PaaS). Offers full control.
+  </Card>
+</CardGrid>
+
+## Request Format
+
+- Method: `POST`
+- Headers: `Content-Type: application/json`
+- Body:
+
+```json
+{
+  "template": "<TSX_IN_BASE64>",
+  "data": { "field": "value" }
+}
+```
+
+## Font Considerations
+
+### Custom Font Registration
+
+If your template uses custom fonts, you must register them using `Font.register`.
+**IMPORTANT**: The API cannot access local files. Fonts must be loaded from **absolute remote URLs** (https://...).
+
+```ts
+Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});
+```
+
+### Default Fonts
+
+The following fonts are available without registration:
+`Courier`, `Courier-Bold`, `Courier-Oblique`, `Courier-BoldOblique`, `Helvetica`, `Helvetica-Bold`, `Helvetica-Oblique`, `Helvetica-BoldOblique`, `Times-Roman`, `Times-Bold`, `Times-Italic`, `Times-BoldItalic`.
+
+## Image Considerations
+
+### Loading and Access
+
+The API cannot access local files. All images used in a template must be referenced by **absolute remote URLs** (https://...). Avoid relative paths or local files in the client package, as the rendering service will not be able to resolve them.
+
+Example of use within a template:
+
+```tsx
+import { Image } from '@react-pdf-levelup/core';
+
+const MyTemplate = ({ data }) => (
+  <Layout>
+    <Image
+      src="https://genarogg.github.io/react-pdf-levelup/public/img/logo/logo.png"
+      style={{ width: 120, height: 'auto' }}
+    />
+  </Layout>
+);
+```
+
+### Formats and Recommendations
+
+- Prefer `JPEG` for photographs (better compression) and `PNG` for images with transparency or graphics.
+- Avoid excessively large images; resize and optimize (compression tools) before serving them.
+- Data URLs (base64) technically work, but greatly increase payload size — **not recommended for large images.**
+
+### CORS and Accessibility
+
+The remote server hosting the images must allow access from the rendering service. Ensure that the resource is publicly accessible (without authentication) and does not block requests due to CORS or IP. If you need protected images, use URLs with valid access tokens and appropriate expiration times.
+
+### SVG
+
+SVGs can work, but make sure they are well-formatted and do not include local references or scripts. Sometimes it is preferable to rasterize them to PNG if rendering is not consistent.
+
+If you wish, I can add visual examples of before/after (optimization) or instructions for serving images from GitHub Pages / CDN.
+
+## Response
+
+```json
+{
+  "data": {
+    "pdf": "<PDF_IN_BASE64>"
+  }
+}
+```
+
+## Complete Example with Node.js (fetch)
+
+This example reads a `.tsx` template, converts it to base64, sends the request to the API, and saves the PDF.
+
+```ts
+import fs from "fs";
+import path from "path";
+
+type ApiResponse = {
+  data?: { pdf?: string }
+}
+
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api";
+
+const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
+  const templatePath = path.join(process.cwd(), "src", "useExample", template);
+  const tsxCode = fs.readFileSync(templatePath, "utf-8");
+  const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
+
+  const res = await fetch(ENDPOINT_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ template: templateBase64, data }),
+  });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`API error (${res.status}): ${txt}`);
+  }
+
+  const json = await res.json() as ApiResponse;
+  return json?.data?.pdf ?? "";
+}
+
+const savePDF = (resultBase64: string) => {
+  const buffer = Buffer.from(resultBase64, "base64");
+  const outputPath = path.join(process.cwd(), "src", "useExample", "example.pdf");
+  fs.writeFileSync(outputPath, buffer);
+  console.log("PDF saved successfully to:", outputPath);
+}
+
+const generateAndSavePDF = async () => {
+  try {
+    const data = { name: "Genaro Gonzalez" };
+    const resultBase64 = await petition({ template: "template.tsx", data });
+    savePDF(resultBase64);
+    console.log(resultBase64);
+  } catch (error) {
+    console.error("Error generating/saving PDF:", error);
+  }
+};
+
+generateAndSavePDF();
+```
+
+## Examples in other languages
+
+These examples show that the API can be used from any language.
+
+### curl
+
+```bash
+curl -X POST https://react-pdf-levelup.nimbux.cloud/api \
+  -H "Content-Type: application/json" \
+  -d '{"template":"BASE64_TSX","data":{"name":"Genaro Gonzalez"}}'
+```
+
+### Python (requests)
+
+```python
+import requests
+import base64
+
+endpoint = "https://react-pdf-levelup.nimbux.cloud/api"
+payload = {
+    "template": "BASE64_TSX",
+    "data": {"name": "Genaro Gonzalez"}
+}
+
+r = requests.post(endpoint, json=payload)
+r.raise_for_status()
+pdf_base64 = r.json().get("data", {}).get("pdf", "")
+
+with open("example.pdf", "wb") as f:
+    f.write(base64.b64decode(pdf_base64))
+```
+
+### C# (HttpClient)
+
+```csharp
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+
+var client = new HttpClient();
+var endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
+
+var body = new
+{
+  template = "BASE64_TSX",
+  data = new { name = "Genaro Gonzalez" }
+};
+
+var json = JsonSerializer.Serialize(body);
+var res = await client.PostAsync(endpoint, new StringContent(json, Encoding.UTF8, "application/json"));
+res.EnsureSuccessStatusCode();
+var content = await res.Content.ReadAsStringAsync();
+
+using var doc = JsonDocument.Parse(content);
+var base64 = doc.RootElement.GetProperty("data").GetProperty("pdf").GetString();
+var bytes = Convert.FromBase64String(base64);
+await File.WriteAllBytesAsync("example.pdf", bytes);
+```
+
+### Java (OkHttp)
+
+```java
+import okhttp3.*;
+
+OkHttpClient client = new OkHttpClient();
+String endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
+String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"name\":\"Genaro Gonzalez\"}}";
+
+RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+Request request = new Request.Builder().url(endpoint).post(body).build();
+
+try (Response response = client.newCall(request).execute()) {
+  if (!response.isSuccessful()) throw new RuntimeException("HTTP " + response.code());
+  String res = response.body().string();
+  // Parse JSON to extract data.pdf and decode base64
+}
+```
+
+### PHP (cURL)
+
+```php
+<?php
+$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api';
+$payload = [
+  'template' => 'BASE64_TSX',
+  'data' => ['name' => 'Genaro Gonzalez']
+];
+
+$ch = curl_init($endpoint);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+if ($response === false) {
+  throw new Exception(curl_error($ch));
+}
+curl_close($ch);
+
+$json = json_decode($response, true);
+$pdfBase64 = $json['data']['pdf'] ?? '';
+file_put_contents('example.pdf', base64_decode($pdfBase64));
+```
+
+## Self-hosting
+
+- Download `api.zip`: `https://genarogg.github.io/react-pdf-levelup/public/api.zip`.
+- Decompress and deploy to your infrastructure (Node, Docker, PaaS).
+- Expose the `/api/pdf` endpoint and point your client to that URL.
+- The payload and response follow the same format shown above.
+
+<LinkButton href="https://genarogg.github.io/react-pdf-levelup/public/api.zip" icon="external" variant="primary" target="_blank" rel="noopener noreferrer">
+  Download API Package (ZIP)
+</LinkButton>
+
+{/* <LinkButton href="/docs/guides/backend-integration" icon="right-arrow" variant="primary">
+  See Backend Integration Guide
+</LinkButton> */}

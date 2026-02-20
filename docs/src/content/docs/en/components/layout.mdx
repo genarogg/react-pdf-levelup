@@ -1,0 +1,172 @@
+---
+title: Layout
+description: Main component for configuring and rendering PDF documents with advanced control over size, margins, background, and footer.
+---
+
+# Layout
+
+The **Layout** component is the structural core of the PDF document.
+
+Internally, it wraps the content with `<Document>` and `<Page>` from `@react-pdf/renderer` and automatically manages:
+
+- Page size
+- Orientation
+- Predefined margin system
+- Background color or image
+- Dynamic footer
+- Automatic numbering
+- Centimeter reference grid
+- Debug mode
+- Automatic footer space reservation
+
+---
+
+## Props
+
+| Name                   | Type                                                                     | Default        | Description                                                                                                        |
+|------------------------|--------------------------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------------------------|
+| `size`                 | `"A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "A9" \| "LETTER" \| "LEGAL" \| "TABLOID"` | `"A4"`         | Page size (ISO 216 and American formats).                                                                          |
+| `orientation`          | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"`      | `"vertical"`   | Page orientation. Internally transformed to `portrait` or `landscape`.                                             |
+| `backgroundColor`      | `string`                                                                 | `"white"`      | Page background color.                                                                                             |
+| `backgroundImage`      | `string`                                                                 | `undefined`    | URL of background image that covers the entire page.                                                               |
+| `backgroundImageOpacity` | `number`                                                                 | `1`            | Opacity of the background image (0–1).                                                                             |
+| `padding`              | `number`                                                                 | `30`           | Base padding when `margin="normal"`.                                                                             |
+| `margin`               | `"apa" \| "normal" \| "estrecho" \| "ancho"`                                     | `"normal"`     | Predefined margin system.                                                                                          |
+| `style`                | `object`                                                                 | `{}`           | Additional styles for the page (does not override automatic footer reservation).                                   |
+| `footer`               | `ReactNode`                                                              | `undefined`    | Custom footer content.                                                                                             |
+| `lines`                | `number`                                                                 | `2` if footer exists | Number of lines reserved for the footer.                                                                           |
+| `pagination`           | `boolean`                                                                | `true`         | Shows automatic page numbering.                                                                                    |
+| `rule`                 | `boolean`                                                                | `false`        | Shows centimeter reference grid.                                                                                   |
+| `debug`                | `boolean`                                                                | `false`        | Activates `@react-pdf/renderer` debug mode.                                                                        |
+
+---
+
+# Margin System
+
+The Layout includes a predefined margin system to facilitate layout.
+
+## `margin="normal"`
+
+Uses the `padding` value.
+
+```tsx
+<Layout padding={40} margin="normal" />
+```
+
+## `margin="estrecho"`
+
+Applies 36pt on all sides.
+
+## `margin="ancho"`
+
+Applies 108pt on all sides.
+
+## `margin="apa"`
+
+Applies 72pt (1 inch) on all sides.
+
+Ideal for academic documents.
+
+---
+
+# Page Background
+
+## Color Background
+
+```tsx
+<Layout backgroundColor="#f5f5f5">
+```
+
+## Background Image
+
+```tsx
+<Layout
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.2}
+>
+```
+
+---
+
+# Smart Footer
+
+```tsx
+<Layout
+  footer={<P>Confidential Document</P>}
+  lines={2}
+>
+```
+
+---
+
+# Automatic Pagination
+
+```tsx
+<Layout pagination={false}>
+```
+
+---
+
+# NextPage
+
+The **NextPage** component allows you to insert a manual page break within the document. It internally uses `<View break />` from `@react-pdf/renderer` to force the start of a new page.
+
+## Usage
+
+```tsx
+<Layout>
+  <H1>First Page</H1>
+  <P>Content of the first page...</P>
+  
+  <NextPage />
+  
+  <H1>Second Page</H1>
+  <P>Content of the second page...</P>
+</Layout>
+```
+
+## Use Cases
+
+- Separate important sections of the document
+- Start chapters or sections on a new page
+- Manually control content distribution
+- Prevent important content from splitting across pages
+
+---
+
+# Reference Grid (`rule`)
+
+```tsx
+<Layout rule>
+```
+
+---
+
+# Debug Mode
+
+```tsx
+<Layout debug>
+```
+
+---
+
+# Complete Example
+
+```tsx
+<Layout
+  size="A4"
+  orientation="portrait"
+  margin="apa"
+  backgroundColor="#ffffff"
+  backgroundImage="/marca-agua.png"
+  backgroundImageOpacity={0.15}
+  footer={<P>My Company</P>}
+  lines={2}
+  pagination
+  rule={false}
+  style={{ fontFamily: 'Helvetica' }}
+>
+  <H1>Document Title</H1>
+  <P>Document content...</P>
+</Layout>
+```

@@ -1,0 +1,113 @@
+---
+title: Form
+description: Components for creating forms.
+---
+
+# Form Components
+
+This document describes the form components (`Form`, `Input`, `TextArea`, `Checkbox`) available for use with `@react-pdf/renderer`.
+
+## Form
+
+The `Form` component is a container for all form fields, providing a context for shared styling and behavior.
+
+### Props
+
+| Property      | Type              | Default     | Description                                                     |
+| :------------ | :---------------- | :---------- | :-------------------------------------------------------------- |
+| `children`    | `React.ReactNode` | `N/A`       | Child elements to be rendered within the form.                  |
+| `style`       | `any`             | `undefined` | Additional styles for the form container.                       |
+| `borderColor` | `string`          | `"#282828"` | Border color for form fields.                                   |
+| `borderRadius`| `number`          | `5`         | Border radius for form fields.                                  |
+| `labelColor`  | `string`          | `"#333"`    | Label text color.                                               |
+| `textColor`   | `string`          | `"#000"`    | General text color within the form.                             |
+
+### Usage Example
+
+```jsx
+import React from 'react';
+import { Page, Document } from '@react-pdf/renderer';
+import { Form, Input, TextArea, Checkbox } from './Form'; // Adjust path
+
+const MyDocument = () => (
+  <Document>
+    <Page>
+      <Form borderColor="#FF0000" borderRadius={10}>
+        {/* ... form fields ... */}
+      </Form>
+    </Page>
+  </Document>
+);
+```
+
+## Input
+
+The `Input` component is used for single-line text input.
+
+### Props
+
+| Property      | Type             | Default     | Description                                                     |
+| :------------ | :--------------- | :---------- | :-------------------------------------------------------------- |
+| `label`       | `string`         | `undefined` | Label for the input field.                                      |
+| `placeholder` | `string`         | `""`        | Placeholder text.                                               |
+| `required`    | `boolean`        | `false`     | Indicates if the field is required.                             |
+| `width`       | `string | number` | `"100%"`    | Width of the input field.                                       |
+| `height`      | `number`         | `undefined` | Minimum height of the input field.                              |
+| `style`       | `any`            | `undefined` | Additional styles for the field container.                      |
+| `labelStyle`  | `any`            | `undefined` | Additional styles for the label.                                |
+
+### Usage Example
+
+```jsx
+<Input
+  label="Full Name"
+  placeholder="Enter your name"
+  required
+  width="50%"
+/>
+```
+
+## TextArea
+
+The `TextArea` component is used for multi-line text input.
+
+### Props
+
+| Property      | Type             | Default     | Description                                                     |
+| :------------ | :--------------- | :---------- | :-------------------------------------------------------------- |
+| `label`       | `string`         | `undefined` | Label for the text area field.                                  |
+| `placeholder` | `string`         | `""`        | Placeholder text.                                               |
+| `required`    | `boolean`        | `false`     | Indicates if the field is required.                             |
+| `width`       | `string | number` | `"100%"`    | Width of the text area field.                                   |
+| `height`      | `number`         | `60`        | Height of the text area field.                                  |
+| `style`       | `any`            | `undefined` | Additional styles for the field container.                      |
+| `labelStyle`  | `any`            | `undefined` | Additional styles for the label.                                |
+
+### Usage Example
+
+```jsx
+<TextArea
+  label="Comments"
+  placeholder="Write your comments here..."
+  height={100}
+/>
+```
+
+## Checkbox
+
+The `Checkbox` component is used for boolean selections.
+
+### Props
+
+| Property      | Type      | Default     | Description                                                     |
+| :------------ | :-------- | :---------- | :-------------------------------------------------------------- |
+| `label`       | `string`  | `undefined` | Label for the checkbox.                                         |
+| `checked`     | `boolean` | `false`     | Indicates if the checkbox is checked.                           |
+| `style`       | `any`     | `undefined` | Additional styles for the checkbox container.                   |
+| `labelStyle`  | `any`     | `undefined` | Additional styles for the checkbox label.                       |
+
+### Usage Example
+
+```jsx
+<Checkbox label="I accept the terms and conditions" checked={true} />
+```

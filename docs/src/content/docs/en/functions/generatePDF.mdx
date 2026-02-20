@@ -1,0 +1,67 @@
+---
+title: generatePDF
+description: Helper functions for generating and handling PDFs.
+---
+
+## generatePDF
+
+Asynchronous function to generate a PDF in base64 format from a React component.
+
+### Signature
+
+```typescript
+generatePDF({ template, data }: { template: React.ElementType, data?: any }): Promise<string>
+```
+
+### Parameters
+
+| Name       | Type                 | Description                                                  |
+| :--------- | :------------------- | :----------------------------------------------------------- |
+| `template` | `React.ElementType`  | The React component that represents the PDF document.        |
+| `data`     | `any`                | Optional data to be passed as props to the template component. |
+
+### Returns
+
+Returns a promise that resolves to a `string` containing the base64 encoded PDF.
+
+### Example
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const handleGenerate = async () => {
+  const base64 = await generatePDF({ 
+    template: MyDocument, 
+    data: { name: "John Doe" } 
+  });
+  console.log("Generated PDF:", base64);
+};
+```
+
+## decodeBase64Pdf
+
+Function to decode a base64 PDF string, download it, and open it in a new tab. Works in the browser.
+
+### Signature
+
+```typescript
+decodeBase64Pdf(base64: string, fileName: string): void
+```
+
+### Parameters
+
+| Name       | Type     | Description                                |
+| :--------- | :------- | :----------------------------------------- |
+| `base64`   | `string` | The base64 string of the PDF.              |
+| `fileName` | `string` | The name under which the file will be downloaded. |
+
+### Example
+
+```tsx
+import { decodeBase64Pdf } from '@react-pdf-levelup/core';
+
+const handleDownload = () => {
+  decodeBase64Pdf(base64String, "document.pdf");
+};
+```

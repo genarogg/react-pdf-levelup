@@ -1,0 +1,226 @@
+---
+title: Table
+description: Components for creating structured and customizable tables.
+---
+
+# Table
+
+The `Table`, `Thead`, `Tbody`, `Tr`, `Th`, and `Td` components provide a complete set for building structured tables in your PDF documents, with customization options for layout and appearance.
+
+---
+
+## Table
+
+The `Table` component is the main container for building tables. It allows defining general styles and behaviors for all cells and rows.
+
+### Props
+
+| Name           | Type                      | Default      | Description                                                                 |
+| :------------- | :------------------------ | :----------- | :-------------------------------------------------------------------------- |
+| `children`       | `React.ReactNode`         | `undefined`  | The content of the table (usually `Thead` and `Tbody`).                     |
+| `style`          | `any`                     | `{}`         | Additional styles for the table.                                          |
+| `cellHeight`     | `number`                  | `22`         | Minimum height of each cell in the table.                                     |
+| `borderColor`    | `string`                  | `"#000"`     | Border color for the table and cells.                                   |
+| `textColor`      | `string`                  | `"#000"`     | Default text color for all cells.                          |
+| `headerBackground` | `string`                  | `"#ccc"`     | Background color for table header cells.                  |
+| `zebraColor`     | `string`                  | `"#eeeeee"`  | Background color for odd rows in "modern" mode.                   |
+| `grid`           | `"grid" \| "modern"`      | `"grid"`     | Defines the table grid style ("grid" for full borders, "modern" for only bottom borders). |
+
+### Example
+
+```tsx
+import { Table, Thead, Tbody, Tr, Th, Td } from './Tablet';
+import { Text } from '@react-pdf/renderer';
+
+function MyTable() {
+  return (
+    <Table
+      cellHeight={25}
+      borderColor="#FF0000"
+      textColor="#0000FF"
+      headerBackground="#ADD8E6"
+      zebraColor="#D3D3D3"
+      grid="modern"
+    >
+      <Thead>
+        <Tr>
+          <Th>Column A</Th>
+          <Th textAlign="right">Column B</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        <Tr>
+          <Td>Data 1</Td>
+          <Td>Data 2</Td>
+        </Tr>
+        <Tr>
+          <Td>Data 3</Td>
+          <Td>Data 4</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  );
+}
+```
+
+---
+
+## Thead
+
+The `Thead` component represents the table header section.
+
+### Props
+
+| Name        | Type                               | Default          | Description                                         |
+| :---------- | :--------------------------------- | :--------------- | :-------------------------------------------------- |
+| `children`  | `React.ReactNode`                  | `undefined`      | The header content (usually `Tr` components). |
+| `style`     | `any`                              | `{}`             | Additional styles for the header.             |
+| `textAlign` | `"left" \| "center" \| "right"`    | `"left"`         | Text alignment for header cells. |
+| `borderColor` | `string`                           | `(from context)` | Border color for the header (overrides `Table`). |
+| `textColor` | `string`                           | `(from context)` | Text color for the header (overrides `Table`). |
+
+### Example
+
+```tsx
+import { Table, Thead, Tr, Th } from './Tablet';
+
+function MyTableWithHeader() {
+  return (
+    <Table>
+      <Thead textAlign="center" textColor="white" borderColor="darkgray">
+        <Tr>
+          <Th>Product</Th>
+          <Th>Quantity</Th>
+        </Tr>
+      </Thead>
+    </Table>
+  );
+}
+```
+
+---
+
+## Tbody
+
+The `Tbody` component represents the table body, where the main data is located.
+
+### Props
+
+| Name        | Type              | Default          | Description                                         |
+| :---------- | :---------------- | :--------------- | :-------------------------------------------------- |
+| `children`  | `React.ReactNode` | `undefined`      | The body content (usually `Tr` components). |
+| `borderColor` | `string`          | `(from context)` | Border color for the body (overrides `Table`). |
+| `textColor` | `string`          | `(from context)` | Text color for the body (overrides `Table`). |
+
+### Example
+
+```tsx
+import { Table, Tbody, Tr, Td } from './Tablet';
+
+function MyTableWithBody() {
+  return (
+    <Table>
+      <Tbody borderColor="lightgray" textColor="gray">
+        <Tr>
+          <Td>Item 1</Td>
+          <Td>10</Td>
+        </Tr>
+        <Tr>
+          <Td>Item 2</Td>
+          <Td>25</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  );
+}
+```
+
+---
+
+## Tr
+
+The `Tr` component represents a row within the table (both in `Thead` and `Tbody`).
+
+### Props
+
+| Name       | Type              | Default     | Description                       |
+| :--------- | :---------------- | :---------- | :-------------------------------- |
+| `children` | `React.ReactNode` | `undefined` | The content of the row (usually `Th` or `Td`). |
+| `style`    | `any`             | `{}`        | Additional styles for the row. |
+
+### Example
+
+```tsx
+import { Tr, Td } from './Tablet';
+
+function MyTableRow() {
+  return (
+    <Tr style={{ backgroundColor: '#F0F0F0' }}>
+      <Td>Custom Row</Td>
+      <Td>Value</Td>
+    </Tr>
+  );
+}
+```
+
+---
+
+## Th
+
+The `Th` component represents an individual header cell within a row (`Tr`) in the `Thead`.
+
+### Props
+
+| Name        | Type                               | Default          | Description                                       |
+| :---------- | :--------------------------------- | :--------------- | :------------------------------------------------ |
+| `children`  | `React.ReactNode`                  | `undefined`      | The content of the header cell.           |
+| `style`     | `any`                              | `{}`             | Additional styles for the cell.                |
+| `width`     | `string \| number`                 | `undefined`      | Cell width (e.g., "50%", 100).                 |
+| `height`    | `string \| number`                 | `(from context)` | Cell height. If not specified, uses `cellHeight` from context. |
+| `colSpan`   | `number`                           | `undefined`      | Number of columns this cell spans.          |
+| `textAlign` | `"left" \| "center" \| "right"`    | `"left"`         | Text alignment within the cell.          |
+
+### Example
+
+```tsx
+import { Th } from './Tablet';
+
+function MyTableHeaderCell() {
+  return (
+    <Th width="30%" colSpan={2} textAlign="center" style={{ color: 'blue' }}>
+      Combined Header
+    </Th>
+  );
+}
+```
+
+---
+
+## Td
+
+The `Td` component represents an individual data cell within a row (`Tr`) in the `Tbody`.
+
+### Props
+
+| Name        | Type                               | Default          | Description                                       |
+| :---------- | :--------------------------------- | :--------------- | :------------------------------------------------ |
+| `children`  | `React.ReactNode`                  | `undefined`      | The content of the data cell.                |
+| `style`     | `any`                              | `{}`             | Additional styles for the cell.                |
+| `width`     | `string \| number`                 | `undefined`      | Cell width (e.g., "25%", 50).                  |
+| `height`    | `string \| number`                 | `(from context)` | Cell height. If not specified, uses `cellHeight` from context. |
+| `colSpan`   | `number`                           | `undefined`      | Number of columns this cell spans.          |
+| `textAlign` | `"left" \| "center" \| "right"`    | `"left"`         | Text alignment within the cell.          |
+
+### Example
+
+```tsx
+import { Td } from './Tablet';
+
+function MyTableDataCell() {
+  return (
+    <Td width="70" textAlign="right" style={{ fontSize: 12 }}>
+      Important Data
+    </Td>
+  );
+}
+```

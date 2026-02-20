@@ -1,0 +1,46 @@
+---
+title: Media
+description: Components for images.
+---
+
+## Img
+
+Component for displaying images.
+
+### Props
+
+| Name    | Type     | Default    | Description           |
+| :------ | :------- | :--------- | :-------------------- |
+| `src`   | `string` | `""`       | Image URL.            |
+| `style` | `object` | `{}`       | Additional styles.    |
+
+### Example
+
+```tsx
+<Img src="https://picsum.photos/400/200" style={{ width: 200 }} />
+```
+
+## ImgBg
+
+Background image with overlaid content.
+
+### Props
+
+| Name           | Type            | Default    | Description                       |
+| :------------- | :-------------- | :--------- | :-------------------------------- |
+| `src`          | `string`        | `""`       | Background image URL.             |
+| `width`        | `number\|string` | `"100%"`   | Background width.                 |
+| `height`       | `number\|string` | `"100%"`   | Background height.                |
+| `opacity`      | `number`        | `0.2`      | Background opacity (0-1).         |
+| `objectFit`    | `string`        | `"cover"`  | Image fit (cover, contain, fill, none, scale-down). |
+| `objectPosition` | `string`      | `"center"` | Image position.                   |
+| `fixed`        | `boolean`       | `false`    | Fix on all pages.                 |
+| `style`        | `object`        | `{}`       | Additional styles.                |
+
+### Example
+
+```tsx
+<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
+  <P>Text over background image</P>
+</ImgBg>
+```

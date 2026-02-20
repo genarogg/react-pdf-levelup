@@ -1,0 +1,60 @@
+---
+title: Font Management
+description: Default available fonts and how to register custom fonts.
+---
+
+## Default Fonts
+
+The following fonts are available by default in `react-pdf-levelup` and do not require registration:
+
+- `Courier`
+- `Courier-Bold`
+- `Courier-Oblique`
+- `Courier-BoldOblique`
+- `Helvetica`
+- `Helvetica-Bold`
+- `Helvetica-Oblique`
+- `Helvetica-BoldOblique`
+- `Times-Roman`
+- `Times-Bold`
+- `Times-Italic`
+- `Times-BoldItalic`
+
+## Custom Fonts
+
+You can register additional fonts using `Font.register`.
+
+> **⚠️ IMPORTANT**: To ensure that the PDF is generated correctly in all environments (especially when using the REST API), fonts **MUST** be loaded from **absolute remote URLs** (https://...). Do not use local file system paths.
+
+### Registration Example
+
+```ts
+Font.register({
+  family: "Lobster",
+  fonts: [
+    {
+      src: "https://genarogg.github.io/react-pdf-levelup/public/font/Lobster-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});
+```
+
+### Usage in Styles
+
+Once registered, you can use the font in your styles (`StyleSheet.create` or inline styles):
+
+```tsx
+<Layout style={{ fontFamily: 'Helvetica' }}>
+  <H1>Document Title</H1>
+  <P>Document content...</P>
+</Layout>
+```
+
+<div style={{ marginTop: '2rem', padding: '1.5rem', border: '1px solid var(--sl-color-gray-5)', borderRadius: '0.5rem', backgroundColor: 'var(--sl-color-gray-6)' }}>
+
+  <h3 style={{ marginTop: 0 }}>Complete Example in playground</h3>
+
+  <p>You can see a complete example of how to register and use a custom font in our [Playground](https://react-pdf-levelup.nimbux.cloud/playground/template/facturaInvoice). There you can interact with the code and see how the PDF is generated in real time.</p>
+
+</div>

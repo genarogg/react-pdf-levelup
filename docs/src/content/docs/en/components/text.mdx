@@ -1,0 +1,144 @@
+---
+title: Text
+description: Components for rendering and formatting text.
+---
+
+## P, H1-H6
+
+Basic text components (paragraph and headings).
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional text styles. |
+
+### Example
+
+```tsx
+<H1>Title</H1>
+<H3>Subtitle</H3>
+<P>Paragraph with normal text.</P>
+```
+
+## Strong, Em, U, Small
+
+Inline text formatting components.
+
+- **Strong**: Bold text.
+- **Em**: Italic text (emphasis).
+- **U**: Underlined text.
+- **Small**: Smaller text.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<P>
+  <Strong>Bold</Strong>, <Em>Italic</Em>, <U>Underlined</U>, <Small>Small</Small>
+</P>
+```
+
+## Blockquote
+
+Blockquote for highlighting important text.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<Blockquote>A highlighted quote in the document.</Blockquote>
+```
+
+## Mark
+
+Highlighted text (like with a marker).
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<Mark>Highlighted Text</Mark>
+```
+
+## Span
+
+Generic inline text container.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<P>Normal text with a <Span style={{ color: 'red' }}>red span</Span>.</P>
+```
+
+## BR
+
+Line break.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<P>Line 1</P>
+<BR />
+<P>Line 2</P>
+```
+
+## HR
+
+Horizontal dividing line.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<HR />
+```
+
+## A
+
+Link.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `href`  | `string` | `""`    | Link URL.             |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<A href="https://example.com">Go to website</A>
+```

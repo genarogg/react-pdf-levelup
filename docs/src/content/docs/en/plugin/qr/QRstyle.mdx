@@ -1,0 +1,62 @@
+---
+title: QRStyle
+description: Styled QR code with advanced customization options.
+---
+
+# QRStyle
+
+The `QRStyle` component (formerly `QRV2`) offers advanced control over the appearance of QR codes, allowing customization of dots, background, corners, and the inclusion of a central image with detailed options. This component uses the `qr-code-styling` library internally.
+
+### Props
+
+| Name                   | Type                                       | Default        | Description                                                                                               |
+| :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
+| `value`                  | `string`                                   | `""`           | The text or URL to be encoded in the QR code.                                                        |
+| `size`                   | `number`                                   | `300`          | Size of the QR code in pixels (width and height).                                                           |
+| `style`                  | `any`                                      | `{}`           | Additional styles for the `View` container that wraps the QR code.                                |
+| `image`                  | `string`                                   | `undefined`    | URL of the logo image to embed in the center of the QR.                                                |
+| `dotsOptions`            | `{ color?: string; type?: "rounded" \| "dots" \| "classy" \| "classy-rounded" \| "square" \| "extra-rounded"; }` | `undefined`    | Options object to customize the shape and color of the QR dots. Can be a hexadecimal color or a predefined type. |
+| `backgroundOptions`      | `{ color?: string; }`                      | `undefined`    | Options object to customize the background color of the QR. The default color if not specified is `#ffffff`. |
+| `imageOptions`           | `{ crossOrigin?: string; margin?: number; imageSize?: number; }` | `{ margin: 0 }`| Options object to control the margin around the central image (`margin` in pixels, value between 0 and 1 for `imageSize`). `crossOrigin` is useful for images from different domains. |
+| `cornersSquareOptions`   | `{ type?: "dot" \| "square" \| "extra-rounded"; color?: string; }` | `undefined`    | Options object to customize the shape and color of the square corner markers of the QR. |
+| `cornersDotOptions`      | `{ type?: "dot" \| "square"; color?: string; }` | `undefined`    | Options object to customize the shape and color of the dots inside the QR corner markers. |
+| `colorDark` (Fallback)   | `string`                                   | `undefined`    | **(Compatibility)** Color of the dots. Used if `dotsOptions.color` is not defined.               |
+| `colorLight` (Fallback)  | `string`                                   | `undefined`    | **(Compatibility)** Background color. Used if `backgroundOptions.color` is not defined.              |
+| `margin` (Fallback)      | `number`                                   | `undefined`    | **(Compatibility)** Margin around the QR. Used if `imageOptions.margin` is not defined.       |
+| `errorCorrectionLevel` (Fallback) | `"L" \| "M" \| "Q" \| "H"` | `undefined`    | **(Compatibility)** Error correction level. Used if not specified in `dotsOptions` or higher-level properties. |
+
+### Example
+
+```tsx
+import QRStyle from './QRstyle'; // Note: The component is exported as QRV2 but can be imported as QRStyle
+
+function MyStyledQRCode() {
+  return (
+    <QRStyle
+      value="https://react-pdf-levelup.com/docs/qrstyle"
+      size={300}
+      image="https://picsum.photos/id/66/200/200"
+      dotsOptions={{
+        color: "#4267B2", // Facebook Blue
+        type: "extra-rounded",
+      }}
+      backgroundOptions={{
+        color: "#E0E0E0", // Light Gray
+      }}
+      imageOptions={{
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        margin: 2,
+      }}
+      cornersSquareOptions={{
+        type: "dot",
+        color: "#FF0000", // Red
+      }}
+      cornersDotOptions={{
+        type: "square",
+        color: "#00FF00", // Green
+      }}
+    />
+  );
+}
+```

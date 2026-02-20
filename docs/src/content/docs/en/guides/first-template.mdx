@@ -1,0 +1,152 @@
+---
+title: Your First Template
+description: Learn to build a PDF template from scratch using React PDF Level Up.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+In this guide, you will learn how to create a basic template for an invoice. We will use layout and table components to structure the information.
+
+## Basic Structure
+
+Every template must be a functional React component that returns a `Layout` component.
+
+```tsx
+import { Layout, P } from '@react-pdf-levelup/core';
+
+const MyTemplate = ({ data }) => {
+  return (
+    <Layout>
+      <P>Hello World</P>
+    </Layout>
+  );
+};
+
+export default MyTemplate;
+```
+
+<Steps>
+
+1.  **Define the Data**
+
+    It's good practice to define an interface for the data your template expects to receive. This will help with autocompletion and type validation.
+
+    ```tsx
+    interface InvoiceData {
+      number: string;
+      date: string;
+      client: {
+        name: string;
+        address: string;
+      };
+      items: {
+        description: string;
+        total: number;
+      }[];
+    }
+    ```
+
+2.  **Configure the Layout**
+
+    Use `Layout` as the main container. You can configure paper size, margins, and other metadata.
+
+    ```tsx
+    <Layout size="A4" padding={30}>
+      {/* Content here */}
+    </Layout>
+    ```
+
+3.  **Create the Header**
+
+    Use the Grid system (`Container`, `Row`, `Col`) to align elements such as the logo and company information.
+
+    ```tsx
+    <Container>
+      <Row>
+        <Col6>
+          <H1>INVOICE</H1>
+        </Col6>
+        <Col6>
+          <Right>
+            <P>Date: {data.date}</P>
+          </Right>
+        </Col6>
+      </Row>
+    </Container>
+    ```
+
+4.  **Add the Items Table**
+
+    Use the `Table`, `Thead`, `Tbody`, `Tr`, `Th`, and `Td` components to list products or services.
+
+    ```tsx
+    <Table>
+      <Thead>
+        <Tr>
+          <Th>Description</Th>
+          <Th textAlign="right">Total</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.items.map((item, index) => (
+          <Tr key={index}>
+            <Td>{item.description}</Td>
+            <Td textAlign="right">{item.total} €</Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+    ```
+
+</Steps>
+
+## Final Result
+
+Here is the complete invoice template code:
+
+```tsx
+import React from 'react';
+import {
+  Layout, Row, Col6, H1, P, Right, Table, Thead, Tbody, Tr, Th, Td
+} from '@react-pdf-levelup/core';
+
+const InvoiceTemplate = ({ data }) => {
+  return (
+    <Layout size="A4">
+      <Row>
+        <Col6>
+          <H1>Invoice #{data.number}</H1>
+          <P>Client: {data.client.name}</P>
+        </Col6>
+        <Col6>
+          <Right>
+            <P>{data.date}</P>
+          </Right>
+        </Col6>
+      </Row>
+
+      <Table style={{ marginTop: 20 }}>
+        <Thead>
+          <Tr>
+            <Th>Description</Th>
+            <Th textAlign="right">Price</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.items.map((item, i) => (
+            <Tr key={i}>
+              <Td>{item.description}</Td>
+              <Td textAlign="right">{item.total}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Layout>
+  );
+};
+
+export default InvoiceTemplate;
+```
+
+## View an Example in the Playground
+You can see a complete example of this template in our [Playground](https://react-pdf-levelup.nimbux.cloud/playground/template/factura). There you can interact with the code and see how the PDF is generated in real time.

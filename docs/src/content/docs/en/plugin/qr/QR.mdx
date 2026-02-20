@@ -1,0 +1,45 @@
+---
+title: QR
+description: Basic QR code generator with logo support.
+---
+
+# QR
+
+The `QR` component allows generating simple QR codes with the option to embed a logo in the center. It is useful for quickly and easily adding encoded information to your PDF documents.
+
+### Props
+
+| Name                   | Type                               | Default                      | Description                                                     |
+| :--------------------- | :--------------------------------- | :--------------------------- | :-------------------------------------------------------------- |
+| `url`                  | `string`                           | `""`                         | The text or URL to be encoded in the QR code.                   |
+| `size`                 | `number`                           | `150`                        | Size of the QR code in pixels (width and height).               |
+| `style`                | `any`                              | `{}`                         | Additional styles for the QR code container.                    |
+| `colorDark`            | `string`                           | `"#000000"`                  | Color of the dark modules (dots) of the QR code.                |
+| `colorLight`           | `string`                           | `"#ffffff"`                  | Background color of the QR code.                                |
+| `margin`               | `number`                           | `0`                          | Margin around the QR code in pixels.                            |
+| `logo`                 | `string`                           | `""`                         | URL of the logo image to embed in the center of the QR.         |
+| `logoWidth`            | `number`                           | `30`                         | Width of the logo in pixels.                                    |
+| `logoHeight`           | `number`                           | `30`                         | Height of the logo in pixels.                                   |
+| `errorCorrectionLevel` | `"L" \| "M" \| "Q" \| "H"`         | `"H" (with logo) / "M" (without logo)` | Error correction level of the QR code. Allows data recovery if the code is damaged. |
+
+### Example
+
+```tsx
+import { QR } from './QR';
+
+function MyQRCode() {
+  return (
+    <QR
+      url="https://react-pdf-levelup.com"
+      size={200}
+      colorDark="#1a202c"
+      colorLight="#f7fafc"
+      margin={5}
+      logo="https://picsum.photos/id/237/200/200"
+      logoWidth={40}
+      logoHeight={40}
+      errorCorrectionLevel="H"
+    />
+  );
+}
+```

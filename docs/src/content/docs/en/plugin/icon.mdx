@@ -1,0 +1,116 @@
+---
+title: Icon
+description: Component for rendering Lucide icons in PDF documents.
+---
+
+# Icon
+
+The `Icon` component allows easy integration of icons from the popular [Lucide](https://lucide.dev/icons/) library into your PDF documents generated with `@react-pdf/renderer`. This component takes the name of a Lucide icon and renders it as a vector graphic (SVG), ensuring perfect scalability and high quality at any size.
+
+### Props
+
+| Name    | Type     | Default          | Description                                                                               |
+| :------ | :------- | :--------------- | :---------------------------------------------------------------------------------------- |
+| `ico`   | `string` | `(required)`     | Lucide icon name in PascalCase format (e.g., `Home`, `FileText`, `Heart`). You can find all available icons in the [Lucide gallery](https://lucide.dev/icons/). |
+| `color` | `string` | `"currentColor"` | Stroke color of the icon. Can be any valid CSS color value (e.g., `"red"`, `"#007bff"`). |
+| `fill`  | `string` | `"none"`         | Fill color of the icon. By default, Lucide icons have no fill, but you can specify one (e.g., `"red"`). |
+| `size`  | `number` | `18`             | Icon size in points (width and height).                                                |
+| `style` | `any`    | `{}`             | Additional styles for the `View` container that wraps the icon.                      |
+
+### Usage Examples
+
+#### Basic Icon
+
+```tsx
+import { Icon } from '@react-pdf-levelup/icons'; // Adjust import
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#E4E4E4',
+    padding: 20,
+    alignItems: 'center',
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    border: '1px solid #333',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 12,
+    marginLeft: 5,
+  }
+});
+
+const MyIconDocument = () => (
+  <Document>
+    <Page style={styles.page}>
+      <View style={styles.section}>
+        <Icon ico="Home" />
+        <Text style={styles.text}>Default Home Icon</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
+export default MyIconDocument;
+```
+
+#### Custom Icon (Color, Size, Fill)
+
+```tsx
+import { Icon } from '@react-pdf-levelup/icons'; // Adjust import
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#E4E4E4',
+    padding: 20,
+    alignItems: 'center',
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    border: '1px solid #333',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 12,
+    marginLeft: 5,
+  }
+});
+
+const MyStyledIconDocument = () => (
+  <Document>
+    <Page style={styles.page}>
+      <View style={styles.section}>
+        <Icon ico="Heart" size={24} color="red" fill="red" />
+        <Text style={styles.text}>Red and filled heart</Text>
+      </View>
+      <View style={styles.section}>
+        <Icon ico="CheckCircle" size={30} color="green" />
+        <Text style={styles.text}>Green check circle</Text>
+      </View>
+      <View style={styles.section}>
+        <Icon ico="AlarmClock" size={28} color="orange" style={{ marginRight: 10 }} />
+        <Text style={styles.text}>Orange alarm clock with style</Text>
+      </View>
+    </Page>
+  </Document>
+);
+
+export default MyStyledIconDocument;
+```
+
+#### Icon with custom `strokeWidth` (Adjusting line thickness)
+
+Although the `Icon` component does not directly expose a `strokeWidth` prop, you can influence line thickness through styles or by modifying the `viewBox` if necessary for very specific cases. However, Lucide icons are designed with a default `strokeWidth` that is usually aesthetic.
+
+### Finding Icons
+
+You can explore the complete Lucide icon library and their names (in PascalCase, which is the format you need for the `ico` prop) on the official page: [Lucide Icons Gallery](https://lucide.dev/icons/).

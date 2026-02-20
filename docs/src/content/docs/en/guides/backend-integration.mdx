@@ -1,0 +1,50 @@
+---
+title: Backend Integration
+description: Generating PDFs on the server or with Node.js scripts.
+---
+
+React PDF Level Up is not just for the frontend. You can use the `generatePDF` function in Node.js environments to programmatically generate documents, save them to disk, or send them as an HTTP response.
+
+## Requirements
+
+Make sure your environment supports React. This generally works out-of-the-box in frameworks like **Next.js**, **Remix**, **express**, **fastify**, or in simple Node, bun scripts, or any environment that supports ES Modules.
+
+## Script Example
+
+The following example shows how to generate a PDF, convert it to a Buffer, and save it to the file system or send it to the frontend.
+
+```typescript
+import { generatePDF } from "@react-pdf-levelup/core";
+import Template from "./MyTemplate"; // Your Template component
+
+const controllerX = async () => {
+    try {
+        const data = {
+            name: "Juan Pérez",
+            age: 30,
+            city: "Madrid",
+        };
+
+        // 1. Generate the PDF in base64
+        const base64PDF = await generatePDF({ template: Template, data });
+
+        if (!base64PDF) {
+            throw new Error("Could not generate PDF");
+        }
+
+        return base64PDF;
+
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+    }
+};
+
+```
+
+## Usage in API Endpoints (from your backend).
+
+If you are using Express, Next.js API Routes, or another HTTP server, you can send the buffer directly to the client and decode it on the frontend.
+
+## I do not use a JavaScript/TypeScript execution environment.
+
+Can I use React PDF Level Up? Yes, you can use the REST API designed to generate PDFs. You can find the documentation for this API at [this link](https://react-pdf-levelup.nimbux.cloud/docs/en/guides/api-rest/)

@@ -1,0 +1,75 @@
+---
+title: Columns
+description: Components for creating responsive grid layouts in your PDF documents.
+---
+
+# Grid
+
+The `Container`, `Row`, and `Col` components provide a flexible grid system for organizing the content of your PDF documents, similar to flexbox-based grid systems in web development.
+
+---
+
+## Container
+
+The `Container` component is the main wrapper for your column layout. It helps center and limit the width of your content.
+
+### Props
+
+| Name       | Type              | Default     | Description                               |
+|----------|-------------------|-------------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | The content to render inside the container. |
+| `style`    | `any`             | `{}`        | Additional styles for the container.      |
+
+## Row
+
+The `Row` component is used to create rows within a `Container`. Rows wrap columns and ensure they align correctly.
+
+### Props
+
+| Name       | Type              | Default     | Description                               |
+|----------|-------------------|-------------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | The content to render inside the row.     |
+| `style`    | `any`             | `{}`        | Additional styles for the row.          |
+
+
+## Col (Col1 to Col12)
+
+The `Col` components (from `Col1` to `Col12`) represent individual columns within a `Row`. Each `Col` component defines the width of the column on a 12-scale. For example, `Col6` will occupy half of the available width.
+
+### Props
+
+| Name       | Type              | Default     | Description                               |
+|----------|-------------------|-------------|-------------------------------------------|
+| `children` | `React.ReactNode` | `undefined` | The content to render inside the column.  |
+| `style`    | `any`             | `{}`        | Additional styles for the column.         |
+
+### Usage Example
+
+```tsx
+import { Layout, Container, Row, Col6, Col3, P } from '@react-pdf-levelup/core';
+
+function MyDocument() {
+  return (
+    <Layout>
+        <Container>
+            <Row>
+                <Col6>
+                <P>This column takes up half the width.</P>
+                </Col6>
+                <Col6>
+                <P>This column also takes up half the width.</P>
+                </Col6>
+            </Row>
+            <Row>
+                <Col3>
+                <P>One quarter.</P>
+                </Col3>
+                <Col9>
+                <P>Three quarters.</P>
+                </Col9>
+            </Row>
+        </Container>
+    </Layout>
+  );
+}
+```
