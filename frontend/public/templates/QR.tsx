@@ -59,14 +59,14 @@ const Component = () => {
         <View style={styles.grid}>
            <View style={styles.qrItem}>
              <QR 
-               value="https://example.com" 
+               url="https://example.com" 
                size={120} 
              /> 
              <Text style={styles.qrLabel}>Basic QR</Text> 
            </View>
            <View style={styles.qrItem}>
              <QR 
-               value="https://example.com" 
+               url="https://example.com" 
                size={120} 
                colorDark="#3794ff"
              /> 
@@ -78,7 +78,7 @@ const Component = () => {
         <View style={styles.grid}>
            <View style={styles.qrItem}>
              <QRstyle 
-               value="https://vercel.com" 
+               url="https://vercel.com" 
                size={120} 
                dotsOptions={{
                  type: "rounded",
@@ -97,7 +97,7 @@ const Component = () => {
 
            <View style={styles.qrItem}>
              <QRstyle 
-               value="https://instagram.com" 
+               url="https://instagram.com" 
                size={120} 
                dotsOptions={{
                  type: "dots",
@@ -117,7 +117,7 @@ const Component = () => {
            
            <View style={styles.qrItem}>
              <QRstyle 
-               value="https://facebook.com" 
+               url="https://facebook.com" 
                size={120} 
                image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1200px-Facebook_Logo_%282019%29.png"
                imageOptions={{
@@ -138,7 +138,7 @@ const Component = () => {
 
            <View style={styles.qrItem}>
              <QRstyle 
-               value="https://example.com/eco" 
+               url="https://example.com/eco" 
                size={120} 
                dotsOptions={{
                  type: "classy-rounded",
