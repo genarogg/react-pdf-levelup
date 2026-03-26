@@ -5,6 +5,7 @@
   "engines": {
     "node": "22"
   },
+
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 4500",
     "build": "astro build",
