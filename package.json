@@ -13,28 +13,22 @@
     "lib",
     "api"
   ],
-  "overrides": {
-    "react": "19",
-    "react-dom": "19",
-    "zod": "3"
-  },
   "scripts": {
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
     "build": "turbo run build --filter=frontend --filter=docs --filter=api",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
-    "publish-all": "cd lib && npm run publish-all",
-    "demo:frontend": "cd frontend && npm run demo",
-    "demo:api": "cd api && npm run demo",
+    "publish-all": "cd lib && pnpm run publish-all",
+    "demo:frontend": "cd frontend && pnpm run demo",
+    "demo:api": "cd api && pnpm run demo",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
-    "clean:install": "node ./global/clean.js && npm install"
+    "clean:install": "node ./global/clean.js && pnpm install"
   },
   "dependencies": {
     "archiver": "^7.0.1",
     "turbo": "^2.7.2"
   },
-  "packageManager": "npm@10.9.4"
-
+  "packageManager": "pnpm@8.15.0"
 }
