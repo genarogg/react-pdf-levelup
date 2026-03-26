@@ -1,17 +1,14 @@
 [phases.setup]
-nixPkgs = ['nodejs_22', 'npm-9_x']
+nixPkgs = ['nodejs_22', 'npm-9_x', 'nodePackages.pnpm']
 
 [phases.install]
 cmds = [
-    "npm install -g pnpm",
     'rm -rf node_modules package-lock.json pnpm-lock.yaml lib',
     'pnpm install'
 ]
 
 [phases.build]
-cmds = [
-    'npm run build'
-]
+cmds = ['npm run build']
 
 [start]
 cmd = 'npm run start'
