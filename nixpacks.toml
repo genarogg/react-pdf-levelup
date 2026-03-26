@@ -3,7 +3,7 @@ nixPkgs = ['nodejs_22', 'npm-9_x']
 
 [phases.install]
 cmds = [
-    "npm install -g pnpm"
+    "npm install -g pnpm",
     'rm -rf node_modules package-lock.json pnpm-lock.yaml lib',
     'pnpm install'
 ]
