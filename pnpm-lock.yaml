@@ -43,19 +43,19 @@ importers:
         version: 9.0.3
       '@react-pdf-levelup/chart':
         specifier: latest
-        version: 1.1.14
+        version: link:../lib/chart
       '@react-pdf-levelup/client':
         specifier: latest
-        version: 1.1.48
+        version: link:../lib/client
       '@react-pdf-levelup/core':
         specifier: latest
-        version: 4.1.13
+        version: link:../lib/core
       '@react-pdf-levelup/icons':
         specifier: latest
-        version: 1.1.19
+        version: link:../lib/icons
       '@react-pdf-levelup/qr':
         specifier: latest
-        version: 1.1.21
+        version: link:../lib/qr
       '@react-pdf/renderer':
         specifier: ^4.3.2
         version: 4.3.2(react@19.2.4)
@@ -191,7 +191,7 @@ importers:
         version: 1.2.8(@types/react-dom@19.2.3)(@types/react@19.2.14)(react-dom@19.2.4)(react@19.2.4)
       '@react-pdf-levelup/core':
         specifier: latest
-        version: 4.1.13
+        version: link:../lib/core
       '@react-pdf/renderer':
         specifier: ^4.3.2
         version: 4.3.2(react@19.2.4)
@@ -313,6 +313,85 @@ importers:
 
   lib:
     devDependencies:
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1
+
+  lib/chart:
+    dependencies:
+      chart.js:
+        specifier: ^4.5.1
+        version: 4.5.1
+      chartjs-node-canvas:
+        specifier: ^5.0.0
+        version: 5.0.0(chart.js@4.5.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
+
+  lib/client:
+    devDependencies:
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
+
+  lib/core:
+    dependencies:
+      '@react-pdf/renderer':
+        specifier: ^4
+        version: 4.3.2(react@19.2.4)
+      react:
+        specifier: '>=18 <=19'
+        version: 19.2.4
+      react-dom:
+        specifier: '>=18 <=19'
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
+      json:
+        specifier: ^11.0.0
+        version: 11.0.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1
+
+  lib/icons:
+    dependencies:
+      lucide:
+        specifier: ^0.562.0
+        version: 0.562.0
+    devDependencies:
+      '@types/node':
+        specifier: ^25.5.0
+        version: 25.5.0
+      json:
+        specifier: ^11.0.0
+        version: 11.0.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1
+
+  lib/qr:
+    dependencies:
+      canvas:
+        specifier: ^3.2.0
+        version: 3.2.2
+      jsdom:
+        specifier: ^27.4.0
+        version: 27.4.0(canvas@3.2.2)
+      qr-code-styling:
+        specifier: ^1.9.2
+        version: 1.9.2
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
+    devDependencies:
+      json:
+        specifier: ^11.0.0
+        version: 11.0.0
       tsup:
         specifier: ^8.5.1
         version: 8.5.1
@@ -2685,42 +2764,6 @@ packages:
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
     dev: false
 
-  /@react-pdf-levelup/chart@1.1.14:
-    resolution: {integrity: sha512-/3t3LyqkRVE9ZBIDlcAVc/EJeDNbD2D+hXHheF4M0cwLSAQ0uJXBq2sJad9ceJKSF9LpdT6qf0LtpCTT9srpeg==}
-    dev: false
-
-  /@react-pdf-levelup/client@1.1.48:
-    resolution: {integrity: sha512-pUghN/YcAIyhWenduD/2Mn+nZferWl5M+tsWys8unwRsMa+FWN9RWKJKUk18QDXB9QdqRzWgiZdU6HaP7dMVFw==}
-    dev: false
-
-  /@react-pdf-levelup/core@4.1.13:
-    resolution: {integrity: sha512-UHSJR2fjpSkDMsOqdhe+EF3Qi7whCyw4X6n1LJTofbrQPDpUKVeoa8TIqfHecPADzloQjCTvMxeQWhHT1f6JXA==}
-    dependencies:
-      '@react-pdf/renderer': 4.3.2(react@19.2.4)
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-    dev: false
-
-  /@react-pdf-levelup/icons@1.1.19:
-    resolution: {integrity: sha512-0xNPIOn3A4TjPbWhTnWRJgMnT7zv/jzx2Ylf2rYYRWwJAhdhfQr3Q6izPaK72uUhvwOkkfGMR1nC7NxYNiF3sQ==}
-    dependencies:
-      lucide: 0.562.0
-    dev: false
-
-  /@react-pdf-levelup/qr@1.1.21:
-    resolution: {integrity: sha512-XJYvNkp8wt1874MVvP5JkrfEDKQZA099sOEmnWm3IkFuBhJSLuOWsACpg1l+C0rB/aYKURUJ84W48ePGQjQZ0Q==}
-    dependencies:
-      canvas: 3.2.2
-      jsdom: 27.4.0(canvas@3.2.2)
-      qr-code-styling: 1.9.2
-      qrcode: 1.5.4
-    transitivePeerDependencies:
-      - '@noble/hashes'
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   /@react-pdf/fns@3.1.2:
     resolution: {integrity: sha512-qTKGUf0iAMGg2+OsUcp9ffKnKi41RukM/zYIWMDJ4hRVYSr89Q7e3wSDW/Koqx3ea3Uy/z3h2y3wPX6Bdfxk6g==}
     dev: false
@@ -3436,6 +3479,11 @@ packages:
     dependencies:
       undici-types: 7.16.0
 
+  /@types/node@25.5.0:
+    resolution: {integrity: sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==}
+    dependencies:
+      undici-types: 7.18.2
+
   /@types/qrcode@1.5.6:
     resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
     dependencies:
@@ -3457,7 +3505,7 @@ packages:
   /@types/sax@1.2.7:
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 25.5.0
     dev: false
 
   /@types/tough-cookie@4.0.5:
@@ -6029,6 +6077,12 @@ packages:
   /json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
+    hasBin: true
+    dev: true
+
+  /json@11.0.0:
+    resolution: {integrity: sha512-N/ITv3Yw9Za8cGxuQqSqrq6RHnlaHWZkAFavcfpH/R52522c26EbihMxnY7A1chxfXJ4d+cEFIsyTgfi9GihrA==}
+    engines: {node: '>=0.10.0'}
     hasBin: true
     dev: true
 
@@ -8787,6 +8841,9 @@ packages:
 
   /undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
+  /undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   /undici@6.24.1:
     resolution: {integrity: sha512-sC+b0tB1whOCzbtlx20fx3WgCXwkW627p4EA9uM+/tNNPkSS+eSEld6pAs9nDv7WbY1UUljBMYPtu9BCOrCWKA==}

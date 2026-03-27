@@ -3,3 +3,5 @@ packages:
   - docs
   - frontend
   - lib
+  - lib/* 
+  - lib/**/*

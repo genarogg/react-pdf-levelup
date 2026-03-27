@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/chart",
-  "version": "1.1.14",
+  "version": "1.1.20",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -18,5 +18,8 @@
   "dependencies": {
     "chart.js": "^4.5.1",
     "chartjs-node-canvas": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
   }
 }
