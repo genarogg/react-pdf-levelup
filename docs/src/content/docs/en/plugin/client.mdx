@@ -5,7 +5,7 @@ description: Plugin for client utility functions, including PDF generation and d
 
 # Client Plugin (`@react-pdf-levelup/client`)
 
-The `@react-pdf-levelup/client` plugin provides a set of utility functions designed for interacting with PDFs in client environments (browsers or Node.js). It primarily exports the `generatePDF` and `decodeBase64Pdf` functions.
+The `@react-pdf-levelup/client` plugin provides a set of utility functions designed for interacting with PDFs in client environments (browsers or Node.js). It exports utility functions including `generatePDF`, `decodeBase64Pdf`, and `printBase64Pdf`.
 
 ## Exported Functions
 
@@ -20,6 +20,13 @@ This function allows you to generate a PDF document from a React component. It i
 This function helps decode a Base64 string representing a PDF and offer it for download to the user. It is the same function described in the main functions documentation.
 
 - [View detailed documentation for `decodeBase64Pdf`](/en/functions/decodeBase64Pdf)
+
+### `printBase64Pdf`
+
+This function prints a PDF document from a Base64 encoded string. It creates a hidden iframe, loads the PDF, and triggers the browser's print dialog for the user to print or save the document.
+
+- **Parameters**: `base64Data` (string) - A Base64 encoded PDF string
+- **Returns**: void
 
 ## Usage
 
