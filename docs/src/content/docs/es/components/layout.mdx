@@ -35,7 +35,7 @@ Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/re
 | `margin` | `"apa" \| "normal" \| "estrecho" \| "ancho"` | `"normal"` | Sistema de márgenes predefinidos. |
 | `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
 | `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
-| `lines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
+| `footerLines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
 | `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
 | `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
 | `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
@@ -94,7 +94,7 @@ Ideal para documentos académicos.
 ```tsx
 <Layout
   footer={<P>Documento confidencial</P>}
-  lines={2}
+  footerLines={2}
 >
 ```
 
@@ -162,7 +162,7 @@ El componente **NextPage** permite insertar un salto de página manual dentro de
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.15}
   footer={<P>Mi Empresa</P>}
-  lines={2}
+  footerLines={2}
   pagination
   rule={false}
   style={{ fontFamily: 'Helvetica' }}

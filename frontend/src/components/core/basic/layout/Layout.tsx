@@ -52,15 +52,15 @@ const Layout: React.FC<LayoutProps> = ({
   style = {},
   pagination = true,
   footer,
-  lines = footer ? 2 : 1,
+  footerLines = footer ? 2 : 1,
   rule = false,
   debug = false,
 }) => {
-  // Calculate footer height based on number of lines
+  // Calculate footer height based on number of footer lines
   // Each line is approximately 20 points (considering font size and line height)
   const LINE_HEIGHT = 20
   const FOOTER_PADDING = 10
-  const footerHeight = (lines * LINE_HEIGHT) + FOOTER_PADDING
+  const footerHeight = (footerLines * LINE_HEIGHT) + FOOTER_PADDING
 
   // Función para obtener márgenes según las normas APA y otros estándares
   const getMargins = (margin: string, pageSize: string) => {
@@ -151,9 +151,9 @@ const Layout: React.FC<LayoutProps> = ({
       safeMargin = "normal"
     }
 
-    // Validar lines
-    if (typeof lines !== "number" || lines < 1) {
-      console.warn(`Invalid lines value: ${lines}. Using 1 as default.`)
+    // Validar footerLines
+    if (typeof footerLines !== "number" || footerLines < 1) {
+      console.warn(`Invalid footerLines value: ${footerLines}. Using 1 as default.`)
 
     }
   } catch (e) {
