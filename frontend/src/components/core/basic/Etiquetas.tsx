@@ -12,15 +12,8 @@ interface DivProps {
   style?: any
 }
 
-interface HeaderProps {
-  children: React.ReactNode
-  style?: any
-  fixed?: boolean
-}
-
 const styles = StyleSheet.create({
   p: {
-    fontSize: 12,
     marginBottom: 5,
     lineHeight: 1.2,
   },
@@ -85,15 +78,6 @@ const styles = StyleSheet.create({
     height: 1,
     marginTop: 6,
     marginBottom: 6,
-  },
-  header: {
-    position: "absolute",
-    top: 20,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-    fontSize: 10,
-    paddingHorizontal: 40,
   },
   hr: {
     width: "100%",

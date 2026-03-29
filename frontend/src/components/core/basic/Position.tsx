@@ -4,9 +4,7 @@ import { View, StyleSheet } from "@react-pdf/renderer";
 interface PositionProps {
   children: React.ReactNode;
   style?: any;
-
-  // opcional -> centra vertical también
-  vertical?: boolean;
+  vertical?: boolean; // -> centra vertical también
 }
 
 const styles = StyleSheet.create({

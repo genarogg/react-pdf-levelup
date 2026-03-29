@@ -59,14 +59,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   th: {
-    fontSize: 10,
     fontWeight: "bold",
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
   },
   td: {
-    fontSize: 10,
     paddingLeft: 8,
     paddingRight: 8,
     justifyContent: "center",
