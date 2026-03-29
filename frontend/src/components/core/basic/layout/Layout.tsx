@@ -56,8 +56,7 @@ const Layout: React.FC<LayoutProps> = ({
   rule = false,
   debug = false,
 }) => {
-  // Calculate footer height based on number of footer lines
-  // Each line is approximately 20 points (considering font size and line height)
+
   const LINE_HEIGHT = 20
   const FOOTER_PADDING = 10
   const footerHeight = (footerLines * LINE_HEIGHT) + FOOTER_PADDING
