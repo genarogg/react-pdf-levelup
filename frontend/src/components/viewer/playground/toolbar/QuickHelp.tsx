@@ -385,7 +385,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "logoWidth", type: "number", default: "30", description: "Ancho del logo en píxeles" },
           { name: "logoHeight", type: "number", default: "30", description: "Alto del logo en píxeles" },
         ],
-        example: `<QR value="https://example.com" size={150} colorDark="#000" colorLight="#fff" logo="https://picsum.photos/80" logoWidth={30} logoHeight={30} />`,
+        example: `<QR url="https://example.com" size={150} colorDark="#000" colorLight="#fff" logo="https://picsum.photos/80" logoWidth={30} logoHeight={30} />`,
       },
       {
         name: "QRV2",
@@ -426,7 +426,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
         ],
         example: `<QRV2
-  value="https://example.com"
+  url="https://example.com"
   size={300}
   image="https://picsum.photos/80"
   dotsOptions={{ color: "#1f2937", type: "rounded" }}

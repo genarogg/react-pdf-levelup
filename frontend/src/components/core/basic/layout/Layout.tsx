@@ -5,8 +5,7 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: "white",
     padding: 30,
-
-    fontSize: 14,
+    fontSize: 10,
   },
   footer: {
     position: "absolute",
@@ -36,7 +35,7 @@ interface LayoutProps {
   style?: any
   pagination?: boolean
   footer?: React.ReactNode
-  lines?: number
+  footerLines?: number
   rule?: boolean
   debug?: boolean
 }
@@ -314,7 +313,6 @@ const Layout: React.FC<LayoutProps> = ({
     flexDirection: "column" as const,
     justifyContent: "center" as const,
     alignItems: "center" as const,
-    fontSize: 10,
     color: "grey"
   }
 
@@ -338,7 +336,7 @@ const Layout: React.FC<LayoutProps> = ({
         <View style={footerStyle} fixed>
           {footer && (footer)}
           {pagination && (
-            <Text style={{ fontSize: footerStyle.fontSize }} render={({ pageNumber, totalPages }) => (
+            <Text render={({ pageNumber, totalPages }) => (
               `${pageNumber} / ${totalPages}`
             )} />
           )}
