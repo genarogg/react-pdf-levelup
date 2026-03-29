@@ -388,7 +388,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         example: `<QR url="https://example.com" size={150} colorDark="#000" colorLight="#fff" logo="https://picsum.photos/80" logoWidth={30} logoHeight={30} />`,
       },
       {
-        name: "QRV2",
+        name: "QRStyle",
         description: "Código QR estilizado (qr-code-styling) con soporte de imagen central",
         props: [
           { name: "value", type: "string", default: "", description: "Texto o URL para el código QR" },
@@ -425,7 +425,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
         ],
-        example: `<QRV2
+        example: `<QRStyle
   url="https://example.com"
   size={300}
   image="https://picsum.photos/80"

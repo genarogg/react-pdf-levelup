@@ -1,6 +1,33 @@
 import React from "react"
 import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
 
+// ─── Constantes de módulo ──────────────────────────────────────────────────────
+
+const MM_TO_POINTS = 2.834645669
+const CM_TO_POINTS = 28.3465
+
+const PAGE_DIMENSIONS: Record<string, { width: number; height: number }> = {
+  A0:      { width: 841,  height: 1189 },
+  A1:      { width: 594,  height: 841  },
+  A2:      { width: 420,  height: 594  },
+  A3:      { width: 297,  height: 420  },
+  A4:      { width: 210,  height: 297  },
+  A5:      { width: 148,  height: 210  },
+  A6:      { width: 105,  height: 148  },
+  A7:      { width: 74,   height: 105  },
+  A8:      { width: 52,   height: 74   },
+  A9:      { width: 37,   height: 52   },
+  LETTER:  { width: 216,  height: 279  },
+  LEGAL:   { width: 216,  height: 356  },
+  TABLOID: { width: 279,  height: 432  },
+}
+
+const VALID_SIZES        = Object.keys(PAGE_DIMENSIONS)
+const VALID_ORIENTATIONS = ["vertical", "horizontal", "portrait", "landscape", "h", "v"]
+const VALID_MARGINS      = ["apa", "normal", "estrecho", "ancho"]
+
+// ─── Estilos base ──────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "white",
@@ -20,18 +47,25 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: -1,
-  }
+  },
 })
+
+// ─── Tipos ─────────────────────────────────────────────────────────────────────
+
+type PageSize       = "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
+type Orientation    = "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
+type MarginPreset   = "apa" | "normal" | "estrecho" | "ancho"
+type PdfOrientation = "portrait" | "landscape"
 
 interface LayoutProps {
   children: React.ReactNode
-  size?: "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
-  orientation?: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
+  size?: PageSize
+  orientation?: Orientation
   backgroundColor?: string
   backgroundImage?: string
   backgroundImageOpacity?: number
   padding?: number
-  margin?: "apa" | "normal" | "estrecho" | "ancho"
+  margin?: MarginPreset
   style?: any
   pagination?: boolean
   footer?: React.ReactNode
@@ -39,6 +73,54 @@ interface LayoutProps {
   rule?: boolean
   debug?: boolean
 }
+
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+
+function toPdfOrientation(orientation: Orientation): PdfOrientation {
+  switch (orientation) {
+    case "vertical":
+    case "portrait":
+    case "v":
+      return "portrait"
+    case "horizontal":
+    case "landscape":
+    case "h":
+      return "landscape"
+    default:
+      console.warn(`Orientación no reconocida: ${orientation}. Usando portrait.`)
+      return "portrait"
+  }
+}
+
+function getMargins(margin: MarginPreset, padding: number) {
+  switch (margin) {
+    case "apa":
+      return { paddingTop: 72, paddingRight: 72, paddingBottom: 72, paddingLeft: 72 }
+    case "estrecho":
+      return { paddingTop: 36, paddingRight: 36, paddingBottom: 36, paddingLeft: 36 }
+    case "ancho":
+      return { paddingTop: 108, paddingRight: 108, paddingBottom: 108, paddingLeft: 108 }
+    case "normal":
+    default:
+      return { paddingTop: padding, paddingRight: padding, paddingBottom: padding, paddingLeft: padding }
+  }
+}
+
+function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
+  const dims     = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
+  const widthPts  = dims.width  * MM_TO_POINTS
+  const heightPts = dims.height * MM_TO_POINTS
+  return orientation === "landscape"
+    ? { width: heightPts, height: widthPts }
+    : { width: widthPts,  height: heightPts }
+}
+
+function getFooterTop(pageSize: string, orientation: PdfOrientation, footerHeight: number): number {
+  const { height } = getPageDimensions(pageSize, orientation)
+  return height - footerHeight - 10
+}
+
+// ─── Componente ────────────────────────────────────────────────────────────────
 
 const Layout: React.FC<LayoutProps> = ({
   children,
@@ -52,214 +134,57 @@ const Layout: React.FC<LayoutProps> = ({
   style = {},
   pagination = true,
   footer,
-  footerLines = footer ? 2 : 1,
+  footerLines,
   rule = false,
   debug = false,
 }) => {
-
-  const LINE_HEIGHT = 20
+  const LINE_HEIGHT    = 20
   const FOOTER_PADDING = 10
-  const footerHeight = (footerLines * LINE_HEIGHT) + FOOTER_PADDING
 
-  // Función para obtener márgenes según las normas APA y otros estándares
-  const getMargins = (margin: string, pageSize: string) => {
-    const normalizedSize = pageSize.toUpperCase()
+  // ── Sanitización de props ──────────────────────────────────────────────────
+  // AJUSTE 1: eliminado try/catch — estas comparaciones nunca lanzan excepciones.
 
-    switch (margin) {
-      case "apa":
-        // Normas APA: 1 pulgada en todos los lados (72 puntos)
-        if (normalizedSize === "LETTER" || normalizedSize === "LEGAL") {
-          return {
-            paddingTop: 72,
-            paddingRight: 72,
-            paddingBottom: 72,
-            paddingLeft: 72
-          }
-        }
-        // Para otros tamaños, usar equivalente proporcional
-        return {
-          paddingTop: 72,
-          paddingRight: 72,
-          paddingBottom: 72,
-          paddingLeft: 72
-        }
+  const safeSize: PageSize = (typeof size === "string" && VALID_SIZES.includes(size.toUpperCase()))
+    ? size.toUpperCase() as PageSize
+    : (console.warn(`Tamaño inválido: ${size}. Usando A4.`), "A4")
 
-      case "estrecho":
-        return {
-          paddingTop: 36,
-          paddingRight: 36,
-          paddingBottom: 36,
-          paddingLeft: 36
-        }
+  const safeOrientation: Orientation = (typeof orientation === "string" && VALID_ORIENTATIONS.includes(orientation.toLowerCase()))
+    ? orientation
+    : (console.warn(`Orientación inválida: ${orientation}. Usando vertical.`), "vertical")
 
-      case "ancho":
-        return {
-          paddingTop: 108,
-          paddingRight: 108,
-          paddingBottom: 108,
-          paddingLeft: 108
-        }
+  const safeBackgroundColor: string = (typeof backgroundColor === "string")
+    ? backgroundColor
+    : (console.warn(`Color de fondo inválido: ${backgroundColor}. Usando white.`), "white")
 
-      case "normal":
-      default:
-        return {
-          paddingTop: padding,
-          paddingRight: padding,
-          paddingBottom: padding,
-          paddingLeft: padding
-        }
-    }
-  }
+  const safeMargin: MarginPreset = VALID_MARGINS.includes(margin)
+    ? margin
+    : (console.warn(`Margen inválido: ${margin}. Usando normal.`), "normal")
 
-  // Validar y sanitizar props
-  let safeSize = size
-  let safeOrientation = orientation
-  let safeBackgroundColor = backgroundColor
+  // AJUSTE 2: fallback activo con Math.max — si footerLines es inválido, se corrige a 1.
+  const resolvedFooterLines = Math.max(1, footerLines ?? (footer ? 2 : 1))
+  const footerHeight        = resolvedFooterLines * LINE_HEIGHT + FOOTER_PADDING
 
-  let safeMargin = margin
+  // ── Cálculos derivados ────────────────────────────────────────────────────
 
-  try {
-    // Validar size
-    const validSizes = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "LETTER", "LEGAL", "TABLOID"]
-    if (typeof size === "string" && !validSizes.includes(size.toUpperCase())) {
-      console.warn(`Invalid page size: ${size}. Using A4 as default.`)
-      safeSize = "A4"
-    }
+  const pdfOrientation = toPdfOrientation(safeOrientation)
+  const margins        = getMargins(safeMargin, padding)
+  const footerTop      = getFooterTop(safeSize, pdfOrientation, footerHeight)
 
-    // Validar orientation
-    const validOrientations = ["vertical", "horizontal", "portrait", "landscape", "h", "v"]
-    const normalizedOrientation = typeof orientation === "string" ? orientation.toLowerCase() : "vertical"
-    if (!validOrientations.includes(normalizedOrientation)) {
-      console.warn(`Invalid orientation: ${orientation}. Using vertical as default.`)
-      safeOrientation = "vertical"
-    } else {
-      // Mantener el valor original si es válido, respetando alias
-      safeOrientation = orientation
-    }
+  // ── Regla / cuadrícula ────────────────────────────────────────────────────
 
-    // Validar backgroundColor
-    if (typeof backgroundColor !== "string") {
-      console.warn(`Invalid background color: ${backgroundColor}. Using white as default.`)
-      safeBackgroundColor = "white"
-    }
-
-    // Validar margin
-    const validMargins = ["apa", "normal", "estrecho", "ancho"]
-    if (!validMargins.includes(margin)) {
-      console.warn(`Invalid margin type: ${margin}. Using normal as default.`)
-      safeMargin = "normal"
-    }
-
-    // Validar footerLines
-    if (typeof footerLines !== "number" || footerLines < 1) {
-      console.warn(`Invalid footerLines value: ${footerLines}. Using 1 as default.`)
-
-    }
-  } catch (e) {
-    console.warn("Error processing props in Layout:", e)
-  }
-
-  // Transform orientation from "vertical"/"horizontal" to "portrait"/"landscape"
-  const transformOrientation = (orientation: "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"): "portrait" | "landscape" => {
-    switch (orientation) {
-      case "vertical":
-      case "portrait":
-      case "v":
-        return "portrait"
-      case "horizontal":
-      case "landscape":
-      case "h":
-        return "landscape"
-      default:
-        console.warn(`Unrecognized orientation: ${orientation}. Using portrait as default.`)
-        return "portrait"
-    }
-  }
-
-  // Function to calculate footer position based on size and orientation
-  const getFooterPosition = (pageSize: string, orientation: "portrait" | "landscape", footerHeight: number) => {
-    // Dimensions in millimeters according to ISO 216 standard
-    const pageDimensions: Record<string, { width: number; height: number }> = {
-      A0: { width: 841, height: 1189 },
-      A1: { width: 594, height: 841 },
-      A2: { width: 420, height: 594 },
-      A3: { width: 297, height: 420 },
-      A4: { width: 210, height: 297 },
-      A5: { width: 148, height: 210 },
-      A6: { width: 105, height: 148 },
-      A7: { width: 74, height: 105 },
-      A8: { width: 52, height: 74 },
-      A9: { width: 37, height: 52 },
-      LETTER: { width: 216, height: 279 },
-      LEGAL: { width: 216, height: 356 },
-      TABLOID: { width: 279, height: 432 },
-    }
-
-    // Convert mm to points (1mm = 2.834645669 points)
-    const mmToPoints = 2.834645669
-
-    const dimensions = pageDimensions[pageSize.toUpperCase()]
-    if (!dimensions) {
-      // A4 default in points
-      return orientation === "landscape" ? 595 - footerHeight - 10 : 842 - footerHeight - 10
-    }
-
-    const heightInPoints = dimensions.height * mmToPoints
-    const widthInPoints = dimensions.width * mmToPoints
-
-    // Subtract footer height and additional margin
-    return orientation === "landscape"
-      ? widthInPoints - footerHeight - 10
-      : heightInPoints - footerHeight - 10
-  }
-
-  const pdfOrientation = transformOrientation(safeOrientation)
-
-  // Obtener márgenes según el tipo seleccionado
-  const margins = getMargins(safeMargin, safeSize)
-
-  // Calculate footer position based on calculated footer height
-  const footerTop = getFooterPosition(safeSize, pdfOrientation, footerHeight)
-
-  // Function to render grid (ruler)
   const renderGrid = () => {
     if (!rule) return null
 
-    // 1 cm = 28.3465 points
-    const cmToPoints = 28.3465
+    const { width: pageWidth, height: pageHeight } = getPageDimensions(safeSize, pdfOrientation)
 
-    // Get page dimensions in points
-    const pageDimensions: Record<string, { width: number; height: number }> = {
-      A0: { width: 841 * 2.834645669, height: 1189 * 2.834645669 },
-      A1: { width: 594 * 2.834645669, height: 841 * 2.834645669 },
-      A2: { width: 420 * 2.834645669, height: 594 * 2.834645669 },
-      A3: { width: 297 * 2.834645669, height: 420 * 2.834645669 },
-      A4: { width: 210 * 2.834645669, height: 297 * 2.834645669 },
-      A5: { width: 148 * 2.834645669, height: 210 * 2.834645669 },
-      A6: { width: 105 * 2.834645669, height: 148 * 2.834645669 },
-      A7: { width: 74 * 2.834645669, height: 105 * 2.834645669 },
-      A8: { width: 52 * 2.834645669, height: 74 * 2.834645669 },
-      A9: { width: 37 * 2.834645669, height: 52 * 2.834645669 },
-      LETTER: { width: 216 * 2.834645669, height: 279 * 2.834645669 },
-      LEGAL: { width: 216 * 2.834645669, height: 356 * 2.834645669 },
-      TABLOID: { width: 279 * 2.834645669, height: 432 * 2.834645669 },
-    }
-
-    const dimensions = pageDimensions[safeSize.toUpperCase()] || pageDimensions.A4
-    const pageWidth = pdfOrientation === "landscape" ? dimensions.height : dimensions.width
-    const pageHeight = pdfOrientation === "landscape" ? dimensions.width : dimensions.height
-
-    const horizontalLines = []
-    const verticalLines = []
-
-    // Generate horizontal lines (every cm)
-    for (let i = 0; i <= Math.ceil(pageHeight / cmToPoints); i++) {
-      horizontalLines.push(
+    const horizontalLines = Array.from(
+      { length: Math.ceil(pageHeight / CM_TO_POINTS) + 1 },
+      (_, i) => (
         <View
           key={`h-${i}`}
           style={{
             position: "absolute",
-            top: i * cmToPoints,
+            top: i * CM_TO_POINTS,
             left: 0,
             right: 0,
             height: i % 5 === 0 ? 1 : 0.5,
@@ -267,16 +192,16 @@ const Layout: React.FC<LayoutProps> = ({
           }}
         />
       )
-    }
+    )
 
-    // Generate vertical lines (every cm)
-    for (let i = 0; i <= Math.ceil(pageWidth / cmToPoints); i++) {
-      verticalLines.push(
+    const verticalLines = Array.from(
+      { length: Math.ceil(pageWidth / CM_TO_POINTS) + 1 },
+      (_, i) => (
         <View
           key={`v-${i}`}
           style={{
             position: "absolute",
-            left: i * cmToPoints,
+            left: i * CM_TO_POINTS,
             top: 0,
             bottom: 0,
             width: i % 5 === 0 ? 1 : 0.5,
@@ -284,7 +209,7 @@ const Layout: React.FC<LayoutProps> = ({
           }}
         />
       )
-    }
+    )
 
     return (
       <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} fixed>
@@ -294,14 +219,25 @@ const Layout: React.FC<LayoutProps> = ({
     )
   }
 
+  // ── Estilos finales ───────────────────────────────────────────────────────
+  // AJUSTE 3: se lee padding primero desde style, luego margins como fallback.
+  // restStyle excluye las claves de padding para evitar que el spread las pise.
+
+  const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
+  const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
+  const paddingLeft   = style?.paddingLeft   ?? style?.padding ?? margins.paddingLeft
+  const paddingBottom = (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight
+
+  const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
+
   const pageStyle = {
     ...styles.page,
     backgroundColor: safeBackgroundColor,
-    paddingTop: (style?.paddingTop ?? style?.padding ?? margins.paddingTop),
-    paddingRight: (style?.paddingRight ?? style?.padding ?? margins.paddingRight),
-    paddingLeft: (style?.paddingLeft ?? style?.padding ?? margins.paddingLeft),
-    paddingBottom: (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight,
-    ...((() => { const { padding, paddingTop, paddingRight, paddingBottom, paddingLeft, ...rest } = style || {}; return rest })()),
+    paddingTop,
+    paddingRight,
+    paddingLeft,
+    paddingBottom,
+    ...restStyle,
   }
 
   const footerStyle = {
@@ -312,8 +248,10 @@ const Layout: React.FC<LayoutProps> = ({
     flexDirection: "column" as const,
     justifyContent: "center" as const,
     alignItems: "center" as const,
-    color: "grey"
+    color: "grey",
   }
+
+  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <Document>
@@ -321,26 +259,20 @@ const Layout: React.FC<LayoutProps> = ({
         {backgroundImage && (
           <Image
             src={backgroundImage}
-            style={{
-              ...styles.backgroundImage,
-              opacity: backgroundImageOpacity,
-            }}
+            style={{ ...styles.backgroundImage, opacity: backgroundImageOpacity }}
             fixed
           />
         )}
         {renderGrid()}
         {children}
-        <View style={{ paddingBottom: footerHeight }}></View>
+        <View style={{ paddingBottom: footerHeight }} />
 
         <View style={footerStyle} fixed>
-          {footer && (footer)}
+          {footer}
           {pagination && (
-            <Text render={({ pageNumber, totalPages }) => (
-              `${pageNumber} / ${totalPages}`
-            )} />
+            <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
           )}
         </View>
-
       </Page>
     </Document>
   )
