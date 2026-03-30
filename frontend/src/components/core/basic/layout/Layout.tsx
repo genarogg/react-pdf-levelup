@@ -40,6 +40,28 @@ const styles = StyleSheet.create({
 
 type Orientation = "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
 
+// ── Metadatos del documento ───────────────────────────────────────────────────
+
+interface DocumentMeta {
+  title?: string
+  author?: string
+  subject?: string
+  keywords?: string
+  creator?: string
+  producer?: string
+  pdfVersion?: string
+  language?: string
+  pageMode?: string
+  pageLayout?: string
+  onRender?: (blob: Blob) => void
+}
+
+const DEFAULT_META: DocumentMeta = {
+  creator: "react-pdf-levelup",
+  producer: "react-pdf-levelup",
+  pdfVersion: "1",
+}
+
 interface LayoutProps {
   children: React.ReactNode
   size?: PageSize
@@ -55,6 +77,7 @@ interface LayoutProps {
   footerLines?: number
   rule?: boolean
   debug?: boolean
+  meta?: DocumentMeta
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -85,7 +108,24 @@ const Layout: React.FC<LayoutProps> = ({
   footerLines,
   rule = false,
   debug = false,
+  meta = {},
 }) => {
+  // ── Merge de meta con defaults ────────────────────────────────────────────
+
+  const {
+    title,
+    author,
+    subject,
+    keywords,
+    creator,
+    producer,
+    pdfVersion,
+    language,
+    pageMode,
+    pageLayout,
+    onRender,
+  } = { ...DEFAULT_META, ...meta }
+
   // ── Sanitización de props ──────────────────────────────────────────────────
 
   const safeSize: PageSize = (typeof size === "string" && VALID_SIZES.includes(size.toUpperCase()))
@@ -104,7 +144,6 @@ const Layout: React.FC<LayoutProps> = ({
     ? margin
     : (console.warn(`Margen inválido: ${margin}. Usando normal.`), "normal")
 
-
   const footerHeight = useMemo(
     () => Math.max(1, footerLines ?? (footer ? 2 : 1)) * LINE_HEIGHT + FOOTER_PADDING,
     [footerLines, footer]
@@ -118,7 +157,6 @@ const Layout: React.FC<LayoutProps> = ({
     () => getMargins(safeMargin, padding),
     [safeMargin, padding]
   )
-
 
   const { width: pageWidth, height: pageHeight } = useMemo(
     () => getPageDimensions(safeSize, pdfOrientation),
@@ -181,7 +219,6 @@ const Layout: React.FC<LayoutProps> = ({
 
   const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
 
-
   const pageStyle = useMemo(() => {
     const paddingTop = style?.paddingTop ?? style?.padding ?? margins.paddingTop
     const paddingRight = style?.paddingRight ?? style?.padding ?? margins.paddingRight
@@ -198,7 +235,6 @@ const Layout: React.FC<LayoutProps> = ({
       ...restStyle,
     }
   }, [safeBackgroundColor, footerHeight, margins, style])
-
 
   const footerStyle = useMemo(() => ({
     ...styles.footer,
@@ -224,7 +260,17 @@ const Layout: React.FC<LayoutProps> = ({
   }, [backgroundImage, backgroundImageStyle])
 
   return (
-    <Document>
+    <Document
+      title={title}
+      author={author}
+      subject={subject}
+      keywords={keywords}
+      creator={creator}
+      producer={producer}
+      language={language}
+      pageMode={pageMode as any}
+      pageLayout={pageLayout as any}
+    >
       <Page debug={debug} size={safeSize as any} orientation={pdfOrientation} style={pageStyle} wrap>
         {backgroundImageNode}
         {grid}
