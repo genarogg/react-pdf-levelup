@@ -107,7 +107,7 @@ function getMargins(margin: MarginPreset, padding: number) {
 }
 
 function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
-  const dims     = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
+  const dims      = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
   const widthPts  = dims.width  * MM_TO_POINTS
   const heightPts = dims.height * MM_TO_POINTS
   return orientation === "landscape"
@@ -115,9 +115,10 @@ function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
     : { width: widthPts,  height: heightPts }
 }
 
-function getFooterTop(pageSize: string, orientation: PdfOrientation, footerHeight: number): number {
-  const { height } = getPageDimensions(pageSize, orientation)
-  return height - footerHeight - 10
+// CAMBIO 1: La función ya no recalcula las dimensiones internamente.
+// Ahora recibe directamente pageHeight, que el componente ya tiene calculado.
+function getFooterTop(pageHeight: number, footerHeight: number): number {
+  return pageHeight - footerHeight - 10
 }
 
 // ─── Componente ────────────────────────────────────────────────────────────────
@@ -159,7 +160,6 @@ const Layout: React.FC<LayoutProps> = ({
     ? margin
     : (console.warn(`Margen inválido: ${margin}. Usando normal.`), "normal")
 
-  // AJUSTE 2: fallback activo con Math.max — si footerLines es inválido, se corrige a 1.
   const resolvedFooterLines = Math.max(1, footerLines ?? (footer ? 2 : 1))
   const footerHeight        = resolvedFooterLines * LINE_HEIGHT + FOOTER_PADDING
 
@@ -167,15 +167,21 @@ const Layout: React.FC<LayoutProps> = ({
 
   const pdfOrientation = toPdfOrientation(safeOrientation)
   const margins        = getMargins(safeMargin, padding)
-  const footerTop      = getFooterTop(safeSize, pdfOrientation, footerHeight)
+
+  // CAMBIO 2: getPageDimensions se llama una sola vez aquí.
+  // pageWidth y pageHeight quedan disponibles para todo el componente.
+  const { width: pageWidth, height: pageHeight } = getPageDimensions(safeSize, pdfOrientation)
+
+  // CAMBIO 3: getFooterTop recibe pageHeight ya calculado, sin repetir getPageDimensions.
+  const footerTop = getFooterTop(pageHeight, footerHeight)
 
   // ── Regla / cuadrícula ────────────────────────────────────────────────────
 
   const renderGrid = () => {
     if (!rule) return null
 
-    const { width: pageWidth, height: pageHeight } = getPageDimensions(safeSize, pdfOrientation)
-
+    // CAMBIO 4: se reutilizan pageWidth y pageHeight del scope superior.
+    // Ya no se llama a getPageDimensions por tercera vez.
     const horizontalLines = Array.from(
       { length: Math.ceil(pageHeight / CM_TO_POINTS) + 1 },
       (_, i) => (
@@ -219,8 +225,6 @@ const Layout: React.FC<LayoutProps> = ({
   }
 
   // ── Estilos finales ───────────────────────────────────────────────────────
-  // AJUSTE 3: se lee padding primero desde style, luego margins como fallback.
-  // restStyle excluye las claves de padding para evitar que el spread las pise.
 
   const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
   const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
