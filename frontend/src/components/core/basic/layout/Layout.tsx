@@ -93,16 +93,21 @@ function toPdfOrientation(orientation: Orientation): PdfOrientation {
 }
 
 function getMargins(margin: MarginPreset, padding: number) {
+  // Todos los valores en mm, convertidos a puntos con MM_TO_POINTS
+  // para mantener coherencia con el resto del sistema de unidades.
+  const mm  = (value: number) => value * MM_TO_POINTS
+  const all = (value: number) => ({ paddingTop: value, paddingRight: value, paddingBottom: value, paddingLeft: value })
+
   switch (margin) {
     case "apa":
-      return { paddingTop: 72, paddingRight: 72, paddingBottom: 72, paddingLeft: 72 }
+      return all(mm(25.4))  // 25.4mm = 1 pulgada, estándar APA
     case "estrecho":
-      return { paddingTop: 36, paddingRight: 36, paddingBottom: 36, paddingLeft: 36 }
+      return all(mm(12.7))  // 12.7mm = 0.5 pulgadas
     case "ancho":
-      return { paddingTop: 108, paddingRight: 108, paddingBottom: 108, paddingLeft: 108 }
+      return all(mm(38.1))  // 38.1mm = 1.5 pulgadas
     case "normal":
     default:
-      return { paddingTop: padding, paddingRight: padding, paddingBottom: padding, paddingLeft: padding }
+      return all(padding)
   }
 }
 
