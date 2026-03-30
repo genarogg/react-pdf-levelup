@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
 import { toPdfOrientation } from "./helper/toPdfOrientation"
 import { getMargins, type MarginPreset } from "./helper/getMargins"
-import { getPageDimensions, type PageSize, type PdfOrientation, PAGE_DIMENSIONS } from "./helper/getPageDimensions"
+import { getPageDimensions, type PageSize, PAGE_DIMENSIONS } from "./helper/getPageDimensions"
 
 // ─── Constantes de módulo ──────────────────────────────────────────────────────
 
