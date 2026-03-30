@@ -70,7 +70,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales para la página" },
           { name: "footer", type: "ReactNode", default: "", description: "Contenido del pie de página" },
-          { name: "lines", type: "number", default: "1", description: "Número de líneas para el pie de página (1-10)" },
+          { name: "footerLines", type: "number", default: "1", description: "Número de líneas para el pie de página (1-10)" },
           { name: "pagination", type: "boolean", default: "true", description: "Mostrar numeración de páginas" },
           {
             name: "rule",
@@ -78,10 +78,19 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             default: "false",
             description: "Mostrar rejilla de referencia en la página",
           },
+          {
+            name: "meta",
+            type: "object",
+            default: "{}",
+            description: "Metadatos (title, author, subject, keywords, language, etc.)",
+          },
         ],
-        example: `<Layout pagination rule footer={<P>Pie de página</P>} lines={2}>
+        example: `<Layout 
+  meta={{ title: 'Mi PDF', author: 'Genaro' }}
+  pagination 
+  footer={<P>Pie de página</P>}
+>
   <H1>Título</H1>
-  <P>Contenido de ejemplo</P>
 </Layout>`,
       },
       {

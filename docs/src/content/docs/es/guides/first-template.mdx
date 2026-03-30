@@ -48,10 +48,14 @@ export default MyTemplate;
 
 2.  **Configura el Layout**
 
-    Usa `Layout` como contenedor principal. Puedes configurar el tamaño de papel, márgenes y otros metadatos.
+    Usa `Layout` como contenedor principal. Puedes configurar el tamaño de papel, márgenes y otros metadatos (título, autor, etc.).
 
     ```tsx
-    <Layout size="A4" padding={30}>
+    <Layout 
+      size="A4" 
+      padding={30} 
+      meta={{ title: "Factura", author: "Genaro" }}
+    >
       {/* Contenido aquí */}
     </Layout>
     ```

@@ -38,6 +38,43 @@ Internally, it wraps the content with `<Document>` and `<Page>` from `@react-pdf
 | `pagination`           | `boolean`                                                                | `true`         | Shows automatic page numbering.                                                                                    |
 | `rule`                 | `boolean`                                                                | `false`        | Shows centimeter reference grid.                                                                                   |
 | `debug`                | `boolean`                                                                | `false`        | Activates `@react-pdf/renderer` debug mode.                                                                        |
+| `meta`                 | `DocumentMeta`                                                           | `{}`           | Document metadata (title, author, keywords, etc.).                                                                 |
+
+---
+
+# Document Metadata (`meta`)
+
+The `meta` prop allows you to configure standard PDF file metadata, which is visible in the document properties of any PDF viewer.
+
+## `meta` Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `title` | `string` | Document title. |
+| `author` | `string` | Document author. |
+| `subject` | `string` | Document subject. |
+| `keywords` | `string` | Keywords (space-separated). |
+| `creator` | `string` | Application that created the document (Default: `react-pdf-levelup`). |
+| `producer` | `string` | Application that produced the PDF (Default: `react-pdf-levelup`). |
+| `language` | `string` | Document language (e.g., `en-US`). |
+| `pageMode` | `string` | How the document should be displayed when opened (`useNone`, `useOutlines`, `useThumbs`, `fullScreen`). |
+| `pageLayout` | `string` | The page layout to use (`singlePage`, `oneColumn`, `twoColumnLeft`, `twoColumnRight`). |
+
+## Usage Example
+
+```tsx
+<Layout
+  meta={{
+    title: "Invoice #1234",
+    author: "My Company Inc.",
+    subject: "Monthly Billing",
+    keywords: "invoice pdf react",
+    language: "en-US"
+  }}
+>
+  {/* Content */}
+</Layout>
+```
 
 ---
 

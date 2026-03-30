@@ -46,12 +46,16 @@ export default MyTemplate;
     }
     ```
 
-2.  **Configure the Layout**
+2.  **Configure Layout**
 
-    Use `Layout` as the main container. You can configure paper size, margins, and other metadata.
+    Use `Layout` as the main container. You can configure paper size, margins, and other metadata (title, author, etc.).
 
     ```tsx
-    <Layout size="A4" padding={30}>
+    <Layout 
+      size="A4" 
+      padding={30} 
+      meta={{ title: "Invoice", author: "Genaro" }}
+    >
       {/* Content here */}
     </Layout>
     ```

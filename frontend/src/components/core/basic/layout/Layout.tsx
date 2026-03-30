@@ -49,17 +49,14 @@ interface DocumentMeta {
   keywords?: string
   creator?: string
   producer?: string
-  pdfVersion?: string
   language?: string
   pageMode?: string
   pageLayout?: string
-  onRender?: (blob: Blob) => void
 }
 
 const DEFAULT_META: DocumentMeta = {
   creator: "react-pdf-levelup",
   producer: "react-pdf-levelup",
-  pdfVersion: "1",
 }
 
 interface LayoutProps {
@@ -119,11 +116,9 @@ const Layout: React.FC<LayoutProps> = ({
     keywords,
     creator,
     producer,
-    pdfVersion,
     language,
     pageMode,
     pageLayout,
-    onRender,
   } = { ...DEFAULT_META, ...meta }
 
   // ── Sanitización de props ──────────────────────────────────────────────────

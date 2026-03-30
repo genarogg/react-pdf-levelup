@@ -39,6 +39,43 @@ Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/re
 | `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
 | `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
 | `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
+| `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, palabras clave, etc.). |
+
+---
+
+# Metadatos del Documento (`meta`)
+
+El prop `meta` permite configurar los metadatos estándar del archivo PDF, que son visibles en las propiedades del documento en cualquier visor de PDF.
+
+## Propiedades de `meta`
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `title` | `string` | Título del documento. |
+| `author` | `string` | Autor del documento. |
+| `subject` | `string` | Asunto del documento. |
+| `keywords` | `string` | Palabras clave (separadas por espacios). |
+| `creator` | `string` | Aplicación que creó el documento (Default: `react-pdf-levelup`). |
+| `producer` | `string` | Aplicación que produjo el PDF (Default: `react-pdf-levelup`). |
+| `language` | `string` | Idioma del documento (ej: `es-ES`). |
+| `pageMode` | `string` | Cómo se debe mostrar el documento al abrirlo (`useNone`, `useOutlines`, `useThumbs`, `fullScreen`). |
+| `pageLayout` | `string` | El diseño de página a utilizar (`singlePage`, `oneColumn`, `twoColumnLeft`, `twoColumnRight`). |
+
+## Ejemplo de uso de `meta`
+
+```tsx
+<Layout
+  meta={{
+    title: "Factura #1234",
+    author: "Mi Empresa S.A.",
+    subject: "Facturación Mensual",
+    keywords: "factura pdf react",
+    language: "es-ES"
+  }}
+>
+  {/* Contenido */}
+</Layout>
+```
 
 ---
 
