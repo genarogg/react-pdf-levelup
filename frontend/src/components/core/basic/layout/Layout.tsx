@@ -226,24 +226,30 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Estilos finales ───────────────────────────────────────────────────────
 
-  const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
-  const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
-  const paddingLeft   = style?.paddingLeft   ?? style?.padding ?? margins.paddingLeft
-  const paddingBottom = (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight
-
   const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
 
-  const pageStyle = {
-    ...styles.page,
-    backgroundColor: safeBackgroundColor,
-    paddingTop,
-    paddingRight,
-    paddingLeft,
-    paddingBottom,
-    ...restStyle,
-  }
+  // CAMBIO 6: pageStyle memoizado — solo se recrea cuando cambian el color de fondo,
+  // los paddings resueltos o el estilo externo.
+  const pageStyle = useMemo(() => {
+    const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
+    const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
+    const paddingLeft   = style?.paddingLeft   ?? style?.padding ?? margins.paddingLeft
+    const paddingBottom = (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight
 
-  const footerStyle = {
+    return {
+      ...styles.page,
+      backgroundColor: safeBackgroundColor,
+      paddingTop,
+      paddingRight,
+      paddingLeft,
+      paddingBottom,
+      ...restStyle,
+    }
+  }, [safeBackgroundColor, footerHeight, margins, style])
+
+  // CAMBIO 7: footerStyle memoizado — solo se recrea cuando cambian
+  // la posición o la altura del footer.
+  const footerStyle = useMemo(() => ({
     ...styles.footer,
     top: footerTop,
     height: footerHeight,
@@ -252,7 +258,7 @@ const Layout: React.FC<LayoutProps> = ({
     justifyContent: "center" as const,
     alignItems: "center" as const,
     color: "grey",
-  }
+  }), [footerTop, footerHeight])
 
   // ── Render ────────────────────────────────────────────────────────────────
 
