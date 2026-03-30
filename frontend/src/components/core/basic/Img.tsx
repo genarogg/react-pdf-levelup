@@ -1,4 +1,4 @@
-import  React from "react"
+import React from "react"
 import { Image, StyleSheet } from "@react-pdf/renderer"
 
 interface ImgProps {
@@ -14,8 +14,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const Img: React.FC<ImgProps> = ({ src, style }) => {
+const Img: React.FC<ImgProps> = React.memo(({ src, style }) => {
   return <Image src={src} style={[styles.image, style]} />
-}
+})
+
+Img.displayName = "Img"
 
 export default Img

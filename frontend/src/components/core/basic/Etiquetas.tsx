@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     textDecoration: "underline",
   },
   small: {
-    fontSize: 10,
+    fontSize: 9,
   },
   blockquote: {
     marginLeft: 20,

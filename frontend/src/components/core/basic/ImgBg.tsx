@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ImgBg: React.FC<ImgBgProps> = ({
+const ImgBg: React.FC<ImgBgProps> = React.memo(({
     src,
     width = "100%",
     height = "100%",
@@ -43,7 +43,7 @@ const ImgBg: React.FC<ImgBgProps> = ({
     objectPosition = "center",
 }) => {
     return (
-        <View style={[styles.container, style]} >
+        <View style={[styles.container, style]}>
             <Image
                 src={src}
                 style={[
@@ -55,6 +55,6 @@ const ImgBg: React.FC<ImgBgProps> = ({
             <View style={styles.content}>{children}</View>
         </View>
     )
-}
+})
 
 export default ImgBg
