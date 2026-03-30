@@ -142,7 +142,6 @@ const Layout: React.FC<LayoutProps> = ({
   const FOOTER_PADDING = 10
 
   // ── Sanitización de props ──────────────────────────────────────────────────
-  // AJUSTE 1: eliminado try/catch — estas comparaciones nunca lanzan excepciones.
 
   const safeSize: PageSize = (typeof size === "string" && VALID_SIZES.includes(size.toUpperCase()))
     ? size.toUpperCase() as PageSize

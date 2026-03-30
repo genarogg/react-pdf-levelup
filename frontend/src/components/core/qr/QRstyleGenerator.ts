@@ -1,6 +1,6 @@
 import { generateQRAsBase64 } from "./QRGenerator"
 
-export interface QRV2Options {
+export interface QRstyleOptions {
   url: string
   width?: number
   height?: number
@@ -32,7 +32,7 @@ export interface QRV2Options {
   fallbackErrorCorrectionLevel?: "L" | "M" | "Q" | "H"
 }
 
-export const generateQRV2AsBase64 = async (options: QRV2Options): Promise<string> => {
+export const generateQRstyleAsBase64 = async (options: QRstyleOptions): Promise<string> => {
   try {
     const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
     

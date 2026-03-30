@@ -1,11 +1,11 @@
 ---
-title: QRStyle
+title: QRstyle
 description: Código QR estilizado con opciones avanzadas de personalización.
 ---
 
-# QRStyle
+# QRstyle
 
-El componente `QRStyle` (anteriormente `QRV2`) ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas. Este componente utiliza la librería `qr-code-styling` internamente.
+El componente `QRstyle` (anteriormente `QRV2`) ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas. Este componente utiliza la librería `qr-code-styling` internamente.
 
 ### Props
 
@@ -28,12 +28,12 @@ El componente `QRStyle` (anteriormente `QRV2`) ofrece un control avanzado sobre 
 ### Ejemplo
 
 ```tsx
-import QRStyle from './QRstyle'; // Nota: El componente se exporta como QRV2 pero se puede importar como QRStyle
+import QRstyle from './QRstyle'; // Nota: El componente se exporta como QRV2 pero se puede importar como QRstyle
 
 function MyStyledQRCode() {
   return (
-    <QRStyle
-      value="https://react-pdf-levelup.com/docs/qrstyle"
+    <QRstyle
+      url="https://react-pdf-levelup.com/docs/qrstyle"
       size={300}
       image="https://picsum.photos/id/66/200/200"
       dotsOptions={{
