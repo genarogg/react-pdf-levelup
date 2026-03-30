@@ -126,6 +126,13 @@ function getFooterTop(pageHeight: number, footerHeight: number): number {
   return pageHeight - footerHeight - 10
 }
 
+// ─── Constantes de layout ─────────────────────────────────────────────────────
+
+// CAMBIO 13: extraídas del componente — son constantes fijas que no dependen
+// de props ni de estado, no tiene sentido redeclararlas en cada render.
+const LINE_HEIGHT    = 20
+const FOOTER_PADDING = 10
+
 // ─── Componente ────────────────────────────────────────────────────────────────
 
 const Layout: React.FC<LayoutProps> = ({
@@ -144,9 +151,6 @@ const Layout: React.FC<LayoutProps> = ({
   rule = false,
   debug = false,
 }) => {
-  const LINE_HEIGHT    = 20
-  const FOOTER_PADDING = 10
-
   // ── Sanitización de props ──────────────────────────────────────────────────
 
   const safeSize: PageSize = (typeof size === "string" && VALID_SIZES.includes(size.toUpperCase()))
@@ -165,8 +169,13 @@ const Layout: React.FC<LayoutProps> = ({
     ? margin
     : (console.warn(`Margen inválido: ${margin}. Usando normal.`), "normal")
 
-  const resolvedFooterLines = Math.max(1, footerLines ?? (footer ? 2 : 1))
-  const footerHeight        = resolvedFooterLines * LINE_HEIGHT + FOOTER_PADDING
+  // CAMBIO 14: footerHeight memoizado — es la base de varios useMemo posteriores
+  // (pageStyle, footerStyle). Sin esto, esos hooks reciben un valor nuevo en cada
+  // render aunque footerLines y footer no hayan cambiado.
+  const footerHeight = useMemo(
+    () => Math.max(1, footerLines ?? (footer ? 2 : 1)) * LINE_HEIGHT + FOOTER_PADDING,
+    [footerLines, footer]
+  )
 
   // ── Cálculos derivados ────────────────────────────────────────────────────
 
@@ -191,7 +200,12 @@ const Layout: React.FC<LayoutProps> = ({
     [safeSize, pdfOrientation]
   )
 
-  const footerTop = getFooterTop(pageHeight, footerHeight)
+  // CAMBIO 15: footerTop memoizado — depende de pageHeight y footerHeight,
+  // ambos ya estables. Mantiene consistencia con el resto del enfoque.
+  const footerTop = useMemo(
+    () => getFooterTop(pageHeight, footerHeight),
+    [pageHeight, footerHeight]
+  )
 
   // ── Regla / cuadrícula ────────────────────────────────────────────────────
 
