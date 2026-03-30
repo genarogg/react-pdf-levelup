@@ -176,31 +176,31 @@ const FathonFooter = () => {
 
 const getFuentes = () => {
   Font.register({
-      family: "Nunito",
-          fonts: [
-                {
-                        src: "https://fonts.gstatic.com/s/nunito/v12/XRXV3I6Li01BKof4Mg.ttf",
-                                fontWeight: "normal",
-                                      },
-                                            {
-                                                    src: "https://fonts.gstatic.com/s/nunito/v12/XRXW3I6Li01BKofAjsOkZg.ttf",
-                                                            fontWeight: "bold",
-                                                                  },
-                                                                        {
-                                                                                src: "https://fonts.gstatic.com/s/nunito/v12/XRXX3I6Li01BKofIMOaE.ttf",
-                                                                                        fontStyle: "italic",
-                                                                                                fontWeight: "normal",
-                                                                                                      }
-                                                                                                          ],
-                                                                                                            });
+    family: "Nunito",
+    fonts: [
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXV3I6Li01BKof4Mg.ttf",
+        fontWeight: "normal",
+      },
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXW3I6Li01BKofAjsOkZg.ttf",
+        fontWeight: "bold",
+      },
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXX3I6Li01BKofIMOaE.ttf",
+        fontStyle: "italic",
+        fontWeight: "normal",
+      }
+    ],
+  });
 
-                                                                                                              Font.register({
-                                                                                                                  family: "Audiowide",
-                                                                                                                      fonts: [
-                                                                                                                            {
-                                                                                                                                    src: "https://raw.githubusercontent.com/google/fonts/main/ofl/audiowide/Audiowide-Regular.ttf",
-                                                                                                                                            fontWeight: "normal"
-                                                                                                                                                  }
-                                                                                                                                                      ]
-                                                                                                                                                        });
-                                                                                                                                                        }
+  Font.register({
+    family: "Audiowide",
+    fonts: [
+      {
+        src: "https://raw.githubusercontent.com/google/fonts/main/ofl/audiowide/Audiowide-Regular.ttf",
+        fontWeight: "normal"
+      }
+    ]
+  });
+}
