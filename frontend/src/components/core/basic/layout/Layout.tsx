@@ -280,16 +280,25 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Render ────────────────────────────────────────────────────────────────
 
+  // CAMBIO 11: el estilo de la imagen de fondo se memoiza por separado para no
+  // recrear el objeto en cada render — solo cambia si cambia la opacidad.
+  const backgroundImageStyle = useMemo(() => ({
+    ...styles.backgroundImage,
+    opacity: backgroundImageOpacity,
+  }), [backgroundImageOpacity])
+
+  // CAMBIO 12: el elemento <Image> completo se memoiza porque react-pdf
+  // hace el fetch/decode de la imagen en cada render. Si el src no cambia
+  // (caso habitual en el playground), se reutiliza el nodo sin reprocesar la imagen.
+  const backgroundImageNode = useMemo(() => {
+    if (!backgroundImage) return null
+    return <Image src={backgroundImage} style={backgroundImageStyle} fixed />
+  }, [backgroundImage, backgroundImageStyle])
+
   return (
     <Document>
       <Page debug={debug} size={safeSize as any} orientation={pdfOrientation} style={pageStyle} wrap>
-        {backgroundImage && (
-          <Image
-            src={backgroundImage}
-            style={{ ...styles.backgroundImage, opacity: backgroundImageOpacity }}
-            fixed
-          />
-        )}
+        {backgroundImageNode}
         {grid}
         {children}
         <View style={{ paddingBottom: footerHeight }} />
