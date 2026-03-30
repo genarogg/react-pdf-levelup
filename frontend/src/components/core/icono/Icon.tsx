@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import {
   View,
   Svg,
@@ -65,6 +65,9 @@ function pascalToCamel(str: string): string {
   return str[0].toLowerCase() + str.slice(1)
 }
 
+const L = Lucide as Record<string, unknown>
+const iconsObj = L.icons as Record<string, unknown> | undefined
+
 export interface IconProps {
   /** Nombre del icono de Lucide en PascalCase (ej: "Home", "FileText") */
   ico: string
@@ -87,75 +90,84 @@ export interface IconProps {
  * <Icon ico="FileText" size={24} color="#333" />
  * <Icon ico="Heart" fill="red" size={20} style={{ marginRight: 8 }} />
  */
-function Icon({
+const Icon = React.memo(function Icon({
   ico,
   color = "currentColor",
   fill = "none",
   size = 18,
   style,
 }: IconProps) {
-  const L = Lucide as Record<string, unknown>
-  const kebab = pascalToKebab(ico)
-  const camel = pascalToCamel(ico)
-  const iconsObj = L.icons as Record<string, unknown> | undefined
-  const rawIcon =
-    iconsObj?.[ico] ??
-    iconsObj?.[kebab] ??
-    iconsObj?.[camel] ??
-    L[ico] ??
-    L[kebab] ??
-    L[camel]
+  const iconData = useMemo(() => {
+    const kebab = pascalToKebab(ico)
+    const camel = pascalToCamel(ico)
+    const rawIcon =
+      iconsObj?.[ico] ??
+      iconsObj?.[kebab] ??
+      iconsObj?.[camel] ??
+      L[ico] ??
+      L[kebab] ??
+      L[camel]
 
-  const iconData = normalizeIconData(rawIcon)
-  if (!iconData) {
-    if (process.env.NODE_ENV !== "production") {
+    const data = normalizeIconData(rawIcon)
+
+    if (!data && process.env.NODE_ENV !== "production") {
       console.warn(
         `[Icon] No se encontró el icono "${ico}" en lucide. Prueba con el nombre en PascalCase (ej: FileText, Home) o kebab-case (file-text, home).`
       )
     }
-    return <View style={style as any} />
-  }
 
-  const [, svgAttrs, iconNode] = iconData
-  const viewBox = (svgAttrs.viewBox as string) ?? "0 0 24 24"
-  const strokeWidth = (svgAttrs["stroke-width"] ?? svgAttrs.strokeWidth ?? 2) as number
+    return data
+  }, [ico])
+
+  const renderedNodes = useMemo(() => {
+    if (!iconData) return null
+
+    const [, svgAttrs, iconNode] = iconData
+    const strokeWidth = (svgAttrs["stroke-width"] ?? svgAttrs.strokeWidth ?? 2) as number
+
+    return iconNode.map(([tag, attrs], i) => {
+      const { "stroke-width": _sw, key: _k, ...rest } = attrs as Record<string, unknown>
+      const props = {
+        ...rest,
+        stroke: color,
+        fill: fill ?? (attrs.fill as string) ?? "none",
+        strokeWidth: attrs["stroke-width"] ?? attrs.strokeWidth ?? strokeWidth,
+      }
+
+      switch (tag) {
+        case "path":
+          return <Path key={i} {...(props as React.ComponentProps<typeof Path>)} />
+        case "g":
+          return <G key={i} {...(props as React.ComponentProps<typeof G>)} />
+        case "circle":
+          return <Circle key={i} {...(props as React.ComponentProps<typeof Circle>)} />
+        case "rect":
+          return <Rect key={i} {...(props as React.ComponentProps<typeof Rect>)} />
+        case "line":
+          return <Line key={i} {...(props as React.ComponentProps<typeof Line>)} />
+        case "ellipse":
+          return <Ellipse key={i} {...(props as React.ComponentProps<typeof Ellipse>)} />
+        case "polygon":
+          return <Polygon key={i} {...(props as React.ComponentProps<typeof Polygon>)} />
+        case "polyline":
+          return <Polyline key={i} {...(props as React.ComponentProps<typeof Polyline>)} />
+        default:
+          return null
+      }
+    })
+  }, [iconData, color, fill])
+
+  if (!iconData) return <View style={style as any} />
+
+  const viewBox = (iconData[1].viewBox as string) ?? DEFAULT_VIEWBOX
 
   return (
     <View style={[{ width: size, height: size }, style] as any}>
       <Svg width={size} height={size} viewBox={viewBox}>
-        {iconNode.map(([tag, attrs], i) => {
-          const { "stroke-width": _sw, key: _k, ...rest } = attrs as Record<string, unknown>
-          const props = {
-            ...rest,
-            stroke: color,
-            fill: fill ?? (attrs.fill as string) ?? "none",
-            strokeWidth: attrs["stroke-width"] ?? attrs.strokeWidth ?? strokeWidth,
-          }
-
-          switch (tag) {
-            case "path":
-              return <Path key={i} {...(props as React.ComponentProps<typeof Path>)} />
-            case "g":
-              return <G key={i} {...(props as React.ComponentProps<typeof G>)} />
-            case "circle":
-              return <Circle key={i} {...(props as React.ComponentProps<typeof Circle>)} />
-            case "rect":
-              return <Rect key={i} {...(props as React.ComponentProps<typeof Rect>)} />
-            case "line":
-              return <Line key={i} {...(props as React.ComponentProps<typeof Line>)} />
-            case "ellipse":
-              return <Ellipse key={i} {...(props as React.ComponentProps<typeof Ellipse>)} />
-            case "polygon":
-              return <Polygon key={i} {...(props as React.ComponentProps<typeof Polygon>)} />
-            case "polyline":
-              return <Polyline key={i} {...(props as React.ComponentProps<typeof Polyline>)} />
-            default:
-              return null
-          }
-        })}
+        {renderedNodes}
       </Svg>
     </View>
   )
-}
+})
 
 export default Icon

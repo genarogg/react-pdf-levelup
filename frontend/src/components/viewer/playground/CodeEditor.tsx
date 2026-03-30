@@ -199,6 +199,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaAutoConclusiva("BR"),
       etiquetaAutoConclusiva("HR"),
       etiquetaAutoConclusiva("Img", 'src="$1"'),
+      etiquetaAutoConclusiva("Icon", 'ico="$1"'),
 
       etiquetaConAtributo("A", 'src="$1"'),
 
@@ -235,7 +236,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
           margin={0}
           errorCorrectionLevel="H"
         />`),
-        
+
       etiquetaAvanzada("QRstyle", `
         <QRstyle
           url="https://example.com"
