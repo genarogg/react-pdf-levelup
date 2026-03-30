@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
 
 // ─── Constantes de módulo ──────────────────────────────────────────────────────
@@ -177,11 +177,11 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Regla / cuadrícula ────────────────────────────────────────────────────
 
-  const renderGrid = () => {
+  // CAMBIO 5: useMemo evita regenerar los arrays de <View> en cada render.
+  // Solo se recalcula cuando cambian las dimensiones de página o se activa/desactiva rule.
+  const grid = useMemo(() => {
     if (!rule) return null
 
-    // CAMBIO 4: se reutilizan pageWidth y pageHeight del scope superior.
-    // Ya no se llama a getPageDimensions por tercera vez.
     const horizontalLines = Array.from(
       { length: Math.ceil(pageHeight / CM_TO_POINTS) + 1 },
       (_, i) => (
@@ -222,7 +222,7 @@ const Layout: React.FC<LayoutProps> = ({
         {verticalLines}
       </View>
     )
-  }
+  }, [rule, pageWidth, pageHeight])
 
   // ── Estilos finales ───────────────────────────────────────────────────────
 
@@ -266,7 +266,7 @@ const Layout: React.FC<LayoutProps> = ({
             fixed
           />
         )}
-        {renderGrid()}
+        {grid}
         {children}
         <View style={{ paddingBottom: footerHeight }} />
 
