@@ -1,8 +1,7 @@
-import React,{ useEffect, useState }  from "react"
+import React, { useEffect, useState } from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
 
-// Define the props for the QR component
 interface QRProps {
   url: string
   size?: number
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
   },
 })
 
-// Mapa para convertir niveles de corrección numéricos a letras
 const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
   0: "L",
   1: "M",
@@ -33,8 +31,10 @@ const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
   3: "H",
 }
 
-// Este componente funciona con React PDF
-const QR: React.FC<QRProps> = ({
+const buildFallbackUrl = (url: string, size: number) =>
+  `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=${size}x${size}`
+
+const QR: React.FC<QRProps> = React.memo(({
   url,
   size = 150,
   style,
@@ -44,15 +44,15 @@ const QR: React.FC<QRProps> = ({
   logo = "",
   logoWidth = 30,
   logoHeight = 30,
-  errorCorrectionLevel = logo ? "H" : "M",
+  errorCorrectionLevel,
 }) => {
   const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
-  // Generar el código QR cuando el componente se monta o cuando cambian las props
+  const resolvedErrorLevel = errorCorrectionLevel ?? (logo ? "H" : "M")
+
   useEffect(() => {
     const generateQR = async () => {
       try {
-        // Primero generamos el QR básico
         const baseQrDataUrl = await generateQRAsBase64({
           url,
           size,
@@ -60,12 +60,11 @@ const QR: React.FC<QRProps> = ({
           colorLight,
           margin,
           errorCorrectionLevel:
-            typeof errorCorrectionLevel === "number"
-              ? errorLevelMap[errorCorrectionLevel] || "M"
-              : errorCorrectionLevel,
+            typeof resolvedErrorLevel === "number"
+              ? errorLevelMap[resolvedErrorLevel] ?? "M"
+              : resolvedErrorLevel,
         })
 
-        // Si hay un logo, lo añadimos al QR
         if (logo && logoWidth && logoHeight) {
           const qrWithLogo = await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
           setQrDataUrl(qrWithLogo)
@@ -74,30 +73,18 @@ const QR: React.FC<QRProps> = ({
         }
       } catch (error) {
         console.error("Error generando QR:", error)
-        // En caso de error, generamos un QR básico usando una API externa
-        const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-          url,
-        )}&size=${size}x${size}&color=${encodeURIComponent(colorDark.replace("#", ""))}&bgcolor=${encodeURIComponent(
-          colorLight.replace("#", ""),
-        )}`
-        setQrDataUrl(fallbackUrl)
+        setQrDataUrl(buildFallbackUrl(url, size))
       }
     }
 
     generateQR()
-  }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, errorCorrectionLevel])
-
-  // Mostrar un QR de respaldo mientras se genera el QR personalizado
-  const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-    url,
-  )}&size=${size}x${size}`
+  }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, resolvedErrorLevel])
 
   return (
     <View style={[styles.qrContainer, style]}>
-      <Image src={qrDataUrl || fallbackUrl} style={{ width: size, height: size }} />
+      <Image src={qrDataUrl || buildFallbackUrl(url, size)} style={{ width: size, height: size }} />
     </View>
   )
-}
+})
 
 export default QR
-
