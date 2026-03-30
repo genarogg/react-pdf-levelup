@@ -235,6 +235,22 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
           margin={0}
           errorCorrectionLevel="H"
         />`),
+        
+      etiquetaAvanzada("QRstyle", `
+        <QRstyle
+          url="https://example.com"
+          size={300}
+          colorDark="#3794ff"
+          colorLight="#ffffff"
+          image="https://genarogg.github.io/media/genarogg/favicon.png"
+          dotsOptions={{ color: "#3794ff", type: "rounded" }}
+          backgroundOptions={{ color: "#ffffff" }}
+          imageOptions={{ margin: 0, imageSize: 0.4 }}
+          cornersSquareOptions={{ type: "extra-rounded", color: "#3794ff" }}
+          cornersDotOptions={{ type: "dot", color: "#3794ff" }}
+          margin={0}
+          errorCorrectionLevel="H"
+        />`),
     ]
 
     // Registrar el proveedor de autocompletado
