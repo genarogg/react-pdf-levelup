@@ -1,30 +1,32 @@
 import React, { useMemo } from "react"
 import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
+import { toPdfOrientation } from "./helper/toPdfOrientation"
+import { getMargins, MM_TO_POINTS } from "./helper/getMargins"
+import type { MarginPreset } from "./helper/getMargins"
 
 // ─── Constantes de módulo ──────────────────────────────────────────────────────
 
-const MM_TO_POINTS = 2.834645669
 const CM_TO_POINTS = 28.3465
 
 const PAGE_DIMENSIONS: Record<string, { width: number; height: number }> = {
-  A0:      { width: 841,  height: 1189 },
-  A1:      { width: 594,  height: 841  },
-  A2:      { width: 420,  height: 594  },
-  A3:      { width: 297,  height: 420  },
-  A4:      { width: 210,  height: 297  },
-  A5:      { width: 148,  height: 210  },
-  A6:      { width: 105,  height: 148  },
-  A7:      { width: 74,   height: 105  },
-  A8:      { width: 52,   height: 74   },
-  A9:      { width: 37,   height: 52   },
-  LETTER:  { width: 216,  height: 279  },
-  LEGAL:   { width: 216,  height: 356  },
-  TABLOID: { width: 279,  height: 432  },
+  A0: { width: 841, height: 1189 },
+  A1: { width: 594, height: 841 },
+  A2: { width: 420, height: 594 },
+  A3: { width: 297, height: 420 },
+  A4: { width: 210, height: 297 },
+  A5: { width: 148, height: 210 },
+  A6: { width: 105, height: 148 },
+  A7: { width: 74, height: 105 },
+  A8: { width: 52, height: 74 },
+  A9: { width: 37, height: 52 },
+  LETTER: { width: 216, height: 279 },
+  LEGAL: { width: 216, height: 356 },
+  TABLOID: { width: 279, height: 432 },
 }
 
-const VALID_SIZES        = Object.keys(PAGE_DIMENSIONS)
+const VALID_SIZES = Object.keys(PAGE_DIMENSIONS)
 const VALID_ORIENTATIONS = ["vertical", "horizontal", "portrait", "landscape", "h", "v"]
-const VALID_MARGINS      = ["apa", "normal", "estrecho", "ancho"]
+const VALID_MARGINS = ["apa", "normal", "estrecho", "ancho"]
 
 // ─── Estilos base ──────────────────────────────────────────────────────────────
 
@@ -52,9 +54,8 @@ const styles = StyleSheet.create({
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
 
-type PageSize       = "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
-type Orientation    = "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
-type MarginPreset   = "apa" | "normal" | "estrecho" | "ancho"
+type PageSize = "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
+type Orientation = "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
 type PdfOrientation = "portrait" | "landscape"
 
 interface LayoutProps {
@@ -76,61 +77,23 @@ interface LayoutProps {
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
-function toPdfOrientation(orientation: Orientation): PdfOrientation {
-  switch (orientation) {
-    case "vertical":
-    case "portrait":
-    case "v":
-      return "portrait"
-    case "horizontal":
-    case "landscape":
-    case "h":
-      return "landscape"
-    default:
-      console.warn(`Orientación no reconocida: ${orientation}. Usando portrait.`)
-      return "portrait"
-  }
-}
-
-function getMargins(margin: MarginPreset, padding: number) {
-  // Todos los valores en mm, convertidos a puntos con MM_TO_POINTS
-  // para mantener coherencia con el resto del sistema de unidades.
-  const mm  = (value: number) => value * MM_TO_POINTS
-  const all = (value: number) => ({ paddingTop: value, paddingRight: value, paddingBottom: value, paddingLeft: value })
-
-  switch (margin) {
-    case "apa":
-      return all(mm(25.4))  // 25.4mm = 1 pulgada, estándar APA
-    case "estrecho":
-      return all(mm(12.7))  // 12.7mm = 0.5 pulgadas
-    case "ancho":
-      return all(mm(38.1))  // 38.1mm = 1.5 pulgadas
-    case "normal":
-    default:
-      return all(padding)
-  }
-}
-
 function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
-  const dims      = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
-  const widthPts  = dims.width  * MM_TO_POINTS
+  const dims = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
+  const widthPts = dims.width * MM_TO_POINTS
   const heightPts = dims.height * MM_TO_POINTS
   return orientation === "landscape"
     ? { width: heightPts, height: widthPts }
-    : { width: widthPts,  height: heightPts }
+    : { width: widthPts, height: heightPts }
 }
 
-// CAMBIO 1: La función ya no recalcula las dimensiones internamente.
-// Ahora recibe directamente pageHeight, que el componente ya tiene calculado.
+
 function getFooterTop(pageHeight: number, footerHeight: number): number {
   return pageHeight - footerHeight - 10
 }
 
 // ─── Constantes de layout ─────────────────────────────────────────────────────
 
-// CAMBIO 13: extraídas del componente — son constantes fijas que no dependen
-// de props ni de estado, no tiene sentido redeclararlas en cada render.
-const LINE_HEIGHT    = 20
+const LINE_HEIGHT = 20
 const FOOTER_PADDING = 10
 
 // ─── Componente ────────────────────────────────────────────────────────────────
@@ -169,9 +132,7 @@ const Layout: React.FC<LayoutProps> = ({
     ? margin
     : (console.warn(`Margen inválido: ${margin}. Usando normal.`), "normal")
 
-  // CAMBIO 14: footerHeight memoizado — es la base de varios useMemo posteriores
-  // (pageStyle, footerStyle). Sin esto, esos hooks reciben un valor nuevo en cada
-  // render aunque footerLines y footer no hayan cambiado.
+
   const footerHeight = useMemo(
     () => Math.max(1, footerLines ?? (footer ? 2 : 1)) * LINE_HEIGHT + FOOTER_PADDING,
     [footerLines, footer]
@@ -179,29 +140,22 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Cálculos derivados ────────────────────────────────────────────────────
 
-  // CAMBIO 8: pdfOrientation memoizado — toPdfOrientation es una función pura
-  // que solo necesita recalcularse si cambia safeOrientation.
   const pdfOrientation = useMemo(
     () => toPdfOrientation(safeOrientation),
     [safeOrientation]
   )
 
-  // CAMBIO 9: margins memoizado — getMargins es una función pura
-  // que solo necesita recalcularse si cambian safeMargin o padding.
   const margins = useMemo(
     () => getMargins(safeMargin, padding),
     [safeMargin, padding]
   )
 
-  // CAMBIO 10: dimensiones memoizadas — getPageDimensions es una función pura
-  // que solo necesita recalcularse si cambian safeSize o pdfOrientation.
+
   const { width: pageWidth, height: pageHeight } = useMemo(
     () => getPageDimensions(safeSize, pdfOrientation),
     [safeSize, pdfOrientation]
   )
 
-  // CAMBIO 15: footerTop memoizado — depende de pageHeight y footerHeight,
-  // ambos ya estables. Mantiene consistencia con el resto del enfoque.
   const footerTop = useMemo(
     () => getFooterTop(pageHeight, footerHeight),
     [pageHeight, footerHeight]
@@ -209,8 +163,6 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Regla / cuadrícula ────────────────────────────────────────────────────
 
-  // CAMBIO 5: useMemo evita regenerar los arrays de <View> en cada render.
-  // Solo se recalcula cuando cambian las dimensiones de página o se activa/desactiva rule.
   const grid = useMemo(() => {
     if (!rule) return null
 
@@ -260,12 +212,11 @@ const Layout: React.FC<LayoutProps> = ({
 
   const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
 
-  // CAMBIO 6: pageStyle memoizado — solo se recrea cuando cambian el color de fondo,
-  // los paddings resueltos o el estilo externo.
+
   const pageStyle = useMemo(() => {
-    const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
-    const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
-    const paddingLeft   = style?.paddingLeft   ?? style?.padding ?? margins.paddingLeft
+    const paddingTop = style?.paddingTop ?? style?.padding ?? margins.paddingTop
+    const paddingRight = style?.paddingRight ?? style?.padding ?? margins.paddingRight
+    const paddingLeft = style?.paddingLeft ?? style?.padding ?? margins.paddingLeft
     const paddingBottom = (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight
 
     return {
@@ -279,8 +230,7 @@ const Layout: React.FC<LayoutProps> = ({
     }
   }, [safeBackgroundColor, footerHeight, margins, style])
 
-  // CAMBIO 7: footerStyle memoizado — solo se recrea cuando cambian
-  // la posición o la altura del footer.
+
   const footerStyle = useMemo(() => ({
     ...styles.footer,
     top: footerTop,
@@ -294,16 +244,11 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Render ────────────────────────────────────────────────────────────────
 
-  // CAMBIO 11: el estilo de la imagen de fondo se memoiza por separado para no
-  // recrear el objeto en cada render — solo cambia si cambia la opacidad.
   const backgroundImageStyle = useMemo(() => ({
     ...styles.backgroundImage,
     opacity: backgroundImageOpacity,
   }), [backgroundImageOpacity])
 
-  // CAMBIO 12: el elemento <Image> completo se memoiza porque react-pdf
-  // hace el fetch/decode de la imagen en cada render. Si el src no cambia
-  // (caso habitual en el playground), se reutiliza el nodo sin reprocesar la imagen.
   const backgroundImageNode = useMemo(() => {
     if (!backgroundImage) return null
     return <Image src={backgroundImage} style={backgroundImageStyle} fixed />
