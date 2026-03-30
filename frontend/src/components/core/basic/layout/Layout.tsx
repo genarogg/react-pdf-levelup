@@ -1,28 +1,12 @@
 import React, { useMemo } from "react"
 import { Page, Document, StyleSheet, Text, View, Image } from "@react-pdf/renderer"
 import { toPdfOrientation } from "./helper/toPdfOrientation"
-import { getMargins, MM_TO_POINTS } from "./helper/getMargins"
-import type { MarginPreset } from "./helper/getMargins"
+import { getMargins, type MarginPreset } from "./helper/getMargins"
+import { getPageDimensions, type PageSize, type PdfOrientation, PAGE_DIMENSIONS } from "./helper/getPageDimensions"
 
 // ─── Constantes de módulo ──────────────────────────────────────────────────────
 
 const CM_TO_POINTS = 28.3465
-
-const PAGE_DIMENSIONS: Record<string, { width: number; height: number }> = {
-  A0: { width: 841, height: 1189 },
-  A1: { width: 594, height: 841 },
-  A2: { width: 420, height: 594 },
-  A3: { width: 297, height: 420 },
-  A4: { width: 210, height: 297 },
-  A5: { width: 148, height: 210 },
-  A6: { width: 105, height: 148 },
-  A7: { width: 74, height: 105 },
-  A8: { width: 52, height: 74 },
-  A9: { width: 37, height: 52 },
-  LETTER: { width: 216, height: 279 },
-  LEGAL: { width: 216, height: 356 },
-  TABLOID: { width: 279, height: 432 },
-}
 
 const VALID_SIZES = Object.keys(PAGE_DIMENSIONS)
 const VALID_ORIENTATIONS = ["vertical", "horizontal", "portrait", "landscape", "h", "v"]
@@ -54,9 +38,7 @@ const styles = StyleSheet.create({
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────────
 
-type PageSize = "A0" | "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "LETTER" | "LEGAL" | "TABLOID"
 type Orientation = "vertical" | "horizontal" | "h" | "v" | "portrait" | "landscape"
-type PdfOrientation = "portrait" | "landscape"
 
 interface LayoutProps {
   children: React.ReactNode
@@ -76,16 +58,6 @@ interface LayoutProps {
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
-
-function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
-  const dims = PAGE_DIMENSIONS[pageSize.toUpperCase()] ?? PAGE_DIMENSIONS.A4
-  const widthPts = dims.width * MM_TO_POINTS
-  const heightPts = dims.height * MM_TO_POINTS
-  return orientation === "landscape"
-    ? { width: heightPts, height: widthPts }
-    : { width: widthPts, height: heightPts }
-}
-
 
 function getFooterTop(pageHeight: number, footerHeight: number): number {
   return pageHeight - footerHeight - 10
@@ -140,10 +112,7 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Cálculos derivados ────────────────────────────────────────────────────
 
-  const pdfOrientation = useMemo(
-    () => toPdfOrientation(safeOrientation),
-    [safeOrientation]
-  )
+  const pdfOrientation = toPdfOrientation(safeOrientation)
 
   const margins = useMemo(
     () => getMargins(safeMargin, padding),
