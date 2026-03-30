@@ -165,14 +165,27 @@ const Layout: React.FC<LayoutProps> = ({
 
   // ── Cálculos derivados ────────────────────────────────────────────────────
 
-  const pdfOrientation = toPdfOrientation(safeOrientation)
-  const margins        = getMargins(safeMargin, padding)
+  // CAMBIO 8: pdfOrientation memoizado — toPdfOrientation es una función pura
+  // que solo necesita recalcularse si cambia safeOrientation.
+  const pdfOrientation = useMemo(
+    () => toPdfOrientation(safeOrientation),
+    [safeOrientation]
+  )
 
-  // CAMBIO 2: getPageDimensions se llama una sola vez aquí.
-  // pageWidth y pageHeight quedan disponibles para todo el componente.
-  const { width: pageWidth, height: pageHeight } = getPageDimensions(safeSize, pdfOrientation)
+  // CAMBIO 9: margins memoizado — getMargins es una función pura
+  // que solo necesita recalcularse si cambian safeMargin o padding.
+  const margins = useMemo(
+    () => getMargins(safeMargin, padding),
+    [safeMargin, padding]
+  )
 
-  // CAMBIO 3: getFooterTop recibe pageHeight ya calculado, sin repetir getPageDimensions.
+  // CAMBIO 10: dimensiones memoizadas — getPageDimensions es una función pura
+  // que solo necesita recalcularse si cambian safeSize o pdfOrientation.
+  const { width: pageWidth, height: pageHeight } = useMemo(
+    () => getPageDimensions(safeSize, pdfOrientation),
+    [safeSize, pdfOrientation]
+  )
+
   const footerTop = getFooterTop(pageHeight, footerHeight)
 
   // ── Regla / cuadrícula ────────────────────────────────────────────────────
