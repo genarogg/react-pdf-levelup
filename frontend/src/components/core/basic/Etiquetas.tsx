@@ -1,15 +1,25 @@
 import React from "react"
 import { Text, StyleSheet, Link, View } from "@react-pdf/renderer"
 
-interface TextProps {
-  children: React.ReactNode
+type TextBaseProps = React.ComponentProps<typeof Text>
+type ViewBaseProps = React.ComponentProps<typeof View>
+type LinkBaseProps = React.ComponentProps<typeof Link>
+
+interface TextProps extends Omit<TextBaseProps, "style"> {
+  children?: React.ReactNode
   style?: any
   href?: string
 }
 
-interface DivProps {
-  children: React.ReactNode
+interface DivProps extends Omit<ViewBaseProps, "style"> {
+  children?: React.ReactNode
   style?: any
+}
+
+interface LinkProps extends Omit<LinkBaseProps, "style"> {
+  children?: React.ReactNode
+  style?: any
+  href?: string
 }
 
 const styles = StyleSheet.create({
@@ -87,80 +97,76 @@ const styles = StyleSheet.create({
   },
 })
 
-const P: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.p, style]}>{children}</Text>
-}
+const P: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.p, style]} {...rest}>{children}</Text>
+)
 
-const H1: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h1, style]}>{children}</Text>
-}
+const H1: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h1, style]} {...rest}>{children}</Text>
+)
 
-const H2: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h2, style]}>{children}</Text>
-}
+const H2: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h2, style]} {...rest}>{children}</Text>
+)
 
-const H3: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h3, style]}>{children}</Text>
-}
+const H3: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h3, style]} {...rest}>{children}</Text>
+)
 
-const H4: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h4, style]}>{children}</Text>
-}
+const H4: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h4, style]} {...rest}>{children}</Text>
+)
 
-const H5: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h5, style]}>{children}</Text>
-}
+const H5: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h5, style]} {...rest}>{children}</Text>
+)
 
-const H6: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.h6, style]}>{children}</Text>
-}
+const H6: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.h6, style]} {...rest}>{children}</Text>
+)
 
-const Strong: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.strong, style]}>{children}</Text>
-}
+const Strong: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.strong, style]} {...rest}>{children}</Text>
+)
 
-const Em: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.em, style]}>{children}</Text>
-}
+const Em: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.em, style]} {...rest}>{children}</Text>
+)
 
-const U: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.u, style]}>{children}</Text>
-}
+const U: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.u, style]} {...rest}>{children}</Text>
+)
 
-const Small: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.small, style]}>{children}</Text>
-}
+const Small: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.small, style]} {...rest}>{children}</Text>
+)
 
-const Blockquote: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.blockquote, style]}>{children}</Text>
-}
+const Blockquote: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.blockquote, style]} {...rest}>{children}</Text>
+)
 
-const Mark: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[styles.mark, style]}>{children}</Text>
-}
+const Mark: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={[styles.mark, style]} {...rest}>{children}</Text>
+)
 
-const A: React.FC<TextProps> = ({ children, style, href }) => {
-  return (
-    <Link src={href} style={[styles.A, style]}>
-      {children}
-    </Link>
-  )
-}
+const A: React.FC<LinkProps> = ({ children, style, href, ...rest }) => (
+  <Link src={href} style={[styles.A, style]} {...rest}>{children}</Link>
+)
 
-const BR: React.FC<{ style?: any }> = ({ style }) => {
-  return <Text style={[styles.br, style]}>{"\n"}</Text>
-}
+const BR: React.FC<TextProps> = ({ style, ...rest }) => (
+  <Text style={[styles.br, style]} {...rest}>{"\n"}</Text>
+)
 
-const HR: React.FC<{ style?: any }> = ({ style }) => {
-  return <View style={[styles.hr, style]} />
-}
+const HR: React.FC<DivProps> = ({ style, ...rest }) => (
+  <View style={[styles.hr, style]} {...rest} />
+)
 
-const Span: React.FC<TextProps> = ({ children, style }) => {
-  return <Text style={[style]}>{children}</Text>
-}
+const Span: React.FC<TextProps> = ({ children, style, ...rest }) => (
+  <Text style={style} {...rest}>{children}</Text>
+)
 
-const Div: React.FC<DivProps> = ({ children, style }) => {
-  return <View style={style}>{children}</View>
-}
+const Div: React.FC<DivProps> = ({ children, style, ...rest }) => (
+  <View style={style} {...rest}>{children}</View>
+)
 
 export { P, A, H1, H2, H3, H4, H5, H6, Strong, Em, U, Small, Blockquote, Mark, Span, BR, HR, Div }
