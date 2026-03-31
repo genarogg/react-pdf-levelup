@@ -5,13 +5,16 @@ description: Components for rendering and formatting text.
 
 ## P, H1-H6
 
-Basic text components (paragraph and headings).
+Basic text components (paragraph and headings). They support all properties of the `Text` component from `@react-pdf/renderer`.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional text styles. |
+| `style` | `object` | `{}` | Additional text styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -23,7 +26,7 @@ Basic text components (paragraph and headings).
 
 ## Strong, Em, U, Small
 
-Inline text formatting components.
+Inline text formatting components. They support all properties of the `Text` component.
 
 - **Strong**: Bold text.
 - **Em**: Italic text (emphasis).
@@ -34,7 +37,10 @@ Inline text formatting components.
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -46,13 +52,16 @@ Inline text formatting components.
 
 ## Blockquote
 
-Blockquote for highlighting important text.
+Blockquote for highlighting important text. Supports all properties of the `Text` component.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -62,13 +71,16 @@ Blockquote for highlighting important text.
 
 ## Mark
 
-Highlighted text (like with a marker).
+Highlighted text (like with a marker). Supports all properties of the `Text` component.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -78,13 +90,16 @@ Highlighted text (like with a marker).
 
 ## Span
 
-Generic inline text container.
+Generic inline text container. Supports all properties of the `Text` component.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -94,13 +109,16 @@ Generic inline text container.
 
 ## BR
 
-Line break.
+Line break. Supports all properties of the `Text` component.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -112,13 +130,16 @@ Line break.
 
 ## HR
 
-Horizontal dividing line.
+Horizontal dividing line. Supports all properties of the `View` component.
 
 ### Props
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
@@ -128,7 +149,7 @@ Horizontal dividing line.
 
 ## A
 
-Link.
+Link. Supports all properties of the `Link` component from `@react-pdf/renderer`.
 
 ### Props
 
@@ -136,9 +157,32 @@ Link.
 | :------ | :------- | :------ | :-------------------- |
 | `href`  | `string` | `""`    | Link URL.             |
 | `style` | `object` | `{}`    | Additional styles.    |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Example
 
 ```tsx
 <A href="https://example.com">Go to website</A>
 ```
+
+## Div
+
+Generic container for grouping elements. Supports all properties of the `View` component from `@react-pdf/renderer`.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+<Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
+  <P>Content inside a Div</P>
+</Div>

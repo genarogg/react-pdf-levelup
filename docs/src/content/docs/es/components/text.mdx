@@ -5,13 +5,16 @@ description: Componentes para renderizar y formatear texto.
 
 ## P, H1-H6
 
-Componentes básicos de texto (párrafo y encabezados).
+Componentes básicos de texto (párrafo y encabezados). Soportan todas las propiedades del componente `Text` de `@react-pdf/renderer`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales para el texto. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -23,7 +26,7 @@ Componentes básicos de texto (párrafo y encabezados).
 
 ## Strong, Em, U, Small
 
-Componentes de formato de texto en línea.
+Componentes de formato de texto en línea. Soportan todas las propiedades del componente `Text`.
 
 - **Strong**: Texto en negrita.
 - **Em**: Texto en cursiva (énfasis).
@@ -35,6 +38,9 @@ Componentes de formato de texto en línea.
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -46,13 +52,16 @@ Componentes de formato de texto en línea.
 
 ## Blockquote
 
-Bloque de cita para destacar texto importante.
+Bloque de cita para destacar texto importante. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -62,13 +71,16 @@ Bloque de cita para destacar texto importante.
 
 ## Mark
 
-Texto resaltado (como con un marcador).
+Texto resaltado (como con un marcador). Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -78,13 +90,16 @@ Texto resaltado (como con un marcador).
 
 ## Span
 
-Contenedor de texto inline genérico.
+Contenedor de texto inline genérico. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -94,13 +109,16 @@ Contenedor de texto inline genérico.
 
 ## BR
 
-Salto de línea.
+Salto de línea. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -112,13 +130,16 @@ Salto de línea.
 
 ## HR
 
-Línea horizontal divisoria.
+Línea horizontal divisoria. Soporta todas las propiedades del componente `View`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
@@ -128,7 +149,7 @@ Línea horizontal divisoria.
 
 ## A
 
-Enlace (Link).
+Enlace (Link). Soporta todas las propiedades del componente `Link` de `@react-pdf/renderer`.
 
 ### Props
 
@@ -136,9 +157,32 @@ Enlace (Link).
 | :--- | :--- | :--- | :--- |
 | `href` | `string` | `""` | URL del enlace. |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
 <A href="https://example.com">Ir al sitio web</A>
 ```
+
+## Div
+
+Contenedor genérico para agrupar elementos. Soporta todas las propiedades del componente `View` de `@react-pdf/renderer`.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
+
+### Ejemplo
+
+```tsx
+<Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
+  <P>Contenido dentro de un Div</P>
+</Div>

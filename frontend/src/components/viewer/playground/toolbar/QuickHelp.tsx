@@ -125,7 +125,12 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "Div",
         description: "Contenedor genérico para agrupar elementos",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Div style={{ padding: 10 }}>
   <P>Bloque con padding</P>
 </Div>`,
@@ -135,7 +140,12 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "P, H1-H6",
         description: "Componentes de texto (párrafo, encabezados)",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales para el texto" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales para el texto" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<H1>Título</H1>
 <H3>Subtítulo</H3>
 <P>Parrafo</P>`,
@@ -143,31 +153,56 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "Strong, Em, U, Small",
         description: "Componentes de formato de texto",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<P><Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U>Subrayado</U>, <Small>Pequeño</Small></P>`,
       },
       {
         name: "Blockquote",
         description: "Bloque de cita",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Blockquote>Una cita destacada</Blockquote>`,
       },
       {
         name: "Mark",
         description: "Texto resaltado",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Mark>Texto resaltado</Mark>`,
       },
       {
         name: "Span",
         description: "Contenedor de texto inline",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Span>Inline</Span>`,
       },
       {
         name: "BR",
         description: "Salto de línea",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<P>Linea 1</P>
 <BR />
 <P>Linea 2</P>`,
@@ -175,7 +210,12 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "HR",
         description: "Línea horizontal divisoria",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<HR />`,
       },
       {
@@ -184,6 +224,9 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         props: [
           { name: "href", type: "string", default: "", description: "URL del enlace" },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<A href="https://example.com">Ir al sitio</A>`,
       },
