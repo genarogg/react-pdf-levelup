@@ -194,7 +194,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       //etiquetaConSalto("Footer"),
       etiquetaConSalto("ImgBg"),
 
-
+      etiquetaAutoConclusiva("NextPage"),
 
       etiquetaAutoConclusiva("BR"),
       etiquetaAutoConclusiva("HR"),
