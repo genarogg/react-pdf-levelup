@@ -47,7 +47,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             name: "size",
             type: "string",
             default: "A4",
-            description: "Tamaño de la página (4A0-2A0, A0-A10, B0-B10, C0-C10, RA0-RA4, SRA0-SRA4, EXECUTIVE, FOLIO, LEGAL, LETTER, TABLOID, ID1)",
+            description: "Tamaño de la página (4A0-2A0, A0-A8, B0-B9, C0-C8, RA0-RA4, SRA0-SRA4, EXECUTIVE, FOLIO, LEGAL, LETTER, TABLOID, ID1)",
           },
           {
             name: "orientation",
