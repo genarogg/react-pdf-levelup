@@ -18,9 +18,12 @@ import { View, Text, StyleSheet, Font, renderToStream, Document, Page } from "@r
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 import Icon from "./icono/Icon"
 
+import { LayoutMultiPage, Section } from "./basic/layout/LayoutMultiPage"
+
 export {
   ImgBg,
   Layout,
+  LayoutMultiPage, Section,
   NextPage,
   Img,
   Left,
