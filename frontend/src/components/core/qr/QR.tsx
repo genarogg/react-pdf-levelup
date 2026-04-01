@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
 
-interface QRProps {
+type ViewBaseProps = React.ComponentProps<typeof View>
+
+interface QRProps extends Omit<ViewBaseProps, "style"> {
   url: string
   size?: number
   style?: any
@@ -45,6 +47,7 @@ const QR: React.FC<QRProps> = React.memo(({
   logoWidth = 30,
   logoHeight = 30,
   errorCorrectionLevel,
+  ...rest
 }) => {
   const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
@@ -52,6 +55,7 @@ const QR: React.FC<QRProps> = React.memo(({
 
   useEffect(() => {
     const generateQR = async () => {
+
       try {
         const baseQrDataUrl = await generateQRAsBase64({
           url,
@@ -81,7 +85,7 @@ const QR: React.FC<QRProps> = React.memo(({
   }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, resolvedErrorLevel])
 
   return (
-    <View style={[styles.qrContainer, style]}>
+    <View style={[styles.qrContainer, style]} {...rest}>
       <Image src={qrDataUrl || buildFallbackUrl(url, size)} style={{ width: size, height: size }} />
     </View>
   )

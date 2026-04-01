@@ -11,7 +11,7 @@ El componente `QRstyle` (anteriormente `QRV2`) ofrece un control avanzado sobre 
 
 | Nombre                   | Tipo                                       | Default        | Descripción                                                                                               |
 | :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
-| `value`                  | `string`                                   | `""`           | El texto o URL que se codificará en el código QR.                                                        |
+| `url`                  | `string`                                   | `""`           | El texto o URL que se codificará en el código QR.                                                        |
 | `size`                   | `number`                                   | `300`          | Tamaño del código QR en píxeles (ancho y alto).                                                           |
 | `style`                  | `any`                                      | `{}`           | Estilos adicionales para el contenedor `View` que envuelve el código QR.                                |
 | `image`                  | `string`                                   | `undefined`    | URL de la imagen del logo a incrustar en el centro del QR.                                                |
@@ -24,6 +24,9 @@ El componente `QRstyle` (anteriormente `QRV2`) ofrece un control avanzado sobre 
 | `colorLight` (Fallback)  | `string`                                   | `undefined`    | **(Compatibilidad)** Color de fondo. Se usa si `backgroundOptions.color` no está definido.              |
 | `margin` (Fallback)      | `number`                                   | `undefined`    | **(Compatibilidad)** Margen alrededor del QR. Se usa si `imageOptions.margin` no está definido.       |
 | `errorCorrectionLevel` (Fallback) | `"L" \| "M" \| "Q" \| "H"` | `undefined`    | **(Compatibilidad)** Nivel de corrección de errores. Se usa si no se especifica en `dotsOptions` o propiedades de nivel superior. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 

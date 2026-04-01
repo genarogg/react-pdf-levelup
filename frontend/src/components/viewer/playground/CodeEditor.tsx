@@ -197,7 +197,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaAutoConclusiva("NextPage"),
 
       etiquetaAutoConclusiva("BR"),
-      etiquetaAutoConclusiva("HR"),
+      etiquetaAutoConclusiva("HR", "style={{ borderTop: '1px solid #000' }}"),
       etiquetaAutoConclusiva("Img", 'src="$1"'),
       etiquetaAutoConclusiva("Icon", 'ico="$1"'),
 
