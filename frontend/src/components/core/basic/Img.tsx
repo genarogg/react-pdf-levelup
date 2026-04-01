@@ -1,7 +1,9 @@
 import React from "react"
 import { Image, StyleSheet } from "@react-pdf/renderer"
 
-interface ImgProps {
+type ImageBaseProps = React.ComponentProps<typeof Image>
+
+interface ImgProps extends Omit<ImageBaseProps, "style"> {
   src?: string
   style?: any
 }
@@ -14,8 +16,8 @@ const styles = StyleSheet.create({
   },
 })
 
-const Img: React.FC<ImgProps> = React.memo(({ src, style }) => {
-  return <Image src={src} style={[styles.image, style]} />
+const Img: React.FC<ImgProps> = React.memo(({ src, style, ...rest }) => {
+  return <Image src={src} style={[styles.image, style]} {...rest} />
 })
 
 Img.displayName = "Img"

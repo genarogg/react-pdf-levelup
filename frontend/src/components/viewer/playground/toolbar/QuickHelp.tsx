@@ -406,6 +406,9 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         props: [
           { name: "src", type: "string", default: "", description: "URL de la imagen" },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<Img src="https://picsum.photos/400/200" style={{ width: 200 }} />`,
       },
@@ -426,6 +429,8 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "objectPosition", type: "string", default: "center", description: "Posición de la imagen" },
           { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
   <P>Texto sobre imagen de fondo</P>
