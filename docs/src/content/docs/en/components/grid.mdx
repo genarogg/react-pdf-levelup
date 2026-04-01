@@ -19,6 +19,9 @@ The `Container` component is the main wrapper for your column layout. It helps c
 |----------|-------------------|-------------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | The content to render inside the container. |
 | `style`    | `any`             | `{}`        | Additional styles for the container.      |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ## Row
 
@@ -30,6 +33,9 @@ The `Row` component is used to create rows within a `Container`. Rows wrap colum
 |----------|-------------------|-------------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | The content to render inside the row.     |
 | `style`    | `any`             | `{}`        | Additional styles for the row.          |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 
 ## Col (Col1 to Col12)
@@ -42,6 +48,9 @@ The `Col` components (from `Col1` to `Col12`) represent individual columns withi
 |----------|-------------------|-------------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | The content to render inside the column.  |
 | `style`    | `any`             | `{}`        | Additional styles for the column.         |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
 
 ### Usage Example
 

@@ -98,6 +98,9 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         description: "Contenedor principal con padding horizontal",
         props: [
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales para el contenedor" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<Container>
   <Row>
@@ -109,7 +112,12 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "Row",
         description: "Fila para el sistema de grid",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales para la fila" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales para la fila" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Row>
   <Col4><P>A</P></Col4>
   <Col4><P>B</P></Col4>
@@ -119,7 +127,12 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
       {
         name: "Col1-Col12",
         description: "Columnas para el sistema de grid (de 1 a 12 unidades)",
-        props: [{ name: "style", type: "object", default: "{}", description: "Estilos adicionales para la columna" }],
+        props: [
+          { name: "style", type: "object", default: "{}", description: "Estilos adicionales para la columna" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
+        ],
         example: `<Col12><P>Contenido a ancho completo</P></Col12>`,
       },
       {

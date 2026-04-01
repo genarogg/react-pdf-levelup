@@ -19,6 +19,9 @@ El componente `Container` es el contenedor principal para tu diseño de columnas
 |----------|----------------|---------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro del contenedor. |
 | `style`    | `any`          | `{}`    | Estilos adicionales para el contenedor.   |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ## Row
 
@@ -30,6 +33,9 @@ El componente `Row` se utiliza para crear filas dentro de un `Container`. Las fi
 |----------|----------------|---------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro de la fila. |
 | `style`    | `any`          | `{}`    | Estilos adicionales para la fila.         |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 
 ## Col (Col1 a Col12)
@@ -42,6 +48,9 @@ Los componentes `Col` (desde `Col1` hasta `Col12`) representan columnas individu
 |----------|----------------|---------|-------------------------------------------|
 | `children` | `React.ReactNode` | `undefined` | El contenido a renderizar dentro de la columna. |
 | `style`    | `any`          | `{}`    | Estilos adicionales para la columna.      |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo de Uso
 
