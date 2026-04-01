@@ -9,9 +9,11 @@ import ImgBg from "../../frontend/src/components/core/basic/ImgBg"
 import { Left, Right, Center } from "../../frontend/src/components/core/basic/Position"
 import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "../../frontend/src/components/core/basic/Etiquetas"
 import { Table, Thead, Tbody, Tr, Th, Td } from "../../frontend/src/components/core/basic/Tablet"
-import { Form, Input,  Checkbox, TextArea } from "../../frontend/src/components/core/basic/Form"
+import { Form, Input, Checkbox, TextArea } from "../../frontend/src/components/core/basic/Form"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "../../frontend/src/components/core/basic/Grid"
 import { UL, OL, LI } from "../../frontend/src/components/core/basic/Lista"
+
+import { LayoutMultiPage, Section } from "../../frontend/src/components/core/basic/layout/LayoutMultiPage"
 
 import decodeBase64Pdf from "../../frontend/src/functions/decodeBase64Pdf"
 import generatePDF from "../../frontend/src/functions/generatePDF"
@@ -39,5 +41,6 @@ export {
     Form, Input, TextArea, Checkbox,
     // misc
     Div, HR, Layout, NextPage,
+    LayoutMultiPage, Section
 
 }
