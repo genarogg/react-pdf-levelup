@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { generateQRstyleAsBase64, type QRstyleOptions } from "./QRstyleGenerator"
 
-export interface QRstyleProps {
+type ViewBaseProps = React.ComponentProps<typeof View>
+
+export interface QRstyleProps extends Omit<ViewBaseProps, "style"> {
   url: string
   size?: number
   style?: any
@@ -40,6 +42,7 @@ const QRstyle: React.FC<QRstyleProps> = React.memo(({
   colorLight,
   margin,
   errorCorrectionLevel,
+  ...rest
 }) => {
   const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
@@ -90,7 +93,7 @@ const QRstyle: React.FC<QRstyleProps> = React.memo(({
   if (!qrDataUrl) return null
 
   return (
-    <View style={[styles.qrContainer, style]}>
+    <View style={[styles.qrContainer, style]} {...rest}>
       <Image style={{ width: size, height: size }} src={qrDataUrl} />
     </View>
   )

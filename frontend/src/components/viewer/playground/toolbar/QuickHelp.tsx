@@ -454,6 +454,9 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "logo", type: "string", default: "", description: "URL de la imagen del logo" },
           { name: "logoWidth", type: "number", default: "30", description: "Ancho del logo en píxeles" },
           { name: "logoHeight", type: "number", default: "30", description: "Alto del logo en píxeles" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<QR url="https://example.com" size={150} colorDark="#000" colorLight="#fff" logo="https://picsum.photos/80" logoWidth={30} logoHeight={30} />`,
       },
@@ -494,6 +497,9 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             description: "Corrección de errores (fallback L, M, Q, H)",
           },
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug (bordes)" },
+          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
+          { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
         example: `<QRStyle
   url="https://example.com"
