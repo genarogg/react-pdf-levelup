@@ -1,0 +1,91 @@
+---
+title: LayoutMultiPage
+description: Componente para crear documentos PDF con múltiples páginas configurables individualmente.
+---
+
+# LayoutMultiPage
+
+El componente **LayoutMultiPage** es una alternativa avanzada al `Layout` estándar. Mientras que `Layout` maneja el contenido como un flujo continuo que se divide automáticamente en páginas, `LayoutMultiPage` permite definir explícitamente cada página (usando el componente `Section`) y configurar propiedades específicas para cada una de ellas.
+
+Internamente, `LayoutMultiPage` actúa como el contenedor `<Document>` y permite inyectar configuraciones globales a todas sus páginas hijas.
+
+---
+
+## LayoutMultiPage Props
+
+Estas propiedades se aplican de forma global a todo el documento, pero pueden ser sobrescritas individualmente en cada `Section`.
+
+| Nombre | Tipo | Default | Descripción |
+|--------|------|---------|-------------|
+| `size` | `PageSize` | `"A4"` | Tamaño base de las páginas. |
+| `orientation` | `Orientation` | `"vertical"` | Orientación base de las páginas. |
+| `backgroundColor` | `string` | `"white"` | Color de fondo base. |
+| `backgroundImage` | `string` | `undefined` | Imagen de fondo base para todas las páginas. |
+| `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo base. |
+| `padding` | `number` | `30` | Padding base de las páginas. |
+| `margin` | `MarginPreset` | `"normal"` | Ajuste de márgenes predefinido base. |
+| `footer` | `ReactNode` | `undefined` | Contenido del pie de página base. |
+| `footerLines` | `number` | `1` | Espacio reservado para el footer en líneas. |
+| `pagination` | `boolean` | `true` | Mostrar numeración de páginas base. |
+| `rule` | `boolean` | `false` | Mostrar rejilla de referencia base. |
+| `debug` | `boolean` | `false` | Activar modo debug base. |
+| `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, etc.). |
+
+---
+
+# Section
+
+El componente **Section** representa una página individual dentro de un `LayoutMultiPage`. Hereda las propiedades globales definidas en su padre, pero permite personalizarlas para crear páginas únicas.
+
+## Section Props
+
+| Nombre | Tipo | Default | Descripción |
+|--------|------|---------|-------------|
+| `style` | `object` | `{}` | Estilos adicionales para la página. |
+| `backgroundColor` | `string` | Heredado | Sobrescribe el color de fondo para esta página. |
+| `backgroundImage` | `string` | Heredado | Sobrescribe la imagen de fondo para esta página. |
+| `backgroundImageOpacity` | `number` | Heredado | Sobrescribe la opacidad de la imagen de fondo. |
+| `padding` | `number` | Heredado | Sobrescribe el padding de esta página. |
+| `margin` | `MarginPreset` | Heredado | Sobrescribe el preset de márgenes. |
+| `footer` | `ReactNode` | Heredado | Sobrescribe el footer para esta página. |
+| `footerLines` | `number` | Heredado | Sobrescribe el espacio del footer. |
+| `pagination` | `boolean` | Heredado | Activa/desactiva la numeración en esta página. |
+| `rule` | `boolean` | Heredado | Activa/desactiva la rejilla en esta página. |
+| `debug` | `boolean` | Heredado | Activa/desactiva el modo debug en esta página. |
+
+---
+
+## Ejemplo de Uso
+
+Este ejemplo muestra un documento donde la primera página tiene un diseño diferente a la segunda.
+
+```tsx
+import { LayoutMultiPage, Section, H1, P } from '@react-pdf-levelup/core';
+
+function MyMultiPageDocument() {
+  return (
+    <LayoutMultiPage 
+      size="A4" 
+      backgroundColor="#f0f0f0"
+      footer={<P>Documento Corporativo</P>}
+    >
+      {/* Primera página: Usa el fondo gris global */}
+      <Section>
+        <H1>Portada</H1>
+        <P>Este es el contenido de la primera página.</P>
+      </Section>
+
+      {/* Segunda página: Sobrescribe el fondo a blanco y quita la numeración */}
+      <Section backgroundColor="white" pagination={false}>
+        <H1>Contenido Especial</H1>
+        <P>Esta página tiene un fondo diferente y no muestra el número de página.</P>
+      </Section>
+    </LayoutMultiPage>
+  );
+}
+```
+
+## Diferencias con Layout
+
+- **Layout**: Ideal para textos largos, reportes automáticos y flujos de datos donde el contenido fluye naturalmente de una página a otra.
+- **LayoutMultiPage**: Ideal para documentos con estructuras fijas por página, como un catálogo donde cada página tiene un diseño único, o documentos con portadas y contraportadas específicas.

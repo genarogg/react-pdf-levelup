@@ -1,0 +1,91 @@
+---
+title: LayoutMultiPage
+description: Component for creating PDF documents with multiple individually configurable pages.
+---
+
+# LayoutMultiPage
+
+The **LayoutMultiPage** component is an advanced alternative to the standard `Layout`. While `Layout` handles content as a continuous flow that automatically splits into pages, `LayoutMultiPage` allows you to explicitly define each page (using the `Section` component) and configure specific properties for each one.
+
+Internally, `LayoutMultiPage` acts as the `<Document>` container and allows injecting global configurations to all its child pages.
+
+---
+
+## LayoutMultiPage Props
+
+These properties apply globally to the entire document but can be overridden individually in each `Section`.
+
+| Name | Type | Default | Description |
+|--------|------|---------|-------------|
+| `size` | `PageSize` | `"A4"` | Base page size. |
+| `orientation` | `Orientation` | `"vertical"` | Base page orientation. |
+| `backgroundColor` | `string` | `"white"` | Base background color. |
+| `backgroundImage` | `string` | `undefined` | Base background image for all pages. |
+| `backgroundImageOpacity` | `number` | `1` | Base background image opacity. |
+| `padding` | `number` | `30` | Base page padding. |
+| `margin` | `MarginPreset` | `"normal"` | Base margin preset. |
+| `footer` | `ReactNode` | `undefined` | Base footer content. |
+| `footerLines` | `number` | `1` | Reserved footer space in lines. |
+| `pagination` | `boolean` | `true` | Base page numbering visibility. |
+| `rule` | `boolean` | `false` | Base reference grid visibility. |
+| `debug` | `boolean` | `false` | Base debug mode activation. |
+| `meta` | `DocumentMeta` | `{}` | Document metadata (title, author, etc.). |
+
+---
+
+# Section
+
+The **Section** component represents an individual page within a `LayoutMultiPage`. It inherits the global properties defined in its parent but allows customizing them to create unique pages.
+
+## Section Props
+
+| Name | Type | Default | Description |
+|--------|------|---------|-------------|
+| `style` | `object` | `{}` | Additional styles for the page. |
+| `backgroundColor` | `string` | Inherited | Overrides the background color for this page. |
+| `backgroundImage` | `string` | Inherited | Overrides the background image for this page. |
+| `backgroundImageOpacity` | `number` | Inherited | Overrides the background image opacity. |
+| `padding` | `number` | Inherited | Overrides the padding for this page. |
+| `margin` | `MarginPreset` | Inherited | Overrides the margin preset. |
+| `footer` | `ReactNode` | Inherited | Overrides the footer for this page. |
+| `footerLines` | `number` | Inherited | Overrides the footer space. |
+| `pagination` | `boolean` | Inherited | Enables/disables numbering on this page. |
+| `rule` | `boolean` | Inherited | Enables/disables the grid on this page. |
+| `debug` | `boolean` | Inherited | Enables/disables debug mode on this page. |
+
+---
+
+## Usage Example
+
+This example shows a document where the first page has a different design than the second.
+
+```tsx
+import { LayoutMultiPage, Section, H1, P } from '@react-pdf-levelup/core';
+
+function MyMultiPageDocument() {
+  return (
+    <LayoutMultiPage 
+      size="A4" 
+      backgroundColor="#f0f0f0"
+      footer={<P>Corporate Document</P>}
+    >
+      {/* First page: Uses the global gray background */}
+      <Section>
+        <H1>Cover Page</H1>
+        <P>This is the content of the first page.</P>
+      </Section>
+
+      {/* Second page: Overrides background to white and removes numbering */}
+      <Section backgroundColor="white" pagination={false}>
+        <H1>Special Content</H1>
+        <P>This page has a different background and does not show the page number.</P>
+      </Section>
+    </LayoutMultiPage>
+  );
+}
+```
+
+## Differences with Layout
+
+- **Layout**: Ideal for long texts, automatic reports, and data flows where content naturally flows from one page to another.
+- **LayoutMultiPage**: Ideal for documents with fixed structures per page, such as a catalog where each page has a unique design, or documents with specific cover and back cover pages.

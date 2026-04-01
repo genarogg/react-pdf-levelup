@@ -94,6 +94,48 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 </Layout>`,
       },
       {
+        name: "LayoutMultiPage",
+        description: "Contenedor avanzado para PDFs con múltiples secciones (páginas) configurables",
+        props: [
+          { name: "size", type: "string", default: "A4", description: "Tamaño base de las páginas" },
+          { name: "orientation", type: "string", default: "vertical", description: "Orientación base" },
+          { name: "backgroundColor", type: "string", default: "white", description: "Color de fondo base" },
+          { name: "padding", type: "number", default: "30", description: "Padding base" },
+          {
+            name: "margin",
+            type: "string",
+            default: "normal",
+            description: "Margen base (apa, normal, estrecho, ancho)",
+          },
+          { name: "footer", type: "ReactNode", default: "", description: "Pie de página base" },
+          { name: "pagination", type: "boolean", default: "true", description: "Numeración base" },
+          { name: "debug", type: "boolean", default: "false", description: "Modo debug base" },
+        ],
+        example: `<LayoutMultiPage backgroundColor="#eee">
+  <Section>
+    <H1>Página 1</H1>
+  </Section>
+  <Section backgroundColor="white">
+    <H1>Página 2 (Blanca)</H1>
+  </Section>
+</LayoutMultiPage>`,
+      },
+      {
+        name: "Section",
+        description: "Representa una página individual dentro de LayoutMultiPage",
+        props: [
+          { name: "backgroundColor", type: "string", default: "Heredado", description: "Color de fondo de esta página" },
+          { name: "padding", type: "number", default: "Heredado", description: "Padding de esta página" },
+          { name: "margin", type: "string", default: "Heredado", description: "Margen de esta página" },
+          { name: "footer", type: "ReactNode", default: "Heredado", description: "Footer de esta página" },
+          { name: "pagination", type: "boolean", default: "Heredado", description: "Numeración en esta página" },
+          { name: "debug", type: "boolean", default: "Heredado", description: "Modo debug en esta página" },
+        ],
+        example: `<Section backgroundColor="skyblue" padding={50}>
+  <H1>Contenido de la página</H1>
+</Section>`,
+      },
+      {
         name: "Container",
         description: "Contenedor principal con padding horizontal",
         props: [
