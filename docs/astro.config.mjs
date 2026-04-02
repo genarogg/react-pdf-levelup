@@ -26,6 +26,7 @@ export default defineConfig({
 			logo: {
 				src: './public/iconos/favicon-192x192.png',
 			},
+			routeMiddleware: ['./src/starlightRouteData.ts'],
 			customCss: [
 				'./src/styles/custom.css',
 			],
