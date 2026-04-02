@@ -9,6 +9,12 @@ import {
   Font,
   Image,
   Link,
+  Svg,
+  Defs,
+  Rect,
+  LinearGradient,
+  Stop,
+  G,
 } from "@react-pdf/renderer"
 import * as React from "react"
 import * as Babel from "@babel/standalone"
@@ -154,7 +160,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         'use strict';
 
         const React = arguments[0];
-        const { Document, Page, Text, View, StyleSheet, Image, Link, Font } = arguments[1];
+        const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
         const CoreComponents = arguments[2];
         const { ${filteredNames.join(", ")} } = CoreComponents;
 
@@ -173,7 +179,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         const evalFn = new Function(moduleCode)
         CustomComponent = evalFn(
           React,
-          { Document, Page, Text, View, StyleSheet, Image, Link, Font },
+          { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
           CoreComponents
         )
       } catch (err) {

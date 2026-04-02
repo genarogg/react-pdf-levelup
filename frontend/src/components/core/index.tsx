@@ -13,7 +13,24 @@ import QR from "./qr/QR"
 import QRstyle from "./qr/QRstyle"
 import ChartJS from "./charts/ChartJS"
 
-import { View, Text, StyleSheet, Font, renderToStream, Document, Page } from "@react-pdf/renderer"
+import {
+  PDFViewer,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Font,
+  Image,
+  Link,
+  Svg,
+  Defs,
+  Rect,
+  LinearGradient,
+  Stop,
+  G,
+  renderToStream
+} from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
 import Icon from "./icono/Icon"
@@ -70,20 +87,32 @@ export {
   UL,
   OL,
   LI,
-  View,
-  Text,
-  Document,
-  Page,
-  StyleSheet,
-  Font,
-  decodeBase64Pdf,
-  generatePDF,
-  renderToStream,
   Div,
   HR,
   Form, Input, Checkbox, TextArea,
-  //Radio, Fieldset, Label,Textarea, Select, 
   Icon,
   ChartJS,
+
+  // funciones
+  decodeBase64Pdf,
+  generatePDF,
+
+  // herencia de react-pdf
+  PDFViewer,
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Font,
+  Image,
+  Link,
+  Svg,
+  Defs,
+  Rect,
+  LinearGradient,
+  Stop,
+  G,
+  renderToStream
 }
 
