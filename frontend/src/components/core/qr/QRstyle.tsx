@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { generateQRstyleAsBase64, type QRstyleOptions } from "./QRstyleGenerator"
 
@@ -14,6 +14,7 @@ export interface QRstyleProps extends Omit<ViewBaseProps, "style"> {
   imageOptions?: QRstyleOptions["imageOptions"]
   cornersSquareOptions?: QRstyleOptions["cornersSquareOptions"]
   cornersDotOptions?: QRstyleOptions["cornersDotOptions"]
+  // Fallback/Compatibility props
   colorDark?: string
   colorLight?: string
   margin?: number
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const QRstyle: React.FC<QRstyleProps> = React.memo(({
+const QRstyle: React.FC<QRstyleProps> = ({
   url,
   size = 300,
   style,
@@ -44,59 +45,32 @@ const QRstyle: React.FC<QRstyleProps> = React.memo(({
   errorCorrectionLevel,
   ...rest
 }) => {
-  const [qrDataUrl, setQrDataUrl] = useState<string>("")
 
-  const resolvedDotsOptions = dotsOptions ?? (colorDark ? { color: colorDark } : undefined)
-  const resolvedBackgroundOptions = backgroundOptions ?? (colorLight ? { color: colorLight } : undefined)
-  const resolvedImageOptions = { ...imageOptions, margin: imageOptions?.margin ?? margin }
-
-  useEffect(() => {
-    const generateQR = async () => {
-      try {
-        const result = await generateQRstyleAsBase64({
+  return (
+    <View style={[styles.qrContainer, style]} {...rest}>
+      <Image
+        style={{ width: size, height: size }}
+        src={generateQRstyleAsBase64({
           url,
           width: size,
           height: size,
           image,
-          dotsOptions: resolvedDotsOptions,
-          backgroundOptions: resolvedBackgroundOptions,
-          imageOptions: resolvedImageOptions,
+          dotsOptions: dotsOptions ?? (colorDark ? { color: colorDark } : undefined),
+          backgroundOptions: backgroundOptions ?? (colorLight ? { color: colorLight } : undefined),
+          imageOptions: {
+            ...imageOptions,
+            margin: imageOptions?.margin !== undefined ? imageOptions.margin : margin,
+          },
           cornersSquareOptions,
           cornersDotOptions,
           fallbackColorDark: colorDark,
           fallbackColorLight: colorLight,
           fallbackMargin: margin,
           fallbackErrorCorrectionLevel: errorCorrectionLevel,
-        })
-        setQrDataUrl(result)
-      } catch (error) {
-        console.error("Error generando QRstyle:", error)
-      }
-    }
-
-    generateQR()
-  }, [
-    url,
-    size,
-    image,
-    dotsOptions,
-    backgroundOptions,
-    imageOptions,
-    cornersSquareOptions,
-    cornersDotOptions,
-    colorDark,
-    colorLight,
-    margin,
-    errorCorrectionLevel,
-  ])
-
-  if (!qrDataUrl) return null
-
-  return (
-    <View style={[styles.qrContainer, style]} {...rest}>
-      <Image style={{ width: size, height: size }} src={qrDataUrl} />
+        })}
+      />
     </View>
   )
-})
+}
 
 export default QRstyle
