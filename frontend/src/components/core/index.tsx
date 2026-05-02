@@ -30,7 +30,9 @@ import {
   Stop,
   G,
   renderToStream,
-  Canvas
+  Canvas,
+  Polygon,
+  ClipPath
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
@@ -114,6 +116,9 @@ export {
   LinearGradient,
   Stop,
   G,
-  renderToStream
+  renderToStream,
+  Canvas,
+  Polygon,
+  ClipPath
 }
 
