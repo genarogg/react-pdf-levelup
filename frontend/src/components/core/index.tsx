@@ -29,7 +29,8 @@ import {
   LinearGradient,
   Stop,
   G,
-  renderToStream
+  renderToStream,
+  Canvas
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
