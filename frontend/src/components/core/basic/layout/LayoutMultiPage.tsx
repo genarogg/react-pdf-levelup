@@ -214,15 +214,19 @@ const Section: React.FC<SectionProps> = ({
 
     const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
 
-    const pageStyle = useMemo(() => ({
-        ...styles.page,
-        backgroundColor: resolvedBg,
-        paddingTop: style?.paddingTop ?? style?.padding ?? margins.paddingTop,
-        paddingRight: style?.paddingRight ?? style?.padding ?? margins.paddingRight,
-        paddingLeft: style?.paddingLeft ?? style?.padding ?? margins.paddingLeft,
-        paddingBottom: (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight,
-        ...restStyle,
-    }), [resolvedBg, footerHeight, margins, style])
+    const pageStyle = useMemo(() => {
+        const explicitPaddingBottom = style?.paddingBottom != null
+        return {
+            ...styles.page,
+            backgroundColor: resolvedBg,
+            paddingTop: style?.paddingTop ?? style?.padding ?? margins.paddingTop,
+            paddingRight: style?.paddingRight ?? style?.padding ?? margins.paddingRight,
+            paddingLeft: style?.paddingLeft ?? style?.padding ?? margins.paddingLeft,
+            paddingBottom: (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom)
+                + (explicitPaddingBottom ? 0 : footerHeight),
+            ...restStyle,
+        }
+    }, [resolvedBg, footerHeight, margins, style])
 
     const footerStyle = useMemo(() => ({
         ...styles.footer,

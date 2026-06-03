@@ -214,22 +214,29 @@ const Layout: React.FC<LayoutProps> = ({
 
   const { padding: _p, paddingTop: _pt, paddingRight: _pr, paddingBottom: _pb, paddingLeft: _pl, ...restStyle } = style ?? {}
 
-  const pageStyle = useMemo(() => {
-    const paddingTop = style?.paddingTop ?? style?.padding ?? margins.paddingTop
-    const paddingRight = style?.paddingRight ?? style?.padding ?? margins.paddingRight
-    const paddingLeft = style?.paddingLeft ?? style?.padding ?? margins.paddingLeft
-    const paddingBottom = (style?.paddingBottom ?? style?.padding ?? margins.paddingBottom) + footerHeight
+const pageStyle = useMemo(() => {
+  const paddingTop    = style?.paddingTop    ?? style?.padding ?? margins.paddingTop
+  const paddingRight  = style?.paddingRight  ?? style?.padding ?? margins.paddingRight
+  const paddingLeft   = style?.paddingLeft   ?? style?.padding ?? margins.paddingLeft
 
-    return {
-      ...styles.page,
-      backgroundColor: safeBackgroundColor,
-      paddingTop,
-      paddingRight,
-      paddingLeft,
-      paddingBottom,
-      ...restStyle,
-    }
-  }, [safeBackgroundColor, footerHeight, margins, style])
+  // Se considera "explícito" si el usuario pasó cualquiera de las dos formas
+  const hasExplicitBottom = style?.paddingBottom != null || style?.padding != null
+  const basePaddingBottom = style?.paddingBottom ?? style?.padding ?? margins.paddingBottom
+
+  const paddingBottom = hasExplicitBottom
+    ? basePaddingBottom          // respeta exactamente lo que pasaron
+    : basePaddingBottom + footerHeight  // solo agrega espacio para el footer si no hay override
+
+  return {
+    ...styles.page,
+    backgroundColor: safeBackgroundColor,
+    paddingTop,
+    paddingRight,
+    paddingLeft,
+    paddingBottom,
+    ...restStyle,
+  }
+}, [safeBackgroundColor, footerHeight, margins, style])
 
   const footerStyle = useMemo(() => ({
     ...styles.footer,
@@ -270,7 +277,11 @@ const Layout: React.FC<LayoutProps> = ({
         {backgroundImageNode}
         {grid}
         {children}
-        <View style={{ paddingBottom: footerHeight }} />
+         {/* 
+          buscar paraque funciona la siguiente linea, de igual manera tiene un bug
+          que renderiza una pagina de mas
+        */}
+        {/* <View style={{ paddingBottom: footerHeight }} /> */}
 
         <View style={footerStyle} fixed>
           {footer}
