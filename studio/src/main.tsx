@@ -1,9 +1,10 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "../../frontend/src/styles/index.css"
+import "./index.css"
 import "../../frontend/src/i18n"
 
 import Playground from "../../frontend/src/components/viewer/playground"
+
 
 const root = document.getElementById("root")
 if (!root) {

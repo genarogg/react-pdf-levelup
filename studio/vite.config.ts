@@ -7,23 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 
-const proxy = {
-  '/api': {
-    target: 'http://localhost:4000',
-    changeOrigin: true,
-    secure: false,
-    ws: true,
-    rewrite: (path: any) => path.replace(/^\/api/, ''),
-  },
 
-
-  '/docs': {
-    target: 'http://localhost:4500',
-    changeOrigin: true,
-    secure: false,
-    ws: true,
-  },
-}
 
 export default defineConfig({
   plugins: [
@@ -45,7 +29,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     allowedHosts: true,
-    proxy: proxy,
     hmr: {
       overlay: false
     }
@@ -54,7 +37,6 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     allowedHosts: true,
-    proxy: proxy,
     
   },
 })
