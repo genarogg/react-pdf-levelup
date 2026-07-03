@@ -1,13 +1,14 @@
 import { Command } from "commander";
 import { createServer } from "http";
-import handler from "serve-handler";
 import path from "path";
 import { fileURLToPath } from "url";
 import { promises as fs } from "fs";
 import open from "open";
+import mime from "mime-types";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const PUBLIC_DIR = path.resolve(__dirname, "../public");
 
 async function ensureTemplatesDir(dir: string) {
   try {
@@ -34,6 +35,29 @@ async function getTemplateContent(dir: string, filename: string) {
 async function saveTemplateContent(dir: string, filename: string, content: string) {
   const filePath = path.join(dir, filename);
   await fs.writeFile(filePath, content, "utf-8");
+}
+
+async function serveStaticFile(reqUrl: string, res: any) {
+  let filePath = path.join(PUBLIC_DIR, reqUrl === "/" ? "index.html" : reqUrl);
+  
+  try {
+    await fs.access(filePath);
+  } catch {
+    // If file doesn't exist, serve index.html
+    filePath = path.join(PUBLIC_DIR, "index.html");
+  }
+
+  try {
+    const content = await fs.readFile(filePath);
+    const contentType = mime.lookup(filePath) || "application/octet-stream";
+    res.setHeader("Content-Type", contentType);
+    res.writeHead(200);
+    res.end(content);
+  } catch (err) {
+    console.error(err);
+    res.writeHead(404);
+    res.end("Not Found");
+  }
 }
 
 export const estudioCommand = new Command()
@@ -92,21 +116,14 @@ export const estudioCommand = new Command()
         }
       }
 
-      // Servir archivos estáticos del frontend
-      await handler(req, res, {
-        public: path.resolve(__dirname, "../public"),
-        directoryListing: false,
-        cleanUrls: true,
-        rewrites: [
-          { source: "**", destination: "/index.html" }
-        ]
-      });
+      // Servir archivos estáticos o index.html por defecto
+      await serveStaticFile(req.url || "/", res);
     });
 
     server.listen(port, () => {
       console.log(`\n🚀 Studio está corriendo en http://localhost:${port}`);
       console.log(`📁 Directorio de plantillas: ${templatesDir}`);
       console.log(`\nAbriendo navegador...\n`);
-      open(`http://localhost:${port}/playground`);
+      open(`http://localhost:${port}`);
     });
   });
