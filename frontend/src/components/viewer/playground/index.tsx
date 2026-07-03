@@ -5,10 +5,16 @@ import ToolBar from "./toolbar/ToolBar"
 import { loadTemplateFile } from "./utils/templateLoader"
 import { useMobileDetection } from "./hooks/useMobileDetection"
 import { MobileWarning } from "./MobileWarning"
+import StudioSidebar from "./StudioSidebar"
 
 import Header from '@/components/viewer/layout/Header'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+
+type FileTreeItem = {
+  name: string
+  path: string
+  type: "file" | "directory"
+  children?: FileTreeItem[]
+}
 
 type TemplateMeta = {
   id: string
@@ -25,65 +31,15 @@ function Editor({ studio = false, templateId }: EditorProps) {
   const [code, setCode] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
+  const [fileTree, setFileTree] = useState<FileTreeItem[]>([])
   const [templatesLoaded, setTemplatesLoaded] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
   const [isStudioMode, setIsStudioMode] = useState(studio)
-  const [currentTemplateFilename, setCurrentTemplateFilename] = useState<string | null>(null)
-  const [newTemplateName, setNewTemplateName] = useState("")
+  const [currentTemplatePath, setCurrentTemplatePath] = useState<string | null>(null)
   const isMobile = useMobileDetection()
 
   // Clave para localStorage
   const STORAGE_KEY = "react-pdf-levelup-code"
-
-  // Detectar modo Studio y cargar templates juntos
-  useEffect(() => {
-    const init = async () => {
-      try {
-        if (studio) {
-          // Si la propiedad studio es true, usamos directamente el studio mode
-          setIsStudioMode(true)
-          const studioRes = await fetch("/api/templates")
-          if (studioRes.ok) {
-            const data = await studioRes.json()
-            setTemplates(data.templates.map((filename: string) => ({
-              id: filename,
-              name: filename,
-              path: `/api/templates/${encodeURIComponent(filename)}`
-            })))
-          }
-        } else {
-          // Si no es studio, comprobamos como antes
-          const studioRes = await fetch("/api/templates")
-          if (studioRes.ok) {
-            setIsStudioMode(true)
-            const data = await studioRes.json()
-            setTemplates(data.templates.map((filename: string) => ({
-              id: filename,
-              name: filename,
-              path: `/api/templates/${encodeURIComponent(filename)}`
-            })))
-          } else {
-            // Si no es Studio, cargar templates normales
-            setIsStudioMode(false)
-            const res = await fetch("/templates/index.json")
-            const data = await res.json()
-            setTemplates(data)
-          }
-        }
-      } catch {
-        // Fallback
-        if (studio) {
-          setIsStudioMode(true)
-        } else {
-          setIsStudioMode(false)
-        }
-        setTemplates([])
-      } finally {
-        setTemplatesLoaded(true)
-      }
-    }
-    init()
-  }, [studio])
 
   // Template por defecto para Studio
   const defaultStudioTemplate = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
@@ -105,84 +61,73 @@ const MyDocument = () => (
 
 export default MyDocument`
 
-  // Cargar template seleccionado
+  const loadFileTree = async () => {
+    if (!isStudioMode) return
+    try {
+      const res = await fetch("/api/templates")
+      if (res.ok) {
+        const data = await res.json()
+        setFileTree(data.tree || [])
+      }
+    } catch (err) {
+      console.error("Error al cargar árbol de archivos:", err)
+    }
+  }
+
+  // Detectar modo Studio y cargar templates juntos
   useEffect(() => {
-    const loadByUrlOrDefault = async () => {
-      if (!templatesLoaded) return
+    const init = async () => {
       try {
-        setIsLoading(true)
-
-        if (templateId) {
-          const selected = templates.find((t) => t.id === templateId)
-          if (selected) {
-            let templateContent
-            if (isStudioMode) {
-              const res = await fetch(selected.path)
-              const data = await res.json()
-              templateContent = data.content
-              setCurrentTemplateFilename(selected.id)
-            } else {
-              templateContent = await loadTemplateFile(selected.path)
-            }
-            setCode(templateContent)
-            return
-          } else {
-            console.warn(`Template no encontrado: ${templateId}`)
-          }
-        }
-
-        const savedCode = localStorage.getItem(STORAGE_KEY)
-        if (savedCode && !isStudioMode) {
-          setCode(savedCode)
-          return
-        }
-
-        const defaultTemplate = templates.find((t) => t.id === "default" || t.id.endsWith("Default.tsx"))
-        if (defaultTemplate) {
-          let templateContent
-          if (isStudioMode) {
-            const res = await fetch(defaultTemplate.path)
-            const data = await res.json()
-            templateContent = data.content
-            setCurrentTemplateFilename(defaultTemplate.id)
-          } else {
-            templateContent = await loadTemplateFile(defaultTemplate.path)
-          }
-          setCode(templateContent)
-        } else if (isStudioMode) {
-          // Si es Studio y no hay templates, usar el template por defecto
-          setCode(defaultStudioTemplate)
+        if (studio) {
+          // Si la propiedad studio es true, usamos directamente el studio mode
+          setIsStudioMode(true)
+          await loadFileTree()
         } else {
-          setCode("")
+          // Si no es studio, cargar templates normales directamente
+          setIsStudioMode(false)
+          const res = await fetch("/templates/index.json")
+          const data = await res.json()
+          setTemplates(data)
         }
-      } catch (error) {
-        console.error("Error al cargar template:", error)
-        // Si hay error en Studio, usar el template por defecto
-        if (isStudioMode) {
-          setCode(defaultStudioTemplate)
+      } catch (err) {
+        // Fallback
+        console.error("Error al inicializar:", err)
+        if (studio) {
+          setIsStudioMode(true)
         } else {
-          setCode("")
+          setIsStudioMode(false)
         }
+        setTemplates([])
+        setFileTree([])
       } finally {
-        setIsLoading(false)
+        setTemplatesLoaded(true)
       }
     }
+    init()
+  }, [studio])
 
-    loadByUrlOrDefault()
-  }, [templateId, templatesLoaded, templates, isStudioMode, studio])
-
-  // Guardar cambios en localStorage (solo si no es Studio mode)
-  useEffect(() => {
-    if (!isStudioMode && !isLoading) {
-      localStorage.setItem(STORAGE_KEY, code)
-    }
-  }, [code, isLoading, isStudioMode])
-
-  // Función para guardar template en Studio mode
-  const saveTemplate = async () => {
-    if (!isStudioMode || !currentTemplateFilename) return
+  // Cargar archivo seleccionado en studio mode
+  const loadFile = async (filePath: string) => {
     try {
-      await fetch(`/api/templates/${encodeURIComponent(currentTemplateFilename)}`, {
+      setIsLoading(true)
+      const res = await fetch(`/api/templates/${encodeURIComponent(filePath)}`)
+      if (res.ok) {
+        const data = await res.json()
+        setCode(data.content)
+        setCurrentTemplatePath(filePath)
+      }
+    } catch (err) {
+      console.error("Error al cargar archivo:", err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Guardar template en Studio mode
+  const saveTemplate = async () => {
+    if (!isStudioMode || !currentTemplatePath) return
+    try {
+      await fetch(`/api/templates/${encodeURIComponent(currentTemplatePath)}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: code })
@@ -194,10 +139,12 @@ export default MyDocument`
     }
   }
 
-  // Función para crear nuevo template
+  // Crear nuevo template
   const createNewTemplate = async () => {
-    if (!isStudioMode || !newTemplateName) return
-    const filename = newTemplateName.endsWith(".tsx") ? newTemplateName : `${newTemplateName}.tsx`
+    if (!isStudioMode) return
+    const name = prompt("Nombre de la nueva plantilla:")
+    if (!name) return
+    const filename = name.endsWith(".tsx") ? name : `${name}.tsx`
     try {
       const defaultCode = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
 
@@ -224,22 +171,95 @@ export default MyDocument`
         body: JSON.stringify({ content: defaultCode })
       })
       
-      // Recargar templates
-      const res = await fetch("/api/templates")
-      const data = await res.json()
-      setTemplates(data.templates.map((f: string) => ({
-        id: f,
-        name: f,
-        path: `/api/templates/${encodeURIComponent(f)}`
-      })))
-      
-      setNewTemplateName("")
+      await loadFileTree()
+      await loadFile(filename)
       alert("Plantilla creada!")
     } catch (err) {
       console.error("Error al crear:", err)
       alert("Error al crear la plantilla")
     }
   }
+
+  // Cargar template seleccionado en modo normal
+  useEffect(() => {
+    if (isStudioMode) return
+    
+    const loadByUrlOrDefault = async () => {
+      if (!templatesLoaded) return
+      try {
+        setIsLoading(true)
+
+        if (templateId) {
+          const selected = templates.find((t) => t.id === templateId)
+          if (selected) {
+            const templateContent = await loadTemplateFile(selected.path)
+            setCode(templateContent)
+            return
+          } else {
+            console.warn(`Template no encontrado: ${templateId}`)
+          }
+        }
+
+        const savedCode = localStorage.getItem(STORAGE_KEY)
+        if (savedCode) {
+          setCode(savedCode)
+          return
+        }
+
+        const defaultTemplate = templates.find((t) => t.id === "default" || t.id.endsWith("Default.tsx"))
+        if (defaultTemplate) {
+          const templateContent = await loadTemplateFile(defaultTemplate.path)
+          setCode(templateContent)
+        } else {
+          setCode("")
+        }
+      } catch (error) {
+        console.error("Error al cargar template:", error)
+        setCode("")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadByUrlOrDefault()
+  }, [templateId, templatesLoaded, templates, isStudioMode, studio])
+
+  // Guardar cambios en localStorage (solo si no es Studio mode)
+  useEffect(() => {
+    if (!isStudioMode && !isLoading) {
+      localStorage.setItem(STORAGE_KEY, code)
+    }
+  }, [code, isLoading, isStudioMode])
+
+  // Cargar primer archivo o template por defecto en studio mode
+  useEffect(() => {
+    if (!isStudioMode || !templatesLoaded) return
+    
+    const loadFirstFile = async () => {
+      const findFirstFile = (items: FileTreeItem[]): FileTreeItem | null => {
+        for (const item of items) {
+          if (item.type === "file") return item
+          if (item.children && item.children.length > 0) {
+            const found = findFirstFile(item.children)
+            if (found) return found
+          }
+        }
+        return null
+      }
+
+      const firstFile = findFirstFile(fileTree)
+      if (firstFile) {
+        await loadFile(firstFile.path)
+      } else {
+        setCode(defaultStudioTemplate)
+        setIsLoading(false)
+      }
+    }
+
+    if (!currentTemplatePath) {
+      loadFirstFile()
+    }
+  }, [isStudioMode, templatesLoaded, fileTree])
 
   // Show mobile warning for mobile devices
   if (isMobile && showMobileWarning) {
@@ -251,10 +271,18 @@ export default MyDocument`
      
       <Header code={code} context="playgroud" studio={studio} />
       
- 
 
       <main className="flex flex-1 overflow-hidden">
-        <div className="w-1/2 border-r border-gray-700 flex flex-col">
+        {isStudioMode && (
+          <StudioSidebar
+            tree={fileTree}
+            selectedPath={currentTemplatePath}
+            onSelectFile={loadFile}
+            onCreateFile={createNewTemplate}
+            onRefresh={loadFileTree}
+          />
+        )}
+        <div className={`flex flex-col ${isStudioMode ? "flex-1" : "w-1/2"} border-r border-gray-700`}>
           {isLoading ? (
             <div className="flex items-center justify-center h-full bg-gray-800">
               <div className="animate-pulse flex flex-col items-center">
@@ -267,9 +295,13 @@ export default MyDocument`
               <CodeEditor value={code} onChange={setCode as any} />
             </div>
           )}
-          <ToolBar code={code} />
+          <ToolBar 
+            code={code} 
+            onSave={isStudioMode ? saveTemplate : undefined}
+            onNew={isStudioMode ? createNewTemplate : undefined}
+          />
         </div>
-        <div className="w-1/2 bg-gray-100">
+        <div className={`${isStudioMode ? "flex-1" : "w-1/2"} bg-gray-100`}>
           <PDFPreview code={code} />
         </div>
       </main>
