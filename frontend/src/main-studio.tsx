@@ -1,10 +1,9 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "./index.css"
-import "../../frontend/src/i18n"
+import "./styles/index.css"
+import "./i18n"
 
-import Playground from "../../frontend/src/components/viewer/playground"
-
+import Playground from "./components/viewer/playground"
 
 const root = document.getElementById("root")
 if (!root) {
@@ -16,4 +15,3 @@ createRoot(root).render(
     <Playground studio={true} />
   </StrictMode>,
 )
-
