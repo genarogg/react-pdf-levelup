@@ -38,13 +38,13 @@ async function saveTemplateContent(dir: string, filename: string, content: strin
 }
 
 async function serveStaticFile(reqUrl: string, res: any) {
-  let filePath = path.join(PUBLIC_DIR, reqUrl === "/" ? "index.html" : reqUrl);
+  let filePath = path.join(PUBLIC_DIR, reqUrl === "/" ? "studio.html" : reqUrl);
   
   try {
     await fs.access(filePath);
   } catch {
-    // If file doesn't exist, serve index.html
-    filePath = path.join(PUBLIC_DIR, "index.html");
+    // If file doesn't exist, serve studio.html
+    filePath = path.join(PUBLIC_DIR, "studio.html");
   }
 
   try {

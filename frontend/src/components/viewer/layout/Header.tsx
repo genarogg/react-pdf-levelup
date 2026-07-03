@@ -128,14 +128,12 @@ const Header: React.FC<HeaderProps> = ({ context, studio = false }) => {
                             {isPlayground && (
                                 <>
                                     <a
-                                        href="/docs/es/get-started"
+                                        href={studio ? "https://react-pdf-levelup.nimbux.cloud/docs/es/" : "/docs/es/get-started"}
                                         onClick={() => (null)}
                                         className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
                                     >
-
                                         <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
                                             <FileText className="w-4 h-4" />
-
                                         </span>
                                         <span>documentacion</span>
 

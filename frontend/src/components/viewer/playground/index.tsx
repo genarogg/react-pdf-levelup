@@ -251,28 +251,7 @@ export default MyDocument`
      
       <Header code={code} context="playgroud" studio={studio} />
       
-      {isStudioMode && (
-        <div className="bg-gray-800 p-4 border-b border-gray-700 flex gap-4 items-center">
-          <span className="text-yellow-400 font-bold">🎬 Studio Mode</span>
-          <Input
-            placeholder="Nueva plantilla (ej: Invoice.tsx)"
-            value={newTemplateName}
-            onChange={(e) => setNewTemplateName(e.target.value)}
-            className="w-64 bg-gray-700 border-gray-600"
-          />
-          <Button onClick={createNewTemplate} className="bg-green-600 hover:bg-green-700">
-            + Crear
-          </Button>
-          {currentTemplateFilename && (
-            <>
-              <span className="ml-auto">Actual: {currentTemplateFilename}</span>
-              <Button onClick={saveTemplate} className="bg-blue-600 hover:bg-blue-700">
-                💾 Guardar
-              </Button>
-            </>
-          )}
-        </div>
-      )}
+ 
 
       <main className="flex flex-1 overflow-hidden">
         <div className="w-1/2 border-r border-gray-700 flex flex-col">
