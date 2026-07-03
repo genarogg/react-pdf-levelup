@@ -8,6 +8,8 @@ import { useMobileDetection } from "./hooks/useMobileDetection"
 import { MobileWarning } from "./MobileWarning"
 
 import Header from '@/components/viewer/layout/Header'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 type TemplateMeta = {
   id: string
@@ -22,27 +24,67 @@ function Editor() {
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [templatesLoaded, setTemplatesLoaded] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
+  const [isStudioMode, setIsStudioMode] = useState(false)
+  const [currentTemplateFilename, setCurrentTemplateFilename] = useState<string | null>(null)
+  const [newTemplateName, setNewTemplateName] = useState("")
   const isMobile = useMobileDetection()
 
   // Clave para localStorage
   const STORAGE_KEY = "react-pdf-levelup-code"
 
+  // Detectar modo Studio y cargar templates juntos
   useEffect(() => {
-    const loadTemplates = async () => {
+    const init = async () => {
       try {
-        const res = await fetch("/templates/index.json")
-        if (!res.ok) throw new Error("Failed to fetch templates")
-        const data = await res.json()
-        setTemplates(data)
+        // Primero, comprobamos si es modo Studio
+        const studioRes = await fetch("/api/templates")
+        if (studioRes.ok) {
+          setIsStudioMode(true)
+          const data = await studioRes.json()
+          setTemplates(data.templates.map((filename: string) => ({
+            id: filename,
+            name: filename,
+            path: `/api/templates/${encodeURIComponent(filename)}`
+          })))
+        } else {
+          // Si no es Studio, cargar templates normales
+          setIsStudioMode(false)
+          const res = await fetch("/templates/index.json")
+          const data = await res.json()
+          setTemplates(data)
+        }
       } catch {
+        // Fallback: modo normal sin templates
+        setIsStudioMode(false)
         setTemplates([])
       } finally {
         setTemplatesLoaded(true)
       }
     }
-    loadTemplates()
+    init()
   }, [])
 
+  // Template por defecto para Studio
+  const defaultStudioTemplate = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+
+const styles = StyleSheet.create({
+  page: { flexDirection: 'row', backgroundColor: '#E4E4E4' },
+  section: { margin: 10, padding: 10, flexGrow: 1 }
+})
+
+const MyDocument = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text>¡Bienvenido a React PDF LevelUp Studio!</Text>
+      </View>
+    </Page>
+  </Document>
+)
+
+export default MyDocument`
+
+  // Cargar template seleccionado
   useEffect(() => {
     const loadByUrlOrDefault = async () => {
       if (!templatesLoaded) return
@@ -52,48 +94,131 @@ function Editor() {
         if (templateId) {
           const selected = templates.find((t) => t.id === templateId)
           if (selected) {
-            const templateContent = await loadTemplateFile(selected.path)
+            let templateContent
+            if (isStudioMode) {
+              const res = await fetch(selected.path)
+              const data = await res.json()
+              templateContent = data.content
+              setCurrentTemplateFilename(selected.id)
+            } else {
+              templateContent = await loadTemplateFile(selected.path)
+            }
             setCode(templateContent)
             return
           } else {
             console.warn(`Template no encontrado: ${templateId}`)
-            setCode("")
-            return
           }
         }
 
         const savedCode = localStorage.getItem(STORAGE_KEY)
-        if (savedCode) {
+        if (savedCode && !isStudioMode) {
           setCode(savedCode)
           return
         }
 
-        const defaultTemplate = templates.find((t) => t.id === "default")
+        const defaultTemplate = templates.find((t) => t.id === "default" || t.id.endsWith("Default.tsx"))
         if (defaultTemplate) {
-          const templateContent = await loadTemplateFile(defaultTemplate.path)
+          let templateContent
+          if (isStudioMode) {
+            const res = await fetch(defaultTemplate.path)
+            const data = await res.json()
+            templateContent = data.content
+            setCurrentTemplateFilename(defaultTemplate.id)
+          } else {
+            templateContent = await loadTemplateFile(defaultTemplate.path)
+          }
           setCode(templateContent)
+        } else if (isStudioMode) {
+          // Si es Studio y no hay templates, usar el template por defecto
+          setCode(defaultStudioTemplate)
         } else {
           setCode("")
         }
       } catch (error) {
         console.error("Error al cargar template:", error)
-        setCode("")
+        // Si hay error en Studio, usar el template por defecto
+        if (isStudioMode) {
+          setCode(defaultStudioTemplate)
+        } else {
+          setCode("")
+        }
       } finally {
         setIsLoading(false)
       }
     }
 
     loadByUrlOrDefault()
-  }, [templateId, templatesLoaded, templates])
+  }, [templateId, templatesLoaded, templates, isStudioMode])
 
-  // Guardar cambios en localStorage
+  // Guardar cambios en localStorage (solo si no es Studio mode)
   useEffect(() => {
-    if (!isLoading) {
+    if (!isStudioMode && !isLoading) {
       localStorage.setItem(STORAGE_KEY, code)
     }
-  }, [code, isLoading])
+  }, [code, isLoading, isStudioMode])
 
+  // Función para guardar template en Studio mode
+  const saveTemplate = async () => {
+    if (!isStudioMode || !currentTemplateFilename) return
+    try {
+      await fetch(`/api/templates/${encodeURIComponent(currentTemplateFilename)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: code })
+      })
+      alert("Plantilla guardada correctamente!")
+    } catch (err) {
+      console.error("Error al guardar:", err)
+      alert("Error al guardar la plantilla")
+    }
+  }
 
+  // Función para crear nuevo template
+  const createNewTemplate = async () => {
+    if (!isStudioMode || !newTemplateName) return
+    const filename = newTemplateName.endsWith(".tsx") ? newTemplateName : `${newTemplateName}.tsx`
+    try {
+      const defaultCode = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+
+const styles = StyleSheet.create({
+  page: { flexDirection: 'row', backgroundColor: '#E4E4E4' },
+  section: { margin: 10, padding: 10, flexGrow: 1 }
+})
+
+const MyDocument = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text>New Template</Text>
+      </View>
+    </Page>
+  </Document>
+)
+
+export default MyDocument`
+      
+      await fetch(`/api/templates/${encodeURIComponent(filename)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: defaultCode })
+      })
+      
+      // Recargar templates
+      const res = await fetch("/api/templates")
+      const data = await res.json()
+      setTemplates(data.templates.map((f: string) => ({
+        id: f,
+        name: f,
+        path: `/api/templates/${encodeURIComponent(f)}`
+      })))
+      
+      setNewTemplateName("")
+      alert("Plantilla creada!")
+    } catch (err) {
+      console.error("Error al crear:", err)
+      alert("Error al crear la plantilla")
+    }
+  }
 
   // Show mobile warning for mobile devices
   if (isMobile && showMobileWarning) {
@@ -104,6 +229,29 @@ function Editor() {
     <div className="flex flex-col h-screen bg-gray-900 text-white">
      
       <Header code={code} context="playgroud" />
+      
+      {isStudioMode && (
+        <div className="bg-gray-800 p-4 border-b border-gray-700 flex gap-4 items-center">
+          <span className="text-yellow-400 font-bold">🎬 Studio Mode</span>
+          <Input
+            placeholder="Nueva plantilla (ej: Invoice.tsx)"
+            value={newTemplateName}
+            onChange={(e) => setNewTemplateName(e.target.value)}
+            className="w-64 bg-gray-700 border-gray-600"
+          />
+          <Button onClick={createNewTemplate} className="bg-green-600 hover:bg-green-700">
+            + Crear
+          </Button>
+          {currentTemplateFilename && (
+            <>
+              <span className="ml-auto">Actual: {currentTemplateFilename}</span>
+              <Button onClick={saveTemplate} className="bg-blue-600 hover:bg-blue-700">
+                💾 Guardar
+              </Button>
+            </>
+          )}
+        </div>
+      )}
 
       <main className="flex flex-1 overflow-hidden">
         <div className="w-1/2 border-r border-gray-700 flex flex-col">

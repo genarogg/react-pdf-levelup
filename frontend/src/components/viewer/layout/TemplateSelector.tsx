@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { useNavigate } from "react-router-dom"
  
 type TemplateMeta = {
   id: string
@@ -19,25 +20,52 @@ const TemplateSelector: React.FC = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("")
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [isStudioMode, setIsStudioMode] = useState<boolean>(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const loadTemplates = async () => {
+    const checkAndLoadTemplates = async () => {
       try {
-        const res = await fetch("/templates/index.json")
-        if (!res.ok) throw new Error("Failed to fetch templates")
-        const data = await res.json()
-        setTemplates(data)
+        // Check if studio mode
+        const studioRes = await fetch("/api/templates")
+        if (studioRes.ok) {
+          setIsStudioMode(true)
+          const data = await studioRes.json()
+          setTemplates(data.templates.map((filename: string) => ({
+            id: filename,
+            name: filename
+          })))
+        } else {
+          // Normal mode
+          const res = await fetch("/templates/index.json")
+          if (!res.ok) throw new Error("Failed to fetch templates")
+          const data = await res.json()
+          setTemplates(data)
+        }
       } catch {
-        setTemplates([])
+        // Fallback to normal mode or empty
+        try {
+          const res = await fetch("/templates/index.json")
+          if (res.ok) {
+            const data = await res.json()
+            setTemplates(data)
+          }
+        } catch {
+          setTemplates([])
+        }
       } finally {
         setLoading(false)
       }
     }
-    loadTemplates()
+    checkAndLoadTemplates()
   }, [])
 
   const handleSelectTemplate = (templateId: string) => {
-    window.open(`/playground/template/${templateId}`, "_blank", "noopener,noreferrer")
+    if (isStudioMode) {
+      navigate(`/playground/template/${templateId}`)
+    } else {
+      window.open(`/playground/template/${templateId}`, "_blank", "noopener,noreferrer")
+    }
     setSelectedTemplate("")
   }
 

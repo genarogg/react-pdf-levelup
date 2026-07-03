@@ -1,0 +1,55 @@
+# Robots.txt for React PDF LevelUp Frontend
+# Project: Generador de PDFs dinámicos con React
+# Main Routes: / (Home), /playground (Editor), /playground/template/:templateId
+
+# ============================================
+# DEFAULT RULES FOR ALL BOTS
+# ============================================
+User-agent: *
+Allow: /
+
+# ============================================
+# DISALLOWED PATHS
+# ============================================
+# Block API routes (served from separate port/domain)
+Disallow: /api/
+
+# Block internal editor/debug routes
+Disallow: /_astro/
+Disallow: /admin/
+
+# ============================================
+# STATIC ASSETS (Optional: Disallow crawling)
+# ============================================
+# Most search engines don't need to crawl these files
+# Uncomment if you want to reduce crawler load
+# Disallow: /*.js
+# Disallow: /*.css
+# Disallow: /*.json
+# Disallow: /*.woff*
+# Disallow: /*.ttf
+# Disallow: /*.otf
+
+# ============================================
+# SPECIFIC BOTS RULES
+# ============================================
+# Block less respectful bots
+User-agent: MJ12bot
+User-agent: SemrushBot
+User-agent: DotBot
+Disallow: /
+
+# ============================================
+# SITEMAP & METADATA
+# ============================================
+# Uncomment and update with your domain when deploying
+# Sitemap: https://react-pdf-levelup.nimbux.cloud/sitemap.xml
+
+# ============================================
+# CRAWL DELAY & REQUEST RATE
+# ============================================
+# Uncomment to limit crawler requests (in seconds)
+# Crawl-delay: 1
+
+# Maximum pages per 10 seconds
+# Request-rate: 1/10
