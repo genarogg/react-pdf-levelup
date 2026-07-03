@@ -1,14 +1,21 @@
 "use client"
 import React, { useState, useCallback, Suspense, lazy } from "react"
 import { Github, FileText, Play, Menu, X } from "lucide-react"
-import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
+let Link: any = null
+try {
+  const rr = require("react-router-dom")
+  Link = rr.Link
+} catch (e) {
+  // No hay react-router-dom disponible, usaremos a tags
+}
 
 interface HeaderProps {
     code?: any
     context?: String
+    studio?: boolean
 }
 
 // Configuración base de enlaces de navegación (sin etiquetas, se traducen en render)
@@ -46,7 +53,7 @@ const Navigation: React.FC<{ className?: string, onNavigate?: () => void }> = ({
     )
 }
 
-const Header: React.FC<HeaderProps> = ({ context }) => {
+const Header: React.FC<HeaderProps> = ({ context, studio = false }) => {
     const [mobileOpen, setMobileOpen] = useState(false)
 
     const handleMenuToggle = useCallback(() => {
@@ -55,6 +62,28 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
     const isHome = context === "home"
     const isPlayground = context === "playgroud"
+
+    // Componente para el logo que usa Link o a según el modo
+    const LogoLink = ({ children }: { children: React.ReactNode }) => {
+        if (studio || !Link) {
+            return (
+                <a
+                    href="/"
+                    className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
+                >
+                    {children}
+                </a>
+            )
+        }
+        return (
+            <Link
+                to="/"
+                className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
+            >
+                {children}
+            </Link>
+        )
+    }
 
     return (
         <>
@@ -81,15 +110,11 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                     {/* Layout Desktop */}
                     <div className="hidden lg:flex justify-between items-center h-full max-w-full">
                         {/* Logo a la izquierda */}
-                        <Link
-                            to="/"
-                            className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
-                        >
-
+                        <LogoLink>
                             <h1 className="text-accent text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap uppercase tracking-wide">
                                 React PDF Levelup
                             </h1>
-                        </Link>
+                        </LogoLink>
 
                         {/* Enlaces a la derecha */}
                         <div className="flex items-center gap-6">
@@ -118,11 +143,13 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
 
 
-                                    <Suspense fallback={
-                                        <div className="w-8 h-8 rounded-lg bg-white/5 animate-pulse" />
-                                    }>
-                                        <TemplateSelector />
-                                    </Suspense>
+                                    {!studio && (
+                                        <Suspense fallback={
+                                            <div className="w-8 h-8 rounded-lg bg-white/5 animate-pulse" />
+                                        }>
+                                            <TemplateSelector />
+                                        </Suspense>
+                                    )}
                                     <a
                                         href="https://github.com/genarogg/react-pdf-levelup"
                                         target="_blank"
@@ -171,15 +198,11 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                         </div>
 
                         {/* Columna Centro: Logo/Título - Ocupa todo el espacio disponible */}
-                        <Link
-                            to="/"
-                            className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
-                        >
-
+                        <LogoLink>
                             <h1 className="text-accent font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate uppercase tracking-wide">
                                 React PDF Levelup
                             </h1>
-                        </Link>
+                        </LogoLink>
 
                         {/* Columna Derecha: Solo GitHub */}
                         <div className="flex justify-end items-center flex-shrink-0">

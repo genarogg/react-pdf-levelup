@@ -9,19 +9,32 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import { useNavigate } from "react-router-dom"
  
 type TemplateMeta = {
   id: string
   name: string
 }
 
-const TemplateSelector: React.FC = () => {
+interface TemplateSelectorProps {
+  studio?: boolean
+  onTemplateSelect?: (templateId: string) => void
+}
+
+const TemplateSelector: React.FC<TemplateSelectorProps> = ({ studio = false, onTemplateSelect }) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("")
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [isStudioMode, setIsStudioMode] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const [isStudioMode, setIsStudioMode] = useState<boolean>(studio)
+  
+  let navigate: any = null
+  if (!studio) {
+    try {
+      const { useNavigate } = require("react-router-dom")
+      navigate = useNavigate()
+    } catch (e) {
+      // No hay react-router-dom disponible
+    }
+  }
 
   useEffect(() => {
     const checkAndLoadTemplates = async () => {
@@ -61,7 +74,9 @@ const TemplateSelector: React.FC = () => {
   }, [])
 
   const handleSelectTemplate = (templateId: string) => {
-    if (isStudioMode) {
+    if (onTemplateSelect) {
+      onTemplateSelect(templateId)
+    } else if (isStudioMode && navigate) {
       navigate(`/playground/template/${templateId}`)
     } else {
       window.open(`/playground/template/${templateId}`, "_blank", "noopener,noreferrer")

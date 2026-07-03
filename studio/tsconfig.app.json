@@ -13,8 +13,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@pdf/*": ["src/pdf/*"]
+      "@/*": ["../frontend/src/*"],
+      "@pdf/*": ["../frontend/src/pdf/*"]
     },
 
     /* Bundler mode */

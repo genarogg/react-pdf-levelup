@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
 import PDFPreview from "./PDFPreview"
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
@@ -17,14 +16,18 @@ type TemplateMeta = {
   path: string
 }
 
-function Editor() {
+type EditorProps = {
+  studio?: boolean
+  templateId?: string
+}
+
+function Editor({ studio = false, templateId }: EditorProps) {
   const [code, setCode] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
-  const { templateId } = useParams<{ templateId: string }>()
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [templatesLoaded, setTemplatesLoaded] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
-  const [isStudioMode, setIsStudioMode] = useState(false)
+  const [isStudioMode, setIsStudioMode] = useState(studio)
   const [currentTemplateFilename, setCurrentTemplateFilename] = useState<string | null>(null)
   const [newTemplateName, setNewTemplateName] = useState("")
   const isMobile = useMobileDetection()
@@ -36,33 +39,51 @@ function Editor() {
   useEffect(() => {
     const init = async () => {
       try {
-        // Primero, comprobamos si es modo Studio
-        const studioRes = await fetch("/api/templates")
-        if (studioRes.ok) {
+        if (studio) {
+          // Si la propiedad studio es true, usamos directamente el studio mode
           setIsStudioMode(true)
-          const data = await studioRes.json()
-          setTemplates(data.templates.map((filename: string) => ({
-            id: filename,
-            name: filename,
-            path: `/api/templates/${encodeURIComponent(filename)}`
-          })))
+          const studioRes = await fetch("/api/templates")
+          if (studioRes.ok) {
+            const data = await studioRes.json()
+            setTemplates(data.templates.map((filename: string) => ({
+              id: filename,
+              name: filename,
+              path: `/api/templates/${encodeURIComponent(filename)}`
+            })))
+          }
         } else {
-          // Si no es Studio, cargar templates normales
-          setIsStudioMode(false)
-          const res = await fetch("/templates/index.json")
-          const data = await res.json()
-          setTemplates(data)
+          // Si no es studio, comprobamos como antes
+          const studioRes = await fetch("/api/templates")
+          if (studioRes.ok) {
+            setIsStudioMode(true)
+            const data = await studioRes.json()
+            setTemplates(data.templates.map((filename: string) => ({
+              id: filename,
+              name: filename,
+              path: `/api/templates/${encodeURIComponent(filename)}`
+            })))
+          } else {
+            // Si no es Studio, cargar templates normales
+            setIsStudioMode(false)
+            const res = await fetch("/templates/index.json")
+            const data = await res.json()
+            setTemplates(data)
+          }
         }
       } catch {
-        // Fallback: modo normal sin templates
-        setIsStudioMode(false)
+        // Fallback
+        if (studio) {
+          setIsStudioMode(true)
+        } else {
+          setIsStudioMode(false)
+        }
         setTemplates([])
       } finally {
         setTemplatesLoaded(true)
       }
     }
     init()
-  }, [])
+  }, [studio])
 
   // Template por defecto para Studio
   const defaultStudioTemplate = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
@@ -148,7 +169,7 @@ export default MyDocument`
     }
 
     loadByUrlOrDefault()
-  }, [templateId, templatesLoaded, templates, isStudioMode])
+  }, [templateId, templatesLoaded, templates, isStudioMode, studio])
 
   // Guardar cambios en localStorage (solo si no es Studio mode)
   useEffect(() => {
@@ -228,7 +249,7 @@ export default MyDocument`
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
      
-      <Header code={code} context="playgroud" />
+      <Header code={code} context="playgroud" studio={studio} />
       
       {isStudioMode && (
         <div className="bg-gray-800 p-4 border-b border-gray-700 flex gap-4 items-center">
