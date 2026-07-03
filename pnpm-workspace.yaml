@@ -2,6 +2,6 @@ packages:
   - api
   - docs
   - frontend
-  - lib
-  - lib/* 
-  - lib/**/*
+  # - lib
+  # - lib/* 
+  # - lib/**/*
