@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => {
               if (req.url === '/' || req.url === '/index.html') {
                 req.url = '/studio.html'
               }
+              console.log(res)
               next()
             })
           }
