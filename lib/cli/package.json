@@ -24,11 +24,10 @@
   },
   "dependencies": {
     "commander": "^12.1.0",
-    "mime-types": "^2.1.35",
-    "open": "^10.1.0"
+    "open": "^10.1.0",
+    "mime-types": "^2.1.35"
   },
   "devDependencies": {
-    "@types/mime-types": "^3.0.1",
     "@types/node": "^25.9.4",
     "@types/serve-handler": "^6.1.4",
     "fs-extra": "^11.3.0",
