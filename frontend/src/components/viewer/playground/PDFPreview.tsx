@@ -36,9 +36,10 @@ const DefaultDocument = () => (
 
 interface PDFPreviewProps {
   code: string
+  studio?: boolean
 }
 
-const PDFPreview = ({ code }: PDFPreviewProps) => {
+const PDFPreview = ({ code, studio }: PDFPreviewProps) => {
   const [Component, setComponent] =
     useState<React.ComponentType>(() => DefaultDocument)
 
@@ -69,7 +70,9 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         return
       }
 
-      // 🔹 Limpiar imports y exports (excepto export default)
+      // 🔹 Limpiar imports y exports (excepto export default) para la compilación
+      // Nota: Los imports se mantienen intactos en el Editor, solo los limpiamos aquí para la previsualización
+      // ya que inyectamos todas las dependencias manualmente en el scope
       let modifiedCode = sourceCode
         .replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
         .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")

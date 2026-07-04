@@ -292,7 +292,7 @@ export default MyDocument`
             </div>
           ) : (
             <div className="flex-1 overflow-hidden">
-              <CodeEditor value={code} onChange={setCode as any} />
+              <CodeEditor value={code} onChange={setCode as any} studio={isStudioMode} />
             </div>
           )}
           <ToolBar 
@@ -302,7 +302,7 @@ export default MyDocument`
           />
         </div>
         <div className={`${isStudioMode ? "flex-1" : "w-1/2"} bg-gray-100`}>
-          <PDFPreview code={code} />
+          <PDFPreview code={code} studio={isStudioMode} />
         </div>
       </main>
     </div>

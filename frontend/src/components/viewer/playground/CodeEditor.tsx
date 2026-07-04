@@ -4,22 +4,26 @@ import { Editor } from "@monaco-editor/react"
 interface CodeEditorProps {
   value: string
   onChange: (value: string | undefined) => void
+  studio?: boolean
 }
 
 // Elimina imports del código pegado o escrito por el usuario, ya que el
 // Playground inyecta sus propios componentes en el scope de evaluación.
 // Preserva el export default para que el código sea utilizable fuera del playground.
+// En modo Studio, mantiene los imports para que el código sea completo y guardable.
 // Usada tanto al escribir (handleEditorChange) como al pegar (pasteHandler).
-const sanitizeCode = (text: string) => {
+const sanitizeCode = (text: string, studio?: boolean) => {
   let s = text
-  s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-  s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+  if (!studio) {
+    s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+    s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+  }
   s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
   s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
   return s
 }
 
-const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
+const CodeEditor = ({ value, onChange, studio }: CodeEditorProps) => {
   const editorRef = useRef<any>(null)
 
   // Add a debounce function to delay updates
@@ -35,7 +39,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
   const handleEditorChange = debounce((value: string | undefined) => {
     if (value === undefined) return
-    const sanitized = sanitizeCode(value)
+    const sanitized = sanitizeCode(value, studio)
     if (editorRef.current) {
       const current = editorRef.current.getValue()
       if (sanitized !== current) {
@@ -58,7 +62,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     const pasteHandler = (e: ClipboardEvent) => {
       const text = e.clipboardData?.getData("text/plain")
       if (!text) return
-      const sanitized = sanitizeCode(text)
+      const sanitized = sanitizeCode(text, studio)
       if (sanitized !== text) {
         e.preventDefault()
         const selections = editor.getSelections() || [editor.getSelection()]
