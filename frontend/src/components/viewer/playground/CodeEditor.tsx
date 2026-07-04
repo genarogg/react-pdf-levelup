@@ -102,6 +102,31 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       editorRef.current.__pasteHandler = pasteHandler
     }
 
+    // El código del Playground es TSX (anotaciones de tipo + JSX), pero el
+    // modelo se estaba tratando como JavaScript puro (ver prop `defaultLanguage`
+    // más abajo, ahora "typescript" + path=".tsx"). Sin esto, el worker de TS
+    // de Monaco marca cualquier anotación de tipo con el error 8010
+    // ("Type annotations can only be used in TypeScript files").
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      jsx: monaco.languages.typescript.JsxEmit.React,
+      target: monaco.languages.typescript.ScriptTarget.ESNext,
+      allowNonTsExtensions: true,
+      allowJs: true,
+      noEmit: true,
+    })
+
+    // El código se ejecuta en un scope aislado (new Function) sin imports
+    // reales: Layout, P, Table, QR, etc. se inyectan como "globales" en
+    // tiempo de ejecución (ver PDFPreview.tsx), pero el language service de
+    // TypeScript no tiene forma de saberlo. Sin apagar la validación
+    // semántica, marcaría como error "Cannot find name" cada una de esas
+    // etiquetas. La validación de sintaxis se deja activa para seguir
+    // avisando errores reales (JSX sin cerrar, llaves faltantes, etc.).
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: false,
+    })
+
     const kind = monaco.languages.CompletionItemKind
     const insertTextRules = monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
 
@@ -378,7 +403,8 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   return (
     <Editor
       height="100%"
-      defaultLanguage="javascript"
+      defaultLanguage="typescript"
+      path="playground-code.tsx"
       value={value}
       theme="vs-dark"
       onChange={handleEditorChange}
