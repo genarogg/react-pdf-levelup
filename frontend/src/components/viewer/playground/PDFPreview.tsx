@@ -1,38 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react"
-import {
-  PDFViewer,
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-  Image,
-  Link,
-  Svg,
-  Defs,
-  Rect,
-  LinearGradient,
-  Stop,
-  G,
-} from "@react-pdf/renderer"
+import { PDFViewer } from "@react-pdf/renderer"
 import * as React from "react"
 import * as Babel from "@babel/standalone"
 import * as CoreComponents from "@/components/core"
 import ErrorDocument from "./ErrorDocument"
-
-const DefaultDocument = () => (
-  <Document>
-    <Page size="A4" style={{ padding: 30, backgroundColor: "#ffffff" }}>
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontSize: 20, marginBottom: 10 }}>
-          Esperando código...
-        </Text>
-        <Text>Escribe tu código para generar el PDF.</Text>
-      </View>
-    </Page>
-  </Document>
-)
+import ErrorBoundary from "./components/ErrorBoundary"
+import DefaultDocument from "./components/DefaultDocument"
+import CompilingIndicator from "./components/CompilingIndicator"
 
 interface PDFPreviewProps {
   code: string
@@ -43,7 +17,6 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
     useState<React.ComponentType>(() => DefaultDocument)
 
   const [isCompiling, setIsCompiling] = useState(false)
-  const [key, setKey] = useState(0)
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const lastCompiledRef = useRef("")
@@ -53,7 +26,6 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
     setComponent(() => () => (
       <ErrorDocument errorMessage={message} />
     ))
-    setKey(prev => prev + 1)
   }
 
   const compileCode = useCallback(async (sourceCode: string) => {
@@ -65,7 +37,6 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
     try {
       if (!sourceCode?.trim()) {
         setComponent(() => DefaultDocument)
-        setKey(prev => prev + 1)
         return
       }
 
@@ -136,35 +107,24 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
       const componentNames = Object.keys(CoreComponents).filter(
         key =>
           typeof CoreComponents[
-            key as keyof typeof CoreComponents
+          key as keyof typeof CoreComponents
           ] === "function" ||
           typeof CoreComponents[
-            key as keyof typeof CoreComponents
+          key as keyof typeof CoreComponents
           ] === "object"
       )
 
-      const filteredNames = componentNames.filter(
-        name =>
-          ![
-            "Font",
-            "Document",
-            "Page",
-            "Text",
-            "View",
-            "StyleSheet",
-            "Image",
-            "Link",
-          ].includes(name)
-      )
-
       // 🔹 Crear módulo seguro (SIN redeclarar result)
+      // Las etiquetas base (Document, Page, Text, View, Svg, etc.) ya vienen
+      // incluidas dentro de CoreComponents (`core/index.tsx` las re-exporta
+      // desde "@react-pdf/renderer"), así que hay una única fuente para todo
+      // el barrel y no hace falta destructurar nada aparte desde `arguments[1]`.
       const moduleCode = `
         'use strict';
 
         const React = arguments[0];
-        const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
-        const CoreComponents = arguments[2];
-        const { ${filteredNames.join(", ")} } = CoreComponents;
+        const CoreComponents = arguments[1];
+        const { ${componentNames.join(", ")} } = CoreComponents;
 
         ${transformedCode}
 
@@ -179,11 +139,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
 
       try {
         const evalFn = new Function(moduleCode)
-        CustomComponent = evalFn(
-          React,
-          { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
-          CoreComponents
-        )
+        CustomComponent = evalFn(React, CoreComponents)
       } catch (err) {
         const msg =
           err instanceof Error
@@ -201,7 +157,6 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
       }
 
       setComponent(() => CustomComponent)
-      setKey(prev => prev + 1)
     } catch (err) {
       const msg =
         err instanceof Error
@@ -234,78 +189,15 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {isCompiling && (
-        <div
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            background: "#fff",
-            padding: "5px 10px",
-            borderRadius: 4,
-            fontSize: 12,
-            boxShadow:
-              "0 2px 4px rgba(0,0,0,0.1)",
-          }}
-        >
-          Compilando...
-        </div>
-      )}
+      {isCompiling && <CompilingIndicator />}
 
-      <ErrorBoundary key={key}>
-        <PDFViewer
-          key={key}
-          width="100%"
-          height="100%"
-          showToolbar
-        >
+      <ErrorBoundary>
+        <PDFViewer width="100%" height="100%" showToolbar>
           <Component />
         </PDFViewer>
       </ErrorBoundary>
     </div>
   )
-}
-
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: any) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true }
-  }
-
-  componentDidUpdate(prevProps: any) {
-    if (
-      prevProps.children !== this.props.children &&
-      this.state.hasError
-    ) {
-      this.setState({ hasError: false })
-    }
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div
-          style={{
-            padding: 40,
-            textAlign: "center",
-            background: "#fff5f5",
-          }}
-        >
-          <h3 style={{ color: "#ff0000" }}>
-            Error al renderizar el PDF
-          </h3>
-        </div>
-      )
-    }
-    return this.props.children
-  }
 }
 
 export default PDFPreview

@@ -5,7 +5,7 @@ import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
 import { loadTemplateFile } from "./utils/templateLoader"
 import { useMobileDetection } from "./hooks/useMobileDetection"
-import { MobileWarning } from "./MobileWarning"
+import { MobileWarning } from "./components/MobileWarning"
 
 import Header from '@/components/viewer/layout/Header'
 
