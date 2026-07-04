@@ -37,11 +37,11 @@ export default defineConfig(({ mode }) => {
         name: 'studio-plugin',
         configureServer(server) {
           if (isStudio) {
-            server.middlewares.use((req, res, next) => {
+            server.middlewares.use((req, _res, next) => {
               if (req.url === '/' || req.url === '/index.html') {
                 req.url = '/studio.html'
               }
-              console.log(res)
+              
               next()
             })
           }
