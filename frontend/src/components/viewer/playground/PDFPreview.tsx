@@ -37,9 +37,11 @@ const DefaultDocument = () => (
 interface PDFPreviewProps {
   code: string
   studio?: boolean
+  files?: { [key: string]: string }
+  mainFile?: string | null
 }
 
-const PDFPreview = ({ code, studio }: PDFPreviewProps) => {
+const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => {
   const [Component, setComponent] =
     useState<React.ComponentType>(() => DefaultDocument)
 
@@ -57,136 +59,287 @@ const PDFPreview = ({ code, studio }: PDFPreviewProps) => {
     setKey(prev => prev + 1)
   }
 
-  const compileCode = useCallback(async (sourceCode: string) => {
-    if (sourceCode === lastCompiledRef.current) return
+  // Helper to resolve relative imports
+  const resolveImportPath = (fromPath: string, importPath: string) => {
+    // Normalize import path
+    let normalizedImport = importPath
+    if (!normalizedImport.endsWith('.tsx') && !normalizedImport.endsWith('.ts') && !normalizedImport.endsWith('.jsx') && !normalizedImport.endsWith('.js')) {
+      normalizedImport += '.tsx'
+    }
+    // Handle relative paths
+    if (normalizedImport.startsWith('./') || normalizedImport.startsWith('../')) {
+      const fromDir = fromPath.split('/').slice(0, -1).join('/')
+      let parts = fromDir ? fromDir.split('/') : []
+      const importParts = normalizedImport.split('/')
+      for (const part of importParts) {
+        if (part === '..') {
+          if (parts.length > 0) parts.pop()
+        } else if (part !== '.' && part) {
+          parts.push(part)
+        }
+      }
+      return parts.join('/')
+    }
+    return normalizedImport
+  }
 
-    lastCompiledRef.current = sourceCode
+  // Process a file and resolve all imports
+  const processFile = (filePath: string, processedFiles: Set<string> = new Set()): { [key: string]: string } => {
+    if (processedFiles.has(filePath)) return {}
+
+    const fileContent = files[filePath] || ''
+    if (!fileContent) {
+      return {}
+    }
+
+    processedFiles.add(filePath)
+    const processed: { [key: string]: string } = { [filePath]: fileContent }
+
+    // Find all imports
+    const importRegex = /import\s+(\w+)\s+from\s+['"]([^'"]+)['"];?/g
+    let match
+    while ((match = importRegex.exec(fileContent)) !== null) {
+      const [, , importPath] = match
+      const resolvedPath = resolveImportPath(filePath, importPath)
+      const childProcessed = processFile(resolvedPath, processedFiles)
+      Object.assign(processed, childProcessed)
+    }
+
+    return processed
+  }
+
+  const compileCode = useCallback(async (sourceCode: string, currentFiles: { [key: string]: string } = {}, currentMainFile?: string | null) => {
+    const combinedKey = JSON.stringify({ sourceCode, currentFiles, currentMainFile })
+    if (combinedKey === lastCompiledRef.current) return
+
+    lastCompiledRef.current = combinedKey
     setIsCompiling(true)
 
     try {
-      if (!sourceCode?.trim()) {
+      let targetFile: string = ""
+      let targetCode: string
+
+      if (studio && currentMainFile && currentFiles[currentMainFile]) {
+        targetFile = currentMainFile
+        targetCode = currentFiles[currentMainFile]
+      } else {
+        targetCode = sourceCode
+      }
+
+      if (!targetCode?.trim()) {
         setComponent(() => DefaultDocument)
         setKey(prev => prev + 1)
         return
       }
 
-      // 🔹 Limpiar imports y exports (excepto export default) para la compilación
-      // Nota: Los imports se mantienen intactos en el Editor, solo los limpiamos aquí para la previsualización
-      // ya que inyectamos todas las dependencias manualmente en el scope
-      let modifiedCode = sourceCode
-        .replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-        .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-        .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-        .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+      // Process all files and collect them
+      let allFiles = studio ? processFile(targetFile) : {}
 
-      // 🔹 Extraer el export default para crear la variable result
-      const defaultExportMatch = sourceCode.match(/export\s+default\s+([A-Z]\w*)/)
-      const defaultFuncMatch = sourceCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
-      const defaultClassMatch = sourceCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
-      const defaultArrowMatch = sourceCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
+      // Build a modules object with all processed files
+      const modules: { [key: string]: string } = {}
 
-      if (defaultFuncMatch) {
-        modifiedCode = modifiedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
-        modifiedCode += `\nconst result = ${defaultFuncMatch[1]};`
-      } else if (defaultClassMatch) {
-        modifiedCode = modifiedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
-        modifiedCode += `\nconst result = ${defaultClassMatch[1]};`
-      } else if (defaultArrowMatch) {
-        modifiedCode = modifiedCode.replace(/export\s+default\s*/, "")
-        modifiedCode += `\nconst result = ${defaultArrowMatch[1]};`
-      } else if (defaultExportMatch) {
-        modifiedCode = modifiedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "const result = $1;")
-      }
+      for (const [filePath, fileContent] of Object.entries({ ...allFiles, [targetFile]: targetCode })) {
+        let processedCode = fileContent
 
-      if (!modifiedCode.includes("const result")) {
-        const componentMatch =
-          modifiedCode.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*=/)
-        if (componentMatch) {
-          modifiedCode += `\nconst result = ${componentMatch[1]};`
-        } else {
-          setErrorComponent(
-            "No se encontró ningún componente exportable."
-          )
-          return
+        // Clean imports but keep track of what's imported
+        // First, replace imports with local variable references
+        // Remove other exports except default
+        processedCode = processedCode
+          .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+          .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+
+        // Find and replace imports
+        const importRegex = /import\s+(\w+)\s+from\s+['"]([^'"]+)['"];?/g
+        let modifiedCodeForRegex = processedCode
+        let resultCode = ''
+        let lastIndex = 0
+
+        let importMatch
+        while ((importMatch = importRegex.exec(modifiedCodeForRegex)) !== null) {
+          const [fullMatch, importName, importPath] = importMatch
+          const resolvedPath = resolveImportPath(filePath, importPath)
+          
+          // Check if it's a @react-pdf/renderer import or local
+          if (importPath.startsWith('@react-pdf/')) {
+            // Keep the React PDF imports, we'll handle them at the module level
+            resultCode += modifiedCodeForRegex.slice(lastIndex, importMatch.index)
+            lastIndex = importMatch.index + fullMatch.length
+          } else {
+            // Replace local imports with our virtual module reference
+            resultCode += modifiedCodeForRegex.slice(lastIndex, importMatch.index)
+            resultCode += `const ${importName} = __modules['${resolvedPath}']?.default;\n`
+            lastIndex = importMatch.index + fullMatch.length
+          }
         }
-      }
+        resultCode += modifiedCodeForRegex.slice(lastIndex)
+        processedCode = resultCode
 
-      // 🔹 Transformar JSX
-      let transformedCode: string
-      try {
-        const babelResult = Babel.transform(modifiedCode, {
-          presets: ["react"],
-          filename: "preview.jsx",
-        })
-        transformedCode = babelResult.code || ""
-      } catch (err) {
-        const msg =
-          err instanceof Error
-            ? err.message
-            : "Error de sintaxis"
-        setErrorComponent(`Error de sintaxis: ${msg}`)
-        return
-      }
+        // Now extract and wrap the export default
+        const defaultFuncMatch = processedCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+        const defaultClassMatch = processedCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
+        const defaultArrowMatch = processedCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
+        const defaultExportMatch = processedCode.match(/export\s+default\s+([A-Z]\w*)/)
 
-      // 🔹 Extraer CoreComponents dinámicamente
-      const componentNames = Object.keys(CoreComponents).filter(
-        key =>
-          typeof CoreComponents[
-            key as keyof typeof CoreComponents
-          ] === "function" ||
-          typeof CoreComponents[
-            key as keyof typeof CoreComponents
-          ] === "object"
-      )
-
-      const filteredNames = componentNames.filter(
-        name =>
-          ![
-            "Font",
-            "Document",
-            "Page",
-            "Text",
-            "View",
-            "StyleSheet",
-            "Image",
-            "Link",
-          ].includes(name)
-      )
-
-      // 🔹 Crear módulo seguro (SIN redeclarar result)
-      const moduleCode = `
-        'use strict';
-
-        const React = arguments[0];
-        const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
-        const CoreComponents = arguments[2];
-        const { ${filteredNames.join(", ")} } = CoreComponents;
-
-        ${transformedCode}
-
-        if (typeof result === "undefined") {
-          throw new Error("No se encontró componente válido.");
+        let wrappedCode = processedCode
+        if (defaultFuncMatch) {
+          wrappedCode = wrappedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
+          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultFuncMatch[1]} };`
+        } else if (defaultClassMatch) {
+          wrappedCode = wrappedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
+          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultClassMatch[1]} };`
+        } else if (defaultArrowMatch) {
+          wrappedCode = wrappedCode.replace(/export\s+default\s*/, "")
+          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultArrowMatch[1]} };`
+        } else if (defaultExportMatch) {
+          wrappedCode = wrappedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "__modules['" + filePath + "'] = { default: $1 };")
         }
 
-        return result;
-      `
+        modules[filePath] = wrappedCode
+      }
 
+      // Now handle both multi-file and single-file cases
       let CustomComponent: React.ComponentType
 
-      try {
-        const evalFn = new Function(moduleCode)
-        CustomComponent = evalFn(
-          React,
-          { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
-          CoreComponents
+      if (studio && currentMainFile) {
+        // Multi-file studio mode
+        // 🔹 Transformar JSX de todos los módulos
+        const transformedModules: { [key: string]: string } = {}
+        try {
+          for (const [filePath, fileContent] of Object.entries(modules)) {
+            const babelResult = Babel.transform(fileContent, {
+              presets: ["react"],
+              filename: filePath,
+            })
+            transformedModules[filePath] = babelResult.code || ""
+          }
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Error de sintaxis"
+          setErrorComponent(`Error de sintaxis: ${msg}`)
+          return
+        }
+
+        // 🔹 Extraer CoreComponents dinámicamente
+        const componentNames = Object.keys(CoreComponents).filter(
+          key => typeof CoreComponents[key as keyof typeof CoreComponents] === "function" || typeof CoreComponents[key as keyof typeof CoreComponents] === "object"
         )
-      } catch (err) {
-        const msg =
-          err instanceof Error
-            ? err.message
-            : "Error de ejecución"
-        setErrorComponent(`Error de ejecución: ${msg}`)
-        return
+        const filteredNames = componentNames.filter(name => !["Font", "Document", "Page", "Text", "View", "StyleSheet", "Image", "Link"].includes(name))
+
+        // 🔹 Build full module code with virtual modules
+        let allModuleCode = ""
+        for (const [, transformed] of Object.entries(transformedModules)) {
+          allModuleCode += transformed + "\n"
+        }
+
+        const moduleCode = `
+          'use strict';
+          const React = arguments[0];
+          const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
+          const CoreComponents = arguments[2];
+          const { ${filteredNames.join(", ")} } = CoreComponents;
+          
+          // Initialize virtual modules
+          const __modules = {};
+          
+          ${allModuleCode}
+          
+          // Return the main module's default export
+          return __modules['${targetFile}']?.default;
+        `
+
+        try {
+          const evalFn = new Function(moduleCode)
+          CustomComponent = evalFn(
+            React,
+            { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
+            CoreComponents
+          )
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Error de ejecución"
+          setErrorComponent(`Error de ejecución: ${msg}`)
+          return
+        }
+      } else {
+        // Single-file mode (original behavior)
+        let modifiedCode = targetCode
+          .replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+          .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+          .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+          .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+
+        const defaultExportMatch = targetCode.match(/export\s+default\s+([A-Z]\w*)/)
+        const defaultFuncMatch = targetCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+        const defaultClassMatch = targetCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
+        const defaultArrowMatch = targetCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
+
+        if (defaultFuncMatch) {
+          modifiedCode = modifiedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
+          modifiedCode += `\nconst result = ${defaultFuncMatch[1]};`
+        } else if (defaultClassMatch) {
+          modifiedCode = modifiedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
+          modifiedCode += `\nconst result = ${defaultClassMatch[1]};`
+        } else if (defaultArrowMatch) {
+          modifiedCode = modifiedCode.replace(/export\s+default\s*/, "")
+          modifiedCode += `\nconst result = ${defaultArrowMatch[1]};`
+        } else if (defaultExportMatch) {
+          modifiedCode = modifiedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "const result = $1;")
+        }
+
+        if (!modifiedCode.includes("const result")) {
+          const componentMatch = modifiedCode.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*=/)
+          if (componentMatch) {
+            modifiedCode += `\nconst result = ${componentMatch[1]};`
+          } else {
+            setErrorComponent("No se encontró ningún componente exportable.")
+            return
+          }
+        }
+
+        // 🔹 Transformar JSX
+        let transformedCode: string
+        try {
+          const babelResult = Babel.transform(modifiedCode, {
+            presets: ["react"],
+            filename: "preview.jsx",
+          })
+          transformedCode = babelResult.code || ""
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Error de sintaxis"
+          setErrorComponent(`Error de sintaxis: ${msg}`)
+          return
+        }
+
+        // 🔹 Extraer CoreComponents dinámicamente
+        const componentNames = Object.keys(CoreComponents).filter(
+          key => typeof CoreComponents[key as keyof typeof CoreComponents] === "function" || typeof CoreComponents[key as keyof typeof CoreComponents] === "object"
+        )
+        const filteredNames = componentNames.filter(name => !["Font", "Document", "Page", "Text", "View", "StyleSheet", "Image", "Link"].includes(name))
+
+        // 🔹 Crear módulo seguro (SIN redeclarar result)
+        const moduleCode = `
+          'use strict';
+          const React = arguments[0];
+          const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
+          const CoreComponents = arguments[2];
+          const { ${filteredNames.join(", ")} } = CoreComponents;
+          ${transformedCode}
+          if (typeof result === "undefined") {
+            throw new Error("No se encontró componente válido.");
+          }
+          return result;
+        `
+
+        try {
+          const evalFn = new Function(moduleCode)
+          CustomComponent = evalFn(
+            React,
+            { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
+            CoreComponents
+          )
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : "Error de ejecución"
+          setErrorComponent(`Error de ejecución: ${msg}`)
+          return
+        }
       }
 
       if (!CustomComponent || typeof CustomComponent !== "function") {
@@ -207,26 +360,26 @@ const PDFPreview = ({ code, studio }: PDFPreviewProps) => {
     } finally {
       setIsCompiling(false)
     }
-  }, [])
+  }, [studio, resolveImportPath, processFile])
 
   useEffect(() => {
     if (isFirstRenderRef.current) {
       isFirstRenderRef.current = false
-      if (code?.trim()) compileCode(code)
+      if (code?.trim()) compileCode(code, files, mainFile)
       return
     }
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
 
     timeoutRef.current = setTimeout(() => {
-      compileCode(code)
+      compileCode(code, files, mainFile)
     }, 300)
 
     return () => {
       if (timeoutRef.current)
         clearTimeout(timeoutRef.current)
     }
-  }, [code, compileCode])
+  }, [code, compileCode, files, mainFile])
 
   return (
     <div style={{ width: "100%", height: "100%" }}>

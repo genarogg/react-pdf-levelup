@@ -27,39 +27,91 @@ type EditorProps = {
   templateId?: string
 }
 
+// Tipo para manejar múltiples archivos
+type FileMap = {
+  [path: string]: string
+}
+
 function Editor({ studio = false, templateId }: EditorProps) {
-  const [code, setCode] = useState<string>("")
+  const [files, setFiles] = useState<FileMap>({}) // { "path": "content" }
+  const [currentTemplatePath, setCurrentTemplatePath] = useState<string | null>(null)
+  const [mainFile, setMainFile] = useState<string | null>(null) // Path del archivo principal
+  const [code, setCode] = useState<string>("") // Para modo normal
   const [isLoading, setIsLoading] = useState(true)
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [fileTree, setFileTree] = useState<FileTreeItem[]>([])
   const [templatesLoaded, setTemplatesLoaded] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
   const [isStudioMode, setIsStudioMode] = useState(studio)
-  const [currentTemplatePath, setCurrentTemplatePath] = useState<string | null>(null)
   const isMobile = useMobileDetection()
 
   // Clave para localStorage
   const STORAGE_KEY = "react-pdf-levelup-code"
 
   // Template por defecto para Studio
-  const defaultStudioTemplate = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+  const defaultStudioMainTemplate = `import { Document, Page, View, StyleSheet } from "@react-pdf/renderer"
+import Header from "./Header"
+import Content from "./Content"
 
 const styles = StyleSheet.create({
-  page: { flexDirection: 'row', backgroundColor: '#E4E4E4' },
-  section: { margin: 10, padding: 10, flexGrow: 1 }
+  page: { flexDirection: 'column', backgroundColor: '#ffffff' },
 })
 
 const MyDocument = () => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>¡Bienvenido a React PDF LevelUp Studio!</Text>
-      </View>
+      <Header />
+      <Content />
     </Page>
   </Document>
 )
 
 export default MyDocument`
+
+  const defaultStudioHeaderTemplate = `import { Text, View, StyleSheet } from "@react-pdf/renderer"
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#3b82f6',
+    padding: 20,
+    marginBottom: 20,
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  }
+})
+
+const Header = () => (
+  <View style={styles.header}>
+    <Text style={styles.text}>Mi PDF</Text>
+  </View>
+)
+
+export default Header`
+
+  const defaultStudioContentTemplate = `import { Text, View, StyleSheet } from "@react-pdf/renderer"
+
+const styles = StyleSheet.create({
+  content: {
+    padding: 20,
+  },
+  text: {
+    fontSize: 12,
+    lineHeight: 1.5,
+    marginBottom: 10,
+  }
+})
+
+const Content = () => (
+  <View style={styles.content}>
+    <Text style={styles.text}>¡Este es el contenido del documento!</Text>
+    <Text style={styles.text}>Puedes editar este componente o importar más.</Text>
+  </View>
+)
+
+export default Content`
 
   const loadFileTree = async () => {
     if (!isStudioMode) return
@@ -106,6 +158,14 @@ export default MyDocument`
     init()
   }, [studio])
 
+  // Actualizar un solo archivo en el estado
+  const updateFileContent = (filePath: string, content: string) => {
+    setFiles(prev => ({
+      ...prev,
+      [filePath]: content
+    }))
+  }
+
   // Cargar archivo seleccionado en studio mode
   const loadFile = async (filePath: string) => {
     try {
@@ -113,8 +173,10 @@ export default MyDocument`
       const res = await fetch(`/api/templates/${encodeURIComponent(filePath)}`)
       if (res.ok) {
         const data = await res.json()
-        setCode(data.content)
+        updateFileContent(filePath, data.content)
         setCurrentTemplatePath(filePath)
+        // Si es el primer archivo o el único, lo establecemos como principal
+        if (!mainFile) setMainFile(filePath)
       }
     } catch (err) {
       console.error("Error al cargar archivo:", err)
@@ -130,40 +192,35 @@ export default MyDocument`
       await fetch(`/api/templates/${encodeURIComponent(currentTemplatePath)}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: code })
+        body: JSON.stringify({ content: files[currentTemplatePath] || "" })
       })
-      alert("Plantilla guardada correctamente!")
+      alert("Archivo guardado correctamente!")
     } catch (err) {
       console.error("Error al guardar:", err)
-      alert("Error al guardar la plantilla")
+      alert("Error al guardar el archivo")
     }
   }
 
-  // Crear nuevo template
+  // Crear nuevo template/componente
   const createNewTemplate = async () => {
     if (!isStudioMode) return
-    const name = prompt("Nombre de la nueva plantilla:")
+    const name = prompt("Nombre del nuevo componente/plantilla:")
     if (!name) return
     const filename = name.endsWith(".tsx") ? name : `${name}.tsx`
     try {
-      const defaultCode = `import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer"
+      const defaultCode = `import { Text, View, StyleSheet } from "@react-pdf/renderer"
 
 const styles = StyleSheet.create({
-  page: { flexDirection: 'row', backgroundColor: '#E4E4E4' },
-  section: { margin: 10, padding: 10, flexGrow: 1 }
+  container: { padding: 10 }
 })
 
-const MyDocument = () => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>New Template</Text>
-      </View>
-    </Page>
-  </Document>
+const ${name.replace(/[^a-zA-Z0-9]/g, '')} = () => (
+  <View style={styles.container}>
+    <Text>${name}</Text>
+  </View>
 )
 
-export default MyDocument`
+export default ${name.replace(/[^a-zA-Z0-9]/g, '')}`
       
       await fetch(`/api/templates/${encodeURIComponent(filename)}`, {
         method: "POST",
@@ -173,10 +230,10 @@ export default MyDocument`
       
       await loadFileTree()
       await loadFile(filename)
-      alert("Plantilla creada!")
+      alert("Archivo creado!")
     } catch (err) {
       console.error("Error al crear:", err)
-      alert("Error al crear la plantilla")
+      alert("Error al crear el archivo")
     }
   }
 
@@ -251,7 +308,15 @@ export default MyDocument`
       if (firstFile) {
         await loadFile(firstFile.path)
       } else {
-        setCode(defaultStudioTemplate)
+        // No hay archivos, creamos plantillas por defecto
+        const defaultFiles: FileMap = {
+          "Main.tsx": defaultStudioMainTemplate,
+          "Header.tsx": defaultStudioHeaderTemplate,
+          "Content.tsx": defaultStudioContentTemplate,
+        }
+        setFiles(defaultFiles)
+        setMainFile("Main.tsx")
+        setCurrentTemplatePath("Main.tsx")
         setIsLoading(false)
       }
     }
@@ -277,9 +342,11 @@ export default MyDocument`
           <StudioSidebar
             tree={fileTree}
             selectedPath={currentTemplatePath}
+            mainFile={mainFile}
             onSelectFile={loadFile}
             onCreateFile={createNewTemplate}
             onRefresh={loadFileTree}
+            onSetMainFile={setMainFile}
           />
         )}
         <div className={`flex flex-col ${isStudioMode ? "flex-1" : "w-1/2"} border-r border-gray-700`}>
@@ -292,17 +359,32 @@ export default MyDocument`
             </div>
           ) : (
             <div className="flex-1 overflow-hidden">
-              <CodeEditor value={code} onChange={setCode as any} studio={isStudioMode} />
+              <CodeEditor 
+                value={isStudioMode && currentTemplatePath ? files[currentTemplatePath] || "" : code} 
+                onChange={(value) => {
+                  if (isStudioMode && currentTemplatePath) {
+                    updateFileContent(currentTemplatePath, value || "")
+                  } else {
+                    setCode(value as string)
+                  }
+                }} 
+                studio={isStudioMode} 
+              />
             </div>
           )}
           <ToolBar 
-            code={code} 
+            code={isStudioMode && currentTemplatePath ? files[currentTemplatePath] || "" : code} 
             onSave={isStudioMode ? saveTemplate : undefined}
             onNew={isStudioMode ? createNewTemplate : undefined}
           />
         </div>
         <div className={`${isStudioMode ? "flex-1" : "w-1/2"} bg-gray-100`}>
-          <PDFPreview code={code} studio={isStudioMode} />
+          <PDFPreview 
+            files={isStudioMode ? files : {}} 
+            mainFile={isStudioMode ? mainFile : null} 
+            studio={isStudioMode} 
+            code={code} 
+          />
         </div>
       </main>
     </div>

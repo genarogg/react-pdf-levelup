@@ -10,34 +10,53 @@ type FileTreeItem = {
 type StudioSidebarProps = {
   tree: FileTreeItem[]
   selectedPath: string | null
+  mainFile: string | null
   onSelectFile: (path: string) => void
   onCreateFile: () => void
   onRefresh: () => void
+  onSetMainFile: (path: string) => void
 }
 
 const EXPANDED_WIDTH = "w-64"
 const COLLAPSED_WIDTH = "w-12"
 
-function FileTree({ item, selectedPath, onSelectFile, level = 0 }: {
+function FileTree({ item, selectedPath, mainFile, onSelectFile, onSetMainFile, level = 0 }: {
   item: FileTreeItem
   selectedPath: string | null
+  mainFile: string | null
   onSelectFile: (path: string) => void
+  onSetMainFile: (path: string) => void
   level?: number
 }) {
   const [isExpanded, setIsExpanded] = useState(true)
 
   if (item.type === "file") {
     return (
-      <div
-        onClick={() => onSelectFile(item.path)}
-        className={`px-3 py-1.5 text-sm cursor-pointer transition-all duration-300 rounded-md mx-2 my-1 ${
-          selectedPath === item.path
-            ? "bg-blue-500/20 text-white"
-            : "text-gray-300 hover:bg-white/5 hover:text-white"
-        }`}
-        style={{ paddingLeft: `${level * 12 + 12}px` }}
-      >
-        📄 {item.name}
+      <div className="group flex items-center">
+        <div
+          onClick={() => onSelectFile(item.path)}
+          className={`flex-1 px-3 py-1.5 text-sm cursor-pointer transition-all duration-300 rounded-md mx-2 my-1 ${
+            selectedPath === item.path
+              ? "bg-blue-500/20 text-white"
+              : "text-gray-300 hover:bg-white/5 hover:text-white"
+          }`}
+          style={{ paddingLeft: `${level * 12 + 12}px` }}
+        >
+          <span className="mr-2">📄</span>
+          {item.name}
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onSetMainFile(item.path)
+          }}
+          className={`mr-2 p-1 rounded transition-opacity ${
+            mainFile === item.path ? "text-yellow-400 opacity-100" : "text-gray-500 opacity-0 group-hover:opacity-100"
+          }`}
+          title={mainFile === item.path ? "Archivo principal" : "Marcar como principal"}
+        >
+          {mainFile === item.path ? "⭐" : "☆"}
+        </button>
       </div>
     )
   }
@@ -56,7 +75,9 @@ function FileTree({ item, selectedPath, onSelectFile, level = 0 }: {
           key={child.path}
           item={child}
           selectedPath={selectedPath}
+          mainFile={mainFile}
           onSelectFile={onSelectFile}
+          onSetMainFile={onSetMainFile}
           level={level + 1}
         />
       ))}
@@ -81,6 +102,7 @@ function flattenFiles(items: FileTreeItem[]): FileTreeItem[] {
 function CollapsedSidebar({
   tree,
   selectedPath,
+  mainFile,
   onSelectFile,
   onCreateFile,
   onRefresh,
@@ -119,25 +141,29 @@ function CollapsedSidebar({
 
       <div className="flex-1 overflow-y-auto py-2 flex flex-col items-center gap-1">
         {files.map((file) => (
-          <button
-            key={file.path}
-            onClick={() => onSelectFile(file.path)}
-            title={file.name}
-            className={`w-8 h-8 flex items-center justify-center text-sm rounded-md transition-all duration-300 ${
-              selectedPath === file.path
-                ? "bg-blue-500/20 text-white"
-                : "text-gray-300 hover:bg-white/5 hover:text-white"
-            }`}
-          >
-            📄
-          </button>
+          <div key={file.path} className="relative">
+            <button
+              onClick={() => onSelectFile(file.path)}
+              title={file.name}
+              className={`w-8 h-8 flex items-center justify-center text-sm rounded-md transition-all duration-300 ${
+                selectedPath === file.path
+                  ? "bg-blue-500/20 text-white"
+                  : "text-gray-300 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              📄
+            </button>
+            {mainFile === file.path && (
+              <span className="absolute -top-1 -right-1 text-xs text-yellow-400">⭐</span>
+            )}
+          </div>
         ))}
       </div>
     </div>
   )
 }
 
-export default function StudioSidebar({ tree, selectedPath, onSelectFile, onCreateFile, onRefresh }: StudioSidebarProps) {
+export default function StudioSidebar({ tree, selectedPath, mainFile, onSelectFile, onCreateFile, onRefresh, onSetMainFile }: StudioSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   if (isCollapsed) {
@@ -145,9 +171,11 @@ export default function StudioSidebar({ tree, selectedPath, onSelectFile, onCrea
       <CollapsedSidebar
         tree={tree}
         selectedPath={selectedPath}
+        mainFile={mainFile}
         onSelectFile={onSelectFile}
         onCreateFile={onCreateFile}
         onRefresh={onRefresh}
+        onSetMainFile={onSetMainFile}
         onExpand={() => setIsCollapsed(false)}
       />
     )
@@ -167,6 +195,12 @@ export default function StudioSidebar({ tree, selectedPath, onSelectFile, onCrea
         >
           «
         </button>
+      </div>
+
+      <div className="p-2 border-b border-white/10">
+        <div className="text-xs text-gray-400 px-2 mb-1">
+          {mainFile ? `Principal: ${mainFile}` : "Selecciona un archivo principal ⭐"}
+        </div>
       </div>
 
       <div className="flex gap-2 p-2 border-b border-white/10">
@@ -195,7 +229,9 @@ export default function StudioSidebar({ tree, selectedPath, onSelectFile, onCrea
               key={item.path}
               item={item}
               selectedPath={selectedPath}
+              mainFile={mainFile}
               onSelectFile={onSelectFile}
+              onSetMainFile={onSetMainFile}
             />
           ))
         )}
