@@ -381,7 +381,7 @@ export default ${name.replace(/[^a-zA-Z0-9]/g, '')}`
         <div className={`${isStudioMode ? "flex-1" : "w-1/2"} bg-gray-100`}>
           <PDFPreview 
             files={isStudioMode ? files : {}} 
-            mainFile={isStudioMode ? currentTemplatePath : null} 
+            mainFile={isStudioMode ? mainFile : null} 
             studio={isStudioMode} 
             code={code} 
           />

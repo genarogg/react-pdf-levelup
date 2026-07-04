@@ -207,12 +207,12 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
     }
 
     processedFiles.add(filePath)
-    const processed: { [key: string]: string } = { [filePath]: fileContent }
 
     // Solo seguimos imports RELATIVOS (archivos locales del proyecto, los
     // únicos que existen dentro de `files`). Los imports de paquetes
     // ("react", "@react-pdf/renderer", "@/components/core", etc.) no se
     // resuelven aquí, se resuelven en compileCode contra STUDIO_PACKAGES.
+    const processed: { [key: string]: string } = {}
     const localImportRegex = /import\s+.+?\s+from\s+['"](\.\.?\/[^'"]+)['"];?/gs
     let match
     while ((match = localImportRegex.exec(fileContent)) !== null) {
@@ -222,35 +222,46 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
       Object.assign(processed, childProcessed)
     }
 
+    // El archivo se agrega DESPUÉS de sus dependencias: así, cuando se
+    // ejecuten los módulos en este mismo orden, cada archivo importado ya
+    // quedó registrado en __modules antes de que el que lo importa intente
+    // leerlo (si no, el import siempre resolvería a undefined).
+    processed[filePath] = fileContent
+
     return processed
   }
 
   const compileCode = useCallback(async (sourceCode: string, currentFiles: { [key: string]: string } = {}, currentMainFile?: string | null) => {
-    const combinedKey = JSON.stringify({ sourceCode, currentFiles, currentMainFile })
+    let targetFile: string = ""
+    let targetCode: string
+
+    if (studio && currentMainFile && currentFiles[currentMainFile]) {
+      targetFile = currentMainFile
+      targetCode = currentFiles[currentMainFile]
+    } else {
+      targetCode = sourceCode
+    }
+
+    // Process all files and collect them (árbol de dependencias del archivo principal)
+    const allFiles = studio ? processFile(targetFile) : {}
+
+    // La firma de recompilación depende SOLO del archivo principal y de los
+    // archivos que él importa. Así, navegar por el sidebar (que agrega
+    // archivos ajenos al mapa `currentFiles` para poder visualizarlos) no
+    // dispara una recompilación: solo lo hace un cambio real de contenido
+    // en algún archivo que forme parte del documento principal.
+    const combinedKey = JSON.stringify({ targetFile, targetCode, allFiles })
     if (combinedKey === lastCompiledRef.current) return
 
     lastCompiledRef.current = combinedKey
     setIsCompiling(true)
 
     try {
-      let targetFile: string = ""
-      let targetCode: string
-
-      if (studio && currentMainFile && currentFiles[currentMainFile]) {
-        targetFile = currentMainFile
-        targetCode = currentFiles[currentMainFile]
-      } else {
-        targetCode = sourceCode
-      }
-
       if (!targetCode?.trim()) {
         setComponent(() => DefaultDocument)
         setKey(prev => prev + 1)
         return
       }
-
-      // Process all files and collect them
-      let allFiles = studio ? processFile(targetFile) : {}
 
       // Build a modules object with all processed files
       const modules: { [key: string]: string } = {}
@@ -370,10 +381,15 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
           return
         }
 
-        // 🔹 Build full module code with virtual modules
+        // 🔹 Build full module code with virtual modules.
+        // Cada archivo se ejecuta dentro de su propia IIFE: sus
+        // declaraciones locales (p. ej. `const Header = ...`) quedan
+        // aisladas en el scope de ESE archivo y no se filtran a otros. Lo
+        // único que un archivo puede usar de otro es lo que haya importado
+        // explícitamente (resuelto contra __modules).
         let allModuleCode = ""
         for (const [, transformed] of Object.entries(transformedModules)) {
-          allModuleCode += transformed + "\n"
+          allModuleCode += `(function () {\n${transformed}\n})();\n`
         }
 
         // Nada se inyecta en el scope global de ejecución: __modules arranca
