@@ -34,12 +34,38 @@ const colorPalette = [
   "#0ea5e9",
 ]
 
+// Estado compartido a nivel de módulo (no de componente): así "recentColors"
+// sobrevive a que ColorPicker se desmonte y se vuelva a montar dentro de la
+// misma sesión de navegador. Se pierde solo al recargar la página, que es el
+// comportamiento esperado (no se persiste en localStorage a propósito).
+const DEFAULT_RECENT_COLORS = ["#3366cc", "#dc3545", "#28a745", "#ffc107", "#17a2b8"]
+let sharedRecentColors: string[] = [...DEFAULT_RECENT_COLORS]
+const recentColorsListeners = new Set<(colors: string[]) => void>()
+
+function pushRecentColor(color: string) {
+  if (sharedRecentColors.includes(color)) return
+  sharedRecentColors = [color, ...sharedRecentColors.slice(0, 4)]
+  recentColorsListeners.forEach((listener) => listener(sharedRecentColors))
+}
+
 export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
   const [open, setOpen] = useState(false)
   const [selectedColor, setSelectedColor] = useState("#3366cc")
-  const [recentColors, setRecentColors] = useState<string[]>(["#3366cc", "#dc3545", "#28a745", "#ffc107", "#17a2b8"])
+  const [recentColors, setRecentColors] = useState<string[]>(sharedRecentColors)
   const [copied, setCopied] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Suscribirse al estado compartido: si otra instancia (u otro montaje previo)
+  // actualizó recentColors mientras este componente estaba desmontado, al
+  // volver a montarse debe reflejar el valor más reciente, no el hardcodeado.
+  useEffect(() => {
+    setRecentColors(sharedRecentColors)
+    const listener = (colors: string[]) => setRecentColors(colors)
+    recentColorsListeners.add(listener)
+    return () => {
+      recentColorsListeners.delete(listener)
+    }
+  }, [])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,10 +92,7 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
   const selectColor = (color: string) => {
     setSelectedColor(color)
     onColorSelect?.(color)
-
-    if (!recentColors.includes(color)) {
-      setRecentColors((prev) => [color, ...prev.slice(0, 4)])
-    }
+    pushRecentColor(color)
   }
 
   const copyToClipboard = () => {
