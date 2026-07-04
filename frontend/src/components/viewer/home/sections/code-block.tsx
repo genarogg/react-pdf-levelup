@@ -121,8 +121,13 @@ function highlightSyntax(line: string) {
   })
 
   // Strings and template pieces
-  result = result.replace(/&#39;[^&#39;]*&#39;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
-  result = result.replace(/&quot;[^&quot;]*&quot;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
+  // NOTA: antes se usaba [^&#39;] y [^&quot;], pero dentro de [] cada caracter
+  // se interpreta por separado (&, #, 3, 9, ; / &, q, u, o, t, ;), no como la
+  // cadena completa de la entidad HTML. Eso rompía el resaltado en cualquier
+  // string que contuviera una "o", "t", "u", "q", "3" o "9". Se reemplaza por
+  // ".*?" (cualquier caracter, de forma perezosa hasta la próxima comilla).
+  result = result.replace(/&#39;.*?&#39;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
+  result = result.replace(/&quot;.*?&quot;/g, (match) => `<span class="text-emerald-400">${match}</span>`)
 
   // Template braces (solo colorear las llaves, no el contenido)
   result = result.replace(/\{/g, `<span class="text-amber-400">{</span>`)
