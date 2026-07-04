@@ -1,5 +1,4 @@
-
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useMemo } from "react"
 import { Editor } from "@monaco-editor/react"
 
 interface CodeEditorProps {
@@ -7,48 +6,63 @@ interface CodeEditorProps {
   onChange: (value: string | undefined) => void
 }
 
+// Movido fuera del componente: es una fábrica pura, no necesita recrearse en cada render.
+const debounce = (func: Function, delay: number) => {
+  let timeoutId: NodeJS.Timeout
+  return (...args: any[]) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => {
+      func(...args)
+    }, delay)
+  }
+}
+
 const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const editorRef = useRef<any>(null)
+  const completionProvidersRef = useRef<{ dispose: () => void }[]>([])
 
-  // Add a debounce function to delay updates
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout
-    return (...args: any[]) => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => {
-        func(...args)
-      }, delay)
-    }
-  }
+  // Referencia siempre actualizada a la última versión de onChange, para que el
+  // debounce memoizado (creado una sola vez) nunca quede con una closure vieja.
+  const onChangeRef = useRef(onChange)
+  useEffect(() => {
+    onChangeRef.current = onChange
+  }, [onChange])
 
-  const handleEditorChange = debounce((value: string | undefined) => {
-    if (value === undefined) return
-    const sanitizeAll = (text: string) => {
-      let s = text
-      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
-      return s
-    }
-    const sanitized = sanitizeAll(value)
-    if (editorRef.current) {
-      const current = editorRef.current.getValue()
-      if (sanitized !== current) {
-        const model = editorRef.current.getModel()
-        if (model) {
-          const fullRange = model.getFullModelRange()
-          editorRef.current.executeEdits("sanitize-change", [{ range: fullRange, text: sanitized, forceMoveMarkers: true }])
-        } else {
-          editorRef.current.setValue(sanitized)
+  // Memoizado una sola vez: evita que un re-render (p. ej. por useMobileDetection
+  // en un resize) cree una nueva instancia de debounce con su propio timeoutId,
+  // dejando "huérfano" el setTimeout pendiente de la instancia anterior.
+  const handleEditorChange = useMemo(
+    () =>
+      debounce((value: string | undefined) => {
+        if (value === undefined) return
+        const sanitizeAll = (text: string) => {
+          let s = text
+          s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+          s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+          s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+          s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+          s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
+          s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
+          s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
+          return s
         }
-      }
-    }
-    onChange(sanitized)
-  }, 1000)
+        const sanitized = sanitizeAll(value)
+        if (editorRef.current) {
+          const current = editorRef.current.getValue()
+          if (sanitized !== current) {
+            const model = editorRef.current.getModel()
+            if (model) {
+              const fullRange = model.getFullModelRange()
+              editorRef.current.executeEdits("sanitize-change", [{ range: fullRange, text: sanitized, forceMoveMarkers: true }])
+            } else {
+              editorRef.current.setValue(sanitized)
+            }
+          }
+        }
+        onChangeRef.current(sanitized)
+      }, 1000),
+    []
+  )
 
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
@@ -141,7 +155,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       // Componentes de layout
       {
         label: "Layout",
-        insertText: '<Layout size="A4" orientation="v" showPageNumbers={true}>\n\n</Layout>',
+        insertText: '<Layout size="A4" orientation="v" pagination={true}>\n\n</Layout>',
         kind,
       },
 
@@ -256,7 +270,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     ]
 
     // Registrar el proveedor de autocompletado
-    monaco.languages.registerCompletionItemProvider("javascript", {
+    const jsProvider = monaco.languages.registerCompletionItemProvider("javascript", {
       provideCompletionItems: (model: any, position: any) => {
         const word = model.getWordUntilPosition(position)
         const range = {
@@ -276,7 +290,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     })
 
     // También registrar para TypeScript y JSX
-    monaco.languages.registerCompletionItemProvider("typescript", {
+    const tsProvider = monaco.languages.registerCompletionItemProvider("typescript", {
       provideCompletionItems: (model: any, position: any) => {
         const word = model.getWordUntilPosition(position)
         const range = {
@@ -295,6 +309,9 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       },
     })
 
+    // Guardar los disposables para poder limpiarlos al desmontar el editor
+    completionProvidersRef.current.push(jsProvider, tsProvider)
+
     // Configurar el editor para mostrar sugerencias automáticamente
     editor.updateOptions({
       quickSuggestions: {
@@ -310,6 +327,17 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   // Limpiar el editor cuando el componente se desmonte
   useEffect(() => {
     return () => {
+      // Disponer los proveedores de autocompletado (JS y TS) para evitar que se dupliquen
+      // las sugerencias en cada montaje/desmontaje del editor (ver bug #3)
+      completionProvidersRef.current.forEach((provider) => {
+        try {
+          provider.dispose()
+        } catch (e) {
+          console.log("Error al disponer del completion provider:", e)
+        }
+      })
+      completionProvidersRef.current = []
+
       if (editorRef.current) {
         // Paso 1: Obtener el modelo actual
         const model = editorRef.current.getModel()
@@ -351,7 +379,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     <Editor
       height="100%"
       defaultLanguage="javascript"
-      defaultValue={value}
+      value={value}
       theme="vs-dark"
       onChange={handleEditorChange}
       onMount={handleEditorDidMount}
@@ -371,4 +399,3 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 }
 
 export default CodeEditor
-

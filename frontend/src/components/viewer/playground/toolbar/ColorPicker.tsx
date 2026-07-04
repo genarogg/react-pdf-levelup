@@ -87,6 +87,7 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
     const color = e.target.value
     setSelectedColor(color)
     onColorSelect?.(color)
+    pushRecentColor(color)
   }
 
   const selectColor = (color: string) => {

@@ -88,10 +88,16 @@ function Editor() {
 
   // Guardar cambios en localStorage
   useEffect(() => {
-    if (!isLoading) {
+    // Solo persistimos cuando estamos en el playground "libre" (sin :templateId
+    // en la URL). Si guardáramos siempre que !isLoading, visitar cualquier
+    // plantilla sobrescribiría el último código guardado del usuario apenas
+    // termina de cargar (isLoading pasa a false con el contenido de la
+    // plantilla ya en el estado `code`), perdiendo su trabajo previo sin que
+    // el usuario haya editado nada todavía.
+    if (!isLoading && !templateId) {
       localStorage.setItem(STORAGE_KEY, code)
     }
-  }, [code, isLoading])
+  }, [code, isLoading, templateId])
 
 
 
@@ -130,4 +136,3 @@ function Editor() {
 }
 
 export default Editor
-
