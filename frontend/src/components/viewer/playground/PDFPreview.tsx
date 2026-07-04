@@ -69,35 +69,30 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         return
       }
 
-      // 🔹 Limpiar imports y exports
+      // 🔹 Limpiar imports y exports (excepto export default)
       let modifiedCode = sourceCode
         .replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
         .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
         .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
         .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-        .replace(
-          /(^|\n)\s*export\s+default\s+([^;]+);?/g,
-          "\nconst result = $2;"
-        )
 
-      const defaultFuncMatch =
-        sourceCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+      // 🔹 Extraer el export default para crear la variable result
+      const defaultExportMatch = sourceCode.match(/export\s+default\s+([A-Z]\w*)/)
+      const defaultFuncMatch = sourceCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+      const defaultClassMatch = sourceCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
+      const defaultArrowMatch = sourceCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
+
       if (defaultFuncMatch) {
-        modifiedCode =
-          modifiedCode.replace(
-            /export\s+default\s+function\s+([A-Z]\w*)/,
-            "function $1"
-          ) + `\nconst result = ${defaultFuncMatch[1]};`
-      }
-
-      const defaultClassMatch =
-        sourceCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
-      if (defaultClassMatch) {
-        modifiedCode =
-          modifiedCode.replace(
-            /export\s+default\s+class\s+([A-Z]\w*)/,
-            "class $1"
-          ) + `\nconst result = ${defaultClassMatch[1]};`
+        modifiedCode = modifiedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
+        modifiedCode += `\nconst result = ${defaultFuncMatch[1]};`
+      } else if (defaultClassMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
+        modifiedCode += `\nconst result = ${defaultClassMatch[1]};`
+      } else if (defaultArrowMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s*/, "")
+        modifiedCode += `\nconst result = ${defaultArrowMatch[1]};`
+      } else if (defaultExportMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "const result = $1;")
       }
 
       if (!modifiedCode.includes("const result")) {

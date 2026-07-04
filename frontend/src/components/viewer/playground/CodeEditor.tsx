@@ -6,17 +6,14 @@ interface CodeEditorProps {
   onChange: (value: string | undefined) => void
 }
 
-// Elimina imports/exports del código pegado o escrito por el usuario, ya que el
-// Playground inyecta sus propios componentes en el scope de evaluación y no
-// necesita (ni debe permitir) que el usuario declare los suyos.
+// Elimina imports del código pegado o escrito por el usuario, ya que el
+// Playground inyecta sus propios componentes en el scope de evaluación.
+// Preserva el export default para que el código sea utilizable fuera del playground.
 // Usada tanto al escribir (handleEditorChange) como al pegar (pasteHandler).
 const sanitizeCode = (text: string) => {
   let s = text
   s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
   s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-  s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-  s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-  s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
   s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
   s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
   return s
