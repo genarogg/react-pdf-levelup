@@ -75,34 +75,31 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
         .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
         .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-        .replace(
-          /(^|\n)\s*export\s+default\s+([^;]+);?/g,
-          "\nconst result = $2;"
-        )
 
-      const defaultFuncMatch =
-        sourceCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+      // 🔹 Manejo robusto de export default (tomado de Playground 1):
+      // se distingue function / class / arrow(const|let|var) / identificador
+      // suelto, para no depender de un único regex genérico y evitar
+      // falsos positivos con `export default X;` vs declaraciones.
+      const defaultExportMatch = sourceCode.match(/export\s+default\s+([A-Z]\w*)/)
+      const defaultFuncMatch = sourceCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
+      const defaultClassMatch = sourceCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
+      const defaultArrowMatch = sourceCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
+
       if (defaultFuncMatch) {
-        modifiedCode =
-          modifiedCode.replace(
-            /export\s+default\s+function\s+([A-Z]\w*)/,
-            "function $1"
-          ) + `\nconst result = ${defaultFuncMatch[1]};`
-      }
-
-      const defaultClassMatch =
-        sourceCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
-      if (defaultClassMatch) {
-        modifiedCode =
-          modifiedCode.replace(
-            /export\s+default\s+class\s+([A-Z]\w*)/,
-            "class $1"
-          ) + `\nconst result = ${defaultClassMatch[1]};`
+        modifiedCode = modifiedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
+        modifiedCode += `\nconst result = ${defaultFuncMatch[1]};`
+      } else if (defaultClassMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
+        modifiedCode += `\nconst result = ${defaultClassMatch[1]};`
+      } else if (defaultArrowMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s*/, "")
+        modifiedCode += `\nconst result = ${defaultArrowMatch[1]};`
+      } else if (defaultExportMatch) {
+        modifiedCode = modifiedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "const result = $1;")
       }
 
       if (!modifiedCode.includes("const result")) {
-        const componentMatch =
-          modifiedCode.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*=/)
+        const componentMatch = modifiedCode.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*=/)
         if (componentMatch) {
           modifiedCode += `\nconst result = ${componentMatch[1]};`
         } else {
@@ -113,12 +110,17 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         }
       }
 
-      // 🔹 Transformar JSX
+      // 🔹 Transformar TS/TSX + JSX (antes solo era "react"; ahora se agrega
+      // el preset "typescript" con isTSX/allExtensions, igual que en
+      // Playground 1, para poder aceptar código .ts/.tsx pegado directo).
       let transformedCode: string
       try {
         const babelResult = Babel.transform(modifiedCode, {
-          presets: ["react"],
-          filename: "preview.jsx",
+          presets: [
+            ["typescript", { isTSX: true, allExtensions: true }],
+            "react",
+          ] as any,
+          filename: "preview.tsx",
         })
         transformedCode = babelResult.code || ""
       } catch (err) {

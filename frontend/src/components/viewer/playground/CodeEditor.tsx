@@ -1,3 +1,5 @@
+// editor 2
+
 import { useRef, useEffect } from "react"
 import { Editor } from "@monaco-editor/react"
 
