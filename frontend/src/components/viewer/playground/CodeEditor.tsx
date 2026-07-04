@@ -6,6 +6,22 @@ interface CodeEditorProps {
   onChange: (value: string | undefined) => void
 }
 
+// Elimina imports/exports del código pegado o escrito por el usuario, ya que el
+// Playground inyecta sus propios componentes en el scope de evaluación y no
+// necesita (ni debe permitir) que el usuario declare los suyos.
+// Usada tanto al escribir (handleEditorChange) como al pegar (pasteHandler).
+const sanitizeCode = (text: string) => {
+  let s = text
+  s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+  s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
+  s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
+  s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
+  s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
+  s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+  s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
+  return s
+}
+
 const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const editorRef = useRef<any>(null)
 
@@ -22,18 +38,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
   const handleEditorChange = debounce((value: string | undefined) => {
     if (value === undefined) return
-    const sanitizeAll = (text: string) => {
-      let s = text
-      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
-      return s
-    }
-    const sanitized = sanitizeAll(value)
+    const sanitized = sanitizeCode(value)
     if (editorRef.current) {
       const current = editorRef.current.getValue()
       if (sanitized !== current) {
@@ -53,22 +58,10 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
 
-    const sanitizePastedText = (text: string) => {
-      let s = text
-      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
-      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-      return s
-    }
-
     const pasteHandler = (e: ClipboardEvent) => {
       const text = e.clipboardData?.getData("text/plain")
       if (!text) return
-      const sanitized = sanitizePastedText(text)
+      const sanitized = sanitizeCode(text)
       if (sanitized !== text) {
         e.preventDefault()
         const selections = editor.getSelections() || [editor.getSelection()]
@@ -370,4 +363,3 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 }
 
 export default CodeEditor
-

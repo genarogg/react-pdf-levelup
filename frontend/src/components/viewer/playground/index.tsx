@@ -222,7 +222,7 @@ export default MyDocument`
     }
 
     loadByUrlOrDefault()
-  }, [templateId, templatesLoaded, templates, isStudioMode, studio])
+  }, [templateId, templatesLoaded, templates, isStudioMode])
 
   // Guardar cambios en localStorage (solo si no es Studio mode)
   useEffect(() => {
@@ -310,4 +310,3 @@ export default MyDocument`
 }
 
 export default Editor
-

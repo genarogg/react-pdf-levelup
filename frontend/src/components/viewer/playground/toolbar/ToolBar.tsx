@@ -3,7 +3,7 @@
 import React from "react"
 import QuickHelp from "./QuickHelp"
 import ColorPicker from "./ColorPicker"
-import downloadTemplate from "./funciones/dowloadTemplate"
+import downloadTemplate from "./funciones/downloadTemplate"
 import { Download, Save, FilePlus } from "lucide-react"
 
 interface ToolBarProps {
