@@ -21,6 +21,21 @@ import * as Babel from "@babel/standalone"
 import * as CoreComponents from "@/components/core"
 import ErrorDocument from "./ErrorDocument"
 
+// Registro de paquetes disponibles para importar explícitamente en modo Studio.
+// IMPORTANTE: nada de esto se inyecta automáticamente en el scope de ningún
+// archivo. Cada entrada solo queda accesible en un archivo del usuario si ese
+// archivo escribe su propio `import ... from "<specifier>"`. Si un archivo no
+// importa "@react-pdf/renderer", por ejemplo, Document/Page/Text/etc. no van
+// a existir en su scope, igual que en un proyecto real.
+const STUDIO_PACKAGES: { [specifier: string]: Record<string, any> } = {
+  "react": { ...(React as any), default: React },
+  "@react-pdf/renderer": {
+    Document, Page, Text, View, StyleSheet, Font, Image, Link,
+    Svg, Defs, Rect, LinearGradient, Stop, G,
+  },
+  "@/components/core": { ...(CoreComponents as any) },
+}
+
 const DefaultDocument = () => (
   <Document>
     <Page size="A4" style={{ padding: 30, backgroundColor: "#ffffff" }}>
@@ -59,29 +74,106 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
     setKey(prev => prev + 1)
   }
 
-  // Helper to resolve relative imports
+  // Resuelve un import a la clave que se usará en __modules.
+  // - Rutas relativas ("./x", "../x"): se resuelven contra el archivo actual
+  //   y se normalizan a un path de archivo dentro de `files`.
+  // - Cualquier otro specifier ("react", "@react-pdf/renderer",
+  //   "@/components/core", etc.): se devuelve TAL CUAL, sin modificar. Es la
+  //   clave literal con la que se busca en STUDIO_PACKAGES/__modules; si el
+  //   paquete no está registrado ahí, el import simplemente resolverá a
+  //   undefined (como cualquier módulo no instalado).
   const resolveImportPath = (fromPath: string, importPath: string) => {
-    // Normalize import path
+    if (!importPath.startsWith('./') && !importPath.startsWith('../')) {
+      return importPath
+    }
+
     let normalizedImport = importPath
     if (!normalizedImport.endsWith('.tsx') && !normalizedImport.endsWith('.ts') && !normalizedImport.endsWith('.jsx') && !normalizedImport.endsWith('.js')) {
       normalizedImport += '.tsx'
     }
-    // Handle relative paths
-    if (normalizedImport.startsWith('./') || normalizedImport.startsWith('../')) {
-      const fromDir = fromPath.split('/').slice(0, -1).join('/')
-      let parts = fromDir ? fromDir.split('/') : []
-      const importParts = normalizedImport.split('/')
-      for (const part of importParts) {
-        if (part === '..') {
-          if (parts.length > 0) parts.pop()
-        } else if (part !== '.' && part) {
-          parts.push(part)
-        }
+
+    const fromDir = fromPath.split('/').slice(0, -1).join('/')
+    let parts = fromDir ? fromDir.split('/') : []
+    const importParts = normalizedImport.split('/')
+    for (const part of importParts) {
+      if (part === '..') {
+        if (parts.length > 0) parts.pop()
+      } else if (part !== '.' && part) {
+        parts.push(part)
       }
-      return parts.join('/')
     }
-    return normalizedImport
+    return parts.join('/')
   }
+
+  // Parsea la cláusula de un import (lo que va entre `import` y `from`):
+  // soporta default (`X`), named (`{ A, B as C }`), namespace (`* as X`)
+  // y combinaciones (`X, { A, B }`).
+  type ParsedImport = {
+    defaultName?: string
+    namespaceName?: string
+    named: { imported: string; local: string }[]
+  }
+
+  const parseImportClause = (clauseRaw: string): ParsedImport => {
+    let clause = clauseRaw.trim()
+    const named: { imported: string; local: string }[] = []
+    let namespaceName: string | undefined
+    let defaultName: string | undefined
+
+    const namedMatch = clause.match(/\{([\s\S]*)\}/)
+    if (namedMatch) {
+      namedMatch[1]
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .forEach(pair => {
+          const asMatch = pair.match(/^([\w$]+)\s+as\s+([\w$]+)$/)
+          if (asMatch) {
+            named.push({ imported: asMatch[1], local: asMatch[2] })
+          } else {
+            named.push({ imported: pair, local: pair })
+          }
+        })
+      clause = clause.replace(/\{[\s\S]*\}/, '').trim()
+    }
+
+    const nsMatch = clause.match(/\*\s+as\s+([\w$]+)/)
+    if (nsMatch) {
+      namespaceName = nsMatch[1]
+      clause = clause.replace(/\*\s+as\s+[\w$]+/, '').trim()
+    }
+
+    clause = clause.replace(/,/g, '').trim()
+    if (clause) defaultName = clause
+
+    return { defaultName, namespaceName, named }
+  }
+
+  // Genera las declaraciones locales que reemplazan un `import` una vez
+  // resuelto contra __modules. Si el archivo no importa algo, esas
+  // declaraciones simplemente no se generan (nada queda "flotando" en scope).
+  const buildImportBindings = (resolvedPath: string, parsed: ParsedImport): string => {
+    const key = JSON.stringify(resolvedPath)
+    const lines: string[] = []
+    if (parsed.defaultName) {
+      lines.push(`const ${parsed.defaultName} = __modules[${key}]?.default;`)
+    }
+    if (parsed.namespaceName) {
+      lines.push(`const ${parsed.namespaceName} = __modules[${key}] || {};`)
+    }
+    if (parsed.named.length > 0) {
+      const destructure = parsed.named
+        .map(({ imported, local }) => (imported === local ? imported : `${imported}: ${local}`))
+        .join(', ')
+      lines.push(`const { ${destructure} } = __modules[${key}] || {};`)
+    }
+    return lines.join('\n')
+  }
+
+  // Coincide con cualquier import ES estándar con `from`: default, named,
+  // namespace o combinaciones. No soporta imports de solo efecto
+  // (`import "algo"`, sin bindings) porque no aportan nada al scope.
+  const IMPORT_REGEX = /import\s+(.+?)\s+from\s+['"]([^'"]+)['"];?/gs
 
   // Process a file and resolve all imports
   const processFile = (filePath: string, processedFiles: Set<string> = new Set()): { [key: string]: string } => {
@@ -95,11 +187,14 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
     processedFiles.add(filePath)
     const processed: { [key: string]: string } = { [filePath]: fileContent }
 
-    // Find all imports
-    const importRegex = /import\s+(\w+)\s+from\s+['"]([^'"]+)['"];?/g
+    // Solo seguimos imports RELATIVOS (archivos locales del proyecto, los
+    // únicos que existen dentro de `files`). Los imports de paquetes
+    // ("react", "@react-pdf/renderer", "@/components/core", etc.) no se
+    // resuelven aquí, se resuelven en compileCode contra STUDIO_PACKAGES.
+    const localImportRegex = /import\s+.+?\s+from\s+['"](\.\.?\/[^'"]+)['"];?/gs
     let match
-    while ((match = importRegex.exec(fileContent)) !== null) {
-      const [, , importPath] = match
+    while ((match = localImportRegex.exec(fileContent)) !== null) {
+      const importPath = match[1]
       const resolvedPath = resolveImportPath(filePath, importPath)
       const childProcessed = processFile(resolvedPath, processedFiles)
       Object.assign(processed, childProcessed)
@@ -140,59 +235,86 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
 
       for (const [filePath, fileContent] of Object.entries({ ...allFiles, [targetFile]: targetCode })) {
         let processedCode = fileContent
+        const namedExportNames: string[] = []
 
-        // Clean imports but keep track of what's imported
-        // First, replace imports with local variable references
-        // Remove other exports except default
-        processedCode = processedCode
-          .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-          .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+        // `export { A, B as C }` -> capturamos los nombres re-exportados
+        // (quedan como propiedades nombradas en __modules) y quitamos la
+        // sentencia; los identificadores siguen existiendo como
+        // declaraciones locales normales.
+        processedCode = processedCode.replace(
+          /(^|\n)\s*export\s*\{([\s\S]*?)\}\s*;?/g,
+          (_m, pre, inner) => {
+            inner
+              .split(',')
+              .map((s: string) => s.trim())
+              .filter(Boolean)
+              .forEach((pair: string) => {
+                const asMatch = pair.match(/^([\w$]+)\s+as\s+([\w$]+)$/)
+                namedExportNames.push(asMatch ? asMatch[2] : pair)
+              })
+            return pre
+          }
+        )
 
-        // Find and replace imports
-        const importRegex = /import\s+(\w+)\s+from\s+['"]([^'"]+)['"];?/g
-        let modifiedCodeForRegex = processedCode
+        // `export const/let/var/function/class NAME` -> quitamos el
+        // `export` (queda como declaración local normal) y registramos
+        // NAME como export nombrado en __modules.
+        processedCode = processedCode.replace(
+          /^\s*export\s+(const|let|var|function|class)\s+([\w$]+)/gm,
+          (_m, kind, name) => {
+            namedExportNames.push(name)
+            return `${kind} ${name}`
+          }
+        )
+
+        // Resolver cada `import ... from "..."` contra __modules. No se
+        // asume NADA sobre lo que hay disponible: si el archivo no importa
+        // "@react-pdf/renderer" o "@/components/core", esos nombres
+        // simplemente no existirán en su scope.
         let resultCode = ''
         let lastIndex = 0
-
-        let importMatch
-        while ((importMatch = importRegex.exec(modifiedCodeForRegex)) !== null) {
-          const [fullMatch, importName, importPath] = importMatch
+        IMPORT_REGEX.lastIndex = 0
+        let importMatch: RegExpExecArray | null
+        while ((importMatch = IMPORT_REGEX.exec(processedCode)) !== null) {
+          const [fullMatch, clause, importPath] = importMatch
           const resolvedPath = resolveImportPath(filePath, importPath)
-          
-          // Check if it's a @react-pdf/renderer import or local
-          if (importPath.startsWith('@react-pdf/')) {
-            // Keep the React PDF imports, we'll handle them at the module level
-            resultCode += modifiedCodeForRegex.slice(lastIndex, importMatch.index)
-            lastIndex = importMatch.index + fullMatch.length
-          } else {
-            // Replace local imports with our virtual module reference
-            resultCode += modifiedCodeForRegex.slice(lastIndex, importMatch.index)
-            resultCode += `const ${importName} = __modules['${resolvedPath}']?.default;\n`
-            lastIndex = importMatch.index + fullMatch.length
-          }
+          const parsed = parseImportClause(clause)
+
+          resultCode += processedCode.slice(lastIndex, importMatch.index)
+          resultCode += buildImportBindings(resolvedPath, parsed) + '\n'
+          lastIndex = importMatch.index + fullMatch.length
         }
-        resultCode += modifiedCodeForRegex.slice(lastIndex)
+        resultCode += processedCode.slice(lastIndex)
         processedCode = resultCode
 
-        // Now extract and wrap the export default
+        // Extraer y envolver el export default (si existe)
         const defaultFuncMatch = processedCode.match(/export\s+default\s+function\s+([A-Z]\w*)/)
         const defaultClassMatch = processedCode.match(/export\s+default\s+class\s+([A-Z]\w*)/)
         const defaultArrowMatch = processedCode.match(/export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/)
         const defaultExportMatch = processedCode.match(/export\s+default\s+([A-Z]\w*)/)
 
         let wrappedCode = processedCode
+        let defaultName: string | null = null
+
         if (defaultFuncMatch) {
           wrappedCode = wrappedCode.replace(/export\s+default\s+function\s+([A-Z]\w*)/, "function $1")
-          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultFuncMatch[1]} };`
+          defaultName = defaultFuncMatch[1]
         } else if (defaultClassMatch) {
           wrappedCode = wrappedCode.replace(/export\s+default\s+class\s+([A-Z]\w*)/, "class $1")
-          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultClassMatch[1]} };`
+          defaultName = defaultClassMatch[1]
         } else if (defaultArrowMatch) {
           wrappedCode = wrappedCode.replace(/export\s+default\s*/, "")
-          wrappedCode += `\n__modules['${filePath}'] = { default: ${defaultArrowMatch[1]} };`
+          defaultName = defaultArrowMatch[1]
         } else if (defaultExportMatch) {
-          wrappedCode = wrappedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "__modules['" + filePath + "'] = { default: $1 };")
+          wrappedCode = wrappedCode.replace(/export\s+default\s+([A-Z]\w*);?/, "")
+          defaultName = defaultExportMatch[1]
         }
+
+        const moduleProps: string[] = []
+        if (defaultName) moduleProps.push(`default: ${defaultName}`)
+        namedExportNames.forEach(name => moduleProps.push(name))
+
+        wrappedCode += `\n__modules[${JSON.stringify(filePath)}] = { ${moduleProps.join(', ')} };`
 
         modules[filePath] = wrappedCode
       }
@@ -218,41 +340,34 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
           return
         }
 
-        // 🔹 Extraer CoreComponents dinámicamente
-        const componentNames = Object.keys(CoreComponents).filter(
-          key => typeof CoreComponents[key as keyof typeof CoreComponents] === "function" || typeof CoreComponents[key as keyof typeof CoreComponents] === "object"
-        )
-        const filteredNames = componentNames.filter(name => !["Font", "Document", "Page", "Text", "View", "StyleSheet", "Image", "Link"].includes(name))
-
         // 🔹 Build full module code with virtual modules
         let allModuleCode = ""
         for (const [, transformed] of Object.entries(transformedModules)) {
           allModuleCode += transformed + "\n"
         }
 
+        // Nada se inyecta en el scope global de ejecución: __modules arranca
+        // pre-cargado únicamente con los PAQUETES (react, @react-pdf/renderer,
+        // @/components/core), como si fueran node_modules instalados. Que un
+        // archivo pueda usar Document/Page/Table/QR/etc. depende exclusivamente
+        // de que ese archivo los haya importado con su propio `import`.
         const moduleCode = `
           'use strict';
           const React = arguments[0];
-          const { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G } = arguments[1];
-          const CoreComponents = arguments[2];
-          const { ${filteredNames.join(", ")} } = CoreComponents;
-          
-          // Initialize virtual modules
-          const __modules = {};
-          
+          const __packages = arguments[1];
+
+          // Módulos virtuales disponibles para resolver imports.
+          const __modules = { ...__packages };
+
           ${allModuleCode}
-          
-          // Return the main module's default export
+
+          // Retorna el export default del archivo marcado como principal (⭐)
           return __modules['${targetFile}']?.default;
         `
 
         try {
           const evalFn = new Function(moduleCode)
-          CustomComponent = evalFn(
-            React,
-            { Document, Page, Text, View, StyleSheet, Image, Link, Font, Svg, Defs, Rect, LinearGradient, Stop, G },
-            CoreComponents
-          )
+          CustomComponent = evalFn(React, STUDIO_PACKAGES)
         } catch (err) {
           const msg = err instanceof Error ? err.message : "Error de ejecución"
           setErrorComponent(`Error de ejecución: ${msg}`)
