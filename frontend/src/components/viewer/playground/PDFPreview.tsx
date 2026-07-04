@@ -27,13 +27,23 @@ import ErrorDocument from "./ErrorDocument"
 // archivo escribe su propio `import ... from "<specifier>"`. Si un archivo no
 // importa "@react-pdf/renderer", por ejemplo, Document/Page/Text/etc. no van
 // a existir en su scope, igual que en un proyecto real.
+//
+// "@/components/core" y "@react-pdf-levelup/core" apuntan al mismo objeto:
+// el primero es el alias interno del monorepo, el segundo es el nombre del
+// paquete público que se instala vía npm. Ambos deben resolver igual para
+// que el código que el usuario escribe (que usa el specifier público) y el
+// código interno de plantillas por defecto (que puede usar el alias) sigan
+// funcionando indistintamente.
+const CORE_COMPONENTS_PACKAGE = { ...(CoreComponents as any) }
+
 const STUDIO_PACKAGES: { [specifier: string]: Record<string, any> } = {
   "react": { ...(React as any), default: React },
   "@react-pdf/renderer": {
     Document, Page, Text, View, StyleSheet, Font, Image, Link,
     Svg, Defs, Rect, LinearGradient, Stop, G,
   },
-  "@/components/core": { ...(CoreComponents as any) },
+  "@/components/core": CORE_COMPONENTS_PACKAGE,
+  "@react-pdf-levelup/core": CORE_COMPONENTS_PACKAGE,
 }
 
 const DefaultDocument = () => (
@@ -116,6 +126,14 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
 
   const parseImportClause = (clauseRaw: string): ParsedImport => {
     let clause = clauseRaw.trim()
+
+    // `import type X from "..."` / `import type { A, B } from "..."`:
+    // TypeScript los borra por completo en tiempo de ejecución (Babel hace
+    // lo mismo). No generan ningún binding.
+    if (/^type\s+/.test(clause)) {
+      return { named: [] }
+    }
+
     const named: { imported: string; local: string }[] = []
     let namespaceName: string | undefined
     let defaultName: string | undefined
@@ -126,7 +144,11 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
         .split(',')
         .map(s => s.trim())
         .filter(Boolean)
-        .forEach(pair => {
+        .forEach(pairRaw => {
+          // `import { type Foo, Bar } from "..."`: el specifier individual
+          // marcado como `type` tampoco existe en runtime, se ignora.
+          if (/^type\s+/.test(pairRaw)) return
+          const pair = pairRaw
           const asMatch = pair.match(/^([\w$]+)\s+as\s+([\w$]+)$/)
           if (asMatch) {
             named.push({ imported: asMatch[1], local: asMatch[2] })
@@ -324,12 +346,20 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
 
       if (studio && currentMainFile) {
         // Multi-file studio mode
-        // 🔹 Transformar JSX de todos los módulos
+        // 🔹 Transformar TS/TSX + JSX de todos los módulos.
+        // El preset "typescript" quita anotaciones de tipo (interfaces,
+        // genéricos, `as X`, etc.) y "react" convierte el JSX resultante en
+        // React.createElement. isTSX/allExtensions fuerza el parseo como TSX
+        // sin depender de la extensión del archivo, así funciona igual con
+        // .ts, .tsx o código pegado sin filename real.
         const transformedModules: { [key: string]: string } = {}
         try {
           for (const [filePath, fileContent] of Object.entries(modules)) {
             const babelResult = Babel.transform(fileContent, {
-              presets: ["react"],
+              presets: [
+                ["typescript", { isTSX: true, allExtensions: true }],
+                "react",
+              ] as any,
               filename: filePath,
             })
             transformedModules[filePath] = babelResult.code || ""
@@ -409,12 +439,15 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
           }
         }
 
-        // 🔹 Transformar JSX
+        // 🔹 Transformar TS/TSX + JSX
         let transformedCode: string
         try {
           const babelResult = Babel.transform(modifiedCode, {
-            presets: ["react"],
-            filename: "preview.jsx",
+            presets: [
+              ["typescript", { isTSX: true, allExtensions: true }],
+              "react",
+            ] as any,
+            filename: "preview.tsx",
           })
           transformedCode = babelResult.code || ""
         } catch (err) {
