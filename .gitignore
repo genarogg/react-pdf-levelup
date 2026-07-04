@@ -74,3 +74,6 @@ backend/prisma/fn/client
 
 api/.tmp-react-pdf-levelup/*
 /.claude
+
+studio/playground/
+studio/pdf

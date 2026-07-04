@@ -18,7 +18,6 @@
   ],
   "scripts": {
     "start": "npm run build && node dist/bin.js estudio",
-    "dev": "tsup --config tsup.config.ts --watch --onSuccess \"node dist/bin.js estudio\"",
     "build:lib": "tsup --config tsup.config.ts",
     "build:studio": "npm run build --prefix ../frontend && node scripts/copy-playground.js",
     "build": "npm run build:lib && npm run build:studio"

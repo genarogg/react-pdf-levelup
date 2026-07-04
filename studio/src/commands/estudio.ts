@@ -5,11 +5,13 @@ import { fileURLToPath } from "url";
 import { promises as fs } from "fs";
 import open from "open";
 import mime from "mime-types";
+import { loadConfig, resolveTemplatesDir, resolvePort } from "../config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PUBLIC_DIR = path.resolve(__dirname, "../playground");
 const DEFAULT_TEMPLATES_DIR = path.resolve(process.cwd(), "templates");
+const DEFAULT_PORT = "9000";
 
 // Helper to build a file tree
 async function buildFileTree(dir: string, baseDir: string = dir): Promise<any[]> {
@@ -83,12 +85,24 @@ async function serveStaticFile(reqUrl: string, res: ServerResponse) {
 export const estudioCommand = new Command()
   .name("estudio")
   .description("Lanza el Studio playground para administrar plantillas PDF")
-  .option("-p, --port <port>", "Puerto para el servidor", "9000")
+  .option("-p, --port <port>", "Puerto para el servidor", DEFAULT_PORT)
   .option("-d, --dir <directory>", "Directorio de plantillas", DEFAULT_TEMPLATES_DIR)
   .action(async (options) => {
-    const port = parseInt(options.port);
-    const templatesDir = path.resolve(options.dir);
-    
+    const rootDir = process.cwd();
+
+    // Busca y carga react-pdf-levelup.config.{js,ts,...} en la raíz del proyecto
+    // (junto a node_modules). Si no existe, config queda como {}.
+    const config = await loadConfig(rootDir);
+
+    // Prioridad: flag de CLI explícito > config file > valor por defecto.
+    const port = resolvePort(options.port, DEFAULT_PORT, config);
+    const templatesDir = resolveTemplatesDir(
+      options.dir,
+      DEFAULT_TEMPLATES_DIR,
+      config,
+      rootDir
+    );
+
     // Ensure templates directory exists
     await fs.mkdir(templatesDir, { recursive: true });
     
