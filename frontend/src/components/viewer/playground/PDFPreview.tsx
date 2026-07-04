@@ -415,25 +415,32 @@ const PDFPreview = ({ code, studio, files = {}, mainFile }: PDFPreviewProps) => 
   )
 }
 
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean }
-> {
-  constructor(props: any) {
+interface ErrorBoundaryProps {
+  children: React.ReactNode
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean
+  errorMessage: string
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, errorMessage: "" }
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true }
+  static getDerivedStateFromError(error: unknown): Partial<ErrorBoundaryState> {
+    const message = error instanceof Error ? error.message : "Error desconocido"
+    return { hasError: true, errorMessage: message }
   }
 
-  componentDidUpdate(prevProps: any) {
+  componentDidUpdate(prevProps: ErrorBoundaryProps) {
     if (
       prevProps.children !== this.props.children &&
       this.state.hasError
     ) {
-      this.setState({ hasError: false })
+      this.setState({ hasError: false, errorMessage: "" })
     }
   }
 
@@ -450,6 +457,14 @@ class ErrorBoundary extends React.Component<
           <h3 style={{ color: "#ff0000" }}>
             Error al renderizar el PDF
           </h3>
+          <p style={{ color: "#7f1d1d", fontSize: 13, marginTop: 8 }}>
+            {this.state.errorMessage}
+          </p>
+          <p style={{ color: "#6b7280", fontSize: 12, marginTop: 8 }}>
+            Si el archivo seleccionado no es un documento raíz (no exporta un
+            &lt;Document&gt;), selecciona el archivo principal de tu plantilla
+            para ver el PDF completo.
+          </p>
         </div>
       )
     }

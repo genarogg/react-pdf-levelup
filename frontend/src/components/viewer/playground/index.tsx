@@ -33,9 +33,9 @@ type FileMap = {
 }
 
 function Editor({ studio = false, templateId }: EditorProps) {
-  const [files, setFiles] = useState<FileMap>({}) // { "path": "content" }
+  const [files, setFiles] = useState<FileMap>({}) 
   const [currentTemplatePath, setCurrentTemplatePath] = useState<string | null>(null)
-  const [mainFile, setMainFile] = useState<string | null>(null) // Path del archivo principal
+  const [mainFile, setMainFile] = useState<string | null>(null) // Path del documento raíz de referencia
   const [code, setCode] = useState<string>("") // Para modo normal
   const [isLoading, setIsLoading] = useState(true)
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
@@ -175,7 +175,7 @@ export default Content`
         const data = await res.json()
         updateFileContent(filePath, data.content)
         setCurrentTemplatePath(filePath)
-        // Si es el primer archivo o el único, lo establecemos como principal
+        // Si es el primer archivo o el único, lo establecemos como documento raíz
         if (!mainFile) setMainFile(filePath)
       }
     } catch (err) {
@@ -381,7 +381,7 @@ export default ${name.replace(/[^a-zA-Z0-9]/g, '')}`
         <div className={`${isStudioMode ? "flex-1" : "w-1/2"} bg-gray-100`}>
           <PDFPreview 
             files={isStudioMode ? files : {}} 
-            mainFile={isStudioMode ? mainFile : null} 
+            mainFile={isStudioMode ? currentTemplatePath : null} 
             studio={isStudioMode} 
             code={code} 
           />
