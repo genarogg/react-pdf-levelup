@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
 import { loadTemplateFile } from "../utils/templateLoader"
-import type { TemplateMeta } from "./usePlaygroundTemplates" // Import TemplateMeta
+import type { TemplateMeta } from "./usePlaygroundTemplates"
 
 const STORAGE_KEY = "react-pdf-levelup-code"
 
