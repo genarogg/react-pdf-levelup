@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react"
 import useClickOutside from "../../../viewer/playground/hooks/useClickOutside"
 import { HelpCircle, X, Copy, Check, Languages } from "lucide-react"
 import { useClipboard } from "../../../viewer/playground/hooks/useClipboard"
-import { componentDocs_en } from "./quickHelp/componentDocs_en"
-import { componentDocs_es } from "./quickHelp/componentDocs_es"
+import { buildComponentDocs } from "./quickHelp/buildComponentDocs"
 import type { TabId, ComponentDoc, PropDoc } from "./quickHelp/types"
 
 type Lang = "es" | "en"
@@ -84,7 +83,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
     setIsOpen(!isOpen)
   }
 
-  const componentDocs = lang === "es" ? componentDocs_es : componentDocs_en
+  const componentDocs = buildComponentDocs(lang)
   const t = UI_TEXT[lang]
   const activeDocs = componentDocs[activeTab]
 
@@ -159,8 +158,8 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {component.props.map((prop: PropDoc, propIndex: number) => (
-                          <tr key={propIndex} className="border-b border-gray-800/30 last:border-0">
+                        {(component.props as PropDoc[]).map((prop, propIndex: number) => (
+                          <tr key={prop.name} className="border-b border-gray-800/30 last:border-0">
                             <td className="py-1.5 px-2">
                               <code className="px-1.5 py-0.5 bg-gray-800/50 text-gray-300 rounded text-[12px]">
                                 {prop.name}
@@ -176,7 +175,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
                                 {prop.default || "-"}
                               </code>
                             </td>
-                            <td className="py-1.5 px-2 text-gray-400">{prop.description}</td>
+                            <td className="py-1.5 px-2 text-gray-400">{prop.description ?? "-"}</td>
                           </tr>
                         ))}
                       </tbody>
