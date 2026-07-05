@@ -1,5 +1,30 @@
+import React from "react";
+import {
+  A,
+  BR,
+  Center,
+  Col6,
+  Container,
+  Div,
+  Em,
+  Font,
+  H1,
+  H4,
+  Img,
+  Layout,
+  P,
+  Right,
+  Row,
+  Strong,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
 
-const Component = ({ data }) => {
+const InvoiceTemplate = ({ data }: { data: any }) => {
   getFuentes()
   return (
     <FathonLayout>
@@ -13,7 +38,7 @@ const Component = ({ data }) => {
   )
 }
 
-const FathonLayout = ({ children }) => {
+const FathonLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Layout
       pagination={false}
@@ -204,3 +229,5 @@ const getFuentes = () => {
     ]
   });
 }
+
+export default InvoiceTemplate;

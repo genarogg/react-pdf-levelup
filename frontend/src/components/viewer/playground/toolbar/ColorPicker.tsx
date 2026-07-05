@@ -1,12 +1,11 @@
-"use client"
-
-
 import React, { useState, useRef, useEffect } from "react"
+import { useClickOutside } from "../hooks/useClickOutside"
 import { Palette, Copy, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useClipboard } from "../hooks/useClipboard"
 
 interface ColorPickerProps {
-  onColorSelect?: (color: string) => void
+
 }
 
 // Predefined color palette
@@ -34,49 +33,56 @@ const colorPalette = [
   "#0ea5e9",
 ]
 
-export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
+// Estado compartido a nivel de módulo (no de componente): así "recentColors"
+// sobrevive a que ColorPicker se desmonte y se vuelva a montar dentro de la
+// misma sesión de navegador. Se pierde solo al recargar la página, que es el
+// comportamiento esperado (no se persiste en localStorage a propósito).
+const DEFAULT_RECENT_COLORS = ["#3366cc", "#dc3545", "#28a745", "#ffc107", "#17a2b8"]
+let sharedRecentColors: string[] = [...DEFAULT_RECENT_COLORS]
+const recentColorsListeners = new Set<(colors: string[]) => void>()
+
+function pushRecentColor(color: string) {
+  if (sharedRecentColors.includes(color)) return
+  sharedRecentColors = [color, ...sharedRecentColors.slice(0, 4)]
+  recentColorsListeners.forEach((listener) => listener(sharedRecentColors))
+}
+
+export default function ColorPicker({ }: ColorPickerProps) {
   const [open, setOpen] = useState(false)
   const [selectedColor, setSelectedColor] = useState("#3366cc")
-  const [recentColors, setRecentColors] = useState<string[]>(["#3366cc", "#dc3545", "#28a745", "#ffc107", "#17a2b8"])
-  const [copied, setCopied] = useState(false)
+  const [recentColors, setRecentColors] = useState<string[]>(sharedRecentColors)
   const containerRef = useRef<HTMLDivElement>(null)
+  useClickOutside(containerRef, () => setOpen(false), open)
+  const { copiedKey, copy } = useClipboard()
 
+  // Suscribirse al estado compartido: si otra instancia (u otro montaje previo)
+  // actualizó recentColors mientras este componente estaba desmontado, al
+  // volver a montarse debe reflejar el valor más reciente, no el hardcodeado.
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false)
-      }
-    }
-
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
-
+    setRecentColors(sharedRecentColors)
+    const listener = (colors: string[]) => setRecentColors(colors)
+    recentColorsListeners.add(listener)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
+      recentColorsListeners.delete(listener)
     }
-  }, [open])
+  }, [])
+
+
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value
     setSelectedColor(color)
-    onColorSelect?.(color)
+
+    pushRecentColor(color)
   }
 
   const selectColor = (color: string) => {
     setSelectedColor(color)
-    onColorSelect?.(color)
 
-    if (!recentColors.includes(color)) {
-      setRecentColors((prev) => [color, ...prev.slice(0, 4)])
-    }
+    pushRecentColor(color)
   }
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(selectedColor)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-  }
+
 
   return (
     <div ref={containerRef} className="relative">
@@ -115,10 +121,10 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
               className="flex-1 bg-gray-700 border-gray-600 text-gray-200 font-mono text-sm"
             />
             <button
-              onClick={copyToClipboard}
+              onClick={() => copy(selectedColor, "colorPicker")}
               className="px-3 py-2 bg-gray-600 text-gray-200 border border-gray-500 rounded hover:bg-gray-500 transition-colors duration-200"
             >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copiedKey === "colorPicker" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </button>
           </div>
 

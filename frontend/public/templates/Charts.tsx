@@ -1,77 +1,93 @@
-const Component = () => {
+import React from "react";
+import {
+  Div,
+  H1,
+  Layout,
+  P,
+  Small,
+  Strong,
+  Text,
+  StyleSheet
+} from "@react-pdf-levelup/core";
+import {
+  ChartJS
+} from "@react-pdf-levelup/chart";
+
+
+const Chart = () => {
 
   const COLORS = {
-  ink: "#1a1a2e",
-  slate: "#5c6079",
-  muted: "#94a0b8",
-  border: "#e6e8f0",
-  cardBg: "#ffffff",
-  pageBg: "#f5f6fa",
-  accentPrimary: "#4338ca",
-}
+    ink: "#1a1a2e",
+    slate: "#5c6079",
+    muted: "#94a0b8",
+    border: "#e6e8f0",
+    cardBg: "#ffffff",
+    pageBg: "#f5f6fa",
+    accentPrimary: "#4338ca",
+  }
 
-const CHART_PALETTE = ["#4338ca", "#3794ff", "#22c1a6", "#f59e0b"]
+  const CHART_PALETTE = ["#4338ca", "#3794ff", "#22c1a6", "#f59e0b"]
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 36,
-    backgroundColor: COLORS.pageBg,
-  },
-  eyebrow: {
-    fontSize: 9,
-    color: COLORS.accentPrimary,
-    letterSpacing: 2,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 10,
-    color: COLORS.slate,
-    marginTop: 4,
-    marginBottom: 16,
-  },
-  headerRule: {
-    height: 2,
-    backgroundColor: COLORS.ink,
-    borderRadius: 2,
-    marginBottom: 20,
-  },
-  card: {
-    backgroundColor: COLORS.cardBg,
-    border: `1px solid ${COLORS.border}`,
-    borderRadius: 10,
-    padding: 20,
-  },
-  cardHeader: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  cardTitle: {
-    fontSize: 13,
-    color: COLORS.ink,
-  },
-  cardMeta: {
-    fontSize: 8,
-    color: COLORS.muted,
-  },
-  chartWrap: {
-    display: "flex",
-    alignItems: "center",
-  },
-  footerRow: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    paddingTop: 12,
-    borderTop: `1px solid ${COLORS.border}`,
-  },
-})
+  const styles = StyleSheet.create({
+    page: {
+      padding: 36,
+      backgroundColor: COLORS.pageBg,
+    },
+    eyebrow: {
+      fontSize: 9,
+      color: COLORS.accentPrimary,
+      letterSpacing: 2,
+      marginBottom: 6,
+    },
+    subtitle: {
+      fontSize: 10,
+      color: COLORS.slate,
+      marginTop: 4,
+      marginBottom: 16,
+    },
+    headerRule: {
+      height: 2,
+      backgroundColor: COLORS.ink,
+      borderRadius: 2,
+      marginBottom: 20,
+    },
+    card: {
+      backgroundColor: COLORS.cardBg,
+      border: `1px solid ${COLORS.border}`,
+      borderRadius: 10,
+      padding: 20,
+    },
+    cardHeader: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 16,
+    },
+    cardTitle: {
+      fontSize: 13,
+      color: COLORS.ink,
+    },
+    cardMeta: {
+      fontSize: 8,
+      color: COLORS.muted,
+    },
+    chartWrap: {
+      display: "flex",
+      alignItems: "center",
+    },
+    footerRow: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 16,
+      paddingTop: 12,
+      borderTop: `1px solid ${COLORS.border}`,
+    },
+  })
 
 
-  const data = {
+  const data: any = {
     type: "bar",
     data: {
       labels: ["Enero", "Febrero", "Marzo", "Abril"],
@@ -143,3 +159,5 @@ const styles = StyleSheet.create({
     </Layout>
   )
 }
+
+export default Chart

@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useCallback, Suspense, lazy } from "react"
 import { Github, FileText, Play, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -7,8 +6,7 @@ import { useTranslation } from "react-i18next"
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
 interface HeaderProps {
-    code?: any
-    context?: String
+    context?: "playgroud" | "home"
 }
 
 // Configuración base de enlaces de navegación (sin etiquetas, se traducen en render)

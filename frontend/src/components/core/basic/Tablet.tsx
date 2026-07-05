@@ -189,6 +189,14 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
 
   const count = elements.length;
 
+  // Unidades de columna reales de la fila: un colSpan={2} cuenta como 2,
+  // no como 1. Esto es lo que faltaba antes y provocaba overflow (>100%)
+  // en filas con celdas fusionadas.
+  const totalUnits = elements.reduce(
+    (sum, child) => sum + (child.props.colSpan ?? 1),
+    0
+  );
+
   return (
     <View
       style={[
@@ -202,7 +210,10 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
     >
       {elements.map((child, idx) => {
         const isLast = idx === count - 1;
-        const width = `${(100 / count).toFixed(2)}%`;
+        const span = child.props.colSpan ?? 1;
+        // El ancho ya incluye el colSpan resuelto: Td/Th solo lo aplican,
+        // no vuelven a multiplicarlo.
+        const width = `${((100 * span) / totalUnits).toFixed(2)}%`;
 
         return React.cloneElement(child, {
           width,
@@ -222,7 +233,6 @@ const Th: React.FC<CellProps> = ({
   style,
   width,
   height,
-  colSpan,
   isLast = false,
   isLastRow = false,
   textAlign: propTextAlign,
@@ -232,17 +242,12 @@ const Th: React.FC<CellProps> = ({
 
   const finalTextAlign = propTextAlign || textAlign || "left";
 
-  const baseWidth =
-    typeof width === "string" && colSpan
-      ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
-      : width;
-
   return (
     <View
       style={[
         styles.th,
         {
-          width: baseWidth || width,
+          width, // ya resuelto en Tr, colSpan incluido
           borderColor,
           minHeight: height ?? cellHeight,
         },
@@ -267,34 +272,22 @@ const Td: React.FC<CellProps> = ({
   style,
   width,
   height,
-  colSpan,
   isLast = false,
   isLastRow = false,
   isOdd = false,
   textAlign: propTextAlign,
 }) => {
-  const {
-    cellHeight,
-    textAlign,
-    borderColor,
-    textColor,
-    zebraColor,
-    grid,
-  } = useContext(TableContext);
+  const { cellHeight, textAlign, borderColor, textColor, zebraColor, grid } =
+    useContext(TableContext);
 
   const finalTextAlign = propTextAlign || textAlign || "left";
-
-  const baseWidth =
-    typeof width === "string" && colSpan
-      ? `${(parseFloat(width) * colSpan).toFixed(2)}%`
-      : width;
 
   return (
     <View
       style={[
         styles.td,
         {
-          width: baseWidth,
+          width, // ya resuelto en Tr, colSpan incluido
           borderColor,
           minHeight: height ?? cellHeight,
           backgroundColor: isOdd ? zebraColor : undefined,

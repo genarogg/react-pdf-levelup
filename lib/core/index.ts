@@ -1,4 +1,25 @@
-import { View, Text, StyleSheet, Font, renderToStream, renderToFile } from "@react-pdf/renderer"
+import {
+    PDFViewer,
+    Document,
+    Page,
+    Image,
+    Link,
+    Svg,
+    Defs,
+    Rect,
+    LinearGradient,
+    Stop,
+    G,
+    Canvas,
+    Polygon,
+    ClipPath,
+    Text,
+    View,
+    StyleSheet,
+    Font,
+    renderToStream,
+renderToFile,
+} from "@react-pdf/renderer"
 
 
 import Layout from "../../frontend/src/components/core/basic/layout/Layout"
@@ -21,6 +42,20 @@ import generatePDF from "../../frontend/src/functions/generatePDF"
 export {
     // react pdf renderer
     View, Text, StyleSheet, Font, renderToStream, renderToFile,
+    PDFViewer,
+    Document,
+    Page,
+    Image,
+    Link,
+    Svg,
+    Defs,
+    Rect,
+    LinearGradient,
+    Stop,
+    G,
+    Canvas,
+    Polygon,
+    ClipPath,
     // funciones
     decodeBase64Pdf, generatePDF,
     // imgs
@@ -42,5 +77,4 @@ export {
     // misc
     Div, HR, Layout, NextPage,
     LayoutMultiPage, Section
-
 }

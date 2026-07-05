@@ -1,10 +1,22 @@
+import React from "react";
+import {
+    H5,
+    Layout,
+    Strong,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr
+} from "@react-pdf-levelup/core";
 
-const Component = ({ data }) => {
+const Tablas = ({ data }: any) => {
     return (
-        <Layout size="A4" padding={20} showPageNumbers={false}>
-           <H5>Tabla con tamaños ajustados</H5>
+        <Layout size="A4" padding={20} pagination={false}>
+            <H5>Tabla con tamaños ajustados</H5>
             <Table>
-                <Thead  textColor="#282828">
+                <Thead textColor="#282828">
                     <Tr>
                         <Th style={{ backgroundColor: "#14b8a6", width: "100%" }}>DOCUMENTO</Th>
                         <Th style={{ backgroundColor: "#14b8a6", width: 150 }}>TIPO</Th>
@@ -51,7 +63,7 @@ const Component = ({ data }) => {
                     </Tr>
                 </Tbody>
             </Table>
-              <H5>Tabla Coloreada</H5>
+            <H5>Tabla Coloreada</H5>
             <Table style={{ width: "100%", borderRadius: "10px", overflow: "hidden" }}>
                 <Thead textColor="#fff">
                     <Tr style={{ backgroundColor: "#8E44AD", textAlign: "left" }}>
@@ -172,8 +184,10 @@ const Component = ({ data }) => {
                     </Tr>
                 </Tbody>
             </Table>
-         
-          
+
+
         </Layout>
     );
 };
+
+export default Tablas
