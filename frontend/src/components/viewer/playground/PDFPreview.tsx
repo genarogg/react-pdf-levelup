@@ -181,7 +181,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
   }, [code, compileCode])
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
       {isCompiling && <CompilingIndicator />}
 
       <ErrorBoundary>

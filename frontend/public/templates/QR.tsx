@@ -192,3 +192,5 @@ const QrCard = ({ children, label, caption }) => (
     </Layout>
   )
 }
+
+export default Component

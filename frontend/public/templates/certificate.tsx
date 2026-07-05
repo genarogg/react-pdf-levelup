@@ -87,3 +87,5 @@ const Component = () => {
     </Layout>
   );
 };
+
+export default Component

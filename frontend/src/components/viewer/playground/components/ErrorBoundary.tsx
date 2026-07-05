@@ -1,4 +1,5 @@
 import * as React from "react"
+import ErrorDocument from "./ErrorDocument"
 
 interface ErrorBoundaryProps {
   children: React.ReactNode
@@ -36,24 +37,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 
   render() {
     if (this.state.hasError) {
-      return (
-        <div
-          style={{
-            padding: 40,
-            textAlign: "center",
-            background: "#fff5f5",
-          }}
-        >
-          <h3 style={{ color: "#ff0000", marginBottom: 8 }}>
-            Error al renderizar el PDF
-          </h3>
-          {this.state.errorMessage && (
-            <p style={{ color: "#666", fontSize: 13 }}>
-              {this.state.errorMessage}
-            </p>
-          )}
-        </div>
-      )
+      return <ErrorDocument errorMessage={this.state.errorMessage || "An unknown error occurred."} />
     }
     return this.props.children
   }

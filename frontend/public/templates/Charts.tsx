@@ -143,3 +143,5 @@ const styles = StyleSheet.create({
     </Layout>
   )
 }
+
+export default Component

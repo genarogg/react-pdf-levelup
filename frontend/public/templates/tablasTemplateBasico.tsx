@@ -177,3 +177,5 @@ const Component = ({ data }) => {
         </Layout>
     );
 };
+
+export default Component

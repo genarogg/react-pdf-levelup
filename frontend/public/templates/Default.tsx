@@ -22,7 +22,9 @@ const Component = ({ data }) => {
         Not actual Latin:
         While it resembles Latin, the text is not meant to be meaningful and is often used as a clear indicator that the space is reserved for actual content.
       </P>
-     
+
     </Layout>
   );
 };
+
+export default Component
