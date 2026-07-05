@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
-import useClickOutside from "../../../viewer/playground/hooks/useClickOutside"
+import useClickOutside from "../hooks/useClickOutside"
 import { HelpCircle, X, Copy, Check, Languages } from "lucide-react"
-import { useClipboard } from "../../../viewer/playground/hooks/useClipboard"
+import { useClipboard } from "../hooks/useClipboard"
 import { buildComponentDocs } from "./quickHelp/buildComponentDocs"
 import type { TabId, ComponentDoc, PropDoc } from "./quickHelp/types"
 
