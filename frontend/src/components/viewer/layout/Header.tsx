@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
 interface HeaderProps {
-    context?: "playgroud" | "home"
+    context?: "playground" | "home"
 }
 
 // Configuración base de enlaces de navegación (sin etiquetas, se traducen en render)
@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
     }, [])
 
     const isHome = context === "home"
-    const isPlayground = context === "playgroud"
+    const isPlayground = context === "playground"
 
     return (
         <>

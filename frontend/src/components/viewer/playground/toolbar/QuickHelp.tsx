@@ -158,7 +158,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {(component.props as PropDoc[]).map((prop, propIndex: number) => (
+                        {(component.props as PropDoc[]).map((prop) => (
                           <tr key={prop.name} className="border-b border-gray-800/30 last:border-0">
                             <td className="py-1.5 px-2">
                               <code className="px-1.5 py-0.5 bg-gray-800/50 text-gray-300 rounded text-[12px]">
