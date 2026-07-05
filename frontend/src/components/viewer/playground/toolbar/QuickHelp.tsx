@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import useClickOutside from "../hooks/useClickOutside"
+import { useClickOutside } from "../hooks/useClickOutside"
 import { HelpCircle, X, Copy, Check, Languages } from "lucide-react"
 import { useClipboard } from "../hooks/useClipboard"
 import { buildComponentDocs } from "./quickHelp/buildComponentDocs"
@@ -126,8 +126,8 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
                 <button
                   key={tab}
                   className={`px-3.5 py-2 text-sm font-medium rounded-md transition-all duration-200 ${activeTab === tab
-                      ? "bg-gradient-to-r from-gray-700 to-gray-600 text-white shadow-md"
-                      : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
+                    ? "bg-gradient-to-r from-gray-700 to-gray-600 text-white shadow-md"
+                    : "text-gray-400 hover:text-gray-200 hover:bg-gray-800/50"
                     }`}
                   onClick={() => setActiveTab(tab)}
                 >

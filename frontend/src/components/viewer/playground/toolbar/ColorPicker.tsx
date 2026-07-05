@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import useClickOutside from "../hooks/useClickOutside"
+import { useClickOutside } from "../hooks/useClickOutside"
 import { Palette, Copy, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useClipboard } from "../hooks/useClipboard"

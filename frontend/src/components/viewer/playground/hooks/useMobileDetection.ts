@@ -12,7 +12,7 @@ const isMobileUserAgent = () => {
   return MOBILE_USER_AGENT_KEYWORDS.some(keyword => userAgent.includes(keyword))
 }
 
-export const useMobileDetection = () => {
+export function useMobileDetection() {
   const [isMobile, setIsMobile] = useState(
     () => isMobileUserAgent() || window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches
   )

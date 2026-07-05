@@ -6,7 +6,7 @@ export interface TemplateMeta {
   path: string
 }
 
-function usePlaygroundTemplates() {
+export function usePlaygroundTemplates() {
   const [templates, setTemplates] = useState<TemplateMeta[]>([])
   const [loaded, setLoaded] = useState(false)
 
@@ -31,4 +31,3 @@ function usePlaygroundTemplates() {
   return { templates, loaded }
 }
 
-export { usePlaygroundTemplates }

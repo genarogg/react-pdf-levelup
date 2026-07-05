@@ -1,6 +1,6 @@
 import { useEffect, type RefObject } from "react"
 
-function useClickOutside(ref: RefObject<HTMLElement | null>, onOutside: () => void, active: boolean) {
+export function useClickOutside(ref: RefObject<HTMLElement | null>, onOutside: () => void, active: boolean) {
   useEffect(() => {
     if (!active) return
 
@@ -18,4 +18,4 @@ function useClickOutside(ref: RefObject<HTMLElement | null>, onOutside: () => vo
   }, [active, onOutside, ref])
 }
 
-export default useClickOutside
+

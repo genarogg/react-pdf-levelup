@@ -4,7 +4,7 @@ import type { TemplateMeta } from "./usePlaygroundTemplates"
 
 const STORAGE_KEY = "react-pdf-levelup-code"
 
-function usePlaygroundCode(templateId: string | undefined, templates: TemplateMeta[], templatesLoaded: boolean) {
+export function usePlaygroundCode(templateId: string | undefined, templates: TemplateMeta[], templatesLoaded: boolean) {
   const [code, setCode] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
 
@@ -68,4 +68,3 @@ function usePlaygroundCode(templateId: string | undefined, templates: TemplateMe
   return { code, setCode, isLoading }
 }
 
-export { usePlaygroundCode }
