@@ -253,7 +253,7 @@ const Section: React.FC<SectionProps> = ({
             {bgImageNode}
             {grid}
             {children}
-            <View style={{ paddingBottom: footerHeight }} />
+
             <View style={footerStyle} fixed>
                 {resolvedFooter}
                 {resolvedPagination && (

@@ -50,12 +50,19 @@ const QR: React.FC<QRProps> = React.memo(({
   ...rest
 }) => {
   const [qrDataUrl, setQrDataUrl] = useState<string>("")
+  const [hasError, setHasError] = useState<boolean>(false)
 
   const resolvedErrorLevel = errorCorrectionLevel ?? (logo ? "H" : "M")
 
   useEffect(() => {
-    const generateQR = async () => {
+    let cancelled = false
 
+    // Reseteamos el estado al iniciar un nuevo ciclo de generación,
+    // así evitamos mostrar un QR o un error "viejo" mientras se genera el nuevo.
+    setQrDataUrl("")
+    setHasError(false)
+
+    const generateQR = async () => {
       try {
         const baseQrDataUrl = await generateQRAsBase64({
           url,
@@ -69,24 +76,40 @@ const QR: React.FC<QRProps> = React.memo(({
               : resolvedErrorLevel,
         })
 
-        if (logo && logoWidth && logoHeight) {
-          const qrWithLogo = await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
-          setQrDataUrl(qrWithLogo)
-        } else {
-          setQrDataUrl(baseQrDataUrl)
+        const finalQrDataUrl =
+          logo && logoWidth && logoHeight
+            ? await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
+            : baseQrDataUrl
+
+        if (!cancelled) {
+          setQrDataUrl(finalQrDataUrl)
         }
       } catch (error) {
         console.error("Error generando QR:", error)
-        setQrDataUrl(buildFallbackUrl(url, size))
+        if (!cancelled) {
+          setHasError(true)
+        }
       }
     }
 
     generateQR()
+
+    // Evita setState sobre un ciclo obsoleto si las props cambian
+    // antes de que termine la generación anterior.
+    return () => {
+      cancelled = true
+    }
   }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, resolvedErrorLevel])
+
+  // El fallback externo solo se usa si la generación local falló de verdad,
+  // nunca como placeholder mientras se está generando el QR.
+  const resolvedSrc = qrDataUrl || (hasError ? buildFallbackUrl(url, size) : undefined)
 
   return (
     <View style={[styles.qrContainer, style]} {...rest}>
-      <Image src={qrDataUrl || buildFallbackUrl(url, size)} style={{ width: size, height: size }} />
+      {resolvedSrc && (
+        <Image src={resolvedSrc} style={{ width: size, height: size }} />
+      )}
     </View>
   )
 })
