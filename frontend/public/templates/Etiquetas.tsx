@@ -1,1 +1,0 @@
-//crear una con las etiquetas basicas (header, footer)

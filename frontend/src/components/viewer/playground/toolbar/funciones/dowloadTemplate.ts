@@ -67,6 +67,14 @@ const detectUsedComponents = (code: string, libraryComponents: LibraryComponents
     usedComponents.core.add("Font");
   }
 
+  // StyleSheet, igual que Font, nunca se usa como etiqueta JSX (`<StyleSheet>`)
+  // sino como llamada de método (`StyleSheet.create({...})`), así que el
+  // patrón `<Componente>` de isComponentUsed nunca lo detecta. Sin este caso
+  // especial, StyleSheet queda afuera del import aunque el código lo use.
+  if (/\bStyleSheet\.\w+\s*\(/.test(code)) {
+    usedComponents.core.add("StyleSheet");
+  }
+
   return usedComponents;
 };
 

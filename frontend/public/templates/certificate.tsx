@@ -1,3 +1,16 @@
+import React from "react";
+import { 
+      A,
+      BR,
+      Div,
+      Font,
+      H2,
+      ImgBg,
+      Layout,
+      P
+    } from "@react-pdf-levelup/core";
+
+
 Font.register({
   family: "BebasNeue",
   fonts: [
@@ -21,7 +34,7 @@ Font.register({
   ],
 });
 
-const Component = () => {
+const Certificado = () => {
   return (
     <Layout
       size="A4"
@@ -88,4 +101,4 @@ const Component = () => {
   );
 };
 
-export default Component
+export default Certificado

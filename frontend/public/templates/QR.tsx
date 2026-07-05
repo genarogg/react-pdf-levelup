@@ -1,101 +1,122 @@
+import React from "react";
+import {
+  Col4,
+  Col6,
+  Container,
+  Div,
+  H1,
+  H3,
+  Layout,
+  P,
+  Row,
+  Small,
+  Strong,
+  StyleSheet
+} from "@react-pdf-levelup/core";
+import {
+  QR,
+  QRstyle
+} from "@react-pdf-levelup/qr";
+
+
 const Component = () => {
 
-const COLORS = {
-  ink: "#1a1a2e",
-  slate: "#5c6079",
-  muted: "#94a0b8",
-  border: "#e6e8f0",
-  cardBg: "#ffffff",
-  accentPrimary: "#4338ca",
-  accentBlue: "#3794ff",
-  accentInsta: "#c13584",
-  accentFacebook: "#1877f2",
-  accentEco: "#16a34a",
-}
+  const COLORS = {
+    ink: "#1a1a2e",
+    slate: "#5c6079",
+    muted: "#94a0b8",
+    border: "#e6e8f0",
+    cardBg: "#ffffff",
+    accentPrimary: "#4338ca",
+    accentBlue: "#3794ff",
+    accentInsta: "#c13584",
+    accentFacebook: "#1877f2",
+    accentEco: "#16a34a",
+  }
 
-const styles = StyleSheet.create({
-  eyebrow: {
-    fontSize: 9,
-    color: COLORS.accentPrimary,
-    letterSpacing: 2,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 10,
-    color: COLORS.slate,
-    marginTop: 4,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    color: COLORS.ink,
-    marginTop: 24,
-    marginBottom: 4,
-  },
-  colWrap: {
-    paddingLeft: 7,
-    paddingRight: 7,
-    marginBottom: 14,
-  },
-  qrCard: {
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
-    padding: 16,
-    backgroundColor: COLORS.cardBg,
-    border: `1px solid ${COLORS.border}`,
-    borderRadius: 10,
-  },
-  qrFrame: {
-    padding: 10,
-    backgroundColor: "#fafafa",
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  qrCaption: {
-    fontSize: 8,
-    textAlign: "center",
-    color: COLORS.muted,
-    marginTop: 3,
-  },
-  headerRule: {
-    height: 2,
-    backgroundColor: COLORS.ink,
-    borderRadius: 2,
-    marginTop: 16,
-    marginBottom: 16,
-  },
-  sectionRule: {
-    height: 3,
-    width: 32,
-    backgroundColor: COLORS.accentPrimary,
-    borderRadius: 3,
-    marginBottom: 12,
-  },
-  footerRow: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-})
+  const styles = StyleSheet.create({
+    eyebrow: {
+      fontSize: 9,
+      color: COLORS.accentPrimary,
+      letterSpacing: 2,
+      marginBottom: 6,
+    },
+    subtitle: {
+      fontSize: 10,
+      color: COLORS.slate,
+      marginTop: 4,
+    },
+    sectionTitle: {
+      fontSize: 14,
+      color: COLORS.ink,
+      marginTop: 24,
+      marginBottom: 4,
+    },
+    colWrap: {
+      paddingLeft: 7,
+      paddingRight: 7,
+      marginBottom: 14,
+    },
+    qrCard: {
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+      padding: 16,
+      backgroundColor: COLORS.cardBg,
+      border: `1px solid ${COLORS.border}`,
+      borderRadius: 10,
+    },
+    qrFrame: {
+      padding: 10,
+      backgroundColor: "#fafafa",
+      borderRadius: 8,
+      marginBottom: 10,
+    },
+    qrCaption: {
+      fontSize: 8,
+      textAlign: "center",
+      color: COLORS.muted,
+      marginTop: 3,
+    },
+    headerRule: {
+      height: 2,
+      backgroundColor: COLORS.ink,
+      borderRadius: 2,
+      marginTop: 16,
+      marginBottom: 16,
+    },
+    sectionRule: {
+      height: 3,
+      width: 32,
+      backgroundColor: COLORS.accentPrimary,
+      borderRadius: 3,
+      marginBottom: 12,
+    },
+    footerRow: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+  })
 
-const SectionHeader = ({ title, count }) => (
-  <>
-    <H3 style={styles.sectionTitle}>
-      {title} <Small style={{ color: COLORS.muted }}>· {count} variantes</Small>
-    </H3>
-    <Div style={styles.sectionRule} />
-  </>
-)
+  const SectionHeader = ({ title, count }: { title: string; count: number }) => (
+    <>
+      <H3 style={styles.sectionTitle}>
+        {title} <Small style={{ color: COLORS.muted }}>· {count} variantes</Small>
+      </H3>
+      <Div style={styles.sectionRule} />
+    </>
+  )
 
-const QrCard = ({ children, label, caption }) => (
-  <Div style={styles.qrCard}>
-    <Div style={styles.qrFrame}>{children}</Div>
-    <P style={{ fontSize: 11, marginBottom: 0 }}>
-      <Strong>{label}</Strong>
-    </P>
-    <Small style={styles.qrCaption}>{caption}</Small>
-  </Div>
-)
+  const QrCard = ({ children, label, caption }: { children: React.ReactNode; label: string; caption: string }) => (
+    <Div style={styles.qrCard}>
+      <Div style={styles.qrFrame}>{children}</Div>
+      <P style={{ fontSize: 11, marginBottom: 0 }}>
+        <Strong>{label}</Strong>
+      </P>
+      <Small style={styles.qrCaption}>{caption}</Small>
+    </Div>
+  )
 
   return (
     <Layout

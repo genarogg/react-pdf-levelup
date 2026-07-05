@@ -1,3 +1,31 @@
+import React from "react";
+import { 
+      Center,
+      Col4,
+      Col6,
+      Col8,
+      H2,
+      H3,
+      HR,
+      Layout,
+      P,
+      Right,
+      Row,
+      Strong,
+      Table,
+      Tbody,
+      Td,
+      Text,
+      Th,
+      Thead,
+      Tr,
+      View
+    } from "@react-pdf-levelup/core";
+import { 
+      QRstyle
+    } from "@react-pdf-levelup/qr";
+
+
 const InvoiceTemplate = () => {
   const invoiceData = {
     number: 'F-2024-001',
@@ -19,7 +47,7 @@ const InvoiceTemplate = () => {
   };
 
   return (
-    <Layout size="A4" padding={30} showPageNumbers={false}>
+    <Layout size="A4" padding={30} pagination={false}>
       <View style={{ marginBottom: 20, borderBottom: "1px solid #ccc", padding: 10 }}>
         <Row>
           <Col6>
@@ -30,7 +58,7 @@ const InvoiceTemplate = () => {
           <Col6>
             <Right style={{position:"absolute", right:"10px", top: "-10px"}}>
               <QRstyle
-                value={`https://verificar-factura.com/${invoiceData.number}`}
+                url={`https://verificar-factura.com/${invoiceData.number}`}
                 size={80}
                 dotsOptions={{ color: "#3366cc", type: "rounded" }}
                 backgroundOptions={{ color: "#ffffff" }}
