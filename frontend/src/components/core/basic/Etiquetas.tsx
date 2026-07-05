@@ -149,8 +149,8 @@ const Mark: React.FC<TextProps> = ({ children, style, ...rest }) => (
   <Text style={[styles.mark, style]} {...rest}>{children}</Text>
 )
 
-const A: React.FC<LinkProps> = ({ children, style, href, ...rest }) => (
-  <Link src={href} style={[styles.A, style]} {...rest}>{children}</Link>
+const A: React.FC<LinkProps & { src?: string }> = ({ children, style, href, src, ...rest }) => (
+  <Link src={href ?? src} style={[styles.A, style]} {...rest}>{children}</Link>
 )
 
 const BR: React.FC<TextProps> = ({ style, ...rest }) => (

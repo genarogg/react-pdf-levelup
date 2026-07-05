@@ -60,10 +60,10 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             name: "padding",
             type: "number",
             default: "30",
-            description: "Padding interno de la página en puntos (solo si margen=normal)",
+            description: "Padding interno de la página en puntos (solo si margin=normal)",
           },
           {
-            name: "margen",
+            name: "margin",
             type: "string",
             default: "normal",
             description: "Tipo de margen (apa, normal, estrecho, ancho)",
@@ -335,12 +335,6 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
           { name: "width", type: "string|number", default: "", description: "Ancho de la celda" },
           { name: "height", type: "string|number", default: "", description: "Alto de la celda" },
-          {
-            name: "cellSize",
-            type: "string",
-            default: "medium",
-            description: "Tamaño predefinido (small, medium, large)",
-          },
           { name: "colSpan", type: "number", default: "", description: "Número de columnas que ocupa" },
           {
             name: "textAlign",
@@ -358,12 +352,6 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
           { name: "width", type: "string|number", default: "", description: "Ancho de la celda" },
           { name: "height", type: "string|number", default: "", description: "Alto de la celda" },
-          {
-            name: "cellSize",
-            type: "string",
-            default: "medium",
-            description: "Tamaño predefinido (small, medium, large)",
-          },
           { name: "colSpan", type: "number", default: "", description: "Número de columnas que ocupa" },
           {
             name: "textAlign",
@@ -482,7 +470,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         name: "QR",
         description: "Código QR",
         props: [
-          { name: "value", type: "string", default: "", description: "Texto o URL para el código QR" },
+          { name: "url", type: "string", default: "", description: "Texto o URL para el código QR" },
           { name: "size", type: "number", default: "150", description: "Tamaño en píxeles" },
           { name: "colorDark", type: "string", default: "#000000", description: "Color de los puntos" },
           { name: "colorLight", type: "string", default: "#ffffff", description: "Color de fondo" },
@@ -506,7 +494,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
         name: "QRStyle",
         description: "Código QR estilizado (qr-code-styling) con soporte de imagen central",
         props: [
-          { name: "value", type: "string", default: "", description: "Texto o URL para el código QR" },
+          { name: "url", type: "string", default: "", description: "Texto o URL para el código QR" },
           { name: "size", type: "number", default: "300", description: "Tamaño del QR" },
           { name: "image", type: "string", default: "", description: "URL del logo central" },
           { name: "dotsOptions", type: "object", default: "{}", description: "Opciones de puntos (color, tipo)" },

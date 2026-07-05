@@ -241,13 +241,13 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       etiquetaAutoConclusiva("Img", 'src="$1"'),
       etiquetaAutoConclusiva("Icon", 'ico="$1"'),
 
-      etiquetaConAtributo("A", 'src="$1"'),
+      etiquetaConAtributo("A", 'href="$1"'),
 
       // Componentes de tabla
-      etiquetaAvanzada("Table", "<Table>\n  <Thead>\n    <Tr>\n      <Th></Th>\n    </Tr>\n  </Thead>\n  <Tbody>\n    <Tr>\n      <Td></Td>\n    </Tr>\n  </Tbody>\n</Table>"),
+      etiquetaAvanzada("Table", "<Table>\n  <Thead>\n    <Tr>\n      <Th>$1</Th>\n    </Tr>\n  </Thead>\n  <Tbody>\n    <Tr>\n      <Td></Td>\n    </Tr>\n  </Tbody>\n</Table>"),
 
       // container 
-      etiquetaAvanzada("Container", "<Container>\n <Row>\n <Col6>\n  \n</Col6>\n<Col6>\n  \n</Col6> \n</Row> \n</Container>"),
+      etiquetaAvanzada("Container", "<Container>\n <Row>\n <Col6>\n  $1\n</Col6>\n<Col6>\n  \n</Col6> \n</Row> \n</Container>"),
 
       etiquetaConSalto("Thead"),
       etiquetaConSalto("Tbody"),
