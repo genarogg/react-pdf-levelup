@@ -125,3 +125,5 @@ const InvoiceTemplate = () => {
     </Layout>
   );
 };
+
+export default InvoiceTemplate;

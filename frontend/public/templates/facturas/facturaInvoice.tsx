@@ -1,5 +1,5 @@
 
-const Component = ({ data }) => {
+const InvoiceTemplate = ({ data }) => {
   getFuentes()
   return (
     <FathonLayout>
@@ -204,3 +204,5 @@ const getFuentes = () => {
     ]
   });
 }
+
+export default InvoiceTemplate;
