@@ -2,6 +2,11 @@ import { useRef, useEffect, useMemo } from "react"
 import { Editor } from "@monaco-editor/react"
 import { getMonacoSnippets } from './utils/monacoSnippets';
 
+const safeDispose = (disposable: { dispose: () => void } | null | undefined, label: string) => {
+  if (!disposable) return
+  try { disposable.dispose() } catch (e) { console.warn(`Error al disponer ${label}:`, e) }
+}
+
 interface CodeEditorProps {
   value: string
   onChange: (value: string | undefined) => void
@@ -172,11 +177,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       // Disponer los proveedores de autocompletado (JS y TS) para evitar que se dupliquen
       // las sugerencias en cada montaje/desmontaje del editor (ver bug #3)
       completionProvidersRef.current.forEach((provider) => {
-        try {
-          provider.dispose()
-        } catch (e) {
-          console.log("Error al disponer del completion provider:", e)
-        }
+        safeDispose(provider, "del completion provider")
       })
       completionProvidersRef.current = []
 
@@ -184,11 +185,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       // duplicación de proveedores más arriba: el mismo riesgo aplica aquí
       // si el editor se remonta sin limpiar el listener anterior).
       if (contentChangeListenerRef.current) {
-        try {
-          contentChangeListenerRef.current.dispose()
-        } catch (e) {
-          console.log("Error al disponer del listener de imports:", e)
-        }
+        safeDispose(contentChangeListenerRef.current, "del listener de imports")
         contentChangeListenerRef.current = null
       }
 
@@ -199,26 +196,12 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
         // Paso 2: Desasociar el modelo del editor antes de eliminarlo
         if (model) {
-          try {
-            // Desasociar el modelo del editor
             editorRef.current.setModel(null)
-
-            // Disponer del modelo
-            model.dispose()
-          } catch (e) {
-            console.log("Error al disponer del modelo:", e)
-          }
+            safeDispose(model, "del modelo")
         }
 
         // Paso 3: Limpiar cualquier suscripción o evento
-        try {
-          // Intentar disponer del editor si es posible
-          if (typeof editorRef.current.dispose === "function") {
-            editorRef.current.dispose()
-          }
-        } catch (e) {
-          console.log("Error al disponer del editor:", e)
-        }
+          safeDispose(editorRef.current, "del editor")
 
         // Paso 4: Limpiar la referencia
         editorRef.current = null

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { useClipboard } from "../hooks/useClipboard"
 
 interface ColorPickerProps {
-  onColorSelect?: (color: string) => void
+
 }
 
 // Predefined color palette
@@ -47,7 +47,7 @@ function pushRecentColor(color: string) {
   recentColorsListeners.forEach((listener) => listener(sharedRecentColors))
 }
 
-export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
+export default function ColorPicker({ }: ColorPickerProps) {
   const [open, setOpen] = useState(false)
   const [selectedColor, setSelectedColor] = useState("#3366cc")
   const [recentColors, setRecentColors] = useState<string[]>(sharedRecentColors)
@@ -72,13 +72,13 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value
     setSelectedColor(color)
-    onColorSelect?.(color)
+
     pushRecentColor(color)
   }
 
   const selectColor = (color: string) => {
     setSelectedColor(color)
-    onColorSelect?.(color)
+
     pushRecentColor(color)
   }
 
