@@ -18,9 +18,26 @@ const debounce = (func: Function, delay: number) => {
   }
 }
 
+// Detecta declaraciones `import` completas (de una o varias líneas) para
+// poder eliminarlas automáticamente del editor. El código del Playground se
+// ejecuta en un scope aislado con `new Function` (ver compilePlaygroundCode.ts),
+// donde Layout, P, Table, QR, etc. ya están inyectados como "globales": los
+// imports reales nunca funcionarían ahí, así que no tiene sentido dejar que
+// el usuario los deje escritos (por error o al pegar código de otro lado).
+//
+// - Primera alternativa: `import ... from 'paquete'`, admite bloques
+//   multilínea (`import {\n  Foo\n} from 'paquete'`) gracias al `[\s\S]*?`
+//   no-codicioso, que se detiene en el primer `from '...'` que encuentra.
+// - Segunda alternativa: imports de solo efecto, `import 'paquete'`.
+// Ambas consumen el `;` final (opcional) y el salto de línea siguiente, para
+// no dejar una línea en blanco al borrar.
+const IMPORT_STATEMENT_REGEX =
+  /^[ \t]*import\s+[\s\S]*?from\s+['"][^'"]*['"]\s*;?[ \t]*\r?\n?|^[ \t]*import\s+['"][^'"]*['"]\s*;?[ \t]*\r?\n?/gm
+
 const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const editorRef = useRef<any>(null)
   const completionProvidersRef = useRef<{ dispose: () => void }[]>([])
+  const contentChangeListenerRef = useRef<{ dispose: () => void } | null>(null)
 
   // Referencia siempre actualizada a la última versión de onChange, para que el
   // debounce memoizado (creado una sola vez) nunca quede con una closure vieja.
@@ -100,6 +117,53 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       suggestOnTriggerCharacters: true,
       wordBasedSuggestions: true,
     })
+
+    // Auto-eliminar imports: en cuanto una declaración `import` queda
+    // completa (el usuario terminó de escribir la comilla de cierre del
+    // paquete, o la pegó junto con más código), se borra directamente del
+    // modelo. No hace falta esperar al onChange debounced de arriba: esto
+    // corre en cada cambio de contenido, así que reacciona al instante.
+    contentChangeListenerRef.current = editor.onDidChangeModelContent(() => {
+      const model = editor.getModel()
+      if (!model) return
+
+      const fullText = model.getValue()
+      // Salida rápida: evita el trabajo de armar ediciones en cada
+      // pulsación cuando no hay ningún "import" en el texto.
+      if (!fullText.includes("import")) return
+
+      const matches: { start: number; end: number }[] = []
+      let match: RegExpExecArray | null
+      IMPORT_STATEMENT_REGEX.lastIndex = 0
+      while ((match = IMPORT_STATEMENT_REGEX.exec(fullText)) !== null) {
+        matches.push({ start: match.index, end: match.index + match[0].length })
+        // Sin esto, un match de longitud 0 (no debería pasar aquí, pero por
+        // seguridad) dejaría el regex girando en el mismo índice.
+        if (match[0].length === 0) IMPORT_STATEMENT_REGEX.lastIndex++
+      }
+
+      if (matches.length === 0) return
+
+      // De atrás hacia adelante: borrar un tramo no debe desplazar los
+      // offsets de los tramos todavía pendientes de procesar.
+      const edits = matches
+        .sort((a, b) => b.start - a.start)
+        .map(({ start, end }) => {
+          const startPos = model.getPositionAt(start)
+          const endPos = model.getPositionAt(end)
+          return {
+            range: {
+              startLineNumber: startPos.lineNumber,
+              startColumn: startPos.column,
+              endLineNumber: endPos.lineNumber,
+              endColumn: endPos.column,
+            },
+            text: "",
+          }
+        })
+
+      editor.executeEdits("remove-imports", edits)
+    })
   }
 
   // Limpiar el editor cuando el componente se desmonte
@@ -115,6 +179,18 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
         }
       })
       completionProvidersRef.current = []
+
+      // Disponer el listener de auto-eliminación de imports (ver bug de
+      // duplicación de proveedores más arriba: el mismo riesgo aplica aquí
+      // si el editor se remonta sin limpiar el listener anterior).
+      if (contentChangeListenerRef.current) {
+        try {
+          contentChangeListenerRef.current.dispose()
+        } catch (e) {
+          console.log("Error al disponer del listener de imports:", e)
+        }
+        contentChangeListenerRef.current = null
+      }
 
       if (editorRef.current) {
         // Paso 1: Obtener el modelo actual

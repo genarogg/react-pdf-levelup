@@ -131,13 +131,29 @@ export function transpileToJs(modifiedCode: string): TranspileResult {
 /**
  * Devuelve los nombres de CoreComponents que son "usables" dentro del
  * módulo generado (funciones u objetos, p. ej. forwardRef/memo).
+ *
+ * IMPORTANTE: también se incluyen los valores `typeof === "string"`.
+ * `@react-pdf/renderer` no implementa sus primitivas (`Text`, `View`,
+ * `Document`, `Page`, `Image`, `Link`, `Svg`, etc.) como componentes React
+ * reales: las exporta como strings literales ("TEXT", "VIEW", "DOCUMENT"...)
+ * que su reconciler interpreta como tipos de elemento "host" (igual que
+ * "div" lo es para react-dom). Si se excluyen aquí, nunca quedan declaradas
+ * como variable local dentro del módulo `eval`'d en `buildAndRunComponent`,
+ * y el JSX `<Text>`/`<Document>`/`<Image>` termina resolviendo contra el
+ * global del navegador del mismo nombre (window.Text, window.Document,
+ * window.Image), que exige `new` y revienta con
+ * "Failed to construct 'Text': Please use the 'new' operator".
  */
 export function getUsableComponentNames(
   coreComponents: Record<string, unknown>
 ): string[] {
   return Object.keys(coreComponents).filter(key => {
     const value = coreComponents[key]
-    return typeof value === "function" || typeof value === "object"
+    return (
+      typeof value === "function" ||
+      typeof value === "object" ||
+      typeof value === "string"
+    )
   })
 }
 
