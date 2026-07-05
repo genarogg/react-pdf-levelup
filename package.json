@@ -24,7 +24,7 @@
     "demo:api": "cd api && pnpm run demo",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
-    "clean:install": "node ./global/clean.js && pnpm install"
+    "clean:install": "node ./global/clean.js && pnpm install && node ./lib/scripts/build-all.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",

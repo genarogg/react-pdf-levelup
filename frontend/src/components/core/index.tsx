@@ -33,6 +33,7 @@ import {
   Canvas,
   Polygon,
   ClipPath
+
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
