@@ -45,24 +45,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
 
-    const pasteHandler = (e: ClipboardEvent) => {
-      const text = e.clipboardData?.getData("text/plain")
-      if (!text) return
-      // Directly insert the text without sanitization
-      const selections = editor.getSelections() || [editor.getSelection()]
-      const edits = selections.map((sel: any) => ({
-        range: sel,
-        text: text,
-        forceMoveMarkers: true,
-      }))
-      editor.executeEdits("paste-sanitize", edits)
-    }
 
-    const domNode = editor.getDomNode()
-    if (domNode) {
-      domNode.addEventListener("paste", pasteHandler as any)
-      editorRef.current.__pasteHandler = pasteHandler
-    }
 
     // El código del Playground es TSX (anotaciones de tipo + JSX), pero el
     // modelo se estaba tratando como JavaScript puro (ver prop `defaultLanguage`
@@ -92,48 +75,20 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
     const customTags = getMonacoSnippets(monaco.languages.CompletionItemKind, monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet);
 
-    // Registrar el proveedor de autocompletado
-    const jsProvider = monaco.languages.registerCompletionItemProvider("javascript", {
-      provideCompletionItems: (model: any, position: any) => {
-        const word = model.getWordUntilPosition(position)
-        const range = {
-          startLineNumber: position.lineNumber,
-          endLineNumber: position.lineNumber,
-          startColumn: word.startColumn,
-          endColumn: word.endColumn,
-        }
+    const provideCompletionItems = (model: any, position: any) => {
+      const word = model.getWordUntilPosition(position)
+      const range = {
+        startLineNumber: position.lineNumber,
+        endLineNumber: position.lineNumber,
+        startColumn: word.startColumn,
+        endColumn: word.endColumn,
+      }
+      return { suggestions: customTags.map((tag) => ({ ...tag, range })) }
+    }
 
-        return {
-          suggestions: customTags.map((tag) => ({
-            ...tag,
-            range,
-          })),
-        }
-      },
-    })
-
-    // También registrar para TypeScript y JSX
-    const tsProvider = monaco.languages.registerCompletionItemProvider("typescript", {
-      provideCompletionItems: (model: any, position: any) => {
-        const word = model.getWordUntilPosition(position)
-        const range = {
-          startLineNumber: position.lineNumber,
-          endLineNumber: position.lineNumber,
-          startColumn: word.startColumn,
-          endColumn: word.endColumn,
-        }
-
-        return {
-          suggestions: customTags.map((tag) => ({
-            ...tag,
-            range,
-          })),
-        }
-      },
-    })
-
-    // Guardar los disposables para poder limpiarlos al desmontar el editor
-    completionProvidersRef.current.push(jsProvider, tsProvider)
+    completionProvidersRef.current = ["javascript", "typescript"].map((lang) =>
+      monaco.languages.registerCompletionItemProvider(lang, { provideCompletionItems })
+    )
 
     // Configurar el editor para mostrar sugerencias automáticamente
     editor.updateOptions({
@@ -164,10 +119,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       if (editorRef.current) {
         // Paso 1: Obtener el modelo actual
         const model = editorRef.current.getModel()
-        const domNode = editorRef.current.getDomNode()
-        if (domNode && editorRef.current.__pasteHandler) {
-          domNode.removeEventListener("paste", editorRef.current.__pasteHandler as any)
-        }
+
 
         // Paso 2: Desasociar el modelo del editor antes de eliminarlo
         if (model) {

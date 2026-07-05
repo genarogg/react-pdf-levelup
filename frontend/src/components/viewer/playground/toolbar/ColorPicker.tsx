@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react"
+import useClickOutside from "../../../viewer/playground/hooks/useClickOutside"
 import { Palette, Copy, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useClipboard } from "../../../viewer/playground/hooks/useClipboard"
 
 interface ColorPickerProps {
   onColorSelect?: (color: string) => void
@@ -49,8 +51,9 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
   const [open, setOpen] = useState(false)
   const [selectedColor, setSelectedColor] = useState("#3366cc")
   const [recentColors, setRecentColors] = useState<string[]>(sharedRecentColors)
-  const [copied, setCopied] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  useClickOutside(containerRef, () => setOpen(false), open)
+  const { copiedKey, copy } = useClipboard()
 
   // Suscribirse al estado compartido: si otra instancia (u otro montaje previo)
   // actualizó recentColors mientras este componente estaba desmontado, al
@@ -64,21 +67,7 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
     }
   }, [])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false)
-      }
-    }
 
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [open])
 
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value
@@ -93,11 +82,7 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
     pushRecentColor(color)
   }
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(selectedColor)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
-  }
+
 
   return (
     <div ref={containerRef} className="relative">
@@ -136,10 +121,10 @@ export default function ColorPicker({ onColorSelect }: ColorPickerProps) {
               className="flex-1 bg-gray-700 border-gray-600 text-gray-200 font-mono text-sm"
             />
             <button
-              onClick={copyToClipboard}
+              onClick={() => copy(selectedColor, "colorPicker")}
               className="px-3 py-2 bg-gray-600 text-gray-200 border border-gray-500 rounded hover:bg-gray-500 transition-colors duration-200"
             >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copiedKey === "colorPicker" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             </button>
           </div>
 

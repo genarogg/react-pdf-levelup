@@ -1,6 +1,7 @@
-import React from "react"
-import { useState } from "react"
+import React, { useState, useRef } from "react"
+import useClickOutside from "../../../viewer/playground/hooks/useClickOutside"
 import { HelpCircle, X, Copy, Check, Languages } from "lucide-react"
+import { useClipboard } from "../../../viewer/playground/hooks/useClipboard"
 import { componentDocs_en } from "./quickHelp/componentDocs_en"
 import { componentDocs_es } from "./quickHelp/componentDocs_es"
 import type { TabId, ComponentDoc, PropDoc } from "./quickHelp/types"
@@ -68,8 +69,11 @@ interface QuickHelpProps {
 
 const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  useClickOutside(panelRef, () => setIsOpen(false), isOpen)
+  const { copiedKey, copy } = useClipboard()
   const [activeTab, setActiveTab] = useState<TabId>("layout")
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
   const [lang, setLang] = useState<Lang>("es")
 
   const toggleLang = () => {
@@ -78,26 +82,6 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 
   const toggleHelp = () => {
     setIsOpen(!isOpen)
-  }
-
-  const handleCopy = async (text: string, index: number) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedIndex(index)
-      setTimeout(() => setCopiedIndex(null), 1500)
-    } catch {
-      const textarea = document.createElement("textarea")
-      textarea.value = text
-      document.body.appendChild(textarea)
-      textarea.select()
-      try {
-        document.execCommand("copy")
-        setCopiedIndex(index)
-        setTimeout(() => setCopiedIndex(null), 1500)
-      } finally {
-        document.body.removeChild(textarea)
-      }
-    }
   }
 
   const componentDocs = lang === "es" ? componentDocs_es : componentDocs_en
@@ -118,7 +102,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 
       {/* Panel de ayuda */}
       {isOpen && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[900px] max-h-[650px] overflow-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black border border-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm">
+        <div ref={panelRef} className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[900px] max-h-[650px] overflow-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black border border-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm">
           {/* Efecto de brillo sutil */}
           <div className="absolute inset-0 bg-gradient-to-r from-gray-800/5 via-gray-700/10 to-gray-800/5 rounded-xl pointer-events-none" />
 
@@ -206,10 +190,10 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
                         <h5 className="text-sm font-medium text-gray-400">{t.example}</h5>
                         <button
                           className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium rounded-md bg-gray-800/60 hover:bg-gray-700/60 border border-gray-700/50 text-gray-200 transition-colors"
-                          onClick={() => component.example && handleCopy(component.example, index)}
+                          onClick={() => component.example && copy(component.example, index)}
                         >
-                          {copiedIndex === index ? <Check size={12} /> : <Copy size={12} />}
-                          <span>{copiedIndex === index ? t.copied : t.copy}</span>
+                          {copiedKey === index ? <Check size={12} /> : <Copy size={12} />}
+                          <span>{copiedKey === index ? t.copied : t.copy}</span>
                         </button>
                       </div>
                       <pre className="p-3 bg-black/50 border border-gray-800/50 rounded-md overflow-x-auto">

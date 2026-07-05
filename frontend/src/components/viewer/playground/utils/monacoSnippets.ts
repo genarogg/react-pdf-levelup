@@ -23,7 +23,7 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
   const etiquetaConAtributo = (label: string, atributo?: string) => {
     return {
       label,
-      insertText: `<${label} ${atributo ? atributo : ""}>$5</${label}>`,
+      insertText: `<${label} ${atributo ? atributo : ""}>$1</${label}>`,
       kind,
       insertTextRules,
     }
