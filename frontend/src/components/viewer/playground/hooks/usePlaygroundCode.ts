@@ -9,6 +9,7 @@ function usePlaygroundCode(templateId: string | undefined, templates: TemplateMe
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    let cancelled = false
     const loadCode = async () => {
       if (!templatesLoaded) return
       setIsLoading(true)
@@ -18,7 +19,7 @@ function usePlaygroundCode(templateId: string | undefined, templates: TemplateMe
           const selected = templates.find((t) => t.id === templateId)
           if (selected) {
             const templateContent = await loadTemplateFile(selected.path)
-            setCode(templateContent)
+            if (!cancelled) setCode(templateContent)
             return
           } else {
             console.warn(`Template no encontrado: ${templateId}`)
@@ -49,6 +50,7 @@ function usePlaygroundCode(templateId: string | undefined, templates: TemplateMe
     }
 
     loadCode()
+    return () => { cancelled = true }
   }, [templateId, templatesLoaded, templates])
 
   useEffect(() => {

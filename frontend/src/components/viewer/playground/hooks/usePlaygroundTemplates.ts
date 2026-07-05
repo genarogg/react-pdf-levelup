@@ -11,19 +11,21 @@ function usePlaygroundTemplates() {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
     const loadTemplates = async () => {
       try {
         const res = await fetch("/templates/index.json")
         if (!res.ok) throw new Error("Failed to fetch templates")
         const data = await res.json()
-        setTemplates(data)
+        if (!cancelled) setTemplates(data)
       } catch {
-        setTemplates([])
+        if (!cancelled) setTemplates([])
       } finally {
-        setLoaded(true)
+        if (!cancelled) setLoaded(true)
       }
     }
     loadTemplates()
+    return () => { cancelled = true }
   }, [])
 
   return { templates, loaded }

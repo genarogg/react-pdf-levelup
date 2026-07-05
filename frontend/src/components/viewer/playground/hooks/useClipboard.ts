@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 export function useClipboard(timeout = 1500) {
   const [copiedKey, setCopiedKey] = useState<string | number | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const copy = async (text: string, key: string | number) => {
     try {
@@ -13,8 +14,9 @@ export function useClipboard(timeout = 1500) {
       textarea.select()
       try { document.execCommand("copy") } finally { document.body.removeChild(textarea) }
     }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setCopiedKey(key)
-    setTimeout(() => setCopiedKey(null), timeout)
+    timeoutRef.current = setTimeout(() => setCopiedKey(null), timeout)
   }
 
   return { copiedKey, copy }
