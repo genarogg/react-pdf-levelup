@@ -36,24 +36,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
     () =>
       debounce((value: string | undefined) => {
         if (value === undefined) return
-        const sanitizeAll = (text: string) => {
-          let s = text
-          return s
-        }
-        const sanitized = sanitizeAll(value)
-        if (editorRef.current) {
-          const current = editorRef.current.getValue()
-          if (sanitized !== current) {
-            const model = editorRef.current.getModel()
-            if (model) {
-              const fullRange = model.getFullModelRange()
-              editorRef.current.executeEdits("sanitize-change", [{ range: fullRange, text: sanitized, forceMoveMarkers: true }])
-            } else {
-              editorRef.current.setValue(sanitized)
-            }
-          }
-        }
-        onChangeRef.current(sanitized)
+        onChangeRef.current(value)
       }, 1000),
     []
   )
@@ -62,25 +45,17 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor
 
-    const sanitizePastedText = (text: string) => {
-      let s = text
-      return s
-    }
-
     const pasteHandler = (e: ClipboardEvent) => {
       const text = e.clipboardData?.getData("text/plain")
       if (!text) return
-      const sanitized = sanitizePastedText(text)
-      if (sanitized !== text) {
-        e.preventDefault()
-        const selections = editor.getSelections() || [editor.getSelection()]
-        const edits = selections.map((sel: any) => ({
-          range: sel,
-          text: sanitized,
-          forceMoveMarkers: true,
-        }))
-        editor.executeEdits("paste-sanitize", edits)
-      }
+      // Directly insert the text without sanitization
+      const selections = editor.getSelections() || [editor.getSelection()]
+      const edits = selections.map((sel: any) => ({
+        range: sel,
+        text: text,
+        forceMoveMarkers: true,
+      }))
+      editor.executeEdits("paste-sanitize", edits)
     }
 
     const domNode = editor.getDomNode()
