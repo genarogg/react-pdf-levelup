@@ -1,6 +1,3 @@
-"use client"
-
-
 import React, { useState, useRef, useEffect } from "react"
 import { Palette, Copy, Check } from "lucide-react"
 import { Input } from "@/components/ui/input"

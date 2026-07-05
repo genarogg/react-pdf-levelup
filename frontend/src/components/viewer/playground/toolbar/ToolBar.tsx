@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import QuickHelp from "./QuickHelp"
 import ColorPicker from "./ColorPicker"

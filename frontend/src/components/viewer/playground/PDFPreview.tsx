@@ -47,7 +47,7 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
         .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
 
-      // 🔹 Manejo robusto de export default (tomado de Playground 1):
+      // Manejo robusto de export default :
       // se distingue function / class / arrow(const|let|var) / identificador
       // suelto, para no depender de un único regex genérico y evitar
       // falsos positivos con `export default X;` vs declaraciones.
@@ -70,15 +70,8 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
       }
 
       if (!modifiedCode.includes("const result")) {
-        const componentMatch = modifiedCode.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*=/)
-        if (componentMatch) {
-          modifiedCode += `\nconst result = ${componentMatch[1]};`
-        } else {
-          setErrorComponent(
-            "No se encontró ningún componente exportable."
-          )
-          return
-        }
+        setErrorComponent("No se encontró ningún componente exportado por defecto (se requiere `export default MiComponente;`).")
+        return
       }
 
       // 🔹 Transformar TS/TSX + JSX (antes solo era "react"; ahora se agrega

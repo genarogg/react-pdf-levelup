@@ -37,13 +37,6 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
         if (value === undefined) return
         const sanitizeAll = (text: string) => {
           let s = text
-          s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-          s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-          s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-          s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
-          s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-          s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-          s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
           return s
         }
         const sanitized = sanitizeAll(value)
@@ -70,13 +63,6 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
 
     const sanitizePastedText = (text: string) => {
       let s = text
-      s = s.replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
-      s = s.replace(/export\s+default\s+function\s+([A-Z]\w*)\s*\(/g, "function $1(")
-      s = s.replace(/export\s+default\s+class\s+([A-Z]\w*)/g, "class $1")
-      s = s.replace(/(^|\n)\s*export\s+default\s+/g, "\n")
-      s = s.replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
-      s = s.replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
       return s
     }
 
@@ -180,7 +166,13 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
       // Componentes de layout
       {
         label: "Layout",
-        insertText: '<Layout size="A4" orientation="v" pagination={true}>\n\n</Layout>',
+        insertText: `const MyDocument = () => (
+  <Layout size="A4" orientation="v" pagination={true}>
+
+  </Layout>
+);
+
+export default MyDocument;`,
         kind,
       },
 
@@ -270,7 +262,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
           size={150} 
           colorDark="#3794ff" 
           colorLight="#ffffff"
-          logo="https://genarogg.github.io/media/genarogg/favicon.png" 
+          logo="https://example.com/logo.png" 
           logoWidth={30}
           logoHeight={30}
           margin={0}
@@ -283,7 +275,7 @@ const CodeEditor = ({ value, onChange }: CodeEditorProps) => {
           size={300}
           colorDark="#3794ff"
           colorLight="#ffffff"
-          image="https://genarogg.github.io/media/genarogg/favicon.png"
+          image="https://example.com/logo.png"
           dotsOptions={{ color: "#3794ff", type: "rounded" }}
           backgroundOptions={{ color: "#ffffff" }}
           imageOptions={{ margin: 0, imageSize: 0.4 }}

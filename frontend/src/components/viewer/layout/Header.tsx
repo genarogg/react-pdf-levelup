@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useCallback, Suspense, lazy } from "react"
 import { Github, FileText, Play, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"

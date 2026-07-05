@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import { useState } from "react"
 import { HelpCircle, X, Copy, Check } from "lucide-react"
@@ -85,13 +83,17 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
             description: "Metadatos (title, author, subject, keywords, language, etc.)",
           },
         ],
-        example: `<Layout 
-  meta={{ title: 'Mi PDF', author: 'Genaro' }}
-  pagination 
-  footer={<P>Pie de página</P>}
->
-  <H1>Título</H1>
-</Layout>`,
+        example: `const MyDocument = () => (
+  <Layout 
+    meta={{ title: 'Mi PDF', author: 'Genaro' }}
+    pagination 
+    footer={<P>Pie de página</P>}
+  >
+    <H1>Título</H1>
+  </Layout>
+);
+
+export default MyDocument;`,
       },
       {
         name: "LayoutMultiPage",
@@ -111,14 +113,18 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
           { name: "pagination", type: "boolean", default: "true", description: "Numeración base" },
           { name: "debug", type: "boolean", default: "false", description: "Modo debug base" },
         ],
-        example: `<LayoutMultiPage backgroundColor="#eee">
-  <Section>
-    <H1>Página 1</H1>
-  </Section>
-  <Section backgroundColor="white">
-    <H1>Página 2 (Blanca)</H1>
-  </Section>
-</LayoutMultiPage>`,
+        example: `const MyMultiPageDocument = () => (
+  <LayoutMultiPage backgroundColor="#eee">
+    <Section>
+      <H1>Página 1</H1>
+    </Section>
+    <Section backgroundColor="white">
+      <H1>Página 2 (Blanca)</H1>
+    </Section>
+  </LayoutMultiPage>
+);
+
+export default MyMultiPageDocument;`,
       },
       {
         name: "Section",
@@ -610,7 +616,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 
       {/* Panel de ayuda */}
       {isOpen && (
-        <div className={inline ? "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[900px] max-h-[650px] overflow-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black border border-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm" : "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[900px] max-h-[650px] overflow-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black border border-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm"}>
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-[900px] max-h-[650px] overflow-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black border border-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm">
           {/* Efecto de brillo sutil */}
           <div className="absolute inset-0 bg-gradient-to-r from-gray-800/5 via-gray-700/10 to-gray-800/5 rounded-xl pointer-events-none" />
 

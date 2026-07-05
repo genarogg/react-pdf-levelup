@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { CodeBlock } from "./code-block"
 import { ArrowRight, Copy, Check } from "lucide-react"
