@@ -196,7 +196,7 @@ export default MyDocument;`,
       //Form
       etiquetaConSalto("Form"),
       etiquetaAutoConclusiva("Input", 'label="$1"'),
-      etiquetaAutoConclusiva("Textarea", 'label="$1"'),
+      etiquetaAutoConclusiva("TextArea", 'label="$1"'),
       etiquetaAutoConclusiva("Checkbox", 'label="$1"'),
 
       // Componentes de columnas

@@ -5,7 +5,7 @@ const downloadTemplate = (templateCode: string) => {
     // Configurar componentes por librería
     const libraryComponents = {
         core: Object.keys(ReactPdfLevelup).filter(key => /^[A-Z]/.test(key)),
-        qr: ['QR', 'QRStyle'],
+        qr: ['QR', 'QRstyle'],
         chart: ['ChartJS']
     };
 

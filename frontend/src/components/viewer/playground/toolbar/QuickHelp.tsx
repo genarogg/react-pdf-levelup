@@ -497,7 +497,7 @@ export default MyMultiPageDocument;`,
         example: `<QR url="https://example.com" size={150} colorDark="#000" colorLight="#fff" logo="https://picsum.photos/80" logoWidth={30} logoHeight={30} />`,
       },
       {
-        name: "QRStyle",
+        name: "QRstyle",
         description: "Código QR estilizado (qr-code-styling) con soporte de imagen central",
         props: [
           { name: "url", type: "string", default: "", description: "Texto o URL para el código QR" },
@@ -537,7 +537,7 @@ export default MyMultiPageDocument;`,
           { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
           { name: "break", type: "boolean", default: "false", description: "Salto de página" },
         ],
-        example: `<QRStyle
+        example: `<QRstyle
   url="https://example.com"
   size={300}
   image="https://picsum.photos/80"
@@ -550,23 +550,15 @@ export default MyMultiPageDocument;`,
       },
     ],
     page: [
-      {
-        name: "Header",
-        description: "Encabezado de página",
-        props: [
-          { name: "style", type: "object", default: "{}", description: "Estilos adicionales" },
-          { name: "fixed", type: "boolean", default: "false", description: "Fijar en todas las páginas" },
-        ],
-        example: `<Header fixed>Encabezado</Header>`,
-      },
+
       {
         name: "Pie de página (Layout.footer)",
         description: "Contenido del pie de página en Layout",
         props: [
           { name: "footer", type: "ReactNode", default: "", description: "Contenido del pie de página" },
-          { name: "lines", type: "number", default: "1", description: "Número de líneas reservadas" },
+          { name: "footerLines", type: "number", default: "1", description: "Número de líneas reservadas" },
         ],
-        example: `<Layout footer={<P>Pie</P>} lines={2}>
+        example: `<Layout footer={<P>Pie</P>} footerLines={2}>
   <P>Contenido</P>
 </Layout>`,
       },
