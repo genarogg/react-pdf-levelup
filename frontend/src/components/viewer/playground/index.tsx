@@ -25,7 +25,7 @@ function Editor() {
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
      
-      <Header code={code} context="playgroud" />
+      <Header context="playgroud" />
 
       <main className="flex flex-1 overflow-hidden">
         <div className="w-1/2 border-r border-gray-700 flex flex-col">

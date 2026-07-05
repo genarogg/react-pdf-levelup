@@ -25,95 +25,13 @@ Estos ya estaban documentados como "bugs" en el análisis previo, pero los agrup
 - **Refactor sugerido**: corregir el string a `'QRstyle'` en ambos archivos. Además, considerar derivar `libraryComponents.qr`/`chart` de un único array compartido (ver 2.4) para que este tipo de typo sea imposible de reintroducir.
 - **Esfuerzo**: 🟢 · **Impacto**: 🔴 Alto
 
-### 1.2 — Autocompletado genera `<Textarea>` pero el componente real es `TextArea`
-- **Archivo**: `CodeEditor.tsx` (línea 199)
-- **Problema**: `etiquetaAutoConclusiva("Textarea", ...)` — con minúscula — mientras que `core` exporta `TextArea`. Aceptar el autocompletado (el flujo más común del Playground) produce `ReferenceError: Textarea is not defined`.
-- **Refactor sugerido**: cambiar a `etiquetaAutoConclusiva("TextArea", ...)`.
-- **Esfuerzo**: 🟢 · **Impacto**: 🔴 Alto (rompe el propio flujo de autocompletar-y-usar)
 
-### 1.3 — `QuickHelp.tsx` documenta un componente `Header` que no existe
-- **Archivo**: `toolbar/QuickHelp.tsx` (pestaña "Page", ~línea 559)
-- **Problema**: no hay ningún `Header.tsx` en `components/core`. Es coherente con que en `CodeEditor.tsx` las entradas para `Header`/`Main`/`Footer` estén comentadas — parecen componentes planeados y nunca implementados.
-- **Refactor sugerido**: quitar la entrada de `componentDocs.page` (o implementar el componente si sigue en el roadmap).
-- **Esfuerzo**: 🟢 · **Impacto**: 🟡 Medio
 
-### 1.4 — Prop `lines` documentada en vez de `footerLines`
-- **Archivo**: `toolbar/QuickHelp.tsx` (pestaña "Page", ~línea 568)
-- **Problema**: la prop real de `Layout` es `footerLines` (confirmado en `core/basic/layout/Layout.tsx`). La propia pestaña "Layout" del mismo archivo sí lo documenta bien — es una inconsistencia interna. Con `lines`, la prop se ignora silenciosamente (Babel no valida tipos en tiempo de ejecución).
-- **Refactor sugerido**: cambiar `lines` → `footerLines` en el ejemplo y en la tabla de props de esa entrada.
-- **Esfuerzo**: 🟢 · **Impacto**: 🟡 Medio
 
 ---
 
 ## Fase 2 — Estructura y mantenibilidad (el núcleo del refactor)
 
-### 2.1 — `QuickHelp.tsx`: 723 líneas, de las cuales ~560 son datos estáticos mezclados con el componente
-- **Archivo**: `toolbar/QuickHelp.tsx`
-- **Problema**: el objeto `componentDocs` (con toda la documentación de props y ejemplos de cada componente, para 8 pestañas) está definido **dentro** del cuerpo del componente React, lo que significa que:
-  1. Se reconstruye por completo en cada render (aunque es un literal estático que nunca cambia).
-  2. Es imposible de testear o reutilizar de forma aislada.
-  3. Usa `any` en varios puntos (`componentDocs[activeTab]` con `@ts-ignore`, `component: any`, `prop: any`), perdiendo cualquier chequeo de tipos que hubiera detectado los bugs de la Fase 1 en tiempo de compilación.
-  4. El archivo mezcla "contenido" (textos de documentación) con "UI" (JSX de tabs, tablas, botones de copiar), dificultando que alguien no-técnico edite la documentación sin tocar código de React.
-- **Refactor sugerido**:
-  ```
-  toolbar/quickHelp/
-  ├── QuickHelp.tsx           # solo UI: tabs, panel, tabla de props, botón copiar
-  ├── componentDocs.ts        # el objeto de datos, tipado explícitamente
-  └── types.ts                # ComponentDoc, PropDoc, TabId
-  ```
-  Con un tipo como:
-  ```ts
-  export type TabId = "layout" | "text" | "table" | "position" | "lists" | "media" | "page" | "fonts"
-
-  export interface PropDoc {
-    name: string
-    type: string
-    default?: string
-    description: string
-  }
-
-  export interface ComponentDoc {
-    name: string
-    description: string
-    props: PropDoc[]
-    example: string
-  }
-
-  export const componentDocs: Record<TabId, ComponentDoc[]> = { ... }
-  ```
-  Esto elimina el `@ts-ignore` de la línea 604 y hace que TypeScript señale en rojo, por ejemplo, un `example` que use una prop no declarada — exactamente el tipo de bug de la Fase 1.
-- **Esfuerzo**: 🟡 · **Impacto**: 🔴 Alto (habilita detectar en compilación los bugs de nomenclatura, no solo corregirlos una vez)
-
-### 2.2 — `PDFPreview.tsx`: `compileCode` hace demasiadas cosas en una sola función
-- **Archivo**: `PDFPreview.tsx`
-- **Problema**: una única función de ~130 líneas mezcla: limpieza de imports/exports vía regex, detección de 4 variantes de `export default`, transpilación con Babel, construcción de un string de módulo, `new Function` + ejecución, y manejo de 5 tipos de error distintos. Es difícil de testear unitariamente (todo pasa por efectos secundarios de `setState`) y cualquier cambio futuro en una parte (p. ej. mejorar la detección de `export default`) obliga a leer y entender el resto.
-- **Refactor sugerido**: extraer funciones puras, testeables de forma aislada, y dejar que `compileCode` solo orqueste:
-  ```ts
-  // utils/compilePlaygroundCode.ts
-  export function stripImportsAndExports(code: string): string { ... }
-  export function extractDefaultExportName(code: string): string | null { ... }
-  export function transpileToJs(code: string): { code: string } | { error: string } { ... }
-  export function buildAndRunComponent(
-    transpiledCode: string,
-    componentNames: string[],
-    coreComponents: Record<string, unknown>
-  ): { component: React.ComponentType } | { error: string } { ... }
-  ```
-  Con esto, `compileCode` en `PDFPreview.tsx` queda como una secuencia legible de pasos, y cada función puede tener sus propios tests con casos límite (código vacío, sin `export default`, con `class`, etc.) sin necesidad de montar el componente React ni Monaco.
-- **Esfuerzo**: 🔴 · **Impacto**: 🔴 Alto (la lógica más frágil y crítica de todo el Playground)
-
-### 2.3 — `CodeEditor.tsx`: funciones de "sanitización" que no hacen nada
-- **Archivo**: `CodeEditor.tsx` (líneas 38-42 y 64-67)
-- **Problema**:
-  ```ts
-  const sanitizeAll = (text: string) => {
-    let s = text
-    return s
-  }
-  ```
-  Esta función (y su gemela `sanitizePastedText`) son identidad pura: reciben `text` y lo devuelven sin tocar. Es casi seguro código residual de una sanitización que existía y se quitó (o se planeó y nunca se implementó), pero deja: (a) una vuelta extra de `editorRef.current.executeEdits(...)` en cada cambio del editor que nunca hace falta, y (b) un `pasteHandler` registrado en el DOM que nunca dispara `preventDefault` porque `sanitized !== text` nunca es `true`.
-- **Refactor sugerido**: si no hay sanitización planeada a corto plazo, eliminar ambas funciones y el código que depende de que devuelvan algo distinto (el bloque `if (sanitized !== current)` en `handleEditorChange` y el `pasteHandler` completo), dejando que `onChange` se llame directo. Si sí hay una sanitización pendiente (p. ej. quitar imports peligrosos antes de pegar), dejar un comentario `// TODO` explícito y un test que documente el caso, en vez de una función que simula hacer algo.
-- **Esfuerzo**: 🟢 · **Impacto**: 🟡 Medio (simplifica el componente y evita el falso rastro de que "algo se sanitiza")
 
 ### 2.4 — `dowloadTemplate.ts`: los nombres de componentes de qr/chart están hardcodeados por segunda vez
 - **Archivo**: `toolbar/funciones/dowloadTemplate.ts`
@@ -121,59 +39,11 @@ Estos ya estaban documentados como "bugs" en el análisis previo, pero los agrup
 - **Refactor sugerido**: crear un único archivo (p. ej. `src/components/core/componentRegistry.ts` o similar) que declare, una sola vez, a qué "paquete" (`core`/`qr`/`chart`) pertenece cada componente exportado, y que tanto `dowloadTemplate.ts` como `QuickHelp.tsx` y `CodeEditor.tsx` importen desde ahí. Esto no solo arregla el bug puntual, sino que hace que un futuro componente nuevo en `qr` o `chart` no se pueda "olvidar" de registrar en un lugar y sí en otro.
 - **Esfuerzo**: 🟡 · **Impacto**: 🟡 Medio-Alto (arregla la causa raíz de 1.1, no solo el síntoma)
 
-### 2.5 — Registro de autocompletado duplicado para `javascript` y `typescript`
-- **Archivo**: `CodeEditor.tsx` (líneas 290-327)
-- **Problema**: `jsProvider` y `tsProvider` son dos bloques de ~15 líneas idénticos, con el mismo `provideCompletionItems`, registrados solo para lenguajes distintos.
-- **Refactor sugerido**: extraer una función `createCompletionProvider(customTags)` que devuelva el objeto `{ provideCompletionItems }`, y registrar ambos idiomas con `monaco.languages.registerCompletionItemProvider(lang, createCompletionProvider(customTags))`. Reduce ~15 líneas duplicadas a una sola definición.
-- **Esfuerzo**: 🟢 · **Impacto**: 🟢 Bajo (mantenibilidad, no afecta comportamiento)
-
-### 2.6 — Fábricas de snippets (`etiqueta`, `etiquetaConSalto`, etc.) viven dentro de `handleEditorDidMount`
-- **Archivo**: `CodeEditor.tsx` (líneas 119-162)
-- **Problema**: cinco funciones fábrica puras (no dependen de `editor`/`monaco` más que para leer `kind`/`insertTextRules`) están anidadas dentro del callback de montaje, junto con el array gigante `customTags` (~120 líneas). Esto hace que el archivo completo sea difícil de escanear: hay que leer todo `handleEditorDidMount` para llegar a la config real de Monaco al final.
-- **Refactor sugerido**: mover `customTags` (y sus fábricas) a un archivo propio, p. ej. `playground/utils/monacoSnippets.ts`, parametrizado por `kind`/`insertTextRules` que Monaco expone en runtime. `handleEditorDidMount` queda enfocado solo en configurar el editor y registrar los providers.
-- **Esfuerzo**: 🟡 · **Impacto**: 🟡 Medio
-
-### 2.7 — `index.tsx` (`Editor`): un componente que hace de todo
-- **Archivo**: `playground/index.tsx`
-- **Problema**: el componente `Editor` combina: fetch de `templates/index.json`, resolución de qué código cargar (URL → localStorage → default), persistencia en localStorage, detección mobile, y el layout visual. Son 4-5 responsabilidades distintas en ~90 líneas de lógica antes del `return`.
-- **Refactor sugerido**: extraer dos hooks propios:
-  ```ts
-  // hooks/usePlaygroundTemplates.ts
-  function usePlaygroundTemplates(): { templates: TemplateMeta[]; loaded: boolean }
-
-  // hooks/usePlaygroundCode.ts
-  function usePlaygroundCode(templateId: string | undefined, templates: TemplateMeta[], loaded: boolean): {
-    code: string
-    setCode: (c: string) => void
-    isLoading: boolean
-  }
-  ```
-  `Editor` queda como un componente casi puramente de layout, y cada hook se puede testear (o al menos razonar) por separado. El comentario detallado que ya existe en el código sobre por qué no se persiste cuando hay `:templateId` es valioso — debería moverse junto con la lógica al hook, no perderse.
-- **Esfuerzo**: 🟡 · **Impacto**: 🟡 Medio
 
 ---
 
 ## Fase 3 — CSS / layout (bugs visuales, bajo riesgo de tocar)
 
-### 3.1 — `ToolBar.tsx` usa `fixed` + `left-1/2` pensado para toda la ventana, no para su panel
-- **Archivo**: `toolbar/ToolBar.tsx` (línea 13), `index.tsx` (contenedor `div.w-1/2`)
-- **Problema**: `fixed bottom-6 left-1/2 -translate-x-1/2` centra respecto al **viewport completo**, pero el `ToolBar` vive dentro de la mitad izquierda de la pantalla (`w-1/2`, junto al editor). El resultado: la barra flotante aparece centrada sobre el límite editor/preview, no bajo el editor.
-- **Refactor sugerido**: hacer `relative` el contenedor `<div className="w-1/2 border-r ...">` en `index.tsx` y cambiar `ToolBar` a `absolute bottom-6 left-1/2 -translate-x-1/2` (posicionamiento relativo a su propio panel, no al viewport).
-- **Esfuerzo**: 🟢 · **Impacto**: 🟡 Medio (visual, pero notorio en pantallas anchas)
-
-### 3.2 — `CompilingIndicator` mal posicionado por falta de `position: relative` en el contenedor
-- **Archivo**: `components/CompilingIndicator.tsx`, `PDFPreview.tsx` (línea 184)
-- **Problema**: mismo patrón que 3.1 — `position: absolute` sin un ancestro `relative` cercano cae en el ancestro posicionado más próximo (o el viewport).
-- **Refactor sugerido**: agregar `position: "relative"` al `<div style={{ width: "100%", height: "100%" }}>` de `PDFPreview.tsx`.
-- **Esfuerzo**: 🟢 · **Impacto**: 🟢 Bajo-Medio
-
-### 3.3 — `ErrorBoundary.tsx` renderiza HTML normal (`div`/`h3`/`p`) dentro del árbol de `<PDFViewer>`
-- **Archivo**: `components/ErrorBoundary.tsx`, usado en `PDFPreview.tsx` envolviendo `<Component />` dentro de `<PDFViewer>`
-- **Problema**: `PDFViewer` (de `@react-pdf/renderer`) espera que sus hijos sean primitivos del renderer de PDF (`Document`, `Page`, `View`, `Text`...), no elementos DOM reales — es un renderer de React distinto (no usa el DOM). El fallback de error de `ErrorBoundary` usa `<div>`/`<h3>`/`<p>` normales, que es justo el patrón que sí siguen correctamente `ErrorDocument.tsx` y `DefaultDocument.tsx` (ambos con `<Document><Page>...`). Vale la pena confirmar visualmente si esto llega a producir algo visible o simplemente queda en blanco/rompe silenciosamente, ya que técnicamente solo se dispara si el **render** de un documento de usuario lanza (no cubre errores de compilación, que ya tienen su propio camino vía `ErrorDocument`).
-- **Refactor sugerido**: cambiar el `render()` de `ErrorBoundary` para que devuelva un `<Document><Page>...<Text>{...}</Text></Page></Document>` (reutilizando el estilo de `ErrorDocument.tsx`) en vez de HTML plano.
-- **Esfuerzo**: 🟢 · **Impacto**: 🔴 Alto si en efecto no se renderiza nada visible hoy (bug funcional, no solo estético) — recomiendo verificarlo primero en el navegador antes de tocarlo, para confirmar el efecto real.
-
----
 
 ## Fase 4 — Detalles menores / limpieza
 
