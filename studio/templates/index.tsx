@@ -1,17 +1,24 @@
-import { Layout, Img } from "@react-pdf-levelup/core"
+import { Layout, Div } from "@react-pdf-levelup/core"
 import Header from "./components/Header"
 import Main from "./components/Main"
 import Footer from "./components/Footer"
-import img from "./img.jpg"
 
+const COLORS = {
+  pageBg: "#f5f6fa",
+}
+
+const page = {
+  backgroundColor: COLORS.pageBg,
+  padding: 36,
+}
 
 const Index = () => {
   return (
-    <Layout>
-      <Img src={img} />
-      <Header />
-      <Main />
-      <Footer />
+    <Layout style={page} footer={<Footer />} pagination={false}>
+      <Div>
+        <Header />
+        <Main />
+      </Div>
     </Layout>
   )
 }
