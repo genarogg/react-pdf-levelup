@@ -1,13 +1,29 @@
 import { useState, useEffect, useCallback, useRef } from "react"
+import * as ReactPdfRenderer from "@react-pdf/renderer"
 import { PDFViewer } from "@react-pdf/renderer"
 import * as React from "react"
+import * as ReactPdfLevelupCore from "@react-pdf-levelup/core"
+import * as ReactPdfLevelupQr from "@react-pdf-levelup/qr"
+import * as ReactPdfLevelupChart from "@react-pdf-levelup/chart"
 import ErrorDocument from "@/components/playground/components/ErrorDocument"
 import ErrorBoundary from "@/components/playground/components/ErrorBoundary"
 import DefaultDocument from "@/components/playground/components/DefaultDocument"
 import CompilingIndicator from "@/components/playground/components/CompilingIndicator"
 import { buildModuleGraph } from "../compiler/moduleGraph"
-import { compileWorkspace } from "../compiler/compileWorkspace"
+import { compileWorkspace, type NpmModuleRegistry } from "../compiler/compileWorkspace"
 import { useStudio } from "../StudioContext"
+
+// Módulos npm reales (cargados por el bundle de la app vía `import` de
+// verdad) que se ponen a disposición del código del usuario dentro del
+// Studio. Las keys deben coincidir con ALLOWED_NPM_SPECIFIERS en
+// compileWorkspace.ts.
+const NPM_MODULES: NpmModuleRegistry = {
+  react: React,
+  "@react-pdf/renderer": ReactPdfRenderer,
+  "@react-pdf-levelup/core": ReactPdfLevelupCore,
+  "@react-pdf-levelup/qr": ReactPdfLevelupQr,
+  "@react-pdf-levelup/chart": ReactPdfLevelupChart,
+}
 
 export function StudioPDFPreview() {
   const { mainFile, saveVersion, setCompileStatus } = useStudio()
@@ -41,7 +57,7 @@ export function StudioPDFPreview() {
       const graph = await buildModuleGraph(mainFile)
 
       // 2) Compilar el grafo completo a un único componente ejecutable.
-      const result = compileWorkspace(graph, React)
+      const result = compileWorkspace(graph, React, NPM_MODULES)
 
       if (!result.ok) {
         setErrorComponent(result.error)

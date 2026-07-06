@@ -2,17 +2,103 @@ import * as Babel from "@babel/standalone"
 import type * as React from "react"
 
 /**
+ * Paquetes npm que el código del usuario puede importar directamente en el
+ * Playground. `new Function` no soporta `import`, así que estos imports no
+ * pueden dejarse (ni quitarse sin más, como antes): se reescriben como
+ * declaraciones locales que apuntan al módulo real, inyectado como
+ * argumento extra al ejecutar el código (ver buildAndRunComponent).
+ *
+ * Debe mantenerse igual a ALLOWED_NPM_SPECIFIERS en
+ * viewer/studio/compiler/compileWorkspace.ts.
+ */
+export const ALLOWED_NPM_SPECIFIERS = [
+  "react",
+  "@react-pdf/renderer",
+  "@react-pdf-levelup/core",
+  "@react-pdf-levelup/qr",
+  "@react-pdf-levelup/chart",
+] as const
+
+export type NpmModuleRegistry = Record<string, unknown>
+
+interface NpmImportBinding {
+  specifier: string
+  defaultLocal: string | null
+  namespaceLocal: string | null
+  namedLocals: { imported: string; local: string }[]
+}
+
+function parseImportClause(clause: string): {
+  defaultLocal: string | null
+  namespaceLocal: string | null
+  namedLocals: { imported: string; local: string }[]
+} {
+  let defaultLocal: string | null = null
+  let namespaceLocal: string | null = null
+  const namedLocals: { imported: string; local: string }[] = []
+
+  const namespaceMatch = clause.match(/\*\s+as\s+([A-Za-z0-9_$]+)/)
+  if (namespaceMatch) namespaceLocal = namespaceMatch[1]
+
+  const namedMatch = clause.match(/\{([^}]*)\}/)
+  const defaultPart = clause
+    .replace(/\{[^}]*\}/, "")
+    .replace(/\*\s+as\s+[A-Za-z0-9_$]+/, "")
+    .replace(/,/g, "")
+    .trim()
+  if (defaultPart) defaultLocal = defaultPart
+
+  if (namedMatch) {
+    for (const piece of namedMatch[1].split(",")) {
+      const trimmed = piece.trim()
+      if (!trimmed) continue
+      const asMatch = trimmed.match(/^([A-Za-z0-9_$]+)\s+as\s+([A-Za-z0-9_$]+)$/)
+      if (asMatch) namedLocals.push({ imported: asMatch[1], local: asMatch[2] })
+      else namedLocals.push({ imported: trimmed, local: trimmed })
+    }
+  }
+
+  return { defaultLocal, namespaceLocal, namedLocals }
+}
+
+/**
  * Elimina imports y exports "planos" (named exports, `export const/function/...`)
  * del código fuente, dejando intacta la lógica de `export default`, que se
  * maneja aparte en `extractDefaultExportName` + `stripDefaultExport`.
+ *
+ * Los imports de paquetes npm permitidos (ALLOWED_NPM_SPECIFIERS) no se
+ * descartan sin más: se capturan en `npmImports` y se devuelven aparte,
+ * para que quien llame pueda anteponer declaraciones locales que los
+ * conecten con los módulos reales ya cargados (ver buildAndRunComponent).
+ * Cualquier otro paquete importado se reporta en `unresolvedSpecifiers`.
  */
+export function stripImportsAndExports(code: string): {
+  code: string
+  npmImports: NpmImportBinding[]
+  unresolvedSpecifiers: string[]
+} {
+  const npmImports: NpmImportBinding[] = []
+  const unresolvedSpecifiers: string[] = []
 
-export function stripImportsAndExports(code: string): string {
-  return code
-    .replace(/(^|\n)\s*import[\s\S]*?from\s+['"][^'"]+['"];?/g, "\n")
+  const withoutNamedImports = code.replace(
+    /(^|\n)[ \t]*import\s+([^'";]+?)\s+from\s+['"]([^'"]+)['"];?/g,
+    (full, lead, clause, specifier) => {
+      if ((ALLOWED_NPM_SPECIFIERS as readonly string[]).includes(specifier)) {
+        const { defaultLocal, namespaceLocal, namedLocals } = parseImportClause(clause)
+        npmImports.push({ specifier, defaultLocal, namespaceLocal, namedLocals })
+        return lead
+      }
+      unresolvedSpecifiers.push(specifier)
+      return lead
+    }
+  )
+
+  const cleaned = withoutNamedImports
     .replace(/(^|\n)\s*import\s+['"][^'"]+['"];?/g, "\n")
     .replace(/(^|\n)\s*export\s*\{[\s\S]*?\};?/g, "\n")
     .replace(/^\s*export\s+(?=const|let|var|function|class)/gm, "")
+
+  return { code: cleaned, npmImports, unresolvedSpecifiers }
 }
 
 export type DefaultExportKind = "function" | "class" | "arrow" | "identifier"
@@ -140,12 +226,40 @@ export type BuildResult =
  */
 export function buildAndRunComponent(
   transpiledCode: string,
-  reactInstance: typeof React
+  reactInstance: typeof React,
+  npmImports: NpmImportBinding[] = [],
+  npmModules: NpmModuleRegistry = {}
 ): BuildResult {
+  // Cada import npm permitido se expone como una variable local
+  // __npm_argN, inyectada como argumento posicional (después de React) al
+  // ejecutar el código, y desde ahí se arman default/namespace/named
+  // exports tal como los pidió el código del usuario.
+  const npmArgDeclarations: string[] = []
+  const localDeclarations: string[] = []
+
+  npmImports.forEach((imp, i) => {
+    const npmVar = `__npm_arg${i}`
+    npmArgDeclarations.push(`const ${npmVar} = arguments[${i + 1}];`)
+
+    if (imp.namespaceLocal) {
+      localDeclarations.push(`const ${imp.namespaceLocal} = ${npmVar};`)
+    }
+    if (imp.defaultLocal) {
+      localDeclarations.push(
+        `const ${imp.defaultLocal} = ${npmVar} && ${npmVar}.default !== undefined ? ${npmVar}.default : ${npmVar};`
+      )
+    }
+    for (const { imported, local } of imp.namedLocals) {
+      localDeclarations.push(`const ${local} = ${npmVar}[${JSON.stringify(imported)}];`)
+    }
+  })
+
   const moduleCode = `
     'use strict';
 
     const React = arguments[0];
+    ${npmArgDeclarations.join("\n")}
+    ${localDeclarations.join("\n")}
 
     ${transpiledCode}
 
@@ -160,7 +274,15 @@ export function buildAndRunComponent(
 
   try {
     const evalFn = new Function(moduleCode)
-    candidate = evalFn(reactInstance)
+    const npmArgs = npmImports.map(({ specifier }) => {
+      if (!(specifier in npmModules)) {
+        throw new Error(
+          `El paquete "${specifier}" está permitido pero no fue provisto al compilador (falta en npmModules).`
+        )
+      }
+      return npmModules[specifier]
+    })
+    candidate = evalFn(reactInstance, ...npmArgs)
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Error de ejecución"
     return { ok: false, error: `Error de ejecución: ${msg}` }
