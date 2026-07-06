@@ -1,8 +1,15 @@
 import Header from "@/components/layout/Header"
-import { StudioProvider } from "./StudioContext"
+import { StudioProvider, useStudio } from "./StudioContext"
 import { FileExplorer } from "./fileExplorer/FileExplorer"
 import { EditorPanel } from "./editor/EditorPanel"
 import { StudioPDFPreview } from "./preview/StudioPDFPreview"
+import { StudioStatusBar } from "./toolbar/StudioStatusBar"
+import ToolBar from "./playground/toolbar"
+
+function StudioToolBar() {
+  const { openFile } = useStudio()
+  return <ToolBar code={openFile?.content ?? ""} />
+}
 
 export default function Studio() {
   return (
@@ -23,8 +30,9 @@ export default function Studio() {
             <StudioPDFPreview />
           </section>
         </div>
-     
-        {/* <StudioStatusBar /> */}
+
+        <StudioToolBar />
+        <StudioStatusBar />
       </div>
     </StudioProvider>
   )

@@ -1,5 +1,4 @@
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
-import { useEffect, useState } from "react"
 import { useStudio } from "../StudioContext"
 
 const STATUS_CONFIG = {
@@ -14,30 +13,10 @@ export function StudioStatusBar() {
   const status = STATUS_CONFIG[compileStatus]
   const Icon = status.icon
 
-  const [showNotification, setShowNotification] = useState(false)
-
-  useEffect(() => {
-    if (mainFile) {
-      setShowNotification(true)
-      const timer = setTimeout(() => {
-        setShowNotification(false)
-      }, 5000) // 5 seconds
-      return () => clearTimeout(timer) // Clean up the timer if mainFile changes again
-    } else {
-      setShowNotification(false) // Hide notification if no mainFile
-    }
-  }, [mainFile])
-
   return (
-    <>
-    {showNotification && mainFile && (
-      <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-6 left-6 z-50">
       <div className="flex items-center gap-3 px-3.5 py-2 bg-gradient-to-r from-gray-800/90 to-gray-900/90 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700/50">
-    
-
-        <div className="w-px h-4 bg-gray-700" />
-
-        <div className={`flex items-center gap-1.5 text-xs font-medium ${status.className}`}>
+        <div className={`flex items-center gap-1.5 text-xs font-medium h-[32px] ${status.className}`}>
           {Icon && <Icon className="w-3.5 h-3.5" />}
           <span>{status.label}</span>
         </div>
@@ -47,9 +26,7 @@ export function StudioStatusBar() {
             {mainFile}
           </span>
         )}
-          </div>
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   )
 }
