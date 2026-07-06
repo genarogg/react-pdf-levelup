@@ -6,7 +6,12 @@
     "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["client/*"],
+      "@react-pdf-levelup/core": ["client/components/core/index.tsx"]
+    }
   },
-  "include": ["src", "shared"]
+  "include": ["client", "shared"]
 }
