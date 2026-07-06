@@ -22,6 +22,31 @@ export async function readFile(relPath: string): Promise<string> {
   return fs.readFile(absPath, 'utf-8')
 }
 
+const IMAGE_MIME_BY_EXT: Record<string, string> = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+}
+
+export function imageMimeType(relPath: string): string | null {
+  const ext = path.extname(relPath).toLowerCase()
+  return IMAGE_MIME_BY_EXT[ext] ?? null
+}
+
+/**
+ * Lee un archivo binario (imagen) y lo devuelve como data URL base64, para
+ * poder transportarlo dentro del mismo JSON que usa /api/file sin corromper
+ * los bytes (a diferencia de readFile, que fuerza utf-8).
+ */
+export async function readFileAsDataUrl(relPath: string, mime: string): Promise<string> {
+  const absPath = resolveSafe(relPath)
+  const buffer = await fs.readFile(absPath)
+  return `data:${mime};base64,${buffer.toString('base64')}`
+}
+
 export async function writeFile(relPath: string, content: string): Promise<void> {
   const absPath = resolveSafe(relPath)
   await fs.mkdir(path.dirname(absPath), { recursive: true })

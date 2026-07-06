@@ -24,10 +24,19 @@ function resolveRelativePath(fromPath: string, importPath: string): string {
 
 const CANDIDATE_EXTENSIONS = [".tsx", ".ts", ".jsx", ".js"]
 
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"]
+
+export function isImagePath(path: string): boolean {
+  return IMAGE_EXTENSIONS.some((ext) => path.toLowerCase().endsWith(ext))
+}
+
 async function fetchFileWithExtensionFallback(path: string) {
-  // Si el import ya trae extensión, se pide directo. Si no, se prueba
-  // cada extensión candidata hasta que el backend responda 200.
-  const hasExtension = CANDIDATE_EXTENSIONS.some((ext) => path.endsWith(ext))
+  // Si el import ya trae extensión (de código o de imagen), se pide directo.
+  // Si no, se prueba cada extensión candidata de código hasta que el
+  // backend responda 200. Las imágenes siempre se importan con extensión
+  // explícita (`./img.jpg`), así que nunca deberían pasar por el fallback.
+  const hasExtension =
+    isImagePath(path) || CANDIDATE_EXTENSIONS.some((ext) => path.endsWith(ext))
   const candidates = hasExtension ? [path] : CANDIDATE_EXTENSIONS.map((ext) => path + ext)
 
   for (const candidate of candidates) {
@@ -50,6 +59,11 @@ export async function buildModuleGraph(entryPath: string): Promise<ModuleGraph> 
     const { content, resolvedPath } = await fetchFileWithExtensionFallback(currentPath)
     if (files.has(resolvedPath)) continue
     files.set(resolvedPath, content)
+
+    // Un archivo de imagen (data URL base64) no tiene imports que seguir:
+    // buscarlos ahí es trabajo innecesario y, en teoría, podría matchear
+    // algo espurio en el base64.
+    if (isImagePath(resolvedPath)) continue
 
     let match: RegExpExecArray | null
     RELATIVE_IMPORT_RE.lastIndex = 0

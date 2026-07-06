@@ -18,6 +18,34 @@ declare module "*.pdf" {
   export default content
 }
 
+// Imágenes importadas por los templates del Studio: en runtime se
+// resuelven como data URL (ver compileWorkspace.ts + server file.controller),
+// así que basta con tipar el default export como string.
+declare module "*.jpg" {
+  const content: string
+  export default content
+}
+declare module "*.jpeg" {
+  const content: string
+  export default content
+}
+declare module "*.png" {
+  const content: string
+  export default content
+}
+declare module "*.gif" {
+  const content: string
+  export default content
+}
+declare module "*.webp" {
+  const content: string
+  export default content
+}
+declare module "*.svg" {
+  const content: string
+  export default content
+}
+
 // Sufijo ?raw de Vite: importa el contenido de cualquier archivo como
 // string crudo en vez de resolverlo como módulo. Se usa para poder incluir
 // el código fuente de Icon.tsx en el .tsx que se descarga desde el Studio.

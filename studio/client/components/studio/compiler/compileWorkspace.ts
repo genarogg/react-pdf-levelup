@@ -4,6 +4,7 @@ import {
   stripDefaultExport,
 } from "@/components/studio/playground/utils/compilePlaygroundCode"
 import type { ModuleGraph } from "./moduleGraph"
+import { isImagePath } from "./moduleGraph"
 import type * as React from "react"
 
 export type WorkspaceCompileResult =
@@ -229,6 +230,15 @@ export function compileWorkspace(
   //    el código fuente final del módulo (sin imports, con declaraciones
   //    locales que apuntan a las variables ya resueltas).
   for (const path of pathList) {
+    // Un archivo de imagen no tiene imports propios que resolver: su
+    // "código" es un data URL, no debe pasar por extractImports/Babel.
+    // dependenciesByPath queda vacío para este path (no depende de nada) y
+    // el módulo real se genera aparte en el paso 3.
+    if (isImagePath(path)) {
+      dependenciesByPath.set(path, [])
+      continue
+    }
+
     const originalSource = graph.files.get(path)!
     const { codeWithoutImports, relativeImports, npmImports, unresolvedSpecifiers } =
       extractImports(originalSource)
@@ -300,6 +310,20 @@ export function compileWorkspace(
   for (const path of order) {
     const varName = varNameByPath.get(path)!
     const originalSource = graph.files.get(path)!
+
+    // Un archivo de imagen no es código: su contenido ya es el data URL
+    // (ver server/models/workspace.model.ts) y se expone tal cual como
+    // `default`, sin pasar por Babel.
+    if (isImagePath(path)) {
+      moduleDeclarations.push(`
+        const ${varName} = {
+          default: ${JSON.stringify(originalSource)},
+          exports: {}
+        };
+      `)
+      continue
+    }
+
     const bodySource = moduleBodySourceByPath.get(path)!
     const defaultExportInfo = extractDefaultExportName(originalSource)
 

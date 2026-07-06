@@ -24,8 +24,14 @@ export async function getFile(
     throw err
   }
 
-  const content = await workspaceModel.readFile(relPath)
   const absPath = resolveSafe(relPath)
+
+  // Las imágenes son binarias: se leen con fs.readFile crudo y se devuelven
+  // como data URL, en vez de forzar utf-8 (que corrompería los bytes).
+  const mime = workspaceModel.imageMimeType(relPath)
+  const content = mime
+    ? await workspaceModel.readFileAsDataUrl(relPath, mime)
+    : await workspaceModel.readFile(relPath)
 
   const response: GetFileResponse = {
     path: relPath,
