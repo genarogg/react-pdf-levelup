@@ -1,9 +1,7 @@
-import * as CoreComponents from "@react-pdf-levelup/core"
 import {
   transpileToJs,
   extractDefaultExportName,
   stripDefaultExport,
-  getUsableComponentNames,
 } from "@/components/playground/utils/compilePlaygroundCode"
 import type { ModuleGraph } from "./moduleGraph"
 import type * as React from "react"
@@ -21,10 +19,10 @@ interface RelativeImportBinding {
 /**
  * Recorre el código fuente ORIGINAL (antes de transpilar) y separa los
  * imports en dos grupos:
- *  - de paquetes npm: se remueven del texto (los recibe el módulo como
- *    CoreComponents inyectado, igual que hoy en compilePlaygroundCode.ts).
- *  - relativos (a otros archivos del workspace): también se remueven del
- *    texto, pero se devuelven aparte para reescribirlos como declaraciones
+ *  - de paquetes npm: se dejan intactos en el texto, tal cual los escribió
+ *    el usuario (es él quien controla qué importa y de dónde).
+ *  - relativos (a otros archivos del workspace): se remueven del texto,
+ *    pero se devuelven aparte para reescribirlos como declaraciones
  *    locales que apuntan a la variable de módulo ya resuelta.
  */
 function extractImports(code: string): {
@@ -37,7 +35,7 @@ function extractImports(code: string): {
     /(^|\n)[ \t]*import\s+([^'";]+?)\s+from\s+['"]([^'"]+)['"];?/g,
     (full, lead, clause, specifier) => {
       if (!specifier.startsWith(".") && !specifier.startsWith("/")) {
-        return lead
+        return full
       }
 
       let defaultLocal: string | null = null
@@ -212,14 +210,10 @@ export function compileWorkspace(
   // 4) Concatenar todos los módulos dentro de un único `new Function`,
   //    exactamente con el mismo mecanismo de `buildAndRunComponent` — pero
   //    con N módulos en vez de 1.
-  const componentNames = getUsableComponentNames(CoreComponents)
-
   const moduleCode = `
     'use strict';
 
     const React = arguments[0];
-    const CoreComponents = arguments[1];
-    const { ${componentNames.join(", ")} } = CoreComponents;
 
     ${moduleDeclarations.join("\n")}
 
@@ -236,7 +230,7 @@ export function compileWorkspace(
 
   try {
     const evalFn = new Function(moduleCode)
-    candidate = evalFn(reactInstance, CoreComponents)
+    candidate = evalFn(reactInstance)
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Error de ejecución"
     return { ok: false, error: `Error de ejecución: ${msg}` }

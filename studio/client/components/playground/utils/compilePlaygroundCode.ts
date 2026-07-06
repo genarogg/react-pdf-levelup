@@ -128,35 +128,6 @@ export function transpileToJs(modifiedCode: string): TranspileResult {
   }
 }
 
-/**
- * Devuelve los nombres de CoreComponents que son "usables" dentro del
- * módulo generado (funciones u objetos, p. ej. forwardRef/memo).
- *
- * IMPORTANTE: también se incluyen los valores `typeof === "string"`.
- * `@react-pdf/renderer` no implementa sus primitivas (`Text`, `View`,
- * `Document`, `Page`, `Image`, `Link`, `Svg`, etc.) como componentes React
- * reales: las exporta como strings literales ("TEXT", "VIEW", "DOCUMENT"...)
- * que su reconciler interpreta como tipos de elemento "host" (igual que
- * "div" lo es para react-dom). Si se excluyen aquí, nunca quedan declaradas
- * como variable local dentro del módulo `eval`'d en `buildAndRunComponent`,
- * y el JSX `<Text>`/`<Document>`/`<Image>` termina resolviendo contra el
- * global del navegador del mismo nombre (window.Text, window.Document,
- * window.Image), que exige `new` y revienta con
- * "Failed to construct 'Text': Please use the 'new' operator".
- */
-export function getUsableComponentNames(
-  coreComponents: Record<string, unknown>
-): string[] {
-  return Object.keys(coreComponents).filter(key => {
-    const value = coreComponents[key]
-    return (
-      typeof value === "function" ||
-      typeof value === "object" ||
-      typeof value === "string"
-    )
-  })
-}
-
 export type BuildResult =
   | { ok: true; component: React.ComponentType }
   | { ok: false; error: string }
@@ -169,16 +140,12 @@ export type BuildResult =
  */
 export function buildAndRunComponent(
   transpiledCode: string,
-  componentNames: string[],
-  reactInstance: typeof React,
-  coreComponents: Record<string, unknown>
+  reactInstance: typeof React
 ): BuildResult {
   const moduleCode = `
     'use strict';
 
     const React = arguments[0];
-    const CoreComponents = arguments[1];
-    const { ${componentNames.join(", ")} } = CoreComponents;
 
     ${transpiledCode}
 
@@ -193,7 +160,7 @@ export function buildAndRunComponent(
 
   try {
     const evalFn = new Function(moduleCode)
-    candidate = evalFn(reactInstance, coreComponents)
+    candidate = evalFn(reactInstance)
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Error de ejecución"
     return { ok: false, error: `Error de ejecución: ${msg}` }

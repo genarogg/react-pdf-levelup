@@ -7,8 +7,8 @@ export interface ModuleGraph {
 
 // Extrae los specifiers de import que empiezan con "." o "/"
 // (imports relativos al workspace). Los de npm (@react-pdf-levelup/core, etc.)
-// no matchean este regex y se ignoran acá: Vite los resuelve normal cuando
-// compileWorkspace.ts los usa como CoreComponents inyectado, igual que hoy.
+// no matchean este regex y se ignoran acá: quedan intactos en el código y
+// los resuelve el propio bundler/runtime, tal como los escribió el usuario.
 const RELATIVE_IMPORT_RE = /import\s+[^'"]*?from\s+['"](\.[^'"]+)['"]/g
 
 function resolveRelativePath(fromPath: string, importPath: string): string {

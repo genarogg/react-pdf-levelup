@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { PDFViewer } from "@react-pdf/renderer"
 import * as React from "react"
-import * as CoreComponents from "@react-pdf-levelup/core"
 import ErrorDocument from "./components/ErrorDocument"
 import ErrorBoundary from "./components/ErrorBoundary"
 import DefaultDocument from "./components/DefaultDocument"
@@ -11,7 +10,6 @@ import {
   extractDefaultExportName,
   stripDefaultExport,
   transpileToJs,
-  getUsableComponentNames,
   buildAndRunComponent,
 } from "./utils/compilePlaygroundCode"
 
@@ -69,16 +67,8 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
         return
       }
 
-      // 4) Resolver qué nombres de CoreComponents están disponibles
-      const componentNames = getUsableComponentNames(CoreComponents)
-
-      // 5) Construir el módulo y ejecutarlo
-      const result = buildAndRunComponent(
-        transpiled.code,
-        componentNames,
-        React,
-        CoreComponents
-      )
+      // 4) Construir el módulo y ejecutarlo
+      const result = buildAndRunComponent(transpiled.code, React)
 
       if (!result.ok) {
         setErrorComponent(result.error)
