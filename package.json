@@ -11,7 +11,8 @@
     "frontend",
     "docs",
     "lib",
-    "api"
+    "api",
+    "studio"
   ],
   "scripts": {
     "dev": "turbo run dev",
@@ -24,7 +25,7 @@
     "demo:api": "cd api && pnpm run demo",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
-    "clean:install": "node ./global/clean.js && pnpm install && node ./lib/scripts/build-all.js"
+    "clean:install": "node ./global/clean.js && pnpm install && cd lib && pnpm run build-all"
   },
   "dependencies": {
     "archiver": "^7.0.1",
