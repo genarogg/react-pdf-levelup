@@ -79,7 +79,7 @@ export function TreeNode({
         {isMain && <Star className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />}
 
         {/* Acciones al hover */}
-        <div className="hidden group-hover:flex items-center gap-1 flex-shrink-0">
+        <div className="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto flex items-center gap-1 flex-shrink-0 transition-opacity duration-75">
           {isFolder && (
             <>
               <button
