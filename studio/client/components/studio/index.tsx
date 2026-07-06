@@ -3,7 +3,6 @@ import { StudioProvider } from "./StudioContext"
 import { FileExplorer } from "./fileExplorer/FileExplorer"
 import { EditorPanel } from "./editor/EditorPanel"
 import { StudioPDFPreview } from "./preview/StudioPDFPreview"
-import { StudioStatusBar } from "./toolbar/StudioStatusBar"
 
 export default function Studio() {
   return (
@@ -24,8 +23,8 @@ export default function Studio() {
             <StudioPDFPreview />
           </section>
         </div>
-
-        <StudioStatusBar />
+     
+        {/* <StudioStatusBar /> */}
       </div>
     </StudioProvider>
   )
