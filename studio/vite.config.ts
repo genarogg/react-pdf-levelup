@@ -12,16 +12,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client'),
-      // @react-pdf-levelup/core es el paquete que este mismo proyecto va a
-      // publicar en npm; hasta que exista en el registro, se resuelve al
-      // código fuente local (autocontenido, sin depender de rutas internas
-      // del cliente del Studio) para que el import sea idéntico al de
-      // producción el día que se publique de verdad.
-      '@react-pdf-levelup/core': path.resolve(__dirname, './client/components/core'),
-      // "canvas" solo se importa dinámicamente en la rama server-side de
-      // QRGenerator.ts, dentro de un try/catch que nunca se ejecuta en el
-      // navegador. Se apunta a un módulo vacío para que ni Vite en dev ni
-      // Rollup en build intenten resolver el paquete nativo real.
+      // "canvas" es una dependencia nativa (requiere compilación con
+      // cairo/pango) que solo se usa en la rama server-side de
+      // @react-pdf-levelup/qr, dentro de un try/catch que nunca se ejecuta
+      // en el navegador. Se apunta a un módulo vacío para que ni Vite en
+      // dev ni Rollup en build intenten resolver el paquete nativo real.
       'canvas': path.resolve(__dirname, './client/lib/emptyModule.ts')
     }
   },

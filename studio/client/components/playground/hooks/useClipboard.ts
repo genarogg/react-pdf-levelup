@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 
 export function useClipboard(timeout = 1500) {
   const [copiedKey, setCopiedKey] = useState<string | number | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const timeoutRef = useRef<any>(null)
 
   const copy = async (text: string, key: string | number) => {
     try {

@@ -14,7 +14,7 @@ interface CodeEditorProps {
 
 // Movido fuera del componente: es una fábrica pura, no necesita recrearse en cada render.
 const debounce = (func: Function, delay: number) => {
-  let timeoutId: NodeJS.Timeout
+  let timeoutId: ReturnType<typeof setTimeout>
   return (...args: any[]) => {
     clearTimeout(timeoutId)
     timeoutId = setTimeout(() => {
