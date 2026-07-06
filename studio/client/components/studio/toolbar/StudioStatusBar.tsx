@@ -1,5 +1,5 @@
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
-// import QuickHelp from "@/components/playground/toolbar/QuickHelp"
+import { useEffect, useState } from "react"
 import { useStudio } from "../StudioContext"
 
 const STATUS_CONFIG = {
@@ -14,8 +14,24 @@ export function StudioStatusBar() {
   const status = STATUS_CONFIG[compileStatus]
   const Icon = status.icon
 
+  const [showNotification, setShowNotification] = useState(false)
+
+  useEffect(() => {
+    if (mainFile) {
+      setShowNotification(true)
+      const timer = setTimeout(() => {
+        setShowNotification(false)
+      }, 5000) // 5 seconds
+      return () => clearTimeout(timer) // Clean up the timer if mainFile changes again
+    } else {
+      setShowNotification(false) // Hide notification if no mainFile
+    }
+  }, [mainFile])
+
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+    <>
+    {showNotification && mainFile && (
+      <div className="fixed bottom-4 right-4 z-50">
       <div className="flex items-center gap-3 px-3.5 py-2 bg-gradient-to-r from-gray-800/90 to-gray-900/90 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700/50">
     
 
@@ -31,7 +47,9 @@ export function StudioStatusBar() {
             {mainFile}
           </span>
         )}
-      </div>
-    </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
