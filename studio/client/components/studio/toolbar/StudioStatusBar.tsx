@@ -1,5 +1,5 @@
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react"
-import QuickHelp from "@/components/playground/toolbar/QuickHelp"
+// import QuickHelp from "@/components/playground/toolbar/QuickHelp"
 import { useStudio } from "../StudioContext"
 
 const STATUS_CONFIG = {
@@ -17,7 +17,7 @@ export function StudioStatusBar() {
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
       <div className="flex items-center gap-3 px-3.5 py-2 bg-gradient-to-r from-gray-800/90 to-gray-900/90 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700/50">
-        <QuickHelp inline />
+        {/* <QuickHelp inline /> */}
 
         <div className="w-px h-4 bg-gray-700" />
 

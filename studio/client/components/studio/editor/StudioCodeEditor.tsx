@@ -1,6 +1,6 @@
 import { useRef, useEffect, useMemo } from "react"
 import { Editor } from "@monaco-editor/react"
-import { getMonacoSnippets } from "@/components/playground/utils/monacoSnippets"
+import { getMonacoSnippets } from "@/components/studio/playground/utils/monacoSnippets"
 
 const safeDispose = (disposable: { dispose: () => void } | null | undefined, label: string) => {
   if (!disposable) return

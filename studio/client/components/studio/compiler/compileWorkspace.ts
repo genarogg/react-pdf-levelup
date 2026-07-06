@@ -2,7 +2,7 @@ import {
   transpileToJs,
   extractDefaultExportName,
   stripDefaultExport,
-} from "@/components/playground/utils/compilePlaygroundCode"
+} from "@/components/studio/playground/utils/compilePlaygroundCode"
 import type { ModuleGraph } from "./moduleGraph"
 import type * as React from "react"
 
