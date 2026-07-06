@@ -1,8 +1,5 @@
 // Importar todos los exports de react-pdf-levelup
 import * as ReactPdfLevelup from "@react-pdf-levelup/core";
-// Fuente de Icon.tsx como texto crudo (Vite ?raw), para poder descargarla
-// junto al template cuando el usuario lo usa (ver nota más abajo).
-import ICON_SOURCE from "@/components/icon/Icon.tsx?raw";
 
 
 // Tipos para mejorar la legibilidad y mantenibilidad
@@ -10,14 +7,12 @@ interface LibraryComponents {
   core: string[];
   qr: string[];
   chart: string[];
-  icon: string[];
 }
 
 interface UsedComponents {
   core: Set<string>;
   qr: Set<string>;
   chart: Set<string>;
-  icon: Set<string>;
 }
 
 // Función pura para detectar componentes utilizados
@@ -33,8 +28,7 @@ const detectUsedComponents = (code: string, libraryComponents: LibraryComponents
   const usedComponents: UsedComponents = {
     core: new Set<string>(),
     qr: new Set<string>(),
-    chart: new Set<string>(),
-    icon: new Set<string>()
+    chart: new Set<string>()
   };
 
   const isComponentUsed = (component: string, componentCode: string): boolean => {
@@ -60,15 +54,9 @@ const detectUsedComponents = (code: string, libraryComponents: LibraryComponents
     }
   });
 
-  libraryComponents.icon.forEach(component => {
-    if (isComponentUsed(component, code)) {
-      usedComponents.icon.add(component);
-    }
-  });
-
-  const qrChartAndIconComponents = [...libraryComponents.qr, ...libraryComponents.chart, ...libraryComponents.icon];
+  const qrAndChartComponents = [...libraryComponents.qr, ...libraryComponents.chart];
   libraryComponents.core.forEach(component => {
-    if (!qrChartAndIconComponents.includes(component)) {
+    if (!qrAndChartComponents.includes(component)) {
       if (isComponentUsed(component, code)) {
         usedComponents.core.add(component);
       }
@@ -115,14 +103,6 @@ const buildImportsSection = (usedComponents: UsedComponents): string => {
     importsSection += `    } from "@react-pdf-levelup/chart";\n`;
   }
 
-  // Icon todavía no tiene paquete npm propio: se descarga junto al template
-  // como archivo aparte (./Icon.tsx) e importa con ruta relativa, en vez de
-  // un specifier de paquete que no existiría al abrir el proyecto del
-  // usuario.
-  if (usedComponents.icon.size > 0) {
-    importsSection += `import Icon from "./Icon";\n`;
-  }
-
   return importsSection + '\n\n';
 };
 
@@ -143,8 +123,7 @@ const downloadTemplate = (templateCode: string) => {
     const libraryComponents = {
         core: Object.keys(ReactPdfLevelup).filter(key => /^[A-Z]/.test(key)),
         qr: ['QR', 'QRstyle'],
-        chart: ['ChartJS'],
-        icon: ['Icon']
+        chart: ['ChartJS']
     };
 
     const usedComponents = detectUsedComponents(templateCode, libraryComponents);
@@ -158,14 +137,6 @@ const downloadTemplate = (templateCode: string) => {
     }
 
     downloadTextFile("template.tsx", fullTemplateContent);
-
-    // Icon no tiene paquete npm propio todavía: si el template lo usa, se
-    // descarga también su código fuente como segundo archivo, ya que el
-    // import generado ("./Icon") apunta a un archivo local junto al
-    // template, no a un paquete instalable.
-    if (usedComponents.icon.size > 0) {
-        downloadTextFile("Icon.tsx", ICON_SOURCE);
-    }
 };
 
 

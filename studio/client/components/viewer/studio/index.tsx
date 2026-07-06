@@ -9,7 +9,7 @@ export default function Studio() {
   return (
     <StudioProvider>
       <div className="flex flex-col h-screen bg-black">
-        <Header />
+        <Header context="studio" />
 
         <div className="flex flex-1 min-h-0">
           <aside className="w-64 flex-shrink-0">

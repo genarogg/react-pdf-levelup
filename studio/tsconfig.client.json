@@ -9,7 +9,8 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["client/*"]
+      "@/*": ["client/*"],
+      "@react-pdf-levelup/core": ["client/components/core/index.tsx"]
     }
   },
   "include": ["client", "shared"]
