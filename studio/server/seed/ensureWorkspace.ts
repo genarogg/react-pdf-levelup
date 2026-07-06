@@ -1,21 +1,20 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { WORKSPACE_DIR } from '../config.js'
 import { writeState, readState } from '../models/state.model.js'
 
-const SEED_INDEX_TSX = `import React from 'react'
-import { Document, Page, Text } from '@react-pdf/renderer'
+// __dirname no existe en ESM; lo reconstruimos para que la ruta a
+// templatesExample sea relativa a ESTE archivo (server/seed/) y no a
+// process.cwd(), que puede variar según desde dónde se arranque el server.
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export default function MyDocument() {
-  return (
-    <Document>
-      <Page size="A4" style={{ padding: 32 }}>
-        <Text>¡Hola desde react-pdf-levelup!</Text>
-      </Page>
-    </Document>
-  )
-}
-`
+const TEMPLATES_EXAMPLE_DIR = path.resolve(__dirname, '../templatesExample')
+
+// Archivo "principal" dentro de templatesExample que debe quedar seteado
+// como mainFile tras el seed. Debe coincidir con el nombre real del archivo
+// (case-sensitive) copiado a la raíz del workspace.
+const SEED_MAIN_FILE = 'Index.tsx'
 
 export async function ensureWorkspace(): Promise<void> {
   await fs.mkdir(WORKSPACE_DIR, { recursive: true })
@@ -24,9 +23,8 @@ export async function ensureWorkspace(): Promise<void> {
   const isEmpty = entries.length === 0
 
   if (isEmpty) {
-    const indexPath = path.join(WORKSPACE_DIR, 'index.tsx')
-    await fs.writeFile(indexPath, SEED_INDEX_TSX, 'utf-8')
-    await writeState({ mainFile: 'index.tsx' })
+    await fs.cp(TEMPLATES_EXAMPLE_DIR, WORKSPACE_DIR, { recursive: true })
+    await writeState({ mainFile: SEED_MAIN_FILE })
     return
   }
 

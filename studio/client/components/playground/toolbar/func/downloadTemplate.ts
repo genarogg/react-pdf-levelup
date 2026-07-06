@@ -2,7 +2,7 @@
 import * as ReactPdfLevelup from "@react-pdf-levelup/core";
 // Fuente de Icon.tsx como texto crudo (Vite ?raw), para poder descargarla
 // junto al template cuando el usuario lo usa (ver nota más abajo).
-import ICON_SOURCE from "@/components/icon/Icon.tsx?raw";
+
 
 
 // Tipos para mejorar la legibilidad y mantenibilidad
@@ -158,14 +158,6 @@ const downloadTemplate = (templateCode: string) => {
     }
 
     downloadTextFile("template.tsx", fullTemplateContent);
-
-    // Icon no tiene paquete npm propio todavía: si el template lo usa, se
-    // descarga también su código fuente como segundo archivo, ya que el
-    // import generado ("./Icon") apunta a un archivo local junto al
-    // template, no a un paquete instalable.
-    if (usedComponents.icon.size > 0) {
-        downloadTextFile("Icon.tsx", ICON_SOURCE);
-    }
 };
 
 

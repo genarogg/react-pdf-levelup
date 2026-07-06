@@ -56,6 +56,14 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
       kind,
     },
 
+    // Snippet de componente funcional vacío
+    {
+      label: "fx",
+      insertText: `const \${1:NombreComponent} = () => {\n  return (\n    <>\n      $2\n    </>\n  )\n}\n\nexport default \${1:NombreComponent}`,
+      kind,
+      insertTextRules,
+    },
+
     // Componentes de texto
     etiqueta("P"),
     etiqueta("H1"),

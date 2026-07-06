@@ -5,7 +5,6 @@ export function useClickOutside(ref: RefObject<HTMLElement | null>, onOutside: (
     if (!active) return
 
     const handler = (e: MouseEvent) => {
-      // Do nothing if clicking ref's element or descendent elements
       if (ref.current && !ref.current.contains(e.target as Node)) {
         onOutside()
       }
