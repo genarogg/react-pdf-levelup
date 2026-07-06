@@ -21,6 +21,7 @@
   },
   "include": [
     "./index.ts",
+    "./assets.d.ts",
     "../../frontend/src/**/*.ts",
     "../../frontend/src/**/*.tsx"
   ],

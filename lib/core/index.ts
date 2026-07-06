@@ -1,3 +1,5 @@
+/// <reference path="./assets.d.ts" />
+
 import {
     PDFViewer,
     Document,
