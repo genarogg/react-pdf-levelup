@@ -25,3 +25,10 @@ declare module "*.svg" {
   const content: string
   export default content
 }
+
+// Fuentes (ttf) importadas como módulo.
+// El bundler devolverá la URL estática del archivo para usar con React-PDF.
+declare module "*.ttf" {
+  const content: string
+  export default content
+}
