@@ -18,9 +18,9 @@
     "@fastify/static": "^7.0.4",
     "@fastify/cors": "^9.0.1",
     "@react-pdf/renderer": "^4",
-    "@react-pdf-levelup/core": "lastest",
-    "@react-pdf-levelup/qr": "lastest",
-    "@react-pdf-levelup/chart": "lastest",
+    "@react-pdf-levelup/core": "latest",
+    "@react-pdf-levelup/qr": "latest",
+    "@react-pdf-levelup/chart": "latest",
     "@babel/standalone": "^7.28.5",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -36,8 +36,8 @@
     "lucide": "^0.562.0",
     "lucide-react": "^0.562.0",
     "monaco-editor": "^0.55.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
