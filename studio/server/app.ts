@@ -14,7 +14,7 @@ import routes from './routes/index.js'
 // server/seed/ensureWorkspace.ts.
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const app = Fastify({})
+const app = Fastify({ logger: !isProduction })
 
 if (!isProduction) {
   await app.register(fastifyCors, { origin: 'http://localhost:8000' })
