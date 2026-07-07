@@ -1,5 +1,5 @@
 import { Div, Small, H1, P, Center, Img } from "@react-pdf-levelup/core"
-import logo from "../asset/imgs/logo.png"
+import logo from "../asset/logo.png"
 
 const COLORS = {
   ink: "#1a1a2e",

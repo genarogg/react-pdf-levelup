@@ -1,26 +1,11 @@
-import { Layout, Div, Font } from "@react-pdf-levelup/core"
+import { Layout, Div } from "@react-pdf-levelup/core"
 import Header from "./components/Header"
 import Main from "./components/Main"
 import Footer from "./components/Footer"
-
-import CourierPrimeBold from "./asset/fonts/CourierPrime-Bold.ttf"
-import CourierPrimeRegular from "./asset/fonts/CourierPrime-Regular.ttf"
+import getFuentes from "./getFuentes"
 
 const Index = () => {
-
-  Font.register({
-    family: "Courier Prime",
-    fonts: [
-      {
-        src: CourierPrimeRegular,
-        fontWeight: "normal",
-      },
-      {
-        src: CourierPrimeBold,
-        fontWeight: "bold",
-      },
-    ],
-  });
+  getFuentes()
 
   const COLORS = {
     pageBg: "#f5f6fa",
@@ -29,6 +14,7 @@ const Index = () => {
   const page = {
     backgroundColor: COLORS.pageBg,
     padding: 36,
+
   }
 
   return (

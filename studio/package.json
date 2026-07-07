@@ -11,7 +11,8 @@
     "build:client": "tsc -p tsconfig.client.json && vite build",
     "build:server": "tsc -p tsconfig.server.json",
     "start": "cross-env NODE_ENV=production node dist/server/server/index.js",
-    "typecheck": "tsc -p tsconfig.client.json --noEmit && tsc -p tsconfig.server.json --noEmit"
+    "typecheck": "tsc -p tsconfig.client.json --noEmit && tsc -p tsconfig.server.json --noEmit", 
+    "demo": "tsx ./templates/demo.ts"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",

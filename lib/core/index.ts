@@ -40,6 +40,7 @@ import { LayoutMultiPage, Section } from "../../frontend/src/components/core/bas
 
 import decodeBase64Pdf from "../../frontend/src/functions/decodeBase64Pdf"
 import generatePDF from "../../frontend/src/functions/generatePDF"
+import getFont from "../../frontend/src/functions/getFont"
 
 export {
     // react pdf renderer
@@ -59,7 +60,7 @@ export {
     Polygon,
     ClipPath,
     // funciones
-    decodeBase64Pdf, generatePDF,
+    decodeBase64Pdf, generatePDF, getFont,
     // imgs
     Img, ImgBg,
     // alignment
