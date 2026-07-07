@@ -7,7 +7,7 @@ description: Component for creating PDF documents with multiple individually con
 
 The **LayoutMultiPage** component is an advanced alternative to the standard `Layout`. While `Layout` handles content as a continuous flow that automatically splits into pages, `LayoutMultiPage` allows you to explicitly define each page (using the `Section` component) and configure specific properties for each one.
 
-Internally, `LayoutMultiPage` acts as the `<Document>` container and allows injecting global configurations to all its child pages.
+Internally, `LayoutMultiPage` manages the document configuration and allows injecting global configurations to all its child pages.
 
 ---
 
@@ -62,7 +62,7 @@ This example shows a document where the first page has a different design than t
 ```tsx
 import { LayoutMultiPage, Section, H1, P } from '@react-pdf-levelup/core';
 
-function MyMultiPageDocument() {
+const MyMultiPageDocument = () => {
   return (
     <LayoutMultiPage 
       size="A4" 
@@ -83,6 +83,8 @@ function MyMultiPageDocument() {
     </LayoutMultiPage>
   );
 }
+
+export default MyMultiPageDocument
 ```
 
 ## Differences with Layout

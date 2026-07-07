@@ -19,6 +19,8 @@ Componentes básicos de texto (párrafo y encabezados). Soportan todas las propi
 ### Ejemplo
 
 ```tsx
+import { H1, H3, P } from '@react-pdf-levelup/core';
+
 <H1>Título</H1>
 <H3>Subtítulo</H3>
 <P>Parrafo con texto normal.</P>
@@ -45,6 +47,8 @@ Componentes de formato de texto en línea. Soportan todas las propiedades del co
 ### Ejemplo
 
 ```tsx
+import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
+
 <P>
   <Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U>Subrayado</U>, <Small>Pequeño</Small>
 </P>
@@ -66,6 +70,8 @@ Bloque de cita para destacar texto importante. Soporta todas las propiedades del
 ### Ejemplo
 
 ```tsx
+import { Blockquote } from '@react-pdf-levelup/core';
+
 <Blockquote>Una cita destacada en el documento.</Blockquote>
 ```
 
@@ -85,6 +91,8 @@ Texto resaltado (como con un marcador). Soporta todas las propiedades del compon
 ### Ejemplo
 
 ```tsx
+import { Mark } from '@react-pdf-levelup/core';
+
 <Mark>Texto resaltado</Mark>
 ```
 
@@ -104,6 +112,8 @@ Contenedor de texto inline genérico. Soporta todas las propiedades del componen
 ### Ejemplo
 
 ```tsx
+import { P, Span } from '@react-pdf-levelup/core';
+
 <P>Texto normal con un <Span style={{ color: 'red' }}>span rojo</Span>.</P>
 ```
 
@@ -123,6 +133,8 @@ Salto de línea. Soporta todas las propiedades del componente `Text`.
 ### Ejemplo
 
 ```tsx
+import { P, BR } from '@react-pdf-levelup/core';
+
 <P>Linea 1</P>
 <BR />
 <P>Linea 2</P>
@@ -144,6 +156,8 @@ Línea horizontal divisoria. Soporta todas las propiedades del componente `View`
 ### Ejemplo
 
 ```tsx
+import { HR } from '@react-pdf-levelup/core';
+
 <HR />
 ```
 
@@ -164,6 +178,8 @@ Enlace (Link). Soporta todas las propiedades del componente `Link` de `@react-pd
 ### Ejemplo
 
 ```tsx
+import { A } from '@react-pdf-levelup/core';
+
 <A href="https://example.com">Ir al sitio web</A>
 ```
 
@@ -183,6 +199,9 @@ Contenedor genérico para agrupar elementos. Soporta todas las propiedades del c
 ### Ejemplo
 
 ```tsx
+import { Div, P } from '@react-pdf-levelup/core';
+
 <Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
   <P>Contenido dentro de un Div</P>
 </Div>
+```

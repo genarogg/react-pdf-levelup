@@ -57,7 +57,7 @@ Los componentes `Col` (desde `Col1` hasta `Col12`) representan columnas individu
 ```tsx
 import { Layout, Container, Row, Col6, Col3, P } from '@react-pdf-levelup/core';
 
-function MyDocument() {
+const MyDocument = () => {
   return (
     <Layout>
         <Container>
@@ -81,4 +81,6 @@ function MyDocument() {
     </Layout>
   );
 }
+
+export default MyDocument
 ```

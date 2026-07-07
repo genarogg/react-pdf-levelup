@@ -19,6 +19,8 @@ Basic text components (paragraph and headings). They support all properties of t
 ### Example
 
 ```tsx
+import { H1, H3, P } from '@react-pdf-levelup/core';
+
 <H1>Title</H1>
 <H3>Subtitle</H3>
 <P>Paragraph with normal text.</P>
@@ -45,6 +47,8 @@ Inline text formatting components. They support all properties of the `Text` com
 ### Example
 
 ```tsx
+import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
+
 <P>
   <Strong>Bold</Strong>, <Em>Italic</Em>, <U>Underlined</U>, <Small>Small</Small>
 </P>
@@ -66,6 +70,8 @@ Blockquote for highlighting important text. Supports all properties of the `Text
 ### Example
 
 ```tsx
+import { Blockquote } from '@react-pdf-levelup/core';
+
 <Blockquote>A highlighted quote in the document.</Blockquote>
 ```
 
@@ -85,6 +91,8 @@ Highlighted text (like with a marker). Supports all properties of the `Text` com
 ### Example
 
 ```tsx
+import { Mark } from '@react-pdf-levelup/core';
+
 <Mark>Highlighted Text</Mark>
 ```
 
@@ -104,6 +112,8 @@ Generic inline text container. Supports all properties of the `Text` component.
 ### Example
 
 ```tsx
+import { P, Span } from '@react-pdf-levelup/core';
+
 <P>Normal text with a <Span style={{ color: 'red' }}>red span</Span>.</P>
 ```
 
@@ -123,6 +133,8 @@ Line break. Supports all properties of the `Text` component.
 ### Example
 
 ```tsx
+import { P, BR } from '@react-pdf-levelup/core';
+
 <P>Line 1</P>
 <BR />
 <P>Line 2</P>
@@ -144,6 +156,8 @@ Horizontal dividing line. Supports all properties of the `View` component.
 ### Example
 
 ```tsx
+import { HR } from '@react-pdf-levelup/core';
+
 <HR />
 ```
 
@@ -164,6 +178,8 @@ Link. Supports all properties of the `Link` component from `@react-pdf/renderer`
 ### Example
 
 ```tsx
+import { A } from '@react-pdf-levelup/core';
+
 <A href="https://example.com">Go to website</A>
 ```
 
@@ -183,6 +199,9 @@ Generic container for grouping elements. Supports all properties of the `View` c
 ### Example
 
 ```tsx
+import { Div, P } from '@react-pdf-levelup/core';
+
 <Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
   <P>Content inside a Div</P>
 </Div>
+```
