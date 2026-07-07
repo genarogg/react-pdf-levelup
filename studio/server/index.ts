@@ -10,7 +10,7 @@ app
     app.log.info(
       isProduction
         ? `Servidor de producción en http://localhost:${PORT}`
-        : `API de desarrollo en http://localhost:${PORT} (frontend en http://localhost:8500)`
+        : `API de desarrollo en http://localhost:${PORT} (frontend en http://localhost:8000)`
     )
   })
   .catch((err) => {

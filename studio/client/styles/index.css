@@ -267,3 +267,7 @@ a, button, [role="button"], input[type="button"], input[type="submit"], label {
   color: rgb(156 163 175 / 0.5);
   flex-shrink: 0;
 }
+
+#download-template{
+  display: none;
+}

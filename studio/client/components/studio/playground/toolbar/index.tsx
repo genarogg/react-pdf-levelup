@@ -16,6 +16,7 @@ const ToolBar: React.FC<ToolBarProps> = ({ code }) => {
         <ColorPicker />
         <button
           onClick={() => downloadTemplate(code)}
+          id="download-template"
           className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-gray-300 hover:text-white     rounded-md transition-colors"
           title="Descargar template"
         >

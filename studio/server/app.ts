@@ -9,7 +9,7 @@ import routes from './routes/index.js'
 const app = Fastify({})
 
 if (!isProduction) {
-  await app.register(fastifyCors, { origin: 'http://localhost:8500' })
+  await app.register(fastifyCors, { origin: 'http://localhost:8000' })
 }
 
 app.setErrorHandler(errorHandler)
