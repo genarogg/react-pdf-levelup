@@ -14,6 +14,15 @@ interface CodeBarProps extends Omit<ViewBaseProps, "style">, Omit<CodeBarOptions
   height?: number // alto renderizado del <Image> en el PDF
   style?: any
   format?: CodeBarFormat
+  /**
+   * Factor por el que se multiplican el width/height internos con los que
+   * JsBarcode genera el canvas (por defecto width: 2, height: 100), antes
+   * de escalarlo al tamaño final del <Image> en el PDF. Subirlo genera un
+   * PNG de mayor resolución, evitando que se vea pixelado al imprimirse o
+   * hacer zoom. Por ejemplo, resolutionScale={3} genera el canvas al
+   * triple de resolución. Default: 3.
+   */
+  resolutionScale?: number
 }
 
 type CodeBarState =
@@ -62,6 +71,7 @@ const CodeBar: React.FC<CodeBarProps> = React.memo(
     marginLeft,
     marginRight,
     autoFixChecksum = false,
+    resolutionScale = 3,
     ...rest
   }) => {
     const [state, setState] = useState<CodeBarState>({ status: "loading" })
@@ -73,15 +83,21 @@ const CodeBar: React.FC<CodeBarProps> = React.memo(
         value,
         format,
         // width/height acá controlan el módulo/alto internos de JsBarcode,
-        // no el tamaño final del <Image>. Se calculan a partir del tamaño
-        // deseado en el PDF para que el resultado no se vea pixelado.
-        width: 2,
-        height: 100,
+        // no el tamaño final del <Image> (ese lo define el width/height del
+        // componente, más abajo). Se multiplican por resolutionScale para
+        // que el canvas nazca en mayor resolución y no se vea pixelado al
+        // escalarlo/imprimirlo, sin cambiar el tamaño final en el PDF.
+        width: 2 * resolutionScale,
+        height: 100 * resolutionScale,
         displayValue,
         text,
         fontOptions,
-        fontSize,
-        textMargin,
+        // Si no se pasa fontSize/textMargin explícito, se escalan junto con
+        // las barras (mismos defaults que usa JsBarcode: fontSize 20,
+        // textMargin 2) para que el texto no quede desproporcionadamente
+        // chico frente a un canvas generado en mayor resolución.
+        fontSize: fontSize ?? 20 * resolutionScale,
+        textMargin: textMargin ?? 2 * resolutionScale,
         textAlign,
         textPosition,
         background,
@@ -111,6 +127,7 @@ const CodeBar: React.FC<CodeBarProps> = React.memo(
         marginLeft,
         marginRight,
         autoFixChecksum,
+        resolutionScale,
       ],
     )
 
