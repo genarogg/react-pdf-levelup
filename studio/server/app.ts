@@ -21,7 +21,6 @@ if (isProduction) {
 
   await app.register(fastifyStatic, {
     root: clientDist,
-    index: false,
   })
 
   app.setNotFoundHandler((request, reply) => {

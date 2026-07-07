@@ -4,6 +4,7 @@
   "private": false,
   "type": "module",
   "scripts": {
+    "demo": "pnpm build && pnpm start",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
     "dev": "concurrently -n CLIENT,SERVER -c blue,green \"npm:dev:client\" \"npm:dev:server\"",
