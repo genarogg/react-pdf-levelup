@@ -8,5 +8,6 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "include": ["server", "shared", "react-pdf-levelup-config.ts"]
+  "include": ["server", "shared", "react-pdf-levelup-config.ts"],
+  "exclude": ["node_modules", "server/templatesExample/**/*"]
 }

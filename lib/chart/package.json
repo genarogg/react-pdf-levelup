@@ -17,7 +17,10 @@
   },
   "dependencies": {
     "chart.js": "^4.5.1",
-    "chartjs-node-canvas": "^5.0.0"
+    "chartjs-node-canvas": "^5.0.0",
+    "@react-pdf/renderer": "^4",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
   },
   "devDependencies": {
     "@types/node": "^25.5.0"

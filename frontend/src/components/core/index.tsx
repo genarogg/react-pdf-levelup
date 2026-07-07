@@ -36,7 +36,7 @@ import {
 
 } from "@react-pdf/renderer"
 
-import { decodeBase64Pdf, generatePDF, getFont } from "../../functions"
+import { decodeBase64Pdf, generatePDF } from "../../functions"
 import Icon from "./icono/Icon"
 
 import { LayoutMultiPage, Section } from "./basic/layout/LayoutMultiPage"
@@ -100,7 +100,7 @@ export {
   // funciones
   decodeBase64Pdf,
   generatePDF,
-  getFont,
+
 
   // herencia de react-pdf
   PDFViewer,
