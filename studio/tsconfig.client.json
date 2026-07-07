@@ -12,5 +12,5 @@
       "@/*": ["client/*"]
     }
   },
-  "include": ["client", "shared", "templates", "demo.ts", "server/templatesExample/components", "server/templatesExample/getFuentes.ts", "server/templatesExample/index.tsx"]
+  "include": ["client", "shared", "templates", "demo.ts", "server/templatesExample/components", "server/templatesExample/getFuentes.ts", "server/templatesExample/index.tsx", "server/templatesExample/components"]
 }
