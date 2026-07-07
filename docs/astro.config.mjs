@@ -47,6 +47,16 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
+					label: 'Get Started',
+					translations: {
+						en: 'Get Started'
+					},
+					items: [
+						{ slug: 'get-started', label: 'Get Started' },
+						{ slug: 'playground', label: 'Playground' },
+					],
+				},
+				{
 					label: 'Componentes',
 					translations: {
 						en: 'Components'
@@ -73,7 +83,6 @@ export default defineConfig({
 						{ slug: 'functions/generate-pdf', label: 'generatePDF' },
 					],
 				},
-				{ slug: 'get-started', label: 'Get Started' },
 				{
 					label: 'Guías',
 					translations: {
@@ -85,7 +94,6 @@ export default defineConfig({
 						{ slug: 'guides/first-template', label: 'Tu Primer Template', translations: { en: 'Your First Template' } },
 					],
 				},
-				{ slug: 'playground', label: 'Playground' },
 				{
 					label: 'Plugins',
 					translations: {
