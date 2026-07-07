@@ -1,0 +1,82 @@
+---
+title: CodeBar
+description: Componente para generar y mostrar códigos de barras.
+---
+
+# Componente CodeBar
+
+Este documento describe el componente `CodeBar` disponible para usar con `@react-pdf/renderer`. Este componente le permite generar varios tipos de códigos de barras y mostrarlos dentro de sus documentos PDF.
+
+## CodeBar
+
+El componente `CodeBar` toma un valor y genera una imagen de código de barras, que luego se renderiza en el PDF. Admite varios formatos de código de barras y opciones de personalización.
+
+### Propiedades
+
+| Propiedad         | Tipo              | Por defecto | Descripción                                                                                                                                                                                                                                                                                                                                                                                        |
+| :---------------- | :---------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`           | `string`          | `N/A`       | **Requerido.** Los datos a codificar en el código de barras.                                                                                                                                                                                                                                                                                                                        |
+| `width`           | `number`          | `200`       | Ancho renderizado del `<Image>` en el PDF.                                                                                                                                                                                                                                                                                                                                         |
+| `height`          | `number`          | `80`        | Alto renderizado del `<Image>` en el PDF.                                                                                                                                                                                                                                                                                                                                           |
+| `style`           | `any`             | `undefined` | Estilos adicionales para el contenedor del componente.                                                                                                                                                                                                                                                                                                                             |
+| `format`          | `CodeBarFormat`   | `"CODE128"` | El formato del código de barras (por ejemplo, `"CODE128"`, `"EAN13"`, `"QR"`). Consulte la documentación de JsBarcode para ver los formatos admitidos.                                                                                                                                                                                                                                           |
+| `displayValue`    | `boolean`         | `true`      | Si se debe mostrar el valor legible debajo del código de barras.                                                                                                                                                                                                                                                                                                                     |
+| `text`            | `string`          | `undefined` | Texto personalizado para mostrar debajo del código de barras, sobrescribiendo `value` si `displayValue` es `true`.                                                                                                                                                                                                                                                                             |
+| `fontOptions`     | `string`          | `undefined` | Opciones de fuente para el texto (por ejemplo, `"bold"`, `"italic"`).                                                                                                                                                                                                                                                                                                                           |
+| `fontSize`        | `number`          | `undefined` | Tamaño de fuente del texto.                                                                                                                                                                                                                                                                                                                                                                |
+| `textMargin`      | `number`          | `undefined` | Margen entre el código de barras y el texto.                                                                                                                                                                                                                                                                                                                                         |
+| `textAlign`       | `string`          | `undefined` | Alineación horizontal del texto (`"left"`, `"center"`, `"right"`).                                                                                                                                                                                                                                                                                                                             |
+| `textPosition`    | `string`          | `undefined` | Posición vertical del texto (`"top"`, `"bottom"`).                                                                                                                                                                                                                                                                                                                                       |
+| `background`      | `string`          | `"#ffffff"` | Color de fondo del código de barras.                                                                                                                                                                                                                                                                                                                                                               |
+| `lineColor`       | `string`          | `"#000000"` | Color de las líneas del código de barras.                                                                                                                                                                                                                                                                                                                                                          |
+| `margin`          | `number`          | `undefined` | Margen alrededor del código de barras.                                                                                                                                                                                                                                                                                                                                               |
+| `marginTop`       | `number`          | `undefined` | Margen superior.                                                                                                                                                                                                                                                                                                                                                                     |
+| `marginBottom`    | `number`          | `undefined` | Margen inferior.                                                                                                                                                                                                                                                                                                                                                                     |
+| `marginLeft`      | `number`          | `undefined` | Margen izquierdo.                                                                                                                                                                                                                                                                                                                                                                    |
+| `marginRight`     | `number`          | `undefined` | Margen derecho.                                                                                                                                                                                                                                                                                                                                                                      |
+| `autoFixChecksum` | `boolean`         | `false`     | Calcula y añade automáticamente una suma de verificación si el formato de código de barras seleccionado lo requiere.                                                                                                                                                                                                                                                                         |
+| `resolutionScale` | `number`          | `3`         | Factor por el cual se multiplican el ancho/alto internos de JsBarcode para generar un lienzo de mayor resolución. Esto evita la pixelación al imprimir o hacer zoom, sin cambiar el tamaño final renderizado en el PDF. Por ejemplo, `resolutionScale={3}` genera el lienzo al triple de resolución.                                                                            |
+
+### Ejemplo de Uso
+
+```jsx
+import React from 'react';
+import { Page, Document, View, Text } from '@react-pdf/renderer';
+import { CodeBar } from '@react-pdf-levelup/components'; // Ajusta la ruta según la configuración de tu proyecto
+
+const MyDocument = () => (
+  <Document>
+    <Page style={{ padding: 30 }}>
+      <Text>Ejemplo CodeBar (CODE128):</Text>
+      <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
+
+      <Text style={{ marginTop: 20 }}>Ejemplo CodeBar (EAN13) con texto personalizado y colores:</Text>
+      <CodeBar
+        value="123456789012"
+        format="EAN13"
+        width={200}
+        height={80}
+        displayValue={true}
+        text="ID de Producto"
+        fontSize={16}
+        lineColor="#FF0000"
+        background="#EEEEEE"
+        textPosition="top"
+      />
+
+      <Text style={{ marginTop: 20 }}>Ejemplo CodeBar (pharmacode) con escalado de resolución:</Text>
+      <CodeBar
+        value="123"
+        format="pharmacode"
+        width={150}
+        height={50}
+        displayValue={false}
+        lineColor="#0000FF"
+        resolutionScale={5}
+      />
+    </Page>
+  </Document>
+);
+
+export default MyDocument;
+```
