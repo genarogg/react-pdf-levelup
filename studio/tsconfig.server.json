@@ -5,11 +5,11 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "outDir": "dist/server",
-    "rootDir": ".",
+    "rootDir": "server",
     "types": ["node"],
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["server", "shared", "react-pdf-levelup-config.ts"],
+  "include": ["server"],
   "exclude": ["node_modules", "server/templatesExample/**/*"]
 }

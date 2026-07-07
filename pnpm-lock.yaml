@@ -423,6 +423,34 @@ importers:
         specifier: ^8.5.1
         version: 8.5.1
 
+  lib/studio:
+    dependencies:
+      '@fastify/cors':
+        specifier: ^11.2.0
+        version: 11.2.0
+      '@fastify/static':
+        specifier: ^9.1.3
+        version: 9.1.3
+      '@react-pdf-levelup/chart':
+        specifier: '*'
+        version: link:../chart
+      '@react-pdf-levelup/core':
+        specifier: '*'
+        version: link:../core
+      '@react-pdf-levelup/qr':
+        specifier: '*'
+        version: link:../qr
+      '@react-pdf/renderer':
+        specifier: ^4
+        version: 4.3.2(react@19.2.4)
+      fastify:
+        specifier: ^5.0.0
+        version: 5.8.4
+    optionalDependencies:
+      tsx:
+        specifier: ^4.16.2
+        version: 4.21.0
+
   studio:
     dependencies:
       '@babel/standalone':
@@ -4000,7 +4028,7 @@ packages:
       '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: 6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0)
+      vite: 6.4.1(@types/node@24.12.0)(terser@5.46.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5765,7 +5793,6 @@ packages:
     resolution: {integrity: sha512-7tN6rFgBlMgpBML5j8typ92BKFi2sFQvIdpAqLA2beia5avZDrMs0FLZiM5etShWq5irVyGcGMEA1jcDaK7A/Q==}
     dependencies:
       resolve-pkg-maps: 1.0.0
-    dev: true
 
   /github-from-package@0.0.0:
     resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
@@ -8418,7 +8445,6 @@ packages:
 
   /resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
-    dev: true
 
   /restructure@3.0.2:
     resolution: {integrity: sha512-gSfoiOEA0VPE6Tukkrr7I0RBdE0s7H1eFCDBk05l1KIQT1UIKNc5JZy6jdyW6eYH3aR3g5b3PuL77rq0hvwtAw==}
@@ -9191,7 +9217,6 @@ packages:
       get-tsconfig: 4.13.7
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}

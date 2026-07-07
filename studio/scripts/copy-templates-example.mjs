@@ -23,12 +23,11 @@ const projectRoot = path.resolve(__dirname, '..')
 
 const source = path.join(projectRoot, 'server', 'templatesExample')
 
-// Debe coincidir con dist/server/server/... (rootDir: "." en
-// tsconfig.server.json anida un "server/" extra dentro de dist/server).
+// Debe coincidir con dist/server/... (ahora que rootDir es "server" en
+// tsconfig.server.json, dist/server queda plano, sin anidar otro "server/").
 const destination = path.join(
   projectRoot,
   'dist',
-  'server',
   'server',
   'templatesExample'
 )

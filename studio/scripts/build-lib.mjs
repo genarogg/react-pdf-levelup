@@ -32,8 +32,8 @@ if (existsSync(destDist)) {
 mkdirSync(destDist, { recursive: true })
 
 // 3. Copiar dist/server -> lib/studio/dist/server
-//    (queda anidado como dist/server/server/index.js por rootDir: "."
-//    del tsconfig.server.json; el CLI ya apunta a esa ruta)
+//    (dist/server queda plano: dist/server/index.js, sin anidar otro
+//    "server/" adicional, gracias a rootDir: "server" en tsconfig.server.json)
 cpSync(
   path.join(studioRoot, 'dist', 'server'),
   path.join(destDist, 'server'),
@@ -46,5 +46,17 @@ cpSync(
   path.join(destDist, 'client'),
   { recursive: true }
 )
+
+// 5. Copiar el .d.ts del config del usuario (generado por
+//    tsconfig.config-types.json en studio/dist/, fuera de dist/server)
+//    para que el consumidor pueda tipar su react-pdf-levelup-config.ts
+//    importando "react-pdf-levelup/dist/react-pdf-levelup-config"
+for (const ext of ['.d.ts', '.d.ts.map']) {
+  const file = `react-pdf-levelup-config${ext}`
+  const src = path.join(studioRoot, 'dist', file)
+  if (existsSync(src)) {
+    cpSync(src, path.join(destDist, file))
+  }
+}
 
 console.log(`\n✔ Paquete listo en ${libStudioRoot}`)
