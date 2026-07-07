@@ -6,7 +6,9 @@
     "lib": ["ES2022"],
     "outDir": "dist/server",
     "rootDir": ".",
-    "types": ["node"]
+    "types": ["node"],
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["server", "shared", "react-pdf-levelup-config.ts"],
   "exclude": ["node_modules", "server/templatesExample/**/*"]

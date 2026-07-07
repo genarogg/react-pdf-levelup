@@ -9,7 +9,8 @@
     "dev": "concurrently -n CLIENT,SERVER -c blue,green \"npm:dev:client\" \"npm:dev:server\"",
     "build": "npm run build:client && npm run build:server",
     "build:client": "tsc -p tsconfig.client.json && vite build",
-    "build:server": "tsc -p tsconfig.server.json",
+    "build:server": "tsc -p tsconfig.server.json && node scripts/copy-templates-example.mjs",
+    "build:lib": "node scripts/build-lib.mjs",
     "start": "cross-env NODE_ENV=production node dist/server/server/index.js"
   },
   "dependencies": {

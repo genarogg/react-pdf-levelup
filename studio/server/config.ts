@@ -1,7 +1,9 @@
 import path from 'node:path'
-import reactPdfLevelupConfig from '../react-pdf-levelup-config.js'
+import { loadUserConfig } from './lib/loadUserConfig.js'
 
 const isProduction = process.env.NODE_ENV === 'production'
+
+const reactPdfLevelupConfig = await loadUserConfig(process.cwd())
 
 export const PORT = isProduction
   ? Number(process.env.PORT) || reactPdfLevelupConfig.productionPort
