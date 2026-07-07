@@ -27,21 +27,38 @@ export default config
 
 ## Generar este paquete desde el monorepo
 
-Este directorio (`lib/studio`) no contiene el build; se genera desde
-`studio/` corriendo:
+Este directorio (`lib/studio`) no contiene el build; se genera compilando
+`studio/` (cliente + servidor) y copiando los artefactos a
+`lib/studio/dist/{server,client}`. Hay dos formas equivalentes de hacerlo:
 
 ```bash
+# Opción A: desde studio/
 cd studio
+npm run build:lib
+
+# Opción B: desde lib/studio, igual que el resto de paquetes de lib/*
+cd lib/studio
 npm run build:lib
 ```
 
-Eso compila `studio/` (cliente + servidor) y copia los artefactos a
-`lib/studio/dist/{server,client}`.
+Ambas ejecutan `studio/scripts/build-lib.mjs`.
 
 ## Publicar
 
+Igual que el resto de paquetes en `lib/*`, se puede publicar individualmente:
+
 ```bash
 cd lib/studio
-npm install   # instala fastify, @fastify/*, tsx (dependencias runtime)
-npm publish
+pnpm install
+npm run build:lib
+npm publish --access public
 ```
+
+O como parte del flujo conjunto desde la raíz del monorepo:
+
+```bash
+pnpm run publish-all   # ver lib/scripts/index.js
+```
+
+Este último bump-ea la versión, compila y publica `studio` junto con
+`client`, `qr`, `chart`, `core` e `icons`.

@@ -1,16 +1,32 @@
 {
-  "name": "react-pdf-levelup",
+  "name": "@react-pdf-levelup/studio",
   "version": "1.0.0",
+  "description": "Studio: editor en vivo con playground para plantillas de react-pdf-levelup. Levanta un servidor local (estilo `npx prisma studio`) con API REST y cliente Vite ya compilados.",
+  "keywords": [
+    "javascript",
+    "pdf",
+    "react pdf",
+    "react pdf levelup",
+    "studio",
+    "playground"
+  ],
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "private": false,
   "bin": {
     "react-pdf-levelup": "./bin/cli.js"
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "README.md"
   ],
   "engines": {
     "node": ">=18"
+  },
+  "scripts": {
+    "build:lib": "node ../../studio/scripts/build-lib.mjs"
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",
