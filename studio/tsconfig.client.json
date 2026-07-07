@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["client/*"]
+    }
+  },
+  "include": ["client", "shared", "templates", "demo.ts", "server/templatesExample/components", "server/templatesExample/getFuentes.ts", "server/templatesExample/index.tsx"]
+}

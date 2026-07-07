@@ -1,3 +1,5 @@
+/// <reference path="./assets.d.ts" />
+
 import {
     PDFViewer,
     Document,
@@ -57,7 +59,7 @@ export {
     Polygon,
     ClipPath,
     // funciones
-    decodeBase64Pdf, generatePDF,
+    decodeBase64Pdf, generatePDF, 
     // imgs
     Img, ImgBg,
     // alignment
@@ -78,3 +80,4 @@ export {
     Div, HR, Layout, NextPage,
     LayoutMultiPage, Section
 }
+

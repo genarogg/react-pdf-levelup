@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/qr",
-  "version": "2.1.3",
+  "version": "2.1.6",
   "description": "",
   "license": "ISC",
   "author": "",
@@ -20,7 +20,10 @@
     "jsdom": "^27.4.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
-    "canvas": "^3.2.0"
+    "canvas": "^3.2.0",
+    "@react-pdf/renderer": "^4",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
   },
   "devDependencies": {
     "json": "^11.0.0",

@@ -101,6 +101,7 @@ export {
   decodeBase64Pdf,
   generatePDF,
 
+
   // herencia de react-pdf
   PDFViewer,
   Document,
