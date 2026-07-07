@@ -57,6 +57,27 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Guías',
+					translations: {
+						en: 'Guides'
+					},
+					items: [
+						{ slug: 'guides/api-rest', label: 'API REST' },
+						{ slug: 'guides/backend-integration', label: 'Integración Backend', translations: { en: 'Backend Integration' } },
+						{ slug: 'guides/first-template', label: 'Tu Primer Template', translations: { en: 'Your First Template' } },
+						{
+							label: 'Funciones',
+							translations: {
+								en: 'Functions'
+							},
+							items: [
+								{ slug: 'guides/functions/fonts', label: 'Gestión de Fuentes', translations: { en: 'Font Management' } },
+								{ slug: 'guides/functions/generate-pdf', label: 'generatePDF' },
+							],
+						},
+					],
+				},
+				{
 					label: 'Componentes',
 					translations: {
 						en: 'Components'
@@ -71,27 +92,6 @@ export default defineConfig({
 						{ slug: 'components/position', label: 'Position' },
 						{ slug: 'components/table', label: 'Table' },
 						{ slug: 'components/text', label: 'Text' },
-					],
-				},
-				{
-					label: 'Funciones',
-					translations: {
-						en: 'Functions'
-					},
-					items: [
-						{ slug: 'functions/fonts', label: 'Gestión de Fuentes', translations: { en: 'Font Management' } },
-						{ slug: 'functions/generate-pdf', label: 'generatePDF' },
-					],
-				},
-				{
-					label: 'Guías',
-					translations: {
-						en: 'Guides'
-					},
-					items: [
-						{ slug: 'guides/api-rest', label: 'API REST' },
-						{ slug: 'guides/backend-integration', label: 'Integración Backend', translations: { en: 'Backend Integration' } },
-						{ slug: 'guides/first-template', label: 'Tu Primer Template', translations: { en: 'Your First Template' } },
 					],
 				},
 				{
