@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "i18next": "^25.8.10",
     "i18next-browser-languagedetector": "^8.2.1",
+    "jsbarcode": "^3.12.3",
     "jsdom": "^27.4.0",
     "lucide": "^0.562.0",
     "lucide-react": "^0.562.0",

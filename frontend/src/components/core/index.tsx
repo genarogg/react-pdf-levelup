@@ -45,6 +45,9 @@ import Icon from "./icono/Icon"
 
 import { LayoutMultiPage, Section } from "./basic/layout/LayoutMultiPage"
 
+import CodeBar from "./codeBar/CodeBar"
+
+
 export {
   ImgBg,
   Layout,
@@ -92,6 +95,7 @@ export {
   Col12,
   QR,
   QRstyle,
+  CodeBar,
   UL,
   OL,
   LI,
