@@ -9,6 +9,8 @@ import { Form, Input, Checkbox, TextArea } from "./basic/Form"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
 import { UL, OL, LI } from "./basic/Lista"
 
+import Gradiant from "./basic/Gradiant"
+
 import QR from "./qr/QR"
 import QRstyle from "./qr/QRstyle"
 import ChartJS from "./charts/ChartJS"
@@ -32,7 +34,9 @@ import {
   renderToStream,
   Canvas,
   Polygon,
-  ClipPath
+  ClipPath,
+  RadialGradient
+
 
 } from "@react-pdf/renderer"
 
@@ -96,7 +100,7 @@ export {
   Form, Input, Checkbox, TextArea,
   Icon,
   ChartJS,
-
+  Gradiant,
   // funciones
   decodeBase64Pdf,
   generatePDF,
@@ -121,6 +125,7 @@ export {
   renderToStream,
   Canvas,
   Polygon,
-  ClipPath
+  ClipPath,
+  RadialGradient
 }
 
