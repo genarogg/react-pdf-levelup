@@ -24,7 +24,7 @@ const styles = {
   },
 }
 
-const Header = () => {
+const Header = ({ data }: any) => {
   return (
     <Div style={styles.wrap}>
       <Div style={styles.logoRow}>
@@ -32,7 +32,7 @@ const Header = () => {
       </Div>
 
       <Center>
-        <Small style={styles.eyebrow}>OPEN SOURCE · REACT PDF LEVELUP</Small>
+        <Small style={styles.eyebrow}>{data.nameDoc}</Small>
       </Center>
 
       <H1 style={styles.title}>Crea PDFs con componentes de React</H1>

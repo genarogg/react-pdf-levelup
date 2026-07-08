@@ -5,6 +5,10 @@ import { existsSync } from 'node:fs'
 export interface ReactPdfLevelupConfig {
   productionPort: number
   templatesDir: string
+  // Se usa solo del lado del cliente (Playground/Studio, ver
+  // @react-pdf-levelup/user-config); el server no la necesita, pero
+  // queda tipada acá para que el shape sea consistente end-to-end.
+  npmModules?: Record<string, unknown>
 }
 
 const DEFAULT_CONFIG: ReactPdfLevelupConfig = {

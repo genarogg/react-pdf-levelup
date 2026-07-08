@@ -1,10 +1,14 @@
-import { Layout, Div, Font } from "@react-pdf-levelup/core"
+import { Layout, Div } from "@react-pdf-levelup/core"
 import Header from "./components/Header"
 import Main from "./components/Main"
 import Footer from "./components/Footer"
 import getFuentes from "./getFuentes"
 
-const Index = () => {
+const Index = ({ data }: any) => {
+
+  const fullData = {
+    nameDoc: data?.nameDoc || "OPEN SOURCE · REACT PDF LEVELUP",
+  }
 
   getFuentes()
 
@@ -21,7 +25,7 @@ const Index = () => {
   return (
     <Layout style={page} footer={<Footer />} pagination={false}>
       <Div>
-        <Header />
+        <Header data={fullData} />
         <Main />
       </Div>
     </Layout>

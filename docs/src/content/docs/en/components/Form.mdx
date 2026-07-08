@@ -26,18 +26,17 @@ The `Form` component is a container for all form fields, providing a context for
 
 ```jsx
 import React from 'react';
-import { Page, Document } from '@react-pdf/renderer';
-import { Form, Input, TextArea, Checkbox } from './Form'; // Adjust path
+import { Layout, Form, Input, TextArea, Checkbox } from '@react-pdf-levelup/core'; // Adjust path
 
 const MyDocument = () => (
-  <Document>
-    <Page>
-      <Form borderColor="#FF0000" borderRadius={10}>
-        {/* ... form fields ... */}
-      </Form>
-    </Page>
-  </Document>
+  <Layout>
+    <Form borderColor="#FF0000" borderRadius={10}>
+      {/* ... form fields ... */}
+    </Form>
+  </Layout>
 );
+
+export default MyDocument
 ```
 
 ## Input

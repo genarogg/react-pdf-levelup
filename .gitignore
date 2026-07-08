@@ -30,6 +30,8 @@ dist/
 out/
 build/
 
+studio/templates
+
 # generated types
 .astro/
 *.tsbuildinfo

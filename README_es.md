@@ -14,9 +14,20 @@ Generador de PDFs dinámicos con React. Esta herramienta te permite crear planti
 npm install @react-pdf-levelup/core
 ```
 
-## 🌐 Playground en vivo:
+## 🌐 Playground y Studio local
 
+### Playground en vivo:
 [https://react-pdf-levelup.nimbux.cloud/playground](https://react-pdf-levelup.nimbux.cloud/playground)
+
+### Studio local:
+Para usar un Studio local en tu proyecto, instala el paquete:
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+Y ejecútalo:
+```bash
+npx react-pdf-levelup studio
+```
 
 ## ✨ Características
 
@@ -47,6 +58,7 @@ npm install @react-pdf-levelup/core
 | **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) || **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Docs Chart](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 | **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Docs Client](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
 | **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Docs Icons](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/studio** | `npm install --save-dev @react-pdf-levelup/studio` | Studio local para crear y probar plantillas |
 
 ## 📚 Documentación
 

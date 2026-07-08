@@ -1,64 +1,95 @@
-# react-pdf-levelup
+# @react-pdf-levelup/studio
 
-CLI que levanta el Studio (al estilo `npx prisma studio`).
+CLI que levanta un Studio local para crear y previsualizar plantillas PDF con react-pdf-levelup, al estilo `npx prisma studio`.
 
-## Uso en el proyecto consumidor
+## Instalación
+
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+
+## Uso básico
+
+### 1. Ejecutar el Studio
+
+Ejecuta el CLI desde la raíz de tu proyecto:
 
 ```bash
 npx react-pdf-levelup studio
 ```
 
-Busca `react-pdf-levelup-config.(ts|mts|mjs|cjs|js)` en la raíz del
-proyecto que lo ejecuta (`process.cwd()`). Si el archivo es `.ts`/`.mts`,
-el propio CLI carga un loader de `tsx` empaquetado internamente — no hace
-falta que el consumidor lo instale.
+Esto levantará un servidor local (por defecto en el puerto 8000) y abrirá el Studio en tu navegador.
 
+### 2. (Opcional) Configuración
+
+Puedes crear un archivo de configuración en la raíz de tu proyecto para personalizar el Studio:
+
+#### TypeScript: `react-pdf-levelup-config.ts`
 ```ts
-// react-pdf-levelup-config.ts
-import type { ReactPdfLevelupConfig } from "react-pdf-levelup/dist/react-pdf-levelup-config"
+import type { ReactPdfLevelupConfig } from "@react-pdf-levelup/studio";
 
 const config: ReactPdfLevelupConfig = {
   productionPort: 8000,
   templatesDir: "templates",
-}
+};
 
-export default config
+export default config;
 ```
 
-## Generar este paquete desde el monorepo
+#### JavaScript: `react-pdf-levelup-config.js`
+```js
+/** @type {import('@react-pdf-levelup/studio').ReactPdfLevelupConfig} */
+const config = {
+  productionPort: 8000,
+  templatesDir: "templates",
+};
 
-Este directorio (`lib/studio`) no contiene el build; se genera compilando
-`studio/` (cliente + servidor) y copiando los artefactos a
-`lib/studio/dist/{server,client}`. Hay dos formas equivalentes de hacerlo:
-
-```bash
-# Opción A: desde studio/
-cd studio
-npm run build:lib
-
-# Opción B: desde lib/studio, igual que el resto de paquetes de lib/*
-cd lib/studio
-npm run build:lib
+export default config;
 ```
 
-Ambas ejecutan `studio/scripts/build-lib.mjs`.
+Si usas un archivo `.ts` o `.mts`, el CLI buscará y usará `tsx` para cargarlo (primero busca en tu proyecto, luego en el paquete mismo).
 
-## Publicar
+## Opciones del CLI
 
-Igual que el resto de paquetes en `lib/*`, se puede publicar individualmente:
+| Opción | Descripción |
+|--------|-------------|
+| `--runtime <nombre>` | Runtime a usar: `node` (por defecto), `bun`, `tsx`, `ts-node` |
+| `--loader <ruta>` | Ruta a un loader ESM personalizado (ej: `ts-node/esm`) |
+| `--no-ts-auto` | Omite la auto-detección de TypeScript y ejecuta sin loader |
+| `--help` / `-h` | Muestra la ayuda completa |
 
-```bash
-cd lib/studio
-pnpm install
-npm run build:lib
-npm publish --access public
-```
+### Ejemplos de uso
 
-O como parte del flujo conjunto desde la raíz del monorepo:
+- Usar **bun**:
+  ```bash
+  npx react-pdf-levelup studio --runtime bun
+  ```
+- Usar **ts-node**:
+  ```bash
+  npx react-pdf-levelup studio --runtime ts-node
+  ```
+- Usar un **loader personalizado**:
+  ```bash
+  npx react-pdf-levelup studio --loader ts-node/esm
+  ```
+- Ejecutar directamente (solo config en JS):
+  ```bash
+  npx react-pdf-levelup studio --no-ts-auto
+  ```
 
-```bash
-pnpm run publish-all   # ver lib/scripts/index.js
-```
+## Características
 
-Este último bump-ea la versión, compila y publica `studio` junto con
-`client`, `qr`, `chart`, `core` e `icons`.
+- 🖼 Editor de plantillas en vivo con previsualización
+- 🎨 Editor de código con Monaco
+- 📥 Descarga automática de PDFs
+- 📁 Explorador de archivos
+- Compatible con TypeScript y JavaScript
+- Soporte para múltiples runtimes (Node.js, Bun, etc.)
+
+## Documentación
+
+Para más información sobre react-pdf-levelup, visita la [documentación oficial](https://react-pdf-levelup.nimbux.cloud/docs).
+
+## Licencia
+
+MIT License

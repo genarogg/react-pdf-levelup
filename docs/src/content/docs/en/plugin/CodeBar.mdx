@@ -1,0 +1,79 @@
+---
+title: CodeBar
+description: Component for generating and displaying barcodes.
+---
+
+# CodeBar Component
+
+This document describes the `CodeBar` component available for use with `@react-pdf/renderer`. This component allows you to generate various types of barcodes and display them within your PDF documents.
+
+## CodeBar
+
+The `CodeBar` component takes a value and generates a barcode image, which is then rendered in the PDF. It supports various barcode formats and customization options.
+
+### Props
+
+| Property          | Type              | Default     | Description                                                                                                                                                                                                                                                                                                                                                              |
+| :---------------- | :---------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`           | `string`          | `N/A`       | **Required.** The data to encode in the barcode.                                                                                                                                                                                                                                                                                                         |
+| `width`           | `number`          | `200`       | Rendered width of the `<Image>` in the PDF.                                                                                                                                                                                                                                                                                                              |
+| `height`          | `number`          | `80`        | Rendered height of the `<Image>` in the PDF.                                                                                                                                                                                                                                                                                                             |
+| `style`           | `any`             | `undefined` | Additional styles for the component container.                                                                                                                                                                                                                                                                                                           |
+| `format`          | `CodeBarFormat`   | `"CODE128"` | The format of the barcode (e.g., `"CODE128"`, `"EAN13"`, `"QR"`). Refer to JsBarcode documentation for supported formats.                                                                                                                                                                                                                                |
+| `displayValue`    | `boolean`         | `true`      | Whether to display the human-readable value below the barcode.                                                                                                                                                                                                                                                                                           |
+| `text`            | `string`          | `undefined` | Custom text to display below the barcode, overriding `value` if `displayValue` is `true`.                                                                                                                                                                                                                                                                |
+| `fontOptions`     | `string`          | `undefined` | Font options for the text (e.g., `"bold"`, `"italic"`).                                                                                                                                                                                                                                                                                                  |
+| `fontSize`        | `number`          | `undefined` | Font size of the text.                                                                                                                                                                                                                                                                                                                                   |
+| `textMargin`      | `number`          | `undefined` | Margin between the barcode and the text.                                                                                                                                                                                                                                                                                                                 |
+| `textAlign`       | `string`          | `undefined` | Horizontal alignment of the text (`"left"`, `"center"`, `"right"`).                                                                                                                                                                                                                                                                                      |
+| `textPosition`    | `string`          | `undefined` | Vertical position of the text (`"top"`, `"bottom"`).                                                                                                                                                                                                                                                                                                     |
+| `background`      | `string`          | `"#ffffff"` | Background color of the barcode.                                                                                                                                                                                                                                                                                                                         |
+| `lineColor`       | `string`          | `"#000000"` | Color of the barcode lines.                                                                                                                                                                                                                                                                                                                              |
+| `margin`          | `number`          | `undefined` | Margin around the barcode.                                                                                                                                                                                                                                                                                                                               |
+| `marginTop`       | `number`          | `undefined` | Top margin.                                                                                                                                                                                                                                                                                                                                              |
+| `marginBottom`    | `number`          | `undefined` | Bottom margin.                                                                                                                                                                                                                                                                                                                                           |
+| `marginLeft`      | `number`          | `undefined` | Left margin.                                                                                                                                                                                                                                                                                                                                             |
+| `marginRight`     | `number`          | `undefined` | Right margin.                                                                                                                                                                                                                                                                                                                                            |
+| `autoFixChecksum` | `boolean`         | `false`     | Automatically calculates and adds a checksum if the selected barcode format requires it.                                                                                                                                                                                                                                                                 |
+| `resolutionScale` | `number`          | `3`         | Factor by which internal JsBarcode width/height are multiplied to generate a higher resolution canvas. This prevents pixelation when printing or zooming, without changing the final rendered size in the PDF. For example, `resolutionScale={3}` generates the canvas at triple the resolution.                                                      |
+
+### Usage Example
+
+```jsx
+import React from 'react';
+import { Layout, Text, CodeBar } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Text>Example CodeBar (CODE128):</Text>
+    <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
+
+    <Text style={{ marginTop: 20 }}>Example CodeBar (EAN13) with custom text and colors:</Text>
+    <CodeBar
+      value="123456789012"
+      format="EAN13"
+      width={200}
+      height={80}
+      displayValue={true}
+      text="Product ID"
+      fontSize={16}
+      lineColor="#FF0000"
+      background="#EEEEEE"
+      textPosition="top"
+    />
+
+    <Text style={{ marginTop: 20 }}>Example CodeBar (pharmacode) with resolution scaling:</Text>
+    <CodeBar
+      value="123"
+      format="pharmacode"
+      width={150}
+      height={50}
+      displayValue={false}
+      lineColor="#0000FF"
+      resolutionScale={5}
+    />
+  </Layout>
+);
+
+export default MyDocument;
+```

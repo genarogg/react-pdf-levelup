@@ -9,8 +9,9 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["client/*"]
+      "@/*": ["client/*"],
+      "@react-pdf-levelup/user-config": ["react-pdf-levelup-config.ts"]
     }
   },
-  "include": ["client", "shared", "templates", "demo.ts", "server/templatesExample/components", "server/templatesExample/getFuentes.ts", "server/templatesExample/index.tsx"]
+  "include": ["client", "shared", "templates", "demo.ts", "server/templatesExample/components", "server/templatesExample/getFuentes.ts", "server/templatesExample/index.tsx", "server/templatesExample/components"]
 }

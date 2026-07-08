@@ -11,7 +11,7 @@ The `QRStyle` component (formerly `QRV2`) offers advanced control over the appea
 
 | Name                   | Type                                       | Default        | Description                                                                                               |
 | :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
-| `value`                  | `string`                                   | `""`           | The text or URL to be encoded in the QR code.                                                        |
+| `url`                  | `string`                                   | `""`           | The text or URL to be encoded in the QR code.                                                        |
 | `size`                   | `number`                                   | `300`          | Size of the QR code in pixels (width and height).                                                           |
 | `style`                  | `any`                                      | `{}`           | Additional styles for the `View` container that wraps the QR code.                                |
 | `image`                  | `string`                                   | `undefined`    | URL of the logo image to embed in the center of the QR.                                                |
@@ -31,11 +31,11 @@ The `QRStyle` component (formerly `QRV2`) offers advanced control over the appea
 ### Example
 
 ```tsx
-import QRStyle from './QRstyle'; // Note: The component is exported as QRV2 but can be imported as QRStyle
+import { QRstyle } from '@react-pdf-levelup/core';
 
 function MyStyledQRCode() {
   return (
-    <QRStyle
+    <QRstyle
       url="https://react-pdf-levelup.com/docs/qrstyle"
       size={300}
       image="https://picsum.photos/id/66/200/200"

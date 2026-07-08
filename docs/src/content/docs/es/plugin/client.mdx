@@ -13,13 +13,13 @@ El plugin `@react-pdf-levelup/client` proporciona un conjunto de funciones de ut
 
 Esta función te permite generar un documento PDF a partir de un componente React. Es la misma función que se describe en la documentación principal de funciones.
 
-- [Ver documentación detallada de `generatePDF`](/es/functions/generatePDF)
+- [Ver documentación detallada de `generatePDF`](/es/guides/functions/generatePDF)
 
 ### `decodeBase64Pdf`
 
 Esta función ayuda a decodificar una cadena Base64 que representa un PDF y a ofrecerlo para descarga al usuario. Es la misma función que se describe en la documentación principal de funciones.
 
-- [Ver documentación detallada de `decodeBase64Pdf`](/es/functions/decodeBase64Pdf)
+- [Ver documentación detallada de `decodeBase64Pdf`](/es/guides/functions/decodeBase64Pdf)
 
 ### `printBase64Pdf`
 
@@ -34,6 +34,7 @@ Para usar estas funciones, simplemente impórtalas desde el paquete `@react-pdf-
 
 ```tsx
 import { generatePDF, decodeBase64Pdf } from '@react-pdf-levelup/client';
+import { Layout, P } from '@react-pdf-levelup/core';
 
 // Ejemplo de uso de generatePDF
 const myTemplate = ({ data }) => {

@@ -22,8 +22,8 @@ The `Icon` component allows easy integration of icons from the popular [Lucide](
 #### Basic Icon
 
 ```tsx
-import { Icon } from '@react-pdf-levelup/icons'; // Adjust import
-import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Icon } from '@react-pdf-levelup/icons';
+import { Layout, View, Text, StyleSheet } from '@react-pdf-levelup/core';
 
 const styles = StyleSheet.create({
   page: {
@@ -46,14 +46,12 @@ const styles = StyleSheet.create({
 });
 
 const MyIconDocument = () => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.section}>
-        <Icon ico="Home" />
-        <Text style={styles.text}>Default Home Icon</Text>
-      </View>
-    </Page>
-  </Document>
+  <Layout style={styles.page}>
+    <View style={styles.section}>
+      <Icon ico="Home" />
+      <Text style={styles.text}>Default Home Icon</Text>
+    </View>
+  </Layout>
 );
 
 export default MyIconDocument;
@@ -62,8 +60,8 @@ export default MyIconDocument;
 #### Custom Icon (Color, Size, Fill)
 
 ```tsx
-import { Icon } from '@react-pdf-levelup/icons'; // Adjust import
-import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Icon } from '@react-pdf-levelup/icons';
+import { Layout, View, Text, StyleSheet } from '@react-pdf-levelup/core';
 
 const styles = StyleSheet.create({
   page: {
@@ -86,22 +84,20 @@ const styles = StyleSheet.create({
 });
 
 const MyStyledIconDocument = () => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.section}>
-        <Icon ico="Heart" size={24} color="red" fill="red" />
-        <Text style={styles.text}>Red and filled heart</Text>
-      </View>
-      <View style={styles.section}>
-        <Icon ico="CheckCircle" size={30} color="green" />
-        <Text style={styles.text}>Green check circle</Text>
-      </View>
-      <View style={styles.section}>
-        <Icon ico="AlarmClock" size={28} color="orange" style={{ marginRight: 10 }} />
-        <Text style={styles.text}>Orange alarm clock with style</Text>
-      </View>
-    </Page>
-  </Document>
+  <Layout style={styles.page}>
+    <View style={styles.section}>
+      <Icon ico="Heart" size={24} color="red" fill="red" />
+      <Text style={styles.text}>Red and filled heart</Text>
+    </View>
+    <View style={styles.section}>
+      <Icon ico="CheckCircle" size={30} color="green" />
+      <Text style={styles.text}>Green check circle</Text>
+    </View>
+    <View style={styles.section}>
+      <Icon ico="AlarmClock" size={28} color="orange" style={{ marginRight: 10 }} />
+      <Text style={styles.text}>Orange alarm clock with style</Text>
+    </View>
+  </Layout>
 );
 
 export default MyStyledIconDocument;
