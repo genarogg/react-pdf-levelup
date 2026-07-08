@@ -1,29 +1,19 @@
 import { useState, useEffect, useCallback, useRef } from "react"
-import * as ReactPdfRenderer from "@react-pdf/renderer"
 import { PDFViewer } from "@react-pdf/renderer"
 import * as React from "react"
-import * as ReactPdfLevelupCore from "@react-pdf-levelup/core"
-import * as ReactPdfLevelupQr from "@react-pdf-levelup/qr"
-import * as ReactPdfLevelupChart from "@react-pdf-levelup/chart"
 import ErrorDocument from "@/components/studio/playground/components/ErrorDocument"
 import ErrorBoundary from "@/components/studio/playground/components/ErrorBoundary"
 import DefaultDocument from "@/components/studio/playground/components/DefaultDocument"
 import CompilingIndicator from "@/components/studio/playground/components/CompilingIndicator"
 import { buildModuleGraph } from "../compiler/moduleGraph"
-import { compileWorkspace, type NpmModuleRegistry } from "../compiler/compileWorkspace"
+import { compileWorkspace } from "../compiler/compileWorkspace"
 import { useStudio } from "../StudioContext"
+import userConfig from "@react-pdf-levelup/user-config"
 
-// Módulos npm reales (cargados por el bundle de la app vía `import` de
-// verdad) que se ponen a disposición del código del usuario dentro del
-// Studio. Las keys deben coincidir con ALLOWED_NPM_SPECIFIERS en
-// compileWorkspace.ts.
-const NPM_MODULES: NpmModuleRegistry = {
-  react: React,
-  "@react-pdf/renderer": ReactPdfRenderer,
-  "@react-pdf-levelup/core": ReactPdfLevelupCore,
-  "@react-pdf-levelup/qr": ReactPdfLevelupQr,
-  "@react-pdf-levelup/chart": ReactPdfLevelupChart,
-}
+// Módulos npm disponibles para el código del usuario dentro del Studio.
+// Se precargan en react-pdf-levelup-config.ts (raíz del proyecto
+// consumidor, propiedad `npmModules`); acá solo se consumen.
+const NPM_MODULES = userConfig.npmModules
 
 export function StudioPDFPreview() {
   const { mainFile, saveVersion, setCompileStatus } = useStudio()

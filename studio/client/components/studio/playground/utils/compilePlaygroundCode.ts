@@ -1,24 +1,6 @@
 import * as Babel from "@babel/standalone"
 import type * as React from "react"
 
-/**
- * Paquetes npm que el código del usuario puede importar directamente en el
- * Playground. `new Function` no soporta `import`, así que estos imports no
- * pueden dejarse (ni quitarse sin más, como antes): se reescriben como
- * declaraciones locales que apuntan al módulo real, inyectado como
- * argumento extra al ejecutar el código (ver buildAndRunComponent).
- *
- * Debe mantenerse igual a ALLOWED_NPM_SPECIFIERS en
- * viewer/studio/compiler/compileWorkspace.ts.
- */
-export const ALLOWED_NPM_SPECIFIERS = [
-  "react",
-  "@react-pdf/renderer",
-  "@react-pdf-levelup/core",
-  "@react-pdf-levelup/qr",
-  "@react-pdf-levelup/chart",
-] as const
-
 export type NpmModuleRegistry = Record<string, unknown>
 
 interface NpmImportBinding {
@@ -66,24 +48,28 @@ function parseImportClause(clause: string): {
  * del código fuente, dejando intacta la lógica de `export default`, que se
  * maneja aparte en `extractDefaultExportName` + `stripDefaultExport`.
  *
- * Los imports de paquetes npm permitidos (ALLOWED_NPM_SPECIFIERS) no se
+ * Los imports de paquetes npm permitidos (las keys de `npmModules`) no se
  * descartan sin más: se capturan en `npmImports` y se devuelven aparte,
  * para que quien llame pueda anteponer declaraciones locales que los
  * conecten con los módulos reales ya cargados (ver buildAndRunComponent).
  * Cualquier otro paquete importado se reporta en `unresolvedSpecifiers`.
  */
-export function stripImportsAndExports(code: string): {
+export function stripImportsAndExports(
+  code: string,
+  npmModules: NpmModuleRegistry
+): {
   code: string
   npmImports: NpmImportBinding[]
   unresolvedSpecifiers: string[]
 } {
+  const allowedSpecifiers = Object.keys(npmModules)
   const npmImports: NpmImportBinding[] = []
   const unresolvedSpecifiers: string[] = []
 
   const withoutNamedImports = code.replace(
     /(^|\n)[ \t]*import\s+([^'";]+?)\s+from\s+['"]([^'"]+)['"];?/g,
     (full, lead, clause, specifier) => {
-      if ((ALLOWED_NPM_SPECIFIERS as readonly string[]).includes(specifier)) {
+      if (allowedSpecifiers.includes(specifier)) {
         const { defaultLocal, namespaceLocal, namedLocals } = parseImportClause(clause)
         npmImports.push({ specifier, defaultLocal, namespaceLocal, namedLocals })
         return lead

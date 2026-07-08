@@ -26,33 +26,13 @@ interface NpmImportBinding {
 }
 
 /**
- * Paquetes npm que el código del usuario puede importar directamente.
- * `new Function` no soporta `import`, así que estos specifiers no se dejan
- * en el texto: se reescriben como referencias a los módulos reales, ya
- * cargados por el bundle de la propia app (mismo objeto que usa el resto
- * del Studio), y se pasan como argumentos extra al ejecutar el código.
- *
- * Si se agrega un nuevo paquete permitido para los usuarios, hay que:
- *  1) importarlo arriba de este archivo,
- *  2) añadirlo a NPM_MODULES,
- *  3) y pasarlo en `compileWorkspace` al llamar a `runModuleCode`.
- */
-export const ALLOWED_NPM_SPECIFIERS = [
-  "react",
-  "@react-pdf/renderer",
-  "@react-pdf-levelup/core",
-  "@react-pdf-levelup/qr",
-  "@react-pdf-levelup/chart",
-] as const
-
-/**
  * Recorre el código fuente ORIGINAL (antes de transpilar) y separa los
  * imports en tres grupos, removiéndolos siempre del texto (`new Function`
  * no soporta `import`):
  *  - relativos (a otros archivos del workspace): se devuelven aparte para
  *    reescribirlos como declaraciones locales que apuntan a la variable de
  *    módulo del workspace ya resuelta.
- *  - de paquetes npm permitidos (ALLOWED_NPM_SPECIFIERS): se devuelven
+ *  - de paquetes npm permitidos (keys de `npmModules`): se devuelven
  *    aparte para reescribirlos como declaraciones locales que apuntan al
  *    módulo real, inyectado como argumento al ejecutar el código.
  *  - cualquier otro paquete: se reporta como specifier no resuelto, para
@@ -92,7 +72,10 @@ function parseImportClause(clause: string): {
   return { defaultLocal, namespaceLocal, namedLocals }
 }
 
-function extractImports(code: string): {
+function extractImports(
+  code: string,
+  allowedSpecifiers: string[]
+): {
   codeWithoutImports: string
   relativeImports: RelativeImportBinding[]
   npmImports: NpmImportBinding[]
@@ -111,7 +94,7 @@ function extractImports(code: string): {
         return lead
       }
 
-      if ((ALLOWED_NPM_SPECIFIERS as readonly string[]).includes(specifier)) {
+      if (allowedSpecifiers.includes(specifier)) {
         const { defaultLocal, namespaceLocal, namedLocals } = parseImportClause(clause)
         npmImports.push({ specifier, defaultLocal, namespaceLocal, namedLocals })
         return lead
@@ -189,7 +172,8 @@ function topologicalOrder(
 /**
  * Módulos npm reales (los que carga Vite/el bundle de la app, con `import`
  * de verdad) que se ponen a disposición del código del usuario. Las keys
- * deben coincidir con ALLOWED_NPM_SPECIFIERS.
+ * son los specifiers permitidos: se derivan directamente de este objeto,
+ * no hay una lista aparte que mantener sincronizada.
  */
 export type NpmModuleRegistry = Record<string, unknown>
 
@@ -202,6 +186,7 @@ export function compileWorkspace(
   reactInstance: typeof React,
   npmModules: NpmModuleRegistry = {}
 ): WorkspaceCompileResult {
+  const allowedNpmSpecifiers = Object.keys(npmModules)
   const entryKey = findGraphKeyFor(graph.files, graph.entry) ?? graph.entry
   const pathList = Array.from(graph.files.keys())
   const varNameByPath = new Map<string, string>()
@@ -241,12 +226,12 @@ export function compileWorkspace(
 
     const originalSource = graph.files.get(path)!
     const { codeWithoutImports, relativeImports, npmImports, unresolvedSpecifiers } =
-      extractImports(originalSource)
+      extractImports(originalSource, allowedNpmSpecifiers)
 
     if (unresolvedSpecifiers.length > 0) {
       return {
         ok: false,
-        error: `El paquete "${unresolvedSpecifiers[0]}" (importado en ${path}) no está disponible en el Studio. Paquetes permitidos: ${ALLOWED_NPM_SPECIFIERS.join(", ")}.`,
+        error: `El paquete "${unresolvedSpecifiers[0]}" (importado en ${path}) no está disponible en el Studio. Paquetes permitidos: ${allowedNpmSpecifiers.join(", ")}.`,
       }
     }
 

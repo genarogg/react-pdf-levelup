@@ -12,6 +12,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client'),
+      // Config del proyecto consumidor (raíz del repo). Se alias-ea para
+      // que el cliente (Playground/Studio) pueda importar `npmModules`
+      // con un specifier estable, sin depender de rutas relativas hacia
+      // la raíz del proyecto.
+      '@react-pdf-levelup/user-config': path.resolve(__dirname, './react-pdf-levelup-config.ts'),
       // "canvas" es una dependencia nativa (requiere compilación con
       // cairo/pango) que solo se usa en la rama server-side de
       // @react-pdf-levelup/qr, dentro de un try/catch que nunca se ejecuta
