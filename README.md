@@ -14,9 +14,20 @@ Dynamic PDF generator built with React. This tool allows you to create PDF templ
 npm install @react-pdf-levelup/core
 ```
 
-## 🌐 Live Playground
+## 🌐 Live Playground & Local Studio
 
+### Live Playground
 https://react-pdf-levelup.nimbux.cloud/playground
+
+### Local Studio
+To use a local Studio in your project, install the package:
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+Then run it:
+```bash
+npx react-pdf-levelup studio
+```
 
 ## ✨ Features
 
@@ -46,6 +57,7 @@ https://react-pdf-levelup.nimbux.cloud/playground
 | **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/components/position/) |
 | **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/client/) |
 | **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/icon/) |
+| **@react-pdf-levelup/studio** | `npm install --save-dev @react-pdf-levelup/studio` | Local Studio to create and test templates |
 
 ## 📚 Documentation
 
