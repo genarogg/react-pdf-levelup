@@ -19,13 +19,7 @@
     "@fastify/cors": "^11.2.0",
     "@fastify/static": "^9.1.3",
     "@monaco-editor/react": "^4.7.0",
-    "@radix-ui/react-accordion": "^1.2.12",
-    "@radix-ui/react-popover": "^1.1.15",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-tooltip": "^1.2.8",
     "@react-pdf-levelup/chart": "latest",
     "@react-pdf-levelup/core": "latest",
     "@react-pdf-levelup/qr": "latest",
@@ -50,11 +44,11 @@
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "postcss": "^8.5.6",
+    "rimraf": "^6.1.2",
     "sass": "^1.101.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "vite": "^6.0.0",
-    "rimraf": "^6.1.2"
+    "vite": "^6.0.0"
   }
 }
