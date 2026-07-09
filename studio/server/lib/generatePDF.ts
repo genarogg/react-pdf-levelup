@@ -29,14 +29,6 @@ interface PDFData {
   data?: any
 }
 
-/**
- * Genera el PDF a partir del template compilado (mismo shape que ya usa
- * renderPdf.ts: un React.ComponentType resultado de compileServerWorkspace),
- * lo guarda en disco dentro del workspace, y devuelve el base64.
- *
- * Siempre genera de nuevo (sin cache): cada llamada vuelve a renderizar y
- * sobreescribe el archivo guardado.
- */
 const generatePDF = async ({ template: Template, data }: PDFData): Promise<string> => {
   try {
     if (!Template) {
