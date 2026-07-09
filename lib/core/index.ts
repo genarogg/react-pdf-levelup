@@ -62,7 +62,8 @@ export {
     ClipPath,
     RadialGradient,
     // funciones
-    decodeBase64Pdf, generatePDF,
+    decodeBase64Pdf, 
+    generatePDF,
     // imgs
     Img, ImgBg,
     // alignment

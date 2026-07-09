@@ -4,12 +4,20 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
-    "outDir": "dist/server",
-    "rootDir": "server",
+    // outDir pasa de "dist/server" a "dist": ahora que el servidor también
+    // compila shared/ (hermano de server/), TS infiere el rootDir común
+    // como la raíz del proyecto y reproduce esa estructura bajo outDir.
+    // Resultado: server/app.ts -> dist/server/app.js (IGUAL que antes) y
+    // shared/compiler/moduleGraph.ts -> dist/shared/compiler/moduleGraph.js
+    // (nuevo, hermano de dist/server). dist/server queda tan "plano" como
+    // antes — el único cambio es que dist/ ahora tiene dos carpetas
+    // (server/ y shared/) en vez de una. Ver scripts/build-lib.mjs, que
+    // copia ambas al paquete publicable.
+    "outDir": "dist",
     "types": ["node"],
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["server"],
+  "include": ["server", "shared"],
   "exclude": ["node_modules", "server/templatesExample/**/*"]
 }

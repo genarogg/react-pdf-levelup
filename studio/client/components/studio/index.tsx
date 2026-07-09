@@ -2,7 +2,7 @@ import Header from "@/components/layout/Header"
 import { StudioProvider, useStudio } from "./StudioContext"
 import { FileExplorer } from "./fileExplorer/FileExplorer"
 import { EditorPanel } from "./editor/EditorPanel"
-import { StudioPDFPreview } from "./preview/StudioPDFPreview"
+import { StudioPDFPreviewServerFile } from "./preview/StudioPDFPreviewServerFile"
 import { StudioStatusBar } from "./toolbar/StudioStatusBar"
 import ToolBar from "./playground/toolbar"
 
@@ -27,7 +27,7 @@ export default function Studio() {
           </main>
 
           <section className="flex-1 min-w-0 border-l border-gray-800">
-            <StudioPDFPreview />
+            <StudioPDFPreviewServerFile />
           </section>
         </div>
 

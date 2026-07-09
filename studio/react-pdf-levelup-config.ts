@@ -27,6 +27,19 @@ const reactPdfLevelupConfig: ReactPdfLevelupConfig = {
     '@react-pdf-levelup/core': ReactPdfLevelupCore,
     // 'supermoney': SuperMoney,
   },
+  // Opcional, sin definir por default: si se descomenta, GET /api/render/file
+  // pasa a modo estricto y SOLO estos specifiers se resuelven — cualquier
+  // otro import npm en el código del usuario corta con 422 antes de
+  // intentar cargarlo. Sin esta línea, el comportamiento actual sigue
+  // siendo "single-user": cualquier paquete instalado en node_modules se
+  // resuelve dinámicamente. Activar esto tiene sentido recién cuando el
+  // Studio se exponga a más de un usuario (ver MIGRACION-STATUS.md).
+  // serverNpmWhitelist: [
+  //   '@react-pdf/renderer',
+  //   '@react-pdf-levelup/core',
+  //   '@react-pdf-levelup/chart',
+  //   '@react-pdf-levelup/qr',
+  // ],
 }
 
 export default reactPdfLevelupConfig
