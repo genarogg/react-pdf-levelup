@@ -1,7 +1,5 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.client.json" },
-    { "path": "./tsconfig.server.json" }
-  ]
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
 }
