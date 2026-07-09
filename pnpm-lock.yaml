@@ -536,6 +536,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.18
         version: 4.2.2
+      '@types/babel__standalone':
+        specifier: ^7.1.9
+        version: 7.1.9
       '@types/node':
         specifier: ^20.14.10
         version: 20.19.43
