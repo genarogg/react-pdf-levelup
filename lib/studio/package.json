@@ -1,46 +1,55 @@
 {
-  "name": "@react-pdf-levelup/studio",
-  "version": "1.1.14",
-  "description": "Studio: editor en vivo con playground para plantillas de react-pdf-levelup. Levanta un servidor local (estilo `npx prisma studio`) con API REST y cliente Vite ya compilados.",
-  "keywords": [
-    "javascript",
-    "pdf",
-    "react pdf",
-    "react pdf levelup",
-    "studio",
-    "playground"
-  ],
-  "license": "ISC",
-  "author": "",
-  "type": "module",
+  "name": "studio",
+  "version": "1.0.0",
   "private": false,
-  "bin": {
-    "react-pdf-levelup": "./bin/cli.js"
-  },
-  "files": [
-    "bin",
-    "dist",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
+  "type": "module",
   "scripts": {
-    "build:lib": "node ../../studio/scripts/build-lib.mjs"
+    "demo": "pnpm build && pnpm start",
+    "dev:client": "vite",
+    "dev:server": "tsx watch server/index.ts",
+    "dev": "concurrently -n CLIENT,SERVER -c blue,green \"npm:dev:client\" \"npm:dev:server\"",
+    "build": "rimraf dist && npm run build:client && npm run build:server",
+    "build:client": "tsc -p tsconfig.client.json && vite build",
+    "build:server": "tsc -p tsconfig.server.json && tsc -p tsconfig.config-types.json && node scripts/copy-templates-example.mjs",
+    "build:lib": "node scripts/build-lib.mjs",
+    "start": "cross-env NODE_ENV=production node dist/server/index.js"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",
     "@fastify/cors": "^11.2.0",
     "@fastify/static": "^9.1.3",
-    "fastify": "^5.0.0"
+    "@monaco-editor/react": "^4.7.0",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@react-pdf-levelup/chart": "latest",
+    "@react-pdf-levelup/core": "latest",
+    "@react-pdf-levelup/qr": "latest",
+    "@react-pdf/renderer": "^4",
+    "chart.js": "^4.5.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "fastify": "^5.0.0",
+    "lucide": "^0.562.0",
+    "lucide-react": "^0.562.0",
+    "monaco-editor": "^0.55.1",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19",
+    "tailwind-merge": "^3.4.0"
   },
-  "optionalDependencies": {
-    "tsx": "^4.16.2"
-  },
-  "peerDependencies": {
-    "@react-pdf-levelup/chart": "*",
-    "@react-pdf-levelup/core": "*",
-    "@react-pdf-levelup/qr": "*",
-    "@react-pdf/renderer": "^4"
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/babel__standalone": "^7.1.9",
+    "@types/node": "^20.14.10",
+    "@types/react": ">=18 <=19",
+    "@types/react-dom": ">=18 <=19",
+    "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.5.6",
+    "rimraf": "^6.1.2",
+    "sass": "^1.101.0",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vite": "^6.0.0"
   }
 }
