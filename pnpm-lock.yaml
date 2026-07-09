@@ -447,6 +447,9 @@ importers:
 
   lib/studio:
     dependencies:
+      '@babel/standalone':
+        specifier: ^7.28.5
+        version: 7.29.2
       '@fastify/cors':
         specifier: ^11.2.0
         version: 11.2.0
@@ -4038,7 +4041,7 @@ packages:
       '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: 6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0)
+      vite: 6.4.1(@types/node@24.12.0)(terser@5.46.1)
     transitivePeerDependencies:
       - supports-color
     dev: true

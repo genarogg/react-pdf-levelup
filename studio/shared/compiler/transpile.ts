@@ -109,10 +109,10 @@ export type TranspileResult =
 export function transpileToJs(modifiedCode: string): TranspileResult {
   try {
     const babelResult = Babel.transform(modifiedCode, {
-      presets: [
-        ["typescript", { isTSX: true, allExtensions: true }],
-        "react",
-      ] as any,
+      // Desde Babel 7.29 / 8, isTSX y allExtensions fueron removidas: el
+      // preset typescript ahora detecta JSX automáticamente a partir de la
+      // extensión del filename (".tsx"), así que basta con no pasar opciones.
+      presets: ["typescript", "react"] as any,
       filename: "preview.tsx",
     })
     return { ok: true, code: babelResult.code || "" }
