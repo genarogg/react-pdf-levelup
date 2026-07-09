@@ -47,6 +47,17 @@ cpSync(
   { recursive: true }
 )
 
+// 4b. Copiar dist/shared -> lib/studio/dist/shared
+//     (nuevo: server/ ahora importa código compartido de shared/compiler/
+//     vía rutas relativas del tipo "../../shared/compiler/xxx.js"; esas
+//     rutas relativas compiladas solo resuelven si dist/shared queda
+//     hermano de dist/server, tal como quedan en studio/dist/ antes de
+//     esta copia. Ver tsconfig.server.json.)
+const sharedSrc = path.join(studioRoot, 'dist', 'shared')
+if (existsSync(sharedSrc)) {
+  cpSync(sharedSrc, path.join(destDist, 'shared'), { recursive: true })
+}
+
 // 5. Copiar el .d.ts del config del usuario (generado por
 //    tsconfig.config-types.json en studio/dist/, fuera de dist/server)
 //    para que el consumidor pueda tipar su react-pdf-levelup-config.ts

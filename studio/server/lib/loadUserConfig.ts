@@ -9,6 +9,23 @@ export interface ReactPdfLevelupConfig {
   // @react-pdf-levelup/user-config); el server no la necesita, pero
   // queda tipada acá para que el shape sea consistente end-to-end.
   npmModules?: Record<string, unknown>
+  // Paso 6 del plan de migración (rediseno-render-servidor.md, sección 5):
+  // modo estricto OPCIONAL para /api/render. Ausente/undefined (default) =
+  // comportamiento "single-user" ya implementado: cualquier paquete
+  // instalado en node_modules se resuelve dinámicamente sin whitelist.
+  // Si se define (aunque sea []), server/lib/serverCompileWorkspace.ts
+  // pasa a modo estricto: solo los specifiers listados acá se resuelven;
+  // cualquier import npm fuera de esta lista corta con 422 antes de
+  // intentar el `import()` dinámico. Pensado para el día en que el Studio
+  // se exponga a más de un usuario (ver huecos de seguridad en
+  // MIGRACION-STATUS.md, sección "Huecos que quedan abiertos").
+  //
+  // Nota deliberada: es un campo DISTINTO de `npmModules` de arriba, no lo
+  // reutiliza. `npmModules` ya está documentado como "solo cliente" (mapa
+  // specifier -> módulo ya cargado por Vite); esta lista es servidor,
+  // specifiers puros, y se resuelve con `import()` real en cada request.
+  // Mezclar ambos shapes bajo el mismo campo hubiera sido confuso.
+  serverNpmWhitelist?: string[]
 }
 
 const DEFAULT_CONFIG: ReactPdfLevelupConfig = {

@@ -14,4 +14,9 @@ export const WORKSPACE_DIR = path.resolve(
   process.env.TEMPLATES_DIR || reactPdfLevelupConfig.templatesDir
 )
 
+// Se re-exporta el mismo singleton ya cargado acá (una vez al boot) en
+// vez de que render.controller.ts vuelva a leer react-pdf-levelup-config.ts
+// en cada GET /api/render/file.
+export const userConfig = reactPdfLevelupConfig
+
 export { isProduction }

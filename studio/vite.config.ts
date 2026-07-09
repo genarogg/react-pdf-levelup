@@ -12,10 +12,12 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './client'),
-      // Config del proyecto consumidor (raíz del repo). Se alias-ea para
-      // que el cliente (Playground/Studio) pueda importar `npmModules`
-      // con un specifier estable, sin depender de rutas relativas hacia
-      // la raíz del proyecto.
+      // Config del proyecto consumidor (raíz del repo). Sigue vigente
+      // porque el Playground legacy (PDFPreview.tsx/CodeEditor.tsx, un
+      // modo aparte de un solo archivo) todavía compila en el navegador
+      // con compilePlaygroundCode.ts y necesita esta whitelist de
+      // npmModules. No se retira sin decidir primero qué pasa con el
+      // Playground (ver MIGRACION-STATUS.md).
       '@react-pdf-levelup/user-config': path.resolve(__dirname, './react-pdf-levelup-config.ts'),
       // "canvas" es una dependencia nativa (requiere compilación con
       // cairo/pango) que solo se usa en la rama server-side de

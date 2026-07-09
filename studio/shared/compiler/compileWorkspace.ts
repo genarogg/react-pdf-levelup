@@ -1,10 +1,16 @@
+// Extraído de client/components/studio/compiler/compileWorkspace.ts.
+// Único cambio real: el import de las utilidades de transpilación ahora
+// apunta a ./transpile (shared, sin alias de Vite) en vez del alias `@/`
+// del cliente — así este archivo es importable 1:1 desde el servidor.
+// El resto de la lógica (parseo de imports, orden topológico, generación
+// del `new Function`) es idéntica a la original.
 import {
   transpileToJs,
   extractDefaultExportName,
   stripDefaultExport,
-} from "@/components/studio/playground/utils/compilePlaygroundCode"
-import type { ModuleGraph } from "./moduleGraph"
-import { isImagePath } from "./moduleGraph"
+} from "./transpile.js"
+import type { ModuleGraph } from "./moduleGraph.js"
+import { isImagePath } from "./moduleGraph.js"
 import type * as React from "react"
 
 export type WorkspaceCompileResult =

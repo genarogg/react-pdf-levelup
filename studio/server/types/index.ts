@@ -43,3 +43,14 @@ export interface DeleteFileQuery {
 export interface PutMainBody {
   path: string
 }
+
+// GET /api/render/file — genera el PDF con generatePDF.ts
+// (renderToStream), lo guarda en el backend y devuelve el mismo base64
+// guardado, para que el cliente lo decodifique con decodeBase64Pdf.ts.
+export interface GetRenderFileQuery {
+  mainFile?: string
+}
+
+export type GetRenderFileResponse =
+  | { ok: true; pdfBase64: string; fileName: string }
+  | { ok: false; error: string }

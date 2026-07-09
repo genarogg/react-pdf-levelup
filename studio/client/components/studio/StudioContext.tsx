@@ -22,7 +22,7 @@ export interface StudioContextValue {
   compileStatus: CompileStatus
   // No está en la interfaz original de la spec, pero es la señal de "algo
   // se guardó" que la nota bajo StudioActions exige para que
-  // StudioPDFPreview invalide su grafo cacheado aunque lo guardado no haya
+  // el visualizador de PDF invalide su grafo cacheado aunque lo guardado no haya
   // sido el mainFile.
   saveVersion: number
 
@@ -72,7 +72,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
       setOpenFile((prev) => (prev ? { ...prev, content } : prev))
       setDirty(false)
       // Cualquier archivo pudo ser importado por el mainFile actual (o
-      // transitivamente); StudioPDFPreview debe reconstruir su grafo y
+      // transitivamente); el visualizador de PDF debe reconstruir su grafo y
       // recompilar sin importar cuál archivo se guardó.
       setSaveVersion((v) => v + 1)
     },

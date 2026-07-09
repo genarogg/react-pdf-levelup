@@ -1,3 +1,11 @@
+// Tipado de las variables de entorno expuestas por Vite (prefijo VITE_).
+interface ImportMetaEnv {
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 declare module "@babel/standalone" {
   export function transform(
     code: string,
