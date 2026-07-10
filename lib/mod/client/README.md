@@ -1,8 +1,8 @@
 # `@react-pdf-levelup/client`
 
-Utilidad de frontend para decodificar un PDF en base64 generados con @react-pdf-levelup/core y descargarlo/abrirlo en el navegador.
+Frontend utility to decode a base64 PDF generated with @react-pdf-levelup/core and download/open/print it in the browser.
 
-## NOTA IMPORTANTE esta libreria es un complemento de @react-pdf-levelup/core
+## IMPORTANT NOTE this library is a complement to @react-pdf-levelup/core
 
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" 
@@ -11,7 +11,7 @@ Utilidad de frontend para decodificar un PDF en base64 generados con @react-pdf-
    />
 </p>
 
-## Instalación
+## Installation
 
 ```bash
 npm install @react-pdf-levelup/client
@@ -21,31 +21,45 @@ npm install @react-pdf-levelup/client
 
 ### decodeBase64Pdf
 
-Decodifica un string en base64 correspondiente a un PDF, genera un Blob tipo `application/pdf`, dispara la descarga y abre el documento en una nueva pestaña. Limpia automáticamente el `ObjectURL` creado.
+Decodes a base64 string corresponding to a PDF, generates an `application/pdf` Blob, triggers the download, and opens the document in a new tab. Automatically cleans up the created `ObjectURL`.
 
-Firma:
+Signature:
 
 ```ts
 decodeBase64Pdf(base64: string, fileName: string): void
 ```
 
-Parámetros:
+Parameters:
 
-- `base64`: contenido del PDF en base64 (sin prefijo `data:application/pdf;base64,`).
-- `fileName`: nombre del archivo a descargar, por ejemplo `documento.pdf`.
+- `base64`: PDF content in base64 (without the `data:application/pdf;base64,` prefix).
+- `fileName`: name of the file to download, e.g. `document.pdf`.
 
-### Ejemplo básico (frontend)
+### printBase64Pdf
+
+Decodes a base64 string corresponding to a PDF and opens the browser's print dialog. Automatically cleans up resources after 3 seconds.
+
+Signature:
+
+```ts
+printBase64Pdf(base64: string): void
+```
+
+Parameters:
+
+- `base64`: PDF content in base64 (without the `data:application/pdf;base64,` prefix).
+
+### Basic example (decodeBase64Pdf)
 
 ```ts
 import { decodeBase64Pdf } from "@react-pdf-levelup/client";
 
-const base64 = "..."; // PDF en base64
-decodeBase64Pdf(base64, "mi-documento.pdf");
+const base64 = "..."; // PDF in base64
+decodeBase64Pdf(base64, "my-document.pdf");
 ```
 
-### Ejemplo tras generar el PDF
+### Example after generating the PDF (decodeBase64Pdf)
 
-Si ya generaste el PDF en base64 (por ejemplo con `react-pdf-levelup`):
+If you already generated the PDF in base64 (for example with `react-pdf-levelup`):
 
 ```ts
 import { generatePDF } from "@react-pdf-levelup/core";
@@ -57,4 +71,13 @@ const pdfBase64 = await generatePDF({
   data: { title: "Demo" },
 });
 decodeBase64Pdf(pdfBase64, "demo.pdf");
+```
+
+### Print example (printBase64Pdf)
+
+```ts
+import { printBase64Pdf } from "@react-pdf-levelup/client";
+
+const base64 = "..."; // PDF in base64
+printBase64Pdf(base64);
 ```

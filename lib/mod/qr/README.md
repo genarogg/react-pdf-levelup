@@ -2,10 +2,6 @@
 
 Paquete de componentes y utilidades para generar códigos QR estilizados dentro de plantillas de @react-pdf-levelup/core e incluso funciona con @react-pdf/renderer puro
 
-### NOTA: esta libreria es un complemento de @react-pdf-levelup/core
-
-### NOTA: este complemento solo funciona en el back
-
 <p align="center">
   <img src="https://genarogg.github.io/media/react-pdf-levelup/logo-de-react-pdf-levelup.png" alt="react-pdf-levelup logo" width="160" />
 </p>
@@ -13,7 +9,7 @@ Paquete de componentes y utilidades para generar códigos QR estilizados dentro 
 ## Instalación
 
 ```bash
-npm install @react-pdf-levelup/core @react-pdf-levelup/qr
+npm install @react-pdf-levelup/qr
 ```
 
 ## Componentes principales
@@ -24,17 +20,13 @@ npm install @react-pdf-levelup/core @react-pdf-levelup/qr
 ## Uso en plantillas PDF (ejemplo mínimo)
 
 ```tsx
-import React from "react";
-import { Document, Page } from "@react-pdf/renderer";
 import { QR } from "@react-pdf-levelup/qr";
 
 const MyPdfTemplate = ({ data }) => (
-  <Document>
-    <Page size="A4">
+  ...
       {/* QR simple */}
       <QR value={data.url} size={120} />
-    </Page>
-  </Document>
+  ...
 );
 
 export default MyPdfTemplate;
@@ -60,7 +52,5 @@ const style = QRStyle({
   dotShape: "rounded",
 });
 
-// Usarlo en el componente QR
-// <QR value="https://example.com" size={140} style={style} />
 ```
 
