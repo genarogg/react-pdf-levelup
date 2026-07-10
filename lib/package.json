@@ -1,11 +1,11 @@
 {
-  "name": "react-pdf-levelup-monorepo",
+  "name": "react-pdf-levelup",
   "version": "1.0.0",
   "private": false,
   "type": "module",
   "scripts": {
     "publish-all": "node scripts/index.js",
-    "build-all": "node scripts/build-all.js"
+    "build-all": "node scripts/fn/build-all.js"
   },
   "devDependencies": {
     "tsup": "^8.5.1"

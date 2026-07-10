@@ -26,7 +26,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build:lib": "node ../../studio/scripts/build-lib.mjs"
+    "build:lib": "node ../../../studio/scripts/build-lib.mjs"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",

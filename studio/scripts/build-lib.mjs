@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const studioRoot = path.resolve(__dirname, '..')
 const monorepoRoot = path.resolve(studioRoot, '..')
-const libStudioRoot = path.join(monorepoRoot, 'lib', 'studio')
+const libStudioRoot = path.join(monorepoRoot, 'lib', "mod", 'studio')
 
 function run(cmd) {
   console.log(`$ ${cmd}`)
