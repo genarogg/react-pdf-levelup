@@ -53,7 +53,8 @@ export default defineConfig({
 					},
 					items: [
 						{ slug: 'get-started', label: 'Get Started' },
-						{ slug: 'playground', label: 'Playground' },
+						{ slug: 'studio', label: 'Playground - Local', translations: { en: 'Playground - Local' } },
+						{ slug: 'playground', label: 'Playground - Online', translations: { en: 'Playground - Online' } },
 					],
 				},
 				{
@@ -83,15 +84,34 @@ export default defineConfig({
 						en: 'Components'
 					},
 					items: [
-						{ slug: 'components/form', label: 'Formulario', translations: { en: 'Form' } },
-						{ slug: 'components/grid', label: 'Columnas', translations: { en: 'Columns' } },
-						{ slug: 'components/layout', label: 'Layout' },
-						{ slug: 'components/layout-multi-page', label: 'LayoutMultiPage' },
-						{ slug: 'components/lists', label: 'Lists' },
-						{ slug: 'components/media', label: 'Media' },
-						{ slug: 'components/position', label: 'Position' },
-						{ slug: 'components/table', label: 'Table' },
-						{ slug: 'components/text', label: 'Text' },
+						{
+							label: 'Estructura',
+							translations: { en: 'Structure' },
+							items: [
+								{ slug: 'components/layout', label: 'Layout' },
+								{ slug: 'components/layout-multi-page', label: 'LayoutMultiPage' },
+								{ slug: 'components/grid', label: 'Columnas', translations: { en: 'Columns' } },
+								{ slug: 'components/position', label: 'Position' },
+							],
+						},
+						{
+							label: 'Contenido',
+							translations: { en: 'Content' },
+							items: [
+								{ slug: 'components/text', label: 'Text' },
+								{ slug: 'components/table', label: 'Table' },
+								{ slug: 'components/lists', label: 'Lists' },
+								{ slug: 'components/media', label: 'Media' },
+							],
+						},
+						{
+							label: 'Avanzado',
+							translations: { en: 'Advanced' },
+							items: [
+								{ slug: 'components/form', label: 'Formulario', translations: { en: 'Form' } },
+								{ slug: 'components/gradiant', label: 'Gradiant', translations: { en: 'Gradiant' } },
+							],
+						},
 					],
 				},
 				{

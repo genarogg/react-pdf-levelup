@@ -1,0 +1,88 @@
+---
+title: Gradiant
+description: Componente para crear degradados lineales y radiales en PDFs.
+---
+
+# Gradiant
+
+El componente `Gradiant` permite agregar degradados lineales y radiales a tus documentos PDF, con soporte para colores personalizados, ángulo (para lineales), y formas.
+
+## Props
+
+| Propiedad      | Tipo                                 | Predeterminado | Descripción                                                                 |
+| :------------- | :----------------------------------- | :------------- | :-------------------------------------------------------------------------- |
+| `colors`       | `(string \| { color: string; offset?: string \| number })[]` | `N/A` (obligatorio) | Colores del degradado. Puede ser un array de strings (ej: `["#fff", "#000"]`) o un array de objetos con `color` y `offset` (ej: `[{ color: "#fff", offset: "0%" }, { color: "#000", offset: "100%" }])` |
+| `width`        | `number \| string`                   | `100`          | Ancho del bloque degradado.                                                 |
+| `height`       | `number \| string`                   | `100`          | Alto del bloque degradado.                                                  |
+| `type`         | `"linear" \| "radial"`               | `"linear"`     | Tipo de degradado: lineal o radial.                                         |
+| `shape`        | `"square" \| "circle"`               | `"square"`     | Forma del contenedor: cuadrado/rectangular o circular.                      |
+| `angle`        | `number`                             | `90`           | Ángulo del degradado lineal en grados (0 = izquierda→derecha, 90 = arriba→abajo). |
+| `children`     | `React.ReactNode`                    | `undefined`    | Contenido interno: texto, imágenes, íconos, etc.                            |
+| `style`        | `any`                                | `undefined`    | Estilos adicionales para el contenedor principal.                           |
+| `...rest`      | `Omit<React.ComponentProps<typeof View>, "style">` | - | Cualquier otra propiedad aceptada por el componente `View` de `@react-pdf/renderer`. |
+
+## Ejemplos de Uso
+
+### Degradado Lineal Simple
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant, Text } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant colors={["#FF6B6B", "#4ECDC4"]} width={300} height={100}>
+      <Text style={{ color: "white" }}>Hola Mundo</Text>
+    </Gradiant>
+  </Layout>
+);
+
+export default MyDocument
+```
+
+### Degradado Radial Circular
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant, Text } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant
+      colors={["#FFD93D", "#FF6B6B"]}
+      width={150}
+      height={150}
+      type="radial"
+      shape="circle"
+    >
+      <Text style={{ color: "white", fontWeight: "bold" }}>Radial</Text>
+    </Gradiant>
+  </Layout>
+);
+
+export default MyDocument
+```
+
+### Degradado con Offsets Personalizados
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant
+      colors={[
+        { color: "#FF0000", offset: "0%" },
+        { color: "#00FF00", offset: "50%" },
+        { color: "#0000FF", offset: "100%" }
+      ]}
+      width={400}
+      height={80}
+      angle={45}
+    />
+  </Layout>
+);
+
+export default MyDocument
+```
