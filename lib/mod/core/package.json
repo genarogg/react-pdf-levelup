@@ -2,6 +2,12 @@
   "name": "@react-pdf-levelup/core",
   "version": "5.0.13",
   "description": "",
+  "keywords": [
+    "javascript",
+    "pdf",
+    "react pdf",
+    "react pdf levelup"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",

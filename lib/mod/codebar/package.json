@@ -2,6 +2,14 @@
   "name": "@react-pdf-levelup/codebar",
   "version": "1.0.6",
   "description": "",
+  "keywords": [
+    "javascript",
+    "pdf",
+    "react pdf",
+    "react pdf levelup",
+    "barcode",
+    "codebar"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",

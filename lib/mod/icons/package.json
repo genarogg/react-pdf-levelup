@@ -2,6 +2,14 @@
   "name": "@react-pdf-levelup/icons",
   "version": "1.1.38",
   "description": "",
+  "keywords": [
+    "javascript",
+    "pdf",
+    "react pdf",
+    "react pdf levelup",
+    "icons",
+    "lucide"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",

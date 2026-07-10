@@ -1,7 +1,15 @@
 {
   "name": "@react-pdf-levelup/qr",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "",
+  "keywords": [
+    "javascript",
+    "pdf",
+    "react pdf",
+    "react pdf levelup",
+    "qr",
+    "qrcode"
+  ],
   "license": "ISC",
   "author": "",
   "type": "module",
