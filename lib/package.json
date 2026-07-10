@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "publish-all": "node scripts/index.js",
-    "build-all": "node scripts/fn/build-all.js"
+    "build:lib": "node scripts/fn/build-all.js"
   },
   "devDependencies": {
     "tsup": "^8.5.1"
