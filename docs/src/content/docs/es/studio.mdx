@@ -1,0 +1,132 @@
+---
+title: Playground - Local
+description: Editor en vivo para crear y previsualizar plantillas PDF con react-pdf-levelup
+---
+
+import { Card, CardGrid, Badge, LinkButton } from '@astrojs/starlight/components';
+
+# Playground Local
+
+<Badge text="CLI" variant="note" />
+<Badge text="Editor en Vivo" variant="tip" />
+<Badge text="Local" variant="caution" />
+
+Studio es un editor local (estilo `npx prisma studio`) que te permite crear, editar y previsualizar tus plantillas PDF en tiempo real. Incluye un servidor Fastify y una interfaz de usuario con Monaco Editor.
+
+## Instalación
+
+Instala el paquete como dependencia de desarrollo:
+
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+
+### Dependencias Requeridas
+
+Studio requiere los siguientes paquetes como peer dependencies (se instalan automáticamente si usas npm/pnpm/yarn):
+
+- `@react-pdf-levelup/core`: El paquete principal de componentes
+- `@react-pdf-levelup/qr`: (Opcional, para códigos QR)
+- `@react-pdf-levelup/chart`: (Opcional, para gráficos Chart.js)
+- `@react-pdf/renderer`: ^4.x
+
+## Uso Básico
+
+### 1. Ejecuta el Studio
+
+Desde la raíz de tu proyecto:
+
+```bash
+npx react-pdf-levelup studio
+```
+
+Esto:
+- Levanta un servidor local (predeterminado en el puerto `8000`)
+- Abre automáticamente el Studio en tu navegador
+- Carga cualquier plantilla en la carpeta configurada
+
+### 2. Personaliza la Configuración (Opcional)
+
+Crea un archivo de configuración en la raíz de tu proyecto para personalizar el Studio:
+
+#### TypeScript: `react-pdf-levelup-config.ts`
+
+```ts
+import type { ReactPdfLevelupConfig } from "@react-pdf-levelup/studio";
+
+const config: ReactPdfLevelupConfig = {
+  // Puerto del servidor
+  productionPort: 8000,
+  // Carpeta donde se guardarán tus plantillas
+  templatesDir: "templates",
+};
+
+export default config;
+```
+
+#### JavaScript: `react-pdf-levelup-config.js`
+
+```js
+/** @type {import('@react-pdf-levelup/studio').ReactPdfLevelupConfig} */
+const config = {
+  productionPort: 8000,
+  templatesDir: "templates",
+};
+
+export default config;
+```
+
+Si usas TypeScript, el CLI buscará y usará automáticamente `tsx` para cargar la configuración (primero busca `tsx` en tu proyecto, luego en el paquete de Studio).
+
+## Opciones del CLI
+
+| Opción | Descripción |
+|--------|-------------|
+| `--runtime <nombre>` | Runtime a usar: `node` (predeterminado), `bun`, `tsx`, `ts-node` |
+| `--loader <ruta>` | Ruta a un loader ESM personalizado (ej: `ts-node/esm`) |
+| `--no-ts-auto` | Omite la auto-detección de TypeScript y ejecuta sin loader |
+| `--help` / `-h` | Muestra la ayuda completa |
+
+### Ejemplos
+
+- Usar **Bun**:
+  ```bash
+  npx react-pdf-levelup studio --runtime bun
+  ```
+
+- Usar **ts-node**:
+  ```bash
+  npx react-pdf-levelup studio --runtime ts-node
+  ```
+
+- Usar un **loader personalizado**:
+  ```bash
+  npx react-pdf-levelup studio --loader ts-node/esm
+  ```
+
+- Ejecutar sin TypeScript:
+  ```bash
+  npx react-pdf-levelup studio --no-ts-auto
+  ```
+
+## Características Principales
+
+<CardGrid>
+  <Card title="Editor en Vivo" icon="edit">
+    Editor de código con Monaco (mismo que VS Code) con resaltado de sintaxis y autocompletado.
+  </Card>
+  <Card title="Previsualización" icon="eye">
+    Vista previa en tiempo real de tu PDF con zoom, navegación y rotación.
+  </Card>
+  <Card title="Gestión de Plantillas" icon="folder">
+    Guarda y carga plantillas desde tu sistema de archivos local.
+  </Card>
+  <Card title="Descarga Directa" icon="download">
+    Descarga tus PDFs con un solo clic.
+  </Card>
+</CardGrid>
+
+## Siguientes Pasos
+
+- [Crear tu primera plantilla](/docs/es/guides/first-template)
+- [Ver la lista de componentes](/docs/es/components/text)

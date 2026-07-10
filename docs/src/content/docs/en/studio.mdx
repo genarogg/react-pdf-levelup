@@ -1,0 +1,132 @@
+---
+title: Playground - Local
+description: Live editor to create and preview PDF templates with react-pdf-levelup
+---
+
+import { Card, CardGrid, Badge, LinkButton } from '@astrojs/starlight/components';
+
+# Playground - Local
+
+<Badge text="CLI" variant="note" />
+<Badge text="Live Editor" variant="tip" />
+<Badge text="Local" variant="caution" />
+
+Studio is a local editor (in the style of `npx prisma studio`) that allows you to create, edit, and preview your PDF templates in real-time. It includes a Fastify server and a UI with Monaco Editor.
+
+## Installation
+
+Install the package as a dev dependency:
+
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+
+### Required Dependencies
+
+Studio requires the following peer dependencies (automatically installed if you use npm/pnpm/yarn):
+
+- `@react-pdf-levelup/core`: The main component package
+- `@react-pdf-levelup/qr`: (Optional, for QR codes)
+- `@react-pdf-levelup/chart`: (Optional, for Chart.js graphs)
+- `@react-pdf/renderer`: ^4.x
+
+## Basic Usage
+
+### 1. Run Studio
+
+From your project root:
+
+```bash
+npx react-pdf-levelup studio
+```
+
+This will:
+- Start a local server (default port `8000`)
+- Automatically open Studio in your browser
+- Load any templates from the configured directory
+
+### 2. Customize Configuration (Optional)
+
+Create a config file at your project root to customize Studio:
+
+#### TypeScript: `react-pdf-levelup-config.ts`
+
+```ts
+import type { ReactPdfLevelupConfig } from "@react-pdf-levelup/studio";
+
+const config: ReactPdfLevelupConfig = {
+  // Server port
+  productionPort: 8000,
+  // Folder where templates are stored
+  templatesDir: "templates",
+};
+
+export default config;
+```
+
+#### JavaScript: `react-pdf-levelup-config.js`
+
+```js
+/** @type {import('@react-pdf-levelup/studio').ReactPdfLevelupConfig} */
+const config = {
+  productionPort: 8000,
+  templatesDir: "templates",
+};
+
+export default config;
+```
+
+If you use TypeScript, the CLI will automatically try to find and use `tsx` to load the config (first looking for `tsx` in your project, then in the Studio package itself).
+
+## CLI Options
+
+| Option | Description |
+|--------|-------------|
+| `--runtime <name>` | Runtime to use: `node` (default), `bun`, `tsx`, `ts-node` |
+| `--loader <path>` | Path to a custom ESM loader (e.g. `ts-node/esm`) |
+| `--no-ts-auto` | Skips TypeScript auto-detection and runs without a loader |
+| `--help` / `-h` | Shows complete help |
+
+### Examples
+
+- Using **Bun**:
+  ```bash
+  npx react-pdf-levelup studio --runtime bun
+  ```
+
+- Using **ts-node**:
+  ```bash
+  npx react-pdf-levelup studio --runtime ts-node
+  ```
+
+- Using a **custom loader**:
+  ```bash
+  npx react-pdf-levelup studio --loader ts-node/esm
+  ```
+
+- Running without TypeScript:
+  ```bash
+  npx react-pdf-levelup studio --no-ts-auto
+  ```
+
+## Key Features
+
+<CardGrid>
+  <Card title="Live Editor" icon="edit">
+    Code editor with Monaco (same as VS Code), syntax highlighting, and autocompletion.
+  </Card>
+  <Card title="Live Preview" icon="eye">
+    Real-time PDF preview with zoom, navigation, and rotation.
+  </Card>
+  <Card title="Template Management" icon="folder">
+    Save and load templates from your local file system.
+  </Card>
+  <Card title="Direct Download" icon="download">
+    Download your PDFs with one click.
+  </Card>
+</CardGrid>
+
+## Next Steps
+
+- [Create your first template](/docs/en/guides/first-template)
+- [Check the components list](/docs/en/components/text)

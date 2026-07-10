@@ -53,7 +53,8 @@ export default defineConfig({
 					},
 					items: [
 						{ slug: 'get-started', label: 'Get Started' },
-						{ slug: 'playground', label: 'Playground' },
+						{ slug: 'studio', label: 'Playground - Local', translations: { en: 'Playground - Local' } },
+						{ slug: 'playground', label: 'Playground - Online', translations: { en: 'Playground - Online' } },
 					],
 				},
 				{

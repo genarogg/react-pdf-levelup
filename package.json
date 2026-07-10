@@ -15,7 +15,7 @@
     "studio"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=frontend --filter=docs --filter=api",
     "build": "turbo run build --filter=frontend --filter=docs --filter=api",
     "start": "turbo run start --filter=frontend --filter=docs --filter=api",
     "lint": "turbo run lint",
