@@ -1,43 +1,33 @@
-import React from "react"
+import React, { createContext, useContext } from "react"
 import { View, Text, StyleSheet } from "@react-pdf/renderer"
+
+/* ================= TYPES ================= */
 
 interface FormProps {
   children: React.ReactNode
   style?: any
+  borderColor?: string
+  borderRadius?: number
+  labelColor?: string
+  textColor?: string
 }
 
-interface InputProps {
+interface BaseFieldProps {
   label?: string
+  required?: boolean
+  style?: any
+  labelStyle?: any
+  width?: string | number
+  height?: number
+}
+
+interface InputProps extends BaseFieldProps {
   placeholder?: string
-  value?: string
-  width?: string | number
-  height?: number
-  style?: any
-  labelStyle?: any
-  required?: boolean
 }
 
-interface TextareaProps {
-  label?: string
+interface TextAreaProps extends BaseFieldProps {
   placeholder?: string
-  value?: string
-  width?: string | number
   height?: number
-  rows?: number
-  style?: any
-  labelStyle?: any
-  required?: boolean
-}
-
-interface SelectProps {
-  label?: string
-  value?: string
-  options?: string[]
-  width?: string | number
-  height?: number
-  style?: any
-  labelStyle?: any
-  required?: boolean
 }
 
 interface CheckboxProps {
@@ -47,299 +37,227 @@ interface CheckboxProps {
   labelStyle?: any
 }
 
-interface RadioProps {
-  label?: string
-  checked?: boolean
-  style?: any
-  labelStyle?: any
-}
+/* ================= CONTEXT ================= */
 
-interface FieldsetProps {
-  legend?: string
-  children: React.ReactNode
-  style?: any
-  legendStyle?: any
-}
+const FormContext = createContext({
+  borderColor: "#282828",
+  borderRadius: 5,
+  labelColor: "#333",
+  textColor: "#000",
+})
+
+/* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
   form: {
     width: "100%",
     marginBottom: 20,
+    borderWidth: 1,
+    padding: 12,
   },
-  inputContainer: {
+
+  fieldContainer: {
     marginBottom: 12,
   },
+
   label: {
     fontSize: 10,
     fontWeight: "bold",
     marginBottom: 4,
-    color: "#333",
   },
+
   required: {
     color: "#e74c3c",
-    marginLeft: 2,
   },
-  input: {
+
+  inputBase: {
     fontSize: 11,
     padding: 6,
     borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 3,
-    backgroundColor: "#fff",
     minHeight: 28,
+    justifyContent: "flex-start",
   },
-  textarea: {
-    fontSize: 11,
-    padding: 6,
-    borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 3,
-    backgroundColor: "#fff",
-    minHeight: 60,
+
+  textArea: {
+    textAlignVertical: "top",
+    paddingTop: 6,
   },
-  select: {
-    fontSize: 11,
-    padding: 6,
-    borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 3,
-    backgroundColor: "#fff",
-    minHeight: 28,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  selectArrow: {
-    fontSize: 10,
-    color: "#666",
-  },
+
   checkboxContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 8,
   },
-  checkbox: {
+
+  checkboxBox: {
     width: 14,
     height: 14,
     borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 2,
     marginRight: 6,
     justifyContent: "center",
     alignItems: "center",
   },
-  checkboxChecked: {
-    backgroundColor: "#3498db",
-    borderColor: "#3498db",
-  },
+
   checkmark: {
-    fontSize: 10,
-    color: "#fff",
+    fontSize: 9,
     fontWeight: "bold",
   },
-  radioContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  radio: {
-    width: 14,
-    height: 14,
-    borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 7,
-    marginRight: 6,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  radioChecked: {
-    borderColor: "#3498db",
-  },
-  radioDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#3498db",
-  },
-  checkboxLabel: {
-    fontSize: 10,
-    color: "#333",
-  },
-  fieldset: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 16,
-  },
-  legend: {
-    fontSize: 12,
-    fontWeight: "bold",
-    color: "#333",
-    backgroundColor: "#fff",
-    paddingHorizontal: 6,
-    position: "absolute",
-    top: -8,
-    left: 8,
-  },
+
   placeholder: {
     color: "#999",
   },
 })
 
-// Componente Form
-const Form: React.FC<FormProps> = ({ children, style }) => {
-  return <View style={[styles.form, style]}>{children}</View>
-}
+/* ================= FORM ================= */
 
-// Componente Input
+const Form: React.FC<FormProps> = ({
+  children,
+  style,
+  borderColor = "#282828",
+  borderRadius = 5,
+  labelColor = "#333",
+  textColor = "#000",
+}) => (
+  <FormContext.Provider
+    value={{ borderColor, borderRadius, labelColor, textColor }}
+  >
+    <View
+      style={[
+        styles.form,
+        {
+          borderColor,
+          borderRadius,
+        },
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  </FormContext.Provider>
+)
+
+/* ================= INPUT ================= */
+
 const Input: React.FC<InputProps> = ({
   label,
-  placeholder,
-  value,
+  placeholder = "",
+  required = false,
   width = "100%",
   height,
   style,
   labelStyle,
-  required = false,
 }) => {
+  const { borderColor, borderRadius, labelColor } =
+    useContext(FormContext)
+
   return (
-    <View style={[styles.inputContainer, { width }]}>
+    <View style={[styles.fieldContainer, { width }]}>
       {label && (
-        <Text style={[styles.label, labelStyle]}>
+        <Text style={[styles.label, { color: labelColor }, labelStyle]}>
           {label}
           {required && <Text style={styles.required}> *</Text>}
         </Text>
       )}
-      <View style={[styles.input, { height }, style]}>
-        <Text style={value ? {} : styles.placeholder}>
-          {value || placeholder || ""}
+
+      <View
+        style={[
+          styles.inputBase,
+          {
+            borderColor,
+            borderRadius,
+            minHeight: height ?? 28,
+          },
+          style,
+        ]}
+      >
+        <Text style={styles.placeholder}>
+          {placeholder}
         </Text>
       </View>
     </View>
   )
 }
 
-// Componente Textarea
-const Textarea: React.FC<TextareaProps> = ({
+/* ================= TEXTAREA ================= */
+
+const TextArea: React.FC<TextAreaProps> = ({
   label,
-  placeholder,
-  value,
+  placeholder = "",
+  required = false,
   width = "100%",
-  height,
-  rows = 3,
+  height = 60,
   style,
   labelStyle,
-  required = false,
 }) => {
-  const calculatedHeight = height || rows * 20
-  
+  const { borderColor, borderRadius, labelColor } =
+    useContext(FormContext)
+
   return (
-    <View style={[styles.inputContainer, { width }]}>
+    <View style={[styles.fieldContainer, { width }]}>
       {label && (
-        <Text style={[styles.label, labelStyle]}>
+        <Text style={[styles.label, { color: labelColor }, labelStyle]}>
           {label}
           {required && <Text style={styles.required}> *</Text>}
         </Text>
       )}
-      <View style={[styles.textarea, { height: calculatedHeight }, style]}>
-        <Text style={value ? {} : styles.placeholder}>
-          {value || placeholder || ""}
+
+      <View
+        style={[
+          styles.inputBase,
+          styles.textArea,
+          {
+            borderColor,
+            borderRadius,
+            minHeight: height,
+          },
+          style,
+        ]}
+      >
+        <Text style={styles.placeholder}>
+          {placeholder}
         </Text>
       </View>
     </View>
   )
 }
 
-// Componente Select
-const Select: React.FC<SelectProps> = ({
-  label,
-  value,
-  width = "100%",
-  height,
-  style,
-  labelStyle,
-  required = false,
-}) => {
-  return (
-    <View style={[styles.inputContainer, { width }]}>
-      {label && (
-        <Text style={[styles.label, labelStyle]}>
-          {label}
-          {required && <Text style={styles.required}> *</Text>}
-        </Text>
-      )}
-      <View style={[styles.select, { height }, style]}>
-        <Text style={value ? {} : styles.placeholder}>
-          {value || "Seleccionar..."}
-        </Text>
-        <Text style={styles.selectArrow}>▼</Text>
-      </View>
-    </View>
-  )
-}
+/* ================= CHECKBOX ================= */
 
-// Componente Checkbox
 const Checkbox: React.FC<CheckboxProps> = ({
   label,
   checked = false,
   style,
   labelStyle,
 }) => {
+  const { borderColor, borderRadius, textColor } =
+    useContext(FormContext)
+
   return (
     <View style={[styles.checkboxContainer, style]}>
-      <View style={[styles.checkbox, checked ? styles.checkboxChecked : {}]}>
-        {checked && <Text style={styles.checkmark}>✓</Text>}
+      <View
+        style={[
+          styles.checkboxBox,
+          {
+            borderColor,
+            borderRadius: borderRadius / 2,
+            backgroundColor: checked ? borderColor : undefined,
+          },
+        ]}
+      >
+        {checked && (
+          <Text style={[styles.checkmark, { color: "#fff" }]}>
+            ✓
+          </Text>
+        )}
       </View>
-      {label && <Text style={[styles.checkboxLabel, labelStyle]}>{label}</Text>}
+
+      {label && (
+        <Text style={[{ fontSize: 10, color: textColor }, labelStyle]}>
+          {label}
+        </Text>
+      )}
     </View>
   )
 }
 
-// Componente Radio
-const Radio: React.FC<RadioProps> = ({
-  label,
-  checked = false,
-  style,
-  labelStyle,
-}) => {
-  return (
-    <View style={[styles.radioContainer, style]}>
-      <View style={[styles.radio, checked ? styles.radioChecked : {}]}>
-        {checked && <View style={styles.radioDot} />}
-      </View>
-      {label && <Text style={[styles.checkboxLabel, labelStyle]}>{label}</Text>}
-    </View>
-  )
-}
-
-// Componente Fieldset
-const Fieldset: React.FC<FieldsetProps> = ({
-  legend,
-  children,
-  style,
-  legendStyle,
-}) => {
-  return (
-    <View style={[styles.fieldset, style]}>
-      {legend && <Text style={[styles.legend, legendStyle]}>{legend}</Text>}
-      <View style={{ marginTop: legend ? 8 : 0 }}>{children}</View>
-    </View>
-  )
-}
-
-// Componente Label (para usar de forma independiente)
-const Label: React.FC<{ children: React.ReactNode; style?: any; required?: boolean }> = ({
-  children,
-  style,
-  required = false,
-}) => {
-  return (
-    <Text style={[styles.label, style]}>
-      {children}
-      {required && <Text style={styles.required}> *</Text>}
-    </Text>
-  )
-}
-
-export { Form, Input, Textarea, Select, Checkbox, Radio, Fieldset, Label }
+export { Form, Input, TextArea, Checkbox }

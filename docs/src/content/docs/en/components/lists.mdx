@@ -1,0 +1,61 @@
+---
+title: Lists
+description: Components for creating ordered and unordered lists.
+---
+
+## UL
+
+Unordered List.
+
+### Props
+
+| Name    | Type     | Default    | Description           |
+| :------ | :------- | :--------- | :-------------------- |
+| `style` | `object` | `{}`       | Additional styles.    |
+| `type`  | `string` | `"disc"`   | Bullet type (disc, circle, square). |
+
+### Example
+
+```tsx
+<UL type="square">
+  <LI>Element 1</LI>
+  <LI>Element 2</LI>
+</UL>
+```
+
+## OL
+
+Ordered List.
+
+### Props
+
+| Name    | Type     | Default     | Description           |
+| :------ | :------- | :---------- | :-------------------- |
+| `style` | `object` | `{}`        | Additional styles.    |
+| `type`  | `string` | `"decimal"` | Numbering type (decimal, lower-alpha, upper-alpha, lower-roman, upper-roman). |
+| `start` | `number` | `1`         | Starting number of the list. |
+
+### Example
+
+```tsx
+<OL type="upper-roman" start={3}>
+  <LI>Item III</LI>
+  <LI>Item IV</LI>
+</OL>
+```
+
+## LI
+
+List Item.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+
+### Example
+
+```tsx
+<LI>Specific Value</LI>
+```

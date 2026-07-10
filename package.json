@@ -11,32 +11,26 @@
     "frontend",
     "docs",
     "lib",
-    "api"
+    "api",
+    "studio"
   ],
-  "overrides": {
-    "react": "19",
-    "react-dom": "19"
-  },
   "scripts": {
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev --filter=frontend --filter=docs --filter=api",
     "build": "turbo run build --filter=frontend --filter=docs --filter=api",
-    "start": "turbo run start",
+    "start": "turbo run start --filter=frontend --filter=docs --filter=api",
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
-    "publish-all": "cd lib && npm run publish-all",
-    "demo:frontend": "cd frontend && npm run demo",
-    "demo:api": "cd api && npm run demo",
+    "publish-all": "cd lib && pnpm run publish-all",
+    "demo:frontend": "cd frontend && pnpm run demo",
+    "demo:api": "cd api && pnpm run demo",
+    "demo:studio": "cd ./lib/studio && pnpm build:lib &&  node ./bin/cli.js studio",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
-    "clean:install": "node ./global/clean.js && npm install"
+    "clean:install": "node ./global/clean.js && pnpm install"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/jetbrains-mono": "^5.2.8",
-    "@six-tech/starlight-theme-six": "^1.0.16",
     "archiver": "^7.0.1",
-    "sharp": "^0.34.5",
     "turbo": "^2.7.2"
   },
-  "packageManager": "npm@10.9.4"
+  "packageManager": "pnpm@8.15.0"
 }

@@ -13,10 +13,15 @@ Componente para mostrar imágenes.
 | :--- | :--- | :--- | :--- |
 | `src` | `string` | `""` | URL de la imagen. |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { Img } from '@react-pdf-levelup/core';
+
 <Img src="https://picsum.photos/400/200" style={{ width: 200 }} />
 ```
 
@@ -36,12 +41,15 @@ Imagen de fondo con contenido superpuesto.
 | `objectPosition` | `string` | `"center"` | Posición de la imagen. |
 | `fixed` | `boolean` | `false` | Fijar en todas las páginas. |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { ImgBg, P } from '@react-pdf-levelup/core';
+
 <ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
   <P>Texto sobre imagen de fondo</P>
 </ImgBg>
 ```
-

@@ -14,9 +14,20 @@ Dynamic PDF generator built with React. This tool allows you to create PDF templ
 npm install @react-pdf-levelup/core
 ```
 
-## 🌐 Live Playground
+## 🌐 Live Playground & Local Studio
 
+### Live Playground
 https://react-pdf-levelup.nimbux.cloud/playground
+
+### Local Studio
+To use a local Studio in your project, install the package:
+```bash
+npm install --save-dev @react-pdf-levelup/studio
+```
+Then run it:
+```bash
+npx react-pdf-levelup studio
+```
 
 ## ✨ Features
 
@@ -42,18 +53,19 @@ https://react-pdf-levelup.nimbux.cloud/playground
 
 | Plugin | Installation | Documentation |
 |--------|-------------|---------------|
-| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#qr) |
-| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
-| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
-| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/components/media/#chart) |
+| **@react-pdf-levelup/qr** | `npm install @react-pdf-levelup/qr` | [QR Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/qr/qr/) |
+| **@react-pdf-levelup/chart** | `npm install @react-pdf-levelup/chart` | [Chart Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/components/position/) |
+| **@react-pdf-levelup/client** | `npm install @react-pdf-levelup/client` | [Client Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/client/) |
+| **@react-pdf-levelup/icons** | `npm install @react-pdf-levelup/icons` | [Icons Docs](https://react-pdf-levelup.nimbux.cloud/docs/en/plugin/icon/) |
+| **@react-pdf-levelup/studio** | `npm install --save-dev @react-pdf-levelup/studio` | Local Studio to create and test templates |
 
 ## 📚 Documentation
 
 - **Guides & API:**  
-  https://react-pdf-levelup.nimbux.cloud/docs
+  https://react-pdf-levelup.nimbux.cloud/docs/en/get-started/
 
 - **REST API Guide:**  
-  https://react-pdf-levelup.nimbux.cloud/docs/guides/api-rest
+  https://react-pdf-levelup.nimbux.cloud/docs/en/guides/api-rest/
 
 ## 🌐 REST API for PDF Generation
 

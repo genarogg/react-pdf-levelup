@@ -1,0 +1,27 @@
+{
+  "name": "@react-pdf-levelup/codebar",
+  "version": "1.0.6",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build:lib": "tsup --config tsup.config.ts"
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^4",
+    "jsbarcode": "^3.12.3",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
+  }
+}

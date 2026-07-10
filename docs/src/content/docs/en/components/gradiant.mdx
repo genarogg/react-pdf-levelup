@@ -1,0 +1,88 @@
+---
+title: Gradiant
+description: Component for creating linear and radial gradients in PDFs.
+---
+
+# Gradiant
+
+The `Gradiant` component allows you to add linear and radial gradients to your PDF documents, with support for custom colors, angles (for linear gradients), and shapes.
+
+## Props
+
+| Property       | Type                                 | Default     | Description                                                                 |
+| :------------- | :----------------------------------- | :---------- | :-------------------------------------------------------------------------- |
+| `colors`       | `(string \| { color: string; offset?: string \| number })[]` | `N/A` (required) | Gradient colors. Can be an array of strings (e.g., `["#fff", "#000"]`) or an array of objects with `color` and `offset` (e.g., `[{ color: "#fff", offset: "0%" }, { color: "#000", offset: "100%" }])` |
+| `width`        | `number \| string`                   | `100`       | Width of the gradient block.                                                |
+| `height`       | `number \| string`                   | `100`       | Height of the gradient block.                                               |
+| `type`         | `"linear" \| "radial"`               | `"linear"`  | Type of gradient: linear or radial.                                         |
+| `shape`        | `"square" \| "circle"`               | `"square"`  | Shape of the container: square/rectangular or circular.                     |
+| `angle`        | `number`                             | `90`        | Angle of the linear gradient in degrees (0 = left→right, 90 = top→bottom). |
+| `children`     | `React.ReactNode`                    | `undefined` | Inner content: text, images, icons, etc.                                    |
+| `style`        | `any`                                | `undefined` | Additional styles for the main container.                                   |
+| `...rest`      | `Omit<React.ComponentProps<typeof View>, "style">` | - | Any other property accepted by the `View` component from `@react-pdf/renderer`. |
+
+## Usage Examples
+
+### Simple Linear Gradient
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant, Text } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant colors={["#FF6B6B", "#4ECDC4"]} width={300} height={100}>
+      <Text style={{ color: "white" }}>Hello World</Text>
+    </Gradiant>
+  </Layout>
+);
+
+export default MyDocument
+```
+
+### Circular Radial Gradient
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant, Text } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant
+      colors={["#FFD93D", "#FF6B6B"]}
+      width={150}
+      height={150}
+      type="radial"
+      shape="circle"
+    >
+      <Text style={{ color: "white", fontWeight: "bold" }}>Radial</Text>
+    </Gradiant>
+  </Layout>
+);
+
+export default MyDocument
+```
+
+### Gradient with Custom Offsets
+
+```jsx
+import React from 'react';
+import { Layout, Gradiant } from '@react-pdf-levelup/core';
+
+const MyDocument = () => (
+  <Layout>
+    <Gradiant
+      colors={[
+        { color: "#FF0000", offset: "0%" },
+        { color: "#00FF00", offset: "50%" },
+        { color: "#0000FF", offset: "100%" }
+      ]}
+      width={400}
+      height={80}
+      angle={45}
+    />
+  </Layout>
+);
+
+export default MyDocument
+```

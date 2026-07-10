@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useEffect, useState } from "react"
 import { FileText } from "lucide-react"
 import {
@@ -37,9 +35,8 @@ const TemplateSelector: React.FC = () => {
   }, [])
 
   const handleSelectTemplate = (templateId: string) => {
-    setSelectedTemplate(templateId)
-    // Navigate to the template page with the selected template
-    window.location.href = `/playground/template/${templateId}`
+    window.open(`/playground/template/${templateId}`, "_blank", "noopener,noreferrer")
+    setSelectedTemplate("")
   }
 
   return (

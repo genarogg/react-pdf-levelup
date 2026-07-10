@@ -4,7 +4,7 @@ import Nav from './Navegacion';
 
 interface LayoutProps {
     children: React.ReactNode;
-    context: String
+    context: "home" | "playground"
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, context }) => {

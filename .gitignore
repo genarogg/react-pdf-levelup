@@ -30,6 +30,8 @@ dist/
 out/
 build/
 
+studio/templates
+
 # generated types
 .astro/
 *.tsbuildinfo
@@ -73,3 +75,6 @@ backend/prisma/dev.db
 backend/prisma/fn/client
 
 api/.tmp-react-pdf-levelup/*
+/.claude
+
+/lib/studio/templates

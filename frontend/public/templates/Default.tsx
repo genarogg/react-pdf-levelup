@@ -1,12 +1,14 @@
+import React from "react";
+import {
+  Layout,
+  P
+} from "@react-pdf-levelup/core";
 
-
-const Component = ({ data }) => {
+const DefaultTemplate = ({ data }: any) => {
 
   const Footer = () => {
     return (
-      <>
-        <P>hola</P>
-      </>
+      <P>hola</P>
     )
   }
 
@@ -22,7 +24,8 @@ const Component = ({ data }) => {
         Not actual Latin:
         While it resembles Latin, the text is not meant to be meaningful and is often used as a clear indicator that the space is reserved for actual content.
       </P>
-     
     </Layout>
   );
 };
+
+export default DefaultTemplate

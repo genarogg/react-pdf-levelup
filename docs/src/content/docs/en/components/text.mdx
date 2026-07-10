@@ -1,0 +1,207 @@
+---
+title: Text
+description: Components for rendering and formatting text.
+---
+
+## P, H1-H6
+
+Basic text components (paragraph and headings). They support all properties of the `Text` component from `@react-pdf/renderer`.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional text styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { H1, H3, P } from '@react-pdf-levelup/core';
+
+<H1>Title</H1>
+<H3>Subtitle</H3>
+<P>Paragraph with normal text.</P>
+```
+
+## Strong, Em, U, Small
+
+Inline text formatting components. They support all properties of the `Text` component.
+
+- **Strong**: Bold text.
+- **Em**: Italic text (emphasis).
+- **U**: Underlined text.
+- **Small**: Smaller text.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
+
+<P>
+  <Strong>Bold</Strong>, <Em>Italic</Em>, <U>Underlined</U>, <Small>Small</Small>
+</P>
+```
+
+## Blockquote
+
+Blockquote for highlighting important text. Supports all properties of the `Text` component.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { Blockquote } from '@react-pdf-levelup/core';
+
+<Blockquote>A highlighted quote in the document.</Blockquote>
+```
+
+## Mark
+
+Highlighted text (like with a marker). Supports all properties of the `Text` component.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { Mark } from '@react-pdf-levelup/core';
+
+<Mark>Highlighted Text</Mark>
+```
+
+## Span
+
+Generic inline text container. Supports all properties of the `Text` component.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { P, Span } from '@react-pdf-levelup/core';
+
+<P>Normal text with a <Span style={{ color: 'red' }}>red span</Span>.</P>
+```
+
+## BR
+
+Line break. Supports all properties of the `Text` component.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { P, BR } from '@react-pdf-levelup/core';
+
+<P>Line 1</P>
+<BR />
+<P>Line 2</P>
+```
+
+## HR
+
+Horizontal dividing line. Supports all properties of the `View` component.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}` | Additional styles. |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { HR } from '@react-pdf-levelup/core';
+
+<HR />
+```
+
+## A
+
+Link. Supports all properties of the `Link` component from `@react-pdf/renderer`.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `href`  | `string` | `""`    | Link URL.             |
+| `style` | `object` | `{}`    | Additional styles.    |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { A } from '@react-pdf-levelup/core';
+
+<A href="https://example.com">Go to website</A>
+```
+
+## Div
+
+Generic container for grouping elements. Supports all properties of the `View` component from `@react-pdf/renderer`.
+
+### Props
+
+| Name    | Type     | Default | Description           |
+| :------ | :------- | :------ | :-------------------- |
+| `style` | `object` | `{}`    | Additional styles.    |
+| `debug` | `boolean` | `false` | Enables debug mode (borders). |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
+| `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Example
+
+```tsx
+import { Div, P } from '@react-pdf-levelup/core';
+
+<Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
+  <P>Content inside a Div</P>
+</Div>
+```

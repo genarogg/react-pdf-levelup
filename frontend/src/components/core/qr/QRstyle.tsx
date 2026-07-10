@@ -1,20 +1,19 @@
-"use client"
-
 import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
-import { generateQRV2AsBase64, type QRV2Options } from "./QRstyleGenerator"
+import { generateQRstyleAsBase64, type QRstyleOptions } from "./QRstyleGenerator"
 
-// Define props
-export interface QRV2Props {
+type ViewBaseProps = React.ComponentProps<typeof View>
+
+export interface QRstyleProps extends Omit<ViewBaseProps, "style"> {
   url: string
   size?: number
   style?: any
   image?: string
-  dotsOptions?: QRV2Options["dotsOptions"]
-  backgroundOptions?: QRV2Options["backgroundOptions"]
-  imageOptions?: QRV2Options["imageOptions"]
-  cornersSquareOptions?: QRV2Options["cornersSquareOptions"]
-  cornersDotOptions?: QRV2Options["cornersDotOptions"]
+  dotsOptions?: QRstyleOptions["dotsOptions"]
+  backgroundOptions?: QRstyleOptions["backgroundOptions"]
+  imageOptions?: QRstyleOptions["imageOptions"]
+  cornersSquareOptions?: QRstyleOptions["cornersSquareOptions"]
+  cornersDotOptions?: QRstyleOptions["cornersDotOptions"]
   // Fallback/Compatibility props
   colorDark?: string
   colorLight?: string
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const QRV2: React.FC<QRV2Props> = ({
+const QRstyle: React.FC<QRstyleProps> = ({
   url,
   size = 300,
   style,
@@ -44,23 +43,23 @@ const QRV2: React.FC<QRV2Props> = ({
   colorLight,
   margin,
   errorCorrectionLevel,
+  ...rest
 }) => {
+
   return (
-    <View style={[styles.qrContainer, style]}>
-      {/* We pass a function that returns the promise/result or use the state if available. 
-          Actually, we can pass the promise directly to src! */}
-      <Image 
-        style={{ width: size, height: size }} 
-        src={generateQRV2AsBase64({
+    <View style={[styles.qrContainer, style]} {...rest}>
+      <Image
+        style={{ width: size, height: size }}
+        src={generateQRstyleAsBase64({
           url,
           width: size,
           height: size,
           image,
-          dotsOptions: dotsOptions || (colorDark ? { color: colorDark } : undefined),
-          backgroundOptions: backgroundOptions || (colorLight ? { color: colorLight } : undefined),
+          dotsOptions: dotsOptions ?? (colorDark ? { color: colorDark } : undefined),
+          backgroundOptions: backgroundOptions ?? (colorLight ? { color: colorLight } : undefined),
           imageOptions: {
             ...imageOptions,
-            margin: imageOptions?.margin !== undefined ? imageOptions.margin : margin
+            margin: imageOptions?.margin !== undefined ? imageOptions.margin : margin,
           },
           cornersSquareOptions,
           cornersDotOptions,
@@ -68,10 +67,10 @@ const QRV2: React.FC<QRV2Props> = ({
           fallbackColorLight: colorLight,
           fallbackMargin: margin,
           fallbackErrorCorrectionLevel: errorCorrectionLevel,
-        })} 
+        })}
       />
     </View>
   )
 }
 
-export default QRV2
+export default QRstyle

@@ -29,10 +29,9 @@ El componente `Table` es el contenedor principal para la construcción de tablas
 ### Ejemplo
 
 ```tsx
-import { Table, Thead, Tbody, Tr, Th, Td } from './Tablet';
-import { Text } from '@react-pdf/renderer';
+import { Table, Thead, Tbody, Tr, Th, Td, Text } from '@react-pdf-levelup/core';
 
-function MyTable() {
+const MyTable = () => {
   return (
     <Table
       cellHeight={25}
@@ -61,6 +60,8 @@ function MyTable() {
     </Table>
   );
 }
+
+export default MyTable
 ```
 
 ---
@@ -82,7 +83,7 @@ El componente `Thead` representa la sección del encabezado de la tabla.
 ### Ejemplo
 
 ```tsx
-import { Table, Thead, Tr, Th } from './Tablet';
+import { Table, Thead, Tr, Th } from '@react-pdf-levelup/core';
 
 function MyTableWithHeader() {
   return (
@@ -115,7 +116,7 @@ El componente `Tbody` representa el cuerpo de la tabla, donde se encuentran los 
 ### Ejemplo
 
 ```tsx
-import { Table, Tbody, Tr, Td } from './Tablet';
+import { Table, Tbody, Tr, Td } from '@react-pdf-levelup/core';
 
 function MyTableWithBody() {
   return (
@@ -151,7 +152,7 @@ El componente `Tr` representa una fila dentro de la tabla (tanto en `Thead` como
 ### Ejemplo
 
 ```tsx
-import { Tr, Td } from './Tablet';
+import { Tr, Td } from '@react-pdf-levelup/core';
 
 function MyTableRow() {
   return (
@@ -183,7 +184,7 @@ El componente `Th` representa una celda de encabezado individual dentro de una f
 ### Ejemplo
 
 ```tsx
-import { Th } from './Tablet';
+import { Th } from '@react-pdf-levelup/core';
 
 function MyTableHeaderCell() {
   return (
@@ -214,7 +215,7 @@ El componente `Td` representa una celda de datos individual dentro de una fila (
 ### Ejemplo
 
 ```tsx
-import { Td } from './Tablet';
+import { Td } from '@react-pdf-levelup/core';
 
 function MyTableDataCell() {
   return (

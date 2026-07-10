@@ -1,0 +1,8 @@
+packages:
+  - api
+  - docs
+  - studio
+  - frontend
+  - lib
+  - lib/* 
+  - lib/**/*

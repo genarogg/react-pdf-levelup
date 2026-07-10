@@ -8,7 +8,7 @@ description: Componente principal para configurar y renderizar documentos PDF co
 
 El componente **Layout** es el núcleo estructural del documento PDF.
 
-Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/renderer` y gestiona automáticamente:
+Internamente gestiona la configuración de página y envuelve el contenido con los componentes adecuados de `@react-pdf/renderer` y gestiona automáticamente:
 
 - Tamaño de página
 - Orientación
@@ -26,7 +26,7 @@ Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/re
 
 | Nombre | Tipo | Default | Descripción |
 |--------|------|---------|-------------|
-| `size` | `"A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "A9" \| "LETTER" \| "LEGAL" \| "TABLOID"` | `"A4"` | Tamaño de página (ISO 216 y formatos americanos). |
+| `size` | `"4A0" \| "2A0" \| "A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "B0" \| "B1" \| "B2" \| "B3" \| "B4" \| "B5" \| "B6" \| "B7" \| "B8" \| "B9" \| "C0" \| "C1" \| "C2" \| "C3" \| "C4" \| "C5" \| "C6" \| "C7" \| "C8" \| "RA0" \| "RA1" \| "RA2" \| "RA3" \| "RA4" \| "SRA0" \| "SRA1" \| "SRA2" \| "SRA3" \| "SRA4" \| "EXECUTIVE" \| "FOLIO" \| "LEGAL" \| "LETTER" \| "TABLOID" \| "ID1"` | `"A4"` | Tamaño de página (ISO 216 y formatos americanos). |
 | `orientation` | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"` | `"vertical"` | Orientación de la página. Internamente se transforma a `portrait` o `landscape`. |
 | `backgroundColor` | `string` | `"white"` | Color de fondo de la página. |
 | `backgroundImage` | `string` | `undefined` | URL de imagen de fondo que ocupa toda la página. |
@@ -35,10 +35,47 @@ Internamente envuelve el contenido con `<Document>` y `<Page>` de `@react-pdf/re
 | `margin` | `"apa" \| "normal" \| "estrecho" \| "ancho"` | `"normal"` | Sistema de márgenes predefinidos. |
 | `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
 | `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
-| `lines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
+| `footerLines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
 | `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
 | `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
 | `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
+| `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, palabras clave, etc.). |
+
+---
+
+# Metadatos del Documento (`meta`)
+
+El prop `meta` permite configurar los metadatos estándar del archivo PDF, que son visibles en las propiedades del documento en cualquier visor de PDF.
+
+## Propiedades de `meta`
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `title` | `string` | Título del documento. |
+| `author` | `string` | Autor del documento. |
+| `subject` | `string` | Asunto del documento. |
+| `keywords` | `string` | Palabras clave (separadas por espacios). |
+| `creator` | `string` | Aplicación que creó el documento (Default: `react-pdf-levelup`). |
+| `producer` | `string` | Aplicación que produjo el PDF (Default: `react-pdf-levelup`). |
+| `language` | `string` | Idioma del documento (ej: `es-ES`). |
+| `pageMode` | `string` | Cómo se debe mostrar el documento al abrirlo (`useNone`, `useOutlines`, `useThumbs`, `fullScreen`). |
+| `pageLayout` | `string` | El diseño de página a utilizar (`singlePage`, `oneColumn`, `twoColumnLeft`, `twoColumnRight`). |
+
+## Ejemplo de uso de `meta`
+
+```tsx
+<Layout
+  meta={{
+    title: "Factura #1234",
+    author: "Mi Empresa S.A.",
+    subject: "Facturación Mensual",
+    keywords: "factura pdf react",
+    language: "es-ES"
+  }}
+>
+  {/* Contenido */}
+</Layout>
+```
 
 ---
 
@@ -94,7 +131,7 @@ Ideal para documentos académicos.
 ```tsx
 <Layout
   footer={<P>Documento confidencial</P>}
-  lines={2}
+  footerLines={2}
 >
 ```
 
@@ -162,7 +199,7 @@ El componente **NextPage** permite insertar un salto de página manual dentro de
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.15}
   footer={<P>Mi Empresa</P>}
-  lines={2}
+  footerLines={2}
   pagination
   rule={false}
   style={{ fontFamily: 'Helvetica' }}

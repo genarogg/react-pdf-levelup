@@ -21,7 +21,7 @@ El componente `ChartJS` permite integrar gráficos generados con la librería Ch
 ### Ejemplo de Uso
 
 ```tsx
-import { Page, View, Text, Document, StyleSheet } from '@react-pdf/renderer';
+import { Layout, View, Text, StyleSheet } from '@react-pdf-levelup/core';
 import { ChartJS } from '@react-pdf-levelup/charts'; // Ajusta la importación según tu estructura
 
 const styles = StyleSheet.create({
@@ -65,14 +65,12 @@ const MyChartDocument = () => {
   };
 
   return (
-    <Document>
-      <Page style={styles.page}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Charts con ChartJS</Text>
-          <ChartJS data={chartData} width={500} height={300} />
-        </View>
-      </Page>
-    </Document>
+    <Layout style={styles.page}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Charts con ChartJS</Text>
+        <ChartJS data={chartData} width={500} height={300} />
+      </View>
+    </Layout>
   );
 };
 

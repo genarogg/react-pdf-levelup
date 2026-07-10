@@ -1,0 +1,39 @@
+import Header from "@/components/layout/Header"
+import { StudioProvider, useStudio } from "./StudioContext"
+import { FileExplorer } from "./fileExplorer/FileExplorer"
+import { EditorPanel } from "./editor/EditorPanel"
+import { StudioPDFPreviewServerFile } from "./preview/StudioPDFPreviewServerFile"
+import { StudioStatusBar } from "./toolbar/StudioStatusBar"
+import ToolBar from "./playground/toolbar"
+
+function StudioToolBar() {
+  const { openFile } = useStudio()
+  return <ToolBar code={openFile?.content ?? ""} />
+}
+
+export default function Studio() {
+  return (
+    <StudioProvider>
+      <div className="flex flex-col h-screen bg-black">
+        <Header />
+
+        <div className="flex flex-1 min-h-0">
+          <aside className="w-64 flex-shrink-0">
+            <FileExplorer />
+          </aside>
+
+          <main className="flex-1 min-w-0">
+            <EditorPanel />
+          </main>
+
+          <section className="flex-1 min-w-0 border-l border-gray-800">
+            <StudioPDFPreviewServerFile />
+          </section>
+        </div>
+
+        <StudioToolBar />
+        <StudioStatusBar />
+      </div>
+    </StudioProvider>
+  )
+}

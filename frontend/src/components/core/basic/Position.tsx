@@ -4,9 +4,7 @@ import { View, StyleSheet } from "@react-pdf/renderer";
 interface PositionProps {
   children: React.ReactNode;
   style?: any;
-
-  // opcional -> centra vertical también
-  vertical?: boolean;
+  vertical?: boolean; // -> centra vertical también
 }
 
 const styles = StyleSheet.create({
@@ -34,9 +32,10 @@ const Left: React.FC<PositionProps> = ({
   children,
   style,
   vertical,
+  ...rest
 }) => {
   return (
-    <View style={[styles.left, vertical && styles.vertical, style]}>
+    <View style={[styles.left, vertical && styles.vertical, style]} {...rest}>
       {children}
     </View>
   );
@@ -48,9 +47,10 @@ const Right: React.FC<PositionProps> = ({
   children,
   style,
   vertical,
+  ...rest
 }) => {
   return (
-    <View style={[styles.right, vertical && styles.vertical, style]}>
+    <View style={[styles.right, vertical && styles.vertical, style]} {...rest}>
       {children}
     </View>
   );
@@ -62,9 +62,10 @@ const Center: React.FC<PositionProps> = ({
   children,
   style,
   vertical,
+  ...rest
 }) => {
   return (
-    <View style={[styles.center, vertical && styles.vertical, style]}>
+    <View style={[styles.center, vertical && styles.vertical, style]} {...rest}>
       {children}
     </View>
   );

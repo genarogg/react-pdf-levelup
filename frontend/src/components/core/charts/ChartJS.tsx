@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { Image, StyleSheet, View, Text } from "@react-pdf/renderer"
 import type { ChartConfiguration } from "chart.js"
 import { generateChartAsBase64, type ChartRenderOptions } from "./ChartJSGenerator"
@@ -7,6 +7,14 @@ interface ChartJSProps extends ChartRenderOptions {
   data: ChartConfiguration
   style?: any
 }
+
+type ChartState =
+  | { status: "loading" }
+  | { status: "success"; url: string }
+  | { status: "error"; message: string }
+
+const TRANSPARENT_PIXEL =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 
 const styles = StyleSheet.create({
   container: {
@@ -26,105 +34,84 @@ const styles = StyleSheet.create({
   },
 })
 
-const ChartJS: React.FC<ChartJSProps> = ({
+const ChartJS: React.FC<ChartJSProps> = React.memo(({
   data,
   width = 600,
   height = 400,
-  backgroundColor = "white", // Cambiar a blanco por defecto para mejor visualización
-  devicePixelRatio = 2, // Mayor calidad por defecto
+  backgroundColor = "white",
+  devicePixelRatio = 2,
   style,
 }) => {
-  const [chartDataUrl, setChartDataUrl] = useState<string>("")
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string>("")
+  const [state, setState] = useState<ChartState>({ status: "loading" })
+  const isMounted = useRef(true)
 
-  // Pixel transparente como placeholder
-  const transparentPixel =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+  const stableData = useMemo(() => data, [JSON.stringify(data)])
 
   useEffect(() => {
-    let isMounted = true
+    isMounted.current = true
 
     const render = async () => {
+      setState({ status: "loading" })
+
       try {
-        setIsLoading(true)
-        setError("")
-        
-        console.log("🔄 Generando gráfico con configuración:", data.type)
-        
-        const url = await generateChartAsBase64(data, {
+        const url = await generateChartAsBase64(stableData, {
           width,
           height,
           backgroundColor,
           devicePixelRatio,
         })
-        
-        if (!isMounted) return
-        
+
+        if (!isMounted.current) return
+
         if (!url || url === "data:,") {
-          const errorMsg = "No se pudo generar el gráfico. Data URL vacía."
-          console.error("❌", errorMsg)
-          setError(errorMsg)
-          setChartDataUrl(transparentPixel)
+          setState({ status: "error", message: "No se pudo generar el gráfico. Data URL vacía." })
         } else {
-          console.log("Gráfico generado. Tamaño:", url.length, "bytes")
-          setChartDataUrl(url)
+          setState({ status: "success", url })
         }
-        
       } catch (err) {
-        if (!isMounted) return
-        
-        const errorMsg = err instanceof Error ? err.message : "Error desconocido"
-        console.error("❌ Error en Chart.tsx:", errorMsg)
-        setError(errorMsg)
-        setChartDataUrl(transparentPixel)
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
+        if (!isMounted.current) return
+        setState({
+          status: "error",
+          message: err instanceof Error ? err.message : "Error desconocido",
+        })
       }
     }
 
     render()
 
     return () => {
-      isMounted = false
+      isMounted.current = false
     }
-  }, [JSON.stringify(data), width, height, backgroundColor, devicePixelRatio])
+  }, [stableData, width, height, backgroundColor, devicePixelRatio])
 
-  // Para debugging
-  useEffect(() => {
-    if (chartDataUrl && chartDataUrl !== transparentPixel) {
-      console.log("Chart.tsx - URL actualizada:", chartDataUrl.substring(0, 50) + "...")
+  if (state.status === "error") {
+    if (process.env.NODE_ENV === "development") {
+      return (
+        <View style={[styles.container, style, { width, height }]}>
+          <Text style={styles.errorText}>Error: {state.message}</Text>
+        </View>
+      )
     }
-  }, [chartDataUrl])
-
-  // Si hay error, mostrar mensaje (solo en desarrollo, en producción mostrar placeholder)
-  if (error && process.env.NODE_ENV === 'development') {
     return (
-      <View style={[styles.container, style, { width, height }]}>
-        <Text style={styles.errorText}>Error: {error}</Text>
+      <View style={[styles.container, style]}>
+        <Image src={TRANSPARENT_PIXEL} style={{ width, height }} />
+      </View>
+    )
+  }
+
+  if (state.status === "loading") {
+    return (
+      <View style={[styles.container, style, { width, height, backgroundColor: "#f0f0f0" }]}>
+        <Text style={styles.loadingText}>Generando gráfico...</Text>
       </View>
     )
   }
 
   return (
     <View style={[styles.container, style]}>
-      {chartDataUrl && chartDataUrl !== transparentPixel ? (
-        <Image 
-          src={chartDataUrl} 
-          style={{ width, height }}
-          cache={false} // Evitar cache de imágenes
-        />
-      ) : (
-        <View style={{ width, height, backgroundColor: '#f0f0f0' }}>
-          {isLoading && (
-            <Text style={styles.loadingText}>Generando gráfico...</Text>
-          )}
-        </View>
-      )}
+      <Image src={state.url} style={{ width, height }} cache={false} />
     </View>
   )
-}
+})
 
 export default ChartJS

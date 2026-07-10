@@ -2,9 +2,7 @@
   "name": "docs",
   "type": "module",
   "version": "0.0.1",
-  "engines": {
-    "node": "22"
-  },
+  "private": false,
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 4500",
     "build": "astro build",
@@ -12,10 +10,10 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.37.1",
-    "@fontsource/inter": "^5.0.19",
-    "@fontsource/jetbrains-mono": "^5.0.22",
-    "@six-tech/starlight-theme-six": "^0.0.4",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@six-tech/starlight-theme-six": "^1.0.16",
     "astro": "^5.6.1",
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.5"
   }
 }

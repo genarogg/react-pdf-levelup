@@ -61,6 +61,6 @@ const style = QRStyle({
 });
 
 // Usarlo en el componente QR
-// <QR value="https://example.com" size={140} style={style} />
+// <QR url="https://example.com" size={140} style={style} />
 ```
 

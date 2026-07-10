@@ -1,99 +1,21 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
 import PDFPreview from "./PDFPreview"
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
-import { loadTemplateFile } from "./utils/templateLoader"
 import { useMobileDetection } from "./hooks/useMobileDetection"
-import { MobileWarning } from "./MobileWarning"
-
+import { MobileWarning } from "./components/MobileWarning"
 import Header from '@/components/viewer/layout/Header'
-
-type TemplateMeta = {
-  id: string
-  name: string
-  path: string
-}
+import { usePlaygroundTemplates } from "./hooks/usePlaygroundTemplates"
+import { usePlaygroundCode } from "./hooks/usePlaygroundCode"
 
 function Editor() {
-  const [code, setCode] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(true)
   const { templateId } = useParams<{ templateId: string }>()
-  const [templates, setTemplates] = useState<TemplateMeta[]>([])
-  const [templatesLoaded, setTemplatesLoaded] = useState(false)
   const [showMobileWarning, setShowMobileWarning] = useState(true)
   const isMobile = useMobileDetection()
 
-  // Clave para localStorage
-  const STORAGE_KEY = "react-pdf-levelup-code"
-
-  useEffect(() => {
-    const loadTemplates = async () => {
-      try {
-        const res = await fetch("/templates/index.json")
-        if (!res.ok) throw new Error("Failed to fetch templates")
-        const data = await res.json()
-        setTemplates(data)
-      } catch {
-        setTemplates([])
-      } finally {
-        setTemplatesLoaded(true)
-      }
-    }
-    loadTemplates()
-  }, [])
-
-  useEffect(() => {
-    const loadByUrlOrDefault = async () => {
-      if (!templatesLoaded) return
-      try {
-        setIsLoading(true)
-
-        if (templateId) {
-          const selected = templates.find((t) => t.id === templateId)
-          if (selected) {
-            const templateContent = await loadTemplateFile(selected.path)
-            setCode(templateContent)
-            return
-          } else {
-            console.warn(`Template no encontrado: ${templateId}`)
-            setCode("")
-            return
-          }
-        }
-
-        const savedCode = localStorage.getItem(STORAGE_KEY)
-        if (savedCode) {
-          setCode(savedCode)
-          return
-        }
-
-        const defaultTemplate = templates.find((t) => t.id === "default")
-        if (defaultTemplate) {
-          const templateContent = await loadTemplateFile(defaultTemplate.path)
-          setCode(templateContent)
-        } else {
-          setCode("")
-        }
-      } catch (error) {
-        console.error("Error al cargar template:", error)
-        setCode("")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadByUrlOrDefault()
-  }, [templateId, templatesLoaded, templates])
-
-  // Guardar cambios en localStorage
-  useEffect(() => {
-    if (!isLoading) {
-      localStorage.setItem(STORAGE_KEY, code)
-    }
-  }, [code, isLoading])
-
-
+  const { templates, loaded: templatesLoaded } = usePlaygroundTemplates()
+  const { code, setCode, isLoading } = usePlaygroundCode(templateId, templates, templatesLoaded)
 
   // Show mobile warning for mobile devices
   if (isMobile && showMobileWarning) {
@@ -103,7 +25,7 @@ function Editor() {
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-white">
      
-      <Header code={code} context="playgroud" />
+      <Header context="playground" />
 
       <main className="flex flex-1 overflow-hidden">
         <div className="w-1/2 border-r border-gray-700 flex flex-col">
@@ -130,4 +52,3 @@ function Editor() {
 }
 
 export default Editor
-

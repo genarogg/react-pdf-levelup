@@ -1,7 +1,9 @@
 import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 
-interface ImgBgProps {
+type ViewBaseProps = React.ComponentProps<typeof View>
+
+interface ImgBgProps extends Omit<ViewBaseProps, "style"> {
     src: string
     width?: number | string
     height?: number | string
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
     },
 })
 
-const ImgBg: React.FC<ImgBgProps> = ({
+const ImgBg: React.FC<ImgBgProps> = React.memo(({
     src,
     width = "100%",
     height = "100%",
@@ -41,9 +43,10 @@ const ImgBg: React.FC<ImgBgProps> = ({
     fixed = false,
     objectFit = "cover",
     objectPosition = "center",
+    ...rest
 }) => {
     return (
-        <View style={[styles.container, style]} >
+        <View style={[styles.container, style]} {...rest}>
             <Image
                 src={src}
                 style={[
@@ -55,6 +58,6 @@ const ImgBg: React.FC<ImgBgProps> = ({
             <View style={styles.content}>{children}</View>
         </View>
     )
-}
+})
 
 export default ImgBg

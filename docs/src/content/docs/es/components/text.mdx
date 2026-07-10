@@ -5,17 +5,22 @@ description: Componentes para renderizar y formatear texto.
 
 ## P, H1-H6
 
-Componentes básicos de texto (párrafo y encabezados).
+Componentes básicos de texto (párrafo y encabezados). Soportan todas las propiedades del componente `Text` de `@react-pdf/renderer`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales para el texto. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { H1, H3, P } from '@react-pdf-levelup/core';
+
 <H1>Título</H1>
 <H3>Subtítulo</H3>
 <P>Parrafo con texto normal.</P>
@@ -23,7 +28,7 @@ Componentes básicos de texto (párrafo y encabezados).
 
 ## Strong, Em, U, Small
 
-Componentes de formato de texto en línea.
+Componentes de formato de texto en línea. Soportan todas las propiedades del componente `Text`.
 
 - **Strong**: Texto en negrita.
 - **Em**: Texto en cursiva (énfasis).
@@ -35,10 +40,15 @@ Componentes de formato de texto en línea.
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
+
 <P>
   <Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U>Subrayado</U>, <Small>Pequeño</Small>
 </P>
@@ -46,65 +56,85 @@ Componentes de formato de texto en línea.
 
 ## Blockquote
 
-Bloque de cita para destacar texto importante.
+Bloque de cita para destacar texto importante. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { Blockquote } from '@react-pdf-levelup/core';
+
 <Blockquote>Una cita destacada en el documento.</Blockquote>
 ```
 
 ## Mark
 
-Texto resaltado (como con un marcador).
+Texto resaltado (como con un marcador). Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { Mark } from '@react-pdf-levelup/core';
+
 <Mark>Texto resaltado</Mark>
 ```
 
 ## Span
 
-Contenedor de texto inline genérico.
+Contenedor de texto inline genérico. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { P, Span } from '@react-pdf-levelup/core';
+
 <P>Texto normal con un <Span style={{ color: 'red' }}>span rojo</Span>.</P>
 ```
 
 ## BR
 
-Salto de línea.
+Salto de línea. Soporta todas las propiedades del componente `Text`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { P, BR } from '@react-pdf-levelup/core';
+
 <P>Linea 1</P>
 <BR />
 <P>Linea 2</P>
@@ -112,23 +142,28 @@ Salto de línea.
 
 ## HR
 
-Línea horizontal divisoria.
+Línea horizontal divisoria. Soporta todas las propiedades del componente `View`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { HR } from '@react-pdf-levelup/core';
+
 <HR />
 ```
 
 ## A
 
-Enlace (Link).
+Enlace (Link). Soporta todas las propiedades del componente `Link` de `@react-pdf/renderer`.
 
 ### Props
 
@@ -136,9 +171,37 @@ Enlace (Link).
 | :--- | :--- | :--- | :--- |
 | `href` | `string` | `""` | URL del enlace. |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
+import { A } from '@react-pdf-levelup/core';
+
 <A href="https://example.com">Ir al sitio web</A>
+```
+
+## Div
+
+Contenedor genérico para agrupar elementos. Soporta todas las propiedades del componente `View` de `@react-pdf/renderer`.
+
+### Props
+
+| Nombre | Tipo | Default | Descripción |
+| :--- | :--- | :--- | :--- |
+| `style` | `object` | `{}` | Estilos adicionales. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
+
+### Ejemplo
+
+```tsx
+import { Div, P } from '@react-pdf-levelup/core';
+
+<Div style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
+  <P>Contenido dentro de un Div</P>
+</Div>
 ```

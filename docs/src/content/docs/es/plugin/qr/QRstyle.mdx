@@ -1,17 +1,17 @@
 ---
-title: QRStyle
+title: QRstyle
 description: Código QR estilizado con opciones avanzadas de personalización.
 ---
 
-# QRStyle
+# QRstyle
 
-El componente `QRStyle` (anteriormente `QRV2`) ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas. Este componente utiliza la librería `qr-code-styling` internamente.
+El componente `QRstyle` (anteriormente `QRV2`) ofrece un control avanzado sobre la apariencia de los códigos QR, permitiendo personalizar los puntos, el fondo, las esquinas y la inclusión de una imagen central con opciones detalladas. Este componente utiliza la librería `qr-code-styling` internamente.
 
 ### Props
 
 | Nombre                   | Tipo                                       | Default        | Descripción                                                                                               |
 | :----------------------- | :----------------------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------- |
-| `value`                  | `string`                                   | `""`           | El texto o URL que se codificará en el código QR.                                                        |
+| `url`                  | `string`                                   | `""`           | El texto o URL que se codificará en el código QR.                                                        |
 | `size`                   | `number`                                   | `300`          | Tamaño del código QR en píxeles (ancho y alto).                                                           |
 | `style`                  | `any`                                      | `{}`           | Estilos adicionales para el contenedor `View` que envuelve el código QR.                                |
 | `image`                  | `string`                                   | `undefined`    | URL de la imagen del logo a incrustar en el centro del QR.                                                |
@@ -24,16 +24,19 @@ El componente `QRStyle` (anteriormente `QRV2`) ofrece un control avanzado sobre 
 | `colorLight` (Fallback)  | `string`                                   | `undefined`    | **(Compatibilidad)** Color de fondo. Se usa si `backgroundOptions.color` no está definido.              |
 | `margin` (Fallback)      | `number`                                   | `undefined`    | **(Compatibilidad)** Margen alrededor del QR. Se usa si `imageOptions.margin` no está definido.       |
 | `errorCorrectionLevel` (Fallback) | `"L" \| "M" \| "Q" \| "H"` | `undefined`    | **(Compatibilidad)** Nivel de corrección de errores. Se usa si no se especifica en `dotsOptions` o propiedades de nivel superior. |
+| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
+| `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
+| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
 ### Ejemplo
 
 ```tsx
-import QRStyle from './QRstyle'; // Nota: El componente se exporta como QRV2 pero se puede importar como QRStyle
+import { QRstyle } from '@react-pdf-levelup/core';
 
 function MyStyledQRCode() {
   return (
-    <QRStyle
-      value="https://react-pdf-levelup.com/docs/qrstyle"
+    <QRstyle
+      url="https://react-pdf-levelup.com/docs/qrstyle"
       size={300}
       image="https://picsum.photos/id/66/200/200"
       dotsOptions={{
