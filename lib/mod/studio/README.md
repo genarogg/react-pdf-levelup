@@ -1,6 +1,6 @@
 # @react-pdf-levelup/studio
 
-CLI que levanta un Studio local para crear y previsualizar plantillas PDF con react-pdf-levelup, al estilo `npx prisma studio`.
+CLI que levanta un Studio local para crear y previsualizar plantillas PDF con react-pdf-levelup, al estilo.
 
 ## Instalación
 
