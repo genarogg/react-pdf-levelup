@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
 import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
 
@@ -33,10 +33,7 @@ const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
   3: "H",
 }
 
-const buildFallbackUrl = (url: string, size: number) =>
-  `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=${size}x${size}`
-
-const QR: React.FC<QRProps> = React.memo(({
+const QR: React.FC<QRProps> = ({
   url,
   size = 150,
   style,
@@ -49,69 +46,43 @@ const QR: React.FC<QRProps> = React.memo(({
   errorCorrectionLevel,
   ...rest
 }) => {
-  const [qrDataUrl, setQrDataUrl] = useState<string>("")
-  const [hasError, setHasError] = useState<boolean>(false)
-
   const resolvedErrorLevel = errorCorrectionLevel ?? (logo ? "H" : "M")
 
-  useEffect(() => {
-    let cancelled = false
+  // Factory function: `@react-pdf/renderer` acepta que `src` sea una función
+  // (la invoca y espera su resultado) — ver `resolveSource` en
+  // `@react-pdf/layout`. No hay fallback a un servicio externo: si la
+  // generación local falla, no hay nada confiable que mostrar, así que se
+  // deja sin imagen en vez de depender de la disponibilidad de un tercero.
+  const resolveQRSrc = async (): Promise<string | undefined> => {
+    try {
+      const baseQrDataUrl = await generateQRAsBase64({
+        url,
+        size,
+        colorDark,
+        colorLight,
+        margin,
+        errorCorrectionLevel:
+          typeof resolvedErrorLevel === "number"
+            ? errorLevelMap[resolvedErrorLevel] ?? "M"
+            : resolvedErrorLevel,
+      })
 
-    // Reseteamos el estado al iniciar un nuevo ciclo de generación,
-    // así evitamos mostrar un QR o un error "viejo" mientras se genera el nuevo.
-    setQrDataUrl("")
-    setHasError(false)
+      if (!baseQrDataUrl) return undefined
 
-    const generateQR = async () => {
-      try {
-        const baseQrDataUrl = await generateQRAsBase64({
-          url,
-          size,
-          colorDark,
-          colorLight,
-          margin,
-          errorCorrectionLevel:
-            typeof resolvedErrorLevel === "number"
-              ? errorLevelMap[resolvedErrorLevel] ?? "M"
-              : resolvedErrorLevel,
-        })
-
-        const finalQrDataUrl =
-          logo && logoWidth && logoHeight
-            ? await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
-            : baseQrDataUrl
-
-        if (!cancelled) {
-          setQrDataUrl(finalQrDataUrl)
-        }
-      } catch (error) {
-        console.error("Error generando QR:", error)
-        if (!cancelled) {
-          setHasError(true)
-        }
-      }
+      return logo && logoWidth && logoHeight
+        ? await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
+        : baseQrDataUrl
+    } catch (error) {
+      console.error("Error generando QR:", error)
+      return undefined
     }
-
-    generateQR()
-
-    // Evita setState sobre un ciclo obsoleto si las props cambian
-    // antes de que termine la generación anterior.
-    return () => {
-      cancelled = true
-    }
-  }, [url, size, colorDark, colorLight, margin, logo, logoWidth, logoHeight, resolvedErrorLevel])
-
-  // El fallback externo solo se usa si la generación local falló de verdad,
-  // nunca como placeholder mientras se está generando el QR.
-  const resolvedSrc = qrDataUrl || (hasError ? buildFallbackUrl(url, size) : undefined)
+  }
 
   return (
     <View style={[styles.qrContainer, style]} {...rest}>
-      {resolvedSrc && (
-        <Image src={resolvedSrc} style={{ width: size, height: size }} />
-      )}
+      <Image src={resolveQRSrc} style={{ width: size, height: size }} />
     </View>
   )
-})
+}
 
 export default QR

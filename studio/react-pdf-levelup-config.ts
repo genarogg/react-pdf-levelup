@@ -25,6 +25,8 @@ const reactPdfLevelupConfig: ReactPdfLevelupConfig = {
     react: React,
     '@react-pdf/renderer': ReactPdfRenderer,
     '@react-pdf-levelup/core': ReactPdfLevelupCore,
+    '@react-pdf-levelup/qr': ReactPdfLevelupQr,
+    '@react-pdf-levelup/chart': ReactPdfLevelupChart,
     // 'supermoney': SuperMoney,
   },
   // Opcional, sin definir por default: si se descomenta, GET /api/render/file

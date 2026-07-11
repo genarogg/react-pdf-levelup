@@ -21,9 +21,11 @@
     "lint": "turbo run lint",
     "-----lib-----": "-----------------------------------------",
     "publish-all": "cd lib && pnpm run publish-all",
+    "build:lib": "cd lib && pnpm run build:lib",
+    
     "demo:frontend": "cd frontend && pnpm run demo",
     "demo:api": "cd api && pnpm run demo",
-    "demo:studio": "cd ./lib/studio && pnpm build:lib &&  node ./bin/cli.js studio",
+    "demo:studio": "cd ./lib/mod/studio && pnpm build:lib &&  node ./bin/cli.js studio",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
     "clean:install": "node ./global/clean.js && pnpm install"

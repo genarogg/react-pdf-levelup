@@ -119,7 +119,19 @@ export default defineConfig({
 					translations: {
 						en: 'Plugins'
 					},
-					autogenerate: { directory: 'plugin' },
+					items: [
+						{
+							label: 'QR',
+							items: [
+								{ slug: 'plugin/qr/qr', label: 'QR' },
+								{ slug: 'plugin/qr/qrstyle', label: 'QRstyle' },
+							],
+						},
+						{ slug: 'plugin/client', label: 'Cliente', translations: { en: 'Client' } },
+						{ slug: 'plugin/chartjs', label: 'ChartJS' },
+						{ slug: 'plugin/icon', label: 'Icon' },
+						{ slug: 'plugin/codebar', label: 'CodeBar' },
+					],
 				},
 			],
 		}),

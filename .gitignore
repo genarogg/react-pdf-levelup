@@ -77,4 +77,4 @@ backend/prisma/fn/client
 api/.tmp-react-pdf-levelup/*
 /.claude
 
-/lib/studio/templates
+/lib/mod/studio/templates
