@@ -36,8 +36,8 @@ export default function Home() {
                     <ApiSection />
                     <RoadmapSection />
                     <UseCasesSection />
-                      {/*  <SupportAndDonationsSection /> */}
-                    <FaqSection />
+                    <SupportAndDonationsSection />
+                    {/* <FaqSection /> */}
 
                     {/* secciones irrelevantes */}
                     {/* <CtaSection /> */}

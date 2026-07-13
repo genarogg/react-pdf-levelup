@@ -24,10 +24,12 @@ const Component = ({ data }) => {
         Gracias por usar <Strong>react-pdf-levelup</Strong>. 
         Explora el Playground y crea tu propio template.
       </P>
-      <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
+      <QR url="https://react-pdf-levelup.nimbux.cloud" size={120} />
     </Layout>
   )
-}`
+}
+
+export default Component`
 
 
 export function HeroSection() {

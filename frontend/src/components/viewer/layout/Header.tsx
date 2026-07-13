@@ -19,7 +19,7 @@ const NAV_BASE = [
     { href: "#hoja-de-ruta", key: "roadmap" },
     { href: "#casos-uso", key: "usecases" },
     { href: "#support", key: "support" },
-    { href: "#faq", key: "faq" },
+    // { href: "#faq", key: "faq" },
 ]
 
 // Componente de navegación reutilizable

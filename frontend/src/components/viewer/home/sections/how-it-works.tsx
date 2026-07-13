@@ -27,14 +27,16 @@ const Component = ({ data }) => {
           </Col6>
           <Col6>
             <H2>Acceso Rápido</H2>
-            <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
+            <QR url="https://react-pdf-levelup.nimbux.cloud" size={120} />
             <P>Escanea el código para ir al Playground.</P>
           </Col6>
         </Row>
       </Container>
     </Layout>
   )
-}`
+}
+
+export default Component`
 
 const frontendGen = `import { generatePDF, decodeBase64Pdf } from 'react-pdf-levelup'
 import { MyTemplate } from './MyTemplate'

@@ -29,7 +29,9 @@ const exampleCode =
       </Table>
     </Layout>
   )
-}`
+}
+  
+export default Component`
 
 export function DeveloperFeatures() {
   const { t } = useTranslation()
