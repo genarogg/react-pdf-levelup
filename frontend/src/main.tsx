@@ -8,6 +8,7 @@ import "./i18n"
 import Home from "./components/viewer/home"
 import PdfViewer from "./components/viewer/pdfViewer"
 import Playground from "./components/viewer/playground"
+import Templates from "./components/viewer/templates"
 
 const root = document.getElementById("root")
 if (!root) {
@@ -21,7 +22,8 @@ createRoot(root).render(
         <Route path="/" element={<Home />} />
         <Route path="/playground" element={<Playground />} />
         <Route path="/playground/template/:templateId" element={<Playground />} />
-        <Route path="/viewer" element={<PdfViewer />} />
+        <Route path="/templates" element={<Templates />} />
+        {/* <Route path="/viewer" element={<PdfViewer />} /> */}
       </Routes>
     </BrowserRouter>
   </StrictMode>,

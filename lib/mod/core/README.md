@@ -98,7 +98,7 @@ const MyPDFTemplate = ({ data }) => (
           </UL>
         </Col6>
         <Col6>
-          <QR value="https://react-pdf-levelup.nimbux.cloud" size={120} />
+          <QR url="https://react-pdf-levelup.nimbux.cloud" size={120} />
         </Col6>
       </Row>
     </Container>
