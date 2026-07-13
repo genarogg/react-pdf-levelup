@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
 interface HeaderProps {
-    context?: "playground" | "home"
+    context?: "playground" | "home" | "templates"
 }
 
 // Configuración base de enlaces de navegación (sin etiquetas, se traducen en render)
@@ -53,6 +53,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
 
     const isHome = context === "home"
     const isPlayground = context === "playground"
+    const isTemplates = context === "templates"
 
     return (
         <>
@@ -97,13 +98,31 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 <Navigation className="flex items-center gap-8" />
                             )}
 
+                            {(isPlayground || isTemplates) && (
+                                <Link
+                                    to="/"
+                                    onClick={() => (null)}
+                                    className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1"
+                                >
+
+                                    <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
+                                        <FileText className="w-4 h-4" />
+
+                                    </span>
+                                    <span>Inicio</span>
+
+                                </Link>
+                            )}
+
+
 
                             {isPlayground && (
                                 <>
+
                                     <a
                                         href="/docs/es/get-started"
                                         onClick={() => (null)}
-                                        className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1 bg-blue-500/5 hover:bg-blue-500/10"
+                                        className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1"
                                     >
 
                                         <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
