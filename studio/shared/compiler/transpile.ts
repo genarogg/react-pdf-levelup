@@ -28,28 +28,28 @@ export function extractDefaultExportName(
   sourceCode: string
 ): DefaultExportInfo | null {
   const defaultFuncMatch = sourceCode.match(
-    /export\s+default\s+function\s+([A-Z]\w*)/
+    /export\s+default\s+function\s+([A-Za-z_$]\w*)/
   )
   if (defaultFuncMatch) {
     return { name: defaultFuncMatch[1], kind: "function" }
   }
 
   const defaultClassMatch = sourceCode.match(
-    /export\s+default\s+class\s+([A-Z]\w*)/
+    /export\s+default\s+class\s+([A-Za-z_$]\w*)/
   )
   if (defaultClassMatch) {
     return { name: defaultClassMatch[1], kind: "class" }
   }
 
   const defaultArrowMatch = sourceCode.match(
-    /export\s+default\s+(?:const|let|var)?\s*([A-Z]\w*)\s*=/
+    /export\s+default\s+(?:const|let|var)?\s*([A-Za-z_$]\w*)\s*=/
   )
   if (defaultArrowMatch) {
     return { name: defaultArrowMatch[1], kind: "arrow" }
   }
 
   const defaultExportMatch = sourceCode.match(
-    /export\s+default\s+([A-Z]\w*)/
+    /export\s+default\s+([A-Za-z_$]\w*)/
   )
   if (defaultExportMatch) {
     return { name: defaultExportMatch[1], kind: "identifier" }
@@ -73,14 +73,14 @@ export function stripDefaultExport(
     case "function":
       return (
         modifiedCode.replace(
-          /export\s+default\s+function\s+([A-Z]\w*)/,
+          /export\s+default\s+function\s+([A-Za-z_$]\w*)/,
           "function $1"
         ) + `\nconst result = ${name};`
       )
     case "class":
       return (
         modifiedCode.replace(
-          /export\s+default\s+class\s+([A-Z]\w*)/,
+          /export\s+default\s+class\s+([A-Za-z_$]\w*)/,
           "class $1"
         ) + `\nconst result = ${name};`
       )
@@ -91,7 +91,7 @@ export function stripDefaultExport(
       )
     case "identifier":
       return modifiedCode.replace(
-        /export\s+default\s+([A-Z]\w*);?/,
+        /export\s+default\s+([A-Za-z_$]\w*);?/,
         "const result = $1;"
       )
   }
