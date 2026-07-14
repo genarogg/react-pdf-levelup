@@ -1,0 +1,94 @@
+# Tabla básica con @react-pdf/renderer
+
+La misma tabla, pero construida directamente con los primitivos de
+`@react-pdf/renderer` (`View`, `Text`, `StyleSheet`), sin la capa semántica
+de react-pdf-levelup. Cada fila y celda se maqueta a mano con Flexbox.
+
+```tsx
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+
+const rows = [
+  ["Ada Lovelace", "Ingeniería", "Senior", "$4,200"],
+  ["Alan Turing", "Investigación", "Principal", "$5,100"],
+  ["Grace Hopper", "Plataforma", "Staff", "$4,800"],
+  ["Margaret Hamilton", "Calidad", "Senior", "$4,300"],
+]
+
+const styles = StyleSheet.create({
+  page: { padding: 30, fontSize: 11 },
+  h1: { fontSize: 20, fontWeight: 700, marginBottom: 8 },
+  p: { color: "#374151", marginBottom: 16 },
+  table: { borderWidth: 1, borderColor: "#e5e7eb" },
+  row: { flexDirection: "row" },
+  headerRow: { flexDirection: "row", backgroundColor: "#1d4ed8" },
+  cell: {
+    flex: 1,
+    padding: 6,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "#e5e7eb",
+  },
+  headerCell: {
+    flex: 1,
+    padding: 6,
+    color: "#ffffff",
+    fontWeight: 700,
+  },
+  cellRight: { textAlign: "right" },
+})
+
+const columns = ["Nombre", "Área", "Nivel", "Salario"]
+
+const TablaBasica = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <Text style={styles.h1}>Equipo de Ingeniería</Text>
+      <Text style={styles.p}>
+        Listado simple de integrantes del equipo con su rol y salario base.
+      </Text>
+
+      <View style={styles.table}>
+        <View style={styles.headerRow}>
+          {columns.map((col, i) => (
+            <Text
+              key={col}
+              style={[styles.headerCell, i === 3 && styles.cellRight]}
+            >
+              {col}
+            </Text>
+          ))}
+        </View>
+
+        {rows.map((row, i) => (
+          <View key={i} style={styles.row}>
+            {row.map((value, j) => (
+              <Text
+                key={j}
+                style={[styles.cell, j === 3 && styles.cellRight]}
+              >
+                {value}
+              </Text>
+            ))}
+          </View>
+        ))}
+      </View>
+    </Page>
+  </Document>
+)
+
+export default TablaBasica
+```
+
+## Notas
+
+- Sin la capa semántica hay que declarar bordes por celda
+  (`borderRightWidth`/`borderBottomWidth`) y quitar el borde sobrante a mano
+  en la última fila/columna si se quiere un resultado idéntico al de la
+  tabla con `Table` de react-pdf-levelup.
+- No hay unidad `px`: los valores numéricos son puntos (`pt`) por defecto,
+  igual que en react-pdf-levelup (que internamente usa estos mismos
+  primitivos).
+- `flex: 1` en cada celda reparte el ancho de forma equitativa; para columnas
+  con distinto ancho relativo habría que ajustar el `flex` de cada una
+  manualmente, cosa que `colSpan` resuelve solo en la versión con
+  react-pdf-levelup.

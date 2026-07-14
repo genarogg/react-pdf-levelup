@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import mdx from '@mdx-js/rollup'
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -27,6 +28,17 @@ const proxy = {
 
 export default defineConfig({
   plugins: [
+    // mdx() debe ir antes que react(): transforma los .mdx en JSX, y el
+    // plugin de React necesita recibir ese JSX ya transformado para poder
+    // procesarlo (JSX -> JS) en el mismo pipeline de transformación.
+    mdx({
+      // Le decimos a MDX que no provea automáticamente los componentes html
+      // globales (h1, pre, code, etc.) por config, sino que los recibe cada
+      // archivo .mdx vía el prop `components` en tiempo de render (ver
+      // MDXProvider en templates/mdx/MdxComponents.tsx). providerImportSource
+      // apunta al hook de contexto de @mdx-js/react.
+      providerImportSource: "@mdx-js/react",
+    }),
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],

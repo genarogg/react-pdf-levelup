@@ -1,0 +1,81 @@
+# Tabla con zebra y fila de totales
+
+Una tabla de factura con filas alternadas (zebra), bordes solo inferiores
+(`grid="modern"`) y una fila final de totales que combina celdas con
+`colSpan`.
+
+```tsx
+import { Layout, H1, P, Table, Thead, Tbody, Tr, Th, Td, Strong } from '@react-pdf-levelup/core'
+
+const items = [
+  ["Licencia software anual", 2, "$1,200.00", "$2,400.00"],
+  ["Soporte técnico premium", 1, "$800.00", "$800.00"],
+  ["Hosting y dominio", 12, "$45.00", "$540.00"],
+  ["Consultoría de migración", 8, "$150.00", "$1,200.00"],
+  ["Capacitación al equipo", 3, "$300.00", "$900.00"],
+]
+
+const total = items.reduce(
+  (acc, r) => acc + parseFloat(String(r[3]).replace(/[$,]/g, "")),
+  0
+)
+
+const TablaConTotales = () => (
+  <Layout size="A4" meta={{ title: "Tabla con zebra y totales", language: "es" }}>
+    <H1>Factura de Servicios</H1>
+    <P>
+      Detalle de conceptos facturados durante el trimestre, con fila de
+      totales al final.
+    </P>
+
+    <Table
+      cellHeight={24}
+      headerBackground="#111827"
+      zebraColor="#f1f5f9"
+      grid="modern"
+      borderColor="#cbd5e1"
+    >
+      <Thead textColor="#ffffff">
+        <Tr>
+          <Th>Concepto</Th>
+          <Th textAlign="right">Cant.</Th>
+          <Th textAlign="right">Precio unit.</Th>
+          <Th textAlign="right">Subtotal</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {items.map((r, i) => (
+          <Tr key={i}>
+            <Td>{r[0]}</Td>
+            <Td textAlign="right">{r[1]}</Td>
+            <Td textAlign="right">{r[2]}</Td>
+            <Td textAlign="right">{r[3]}</Td>
+          </Tr>
+        ))}
+        <Tr>
+          <Td colSpan={3} textAlign="right">
+            <Strong>Total</Strong>
+          </Td>
+          <Td textAlign="right">
+            <Strong>${total.toFixed(2)}</Strong>
+          </Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  </Layout>
+)
+
+export default TablaConTotales
+```
+
+## Notas
+
+- `zebraColor` aplica tanto en modo `grid` como en `modern`: no depende de
+  qué valor tenga la prop `grid`, siempre alterna el color de fondo fila por
+  fila.
+- `grid="modern"` deja solo bordes inferiores (estilo factura/extracto),
+  en vez de la grilla completa del modo `"grid"` (por defecto).
+- La fila de totales usa `colSpan={3}` en la primera celda para fusionar
+  "Concepto", "Cant." y "Precio unit." en un solo bloque alineado a la
+  derecha con la etiqueta "Total" — no hace falta recalcular anchos, `Tr`
+  ya reparte el resto de columnas en base al `colSpan` declarado.
