@@ -1,4 +1,10 @@
 import { useMemo } from "react"
+import type React from "react"
+
+/** Props que acepta cualquier componente MDX compilado por @mdx-js/mdx. */
+type MDXComponentProps = {
+  components?: Record<string, React.ComponentType<any>>
+}
 
 /**
  * Autodescubrimiento de contenido de templates.
@@ -27,11 +33,11 @@ const imageModules = import.meta.glob(
 // compila/descarga cuando el usuario realmente abre ese componente/tab. ---
 const levelupModules = import.meta.glob(
   "../content/*/*/levelup.mdx"
-) as Record<string, () => Promise<{ default: React.ComponentType }>>
+) as Record<string, () => Promise<{ default: React.ComponentType<MDXComponentProps> }>>
 
 const reactPdfModules = import.meta.glob(
   "../content/*/*/react-pdf.mdx"
-) as Record<string, () => Promise<{ default: React.ComponentType }>>
+) as Record<string, () => Promise<{ default: React.ComponentType<MDXComponentProps> }>>
 
 // Todas las globs anteriores comparten esta forma de ruta:
 //   ../content/<seccion>/<componente>/<archivo>
@@ -47,9 +53,9 @@ export interface TemplateComponentMeta {
   /** URL de la imagen de resultado (tab 1), o null si la carpeta no trae image.* */
   imageUrl: string | null
   /** Cargador perezoso del MDX de react-pdf-levelup (tab 2), o null si no existe */
-  loadLevelup: (() => Promise<{ default: React.ComponentType }>) | null
+  loadLevelup: (() => Promise<{ default: React.ComponentType<MDXComponentProps> }>) | null
   /** Cargador perezoso del MDX de @react-pdf/renderer (tab 3), o null si no existe */
-  loadReactPdf: (() => Promise<{ default: React.ComponentType }>) | null
+  loadReactPdf: (() => Promise<{ default: React.ComponentType<MDXComponentProps> }>) | null
 }
 
 function slugToTitle(slug: string): string {

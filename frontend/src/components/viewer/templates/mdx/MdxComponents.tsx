@@ -2,17 +2,15 @@ import React from "react"
 import CodeBlock from "./CodeBlock"
 
 /**
- * MDX compila un code fence:
+ * MDX compila un code fence (```tsx ... ```) a una de estas dos formas,
+ * según versión/config de @mdx-js/mdx:
  *
- *   ```tsx
- *   const x = 1
- *   ```
+ *   A) <pre><code className="language-tsx">texto</code></pre>
+ *   B) <pre className="language-tsx">texto</pre>   (sin <code> hijo)
  *
- * a: <pre><code className="language-tsx">const x = 1\n</code></pre>
- *
- * Interceptamos <pre> (no <code>, porque MDX también usa <code> suelto para
- * `inline code`) y extraemos el lenguaje + texto plano del <code> hijo para
- * pasárselo a nuestro CodeBlock con resaltado Shiki.
+ * getCodeInfo cubre ambos casos con una sola lógica: primero busca el
+ * className en el propio <pre>, y si no está, en un <code> hijo directo.
+ * El texto se extrae recursivamente por si vinieran nodos anidados.
  */
 
 function extractText(node: React.ReactNode): string {
@@ -26,20 +24,37 @@ function extractText(node: React.ReactNode): string {
   return ""
 }
 
-function Pre(props: React.ComponentPropsWithoutRef<"pre">) {
-  const { children } = props
+function getLangFromClassName(className?: string): string | undefined {
+  return /language-(\w+)/.exec(className || "")?.[1]
+}
 
-  if (React.isValidElement(children) && children.type === "code") {
-    const codeProps = children.props as { className?: string; children?: React.ReactNode }
-    const className = codeProps.className || ""
-    const langMatch = /language-(\w+)/.exec(className)
-    const code = extractText(codeProps.children)
+interface PreProps extends React.ComponentPropsWithoutRef<"pre"> {
+  className?: string
+}
 
-    return <CodeBlock code={code} language={langMatch?.[1]} />
+function Pre(props: PreProps) {
+  const { children, className } = props
+
+  // ¿El hijo directo es un <code>? (Caso A)
+  const codeChild =
+    React.isValidElement(children) && children.type === "code"
+      ? (children as React.ReactElement<{ className?: string; children?: React.ReactNode }>)
+      : null
+
+  const lang =
+    getLangFromClassName(className) ??
+    getLangFromClassName(codeChild?.props.className)
+
+  const code = codeChild ? extractText(codeChild.props.children) : extractText(children)
+
+  // Un <pre> de code fence siempre trae texto (o un <code> con texto)
+  // como contenido. Si no hay nada de texto real, no es un bloque de
+  // código: se deja el <pre> tal cual vino.
+  if (!code.trim()) {
+    return <pre {...props} />
   }
 
-  // Fallback: <pre> sin un <code> hijo directo, se deja tal cual.
-  return <pre {...props} />
+  return <CodeBlock code={code} language={lang} />
 }
 
 function InlineCode(props: React.ComponentPropsWithoutRef<"code">) {

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react"
 import type { HighlighterCore } from "shiki/core"
 
-// El bundle "shiki/bundle-web" (o "bundle-full") trae DECENAS de lenguajes y
-// temas precompilados, aunque solo usemos un puñado — eso infla el build en
-// varios MB (se detectó al correr `vite build`, ver commit/PR). En su lugar
-// usamos la API "fine-grained" de Shiki: motor JS puro (sin WASM) + solo los
-// lenguajes y el tema que este viewer realmente necesita.
+// API "fine-grained" de Shiki: motor JS puro (sin WASM) + solo los lenguajes
+// y el tema que este viewer necesita, en vez de shiki/bundle-web (que trae
+// decenas de lenguajes precompilados e infla el build en varios MB).
 //
 // El highlighter es costoso de construir, así que se instancia UNA sola vez
 // para toda la app y se reutiliza entre todos los <CodeBlock>.
@@ -66,20 +64,27 @@ function normalizeLang(lang?: string): string {
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, filename }) => {
   const [html, setHtml] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     const lang = normalizeLang(language)
 
-    getHighlighter().then((highlighter) => {
-      if (cancelled) return
-      const out = highlighter.codeToHtml(code.replace(/\n$/, ""), {
-        lang,
-        theme: "github-dark",
+    getHighlighter()
+      .then((highlighter) => {
+        if (cancelled) return
+        const out = highlighter.codeToHtml(code.replace(/\n$/, ""), {
+          lang,
+          theme: "github-dark",
+        })
+        setHtml(out)
       })
-      setHtml(out)
-    })
+      .catch((err) => {
+        if (cancelled) return
+        console.error("[CodeBlock] No se pudo cargar el highlighter de Shiki:", err)
+        setError(err instanceof Error ? err.message : String(err))
+      })
 
     return () => {
       cancelled = true
@@ -119,6 +124,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, filename }) => {
         <pre className="p-4 text-sm text-gray-300 overflow-x-auto m-0">
           <code>{code}</code>
         </pre>
+      )}
+      {error && (
+        <div className="px-4 py-2 text-xs text-red-300 bg-red-950/40 border-t border-red-500/20">
+          Resaltado de sintaxis no disponible ({error}). Revisá la versión de{" "}
+          <code className="px-1 py-0.5 rounded bg-white/10">shiki</code> instalada.
+        </div>
       )}
     </div>
   )

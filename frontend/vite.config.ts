@@ -31,14 +31,16 @@ export default defineConfig({
     // mdx() debe ir antes que react(): transforma los .mdx en JSX, y el
     // plugin de React necesita recibir ese JSX ya transformado para poder
     // procesarlo (JSX -> JS) en el mismo pipeline de transformación.
-    mdx({
-      // Le decimos a MDX que no provea automáticamente los componentes html
-      // globales (h1, pre, code, etc.) por config, sino que los recibe cada
-      // archivo .mdx vía el prop `components` en tiempo de render (ver
-      // MDXProvider en templates/mdx/MdxComponents.tsx). providerImportSource
-      // apunta al hook de contexto de @mdx-js/react.
-      providerImportSource: "@mdx-js/react",
-    }),
+    //
+    // NOTA: `providerImportSource` era la forma de conectar MDXProvider en
+    // MDX v1. En MDX v2+ esa opción ya no existe/no hace nada: el mecanismo
+    // correcto es que el runtime de MDX importe automáticamente
+    // `useMDXComponents` desde "@mdx-js/react" (esto ya sucede por defecto
+    // en @mdx-js/rollup v2+, sin necesidad de configurarlo acá). Si tu
+    // versión de @mdx-js/rollup es v2 o v3, quitar esta opción es lo que
+    // permite que <MDXProvider> en MdxRenderer.tsx efectivamente conecte
+    // mdxComponents con lo que compila cada .mdx.
+    mdx(),
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
