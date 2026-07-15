@@ -33,6 +33,7 @@ const base = StyleSheet.create({
 const corp = StyleSheet.create({
   table: { display: "flex", flexDirection: "column", borderWidth: 1, borderColor: "#cccccc" },
   row: { display: "flex", flexDirection: "row" },
+  rowAlt: { backgroundColor: "#f5f5f5" },
   headerRow: { display: "flex", flexDirection: "row", backgroundColor: "#1a1a2e" },
   headerCell: {
     flex: 1,
@@ -67,8 +68,8 @@ function TablaCorporativa() {
           </Text>
         ))}
       </View>
-      {productos.map((p) => (
-        <View style={corp.row} key={p.id}>
+      {productos.map((p, idx) => (
+        <View style={idx % 2 === 1 ? [corp.row, corp.rowAlt] : corp.row} key={p.id}>
           {columnas.map((c, i) => (
             <Text
               key={c.key}
@@ -86,9 +87,6 @@ function TablaCorporativa() {
 const TablasDemoDoc = () => (
   <Document>
     <Page size="A4" style={base.page}>
-      <Text style={{ fontSize: 20, fontFamily: "Helvetica-Bold", marginBottom: 6 }}>
-        Lorem Ipsum Dolor Sit Amet
-      </Text>
       <TablaCorporativa />
     </Page>
   </Document>
