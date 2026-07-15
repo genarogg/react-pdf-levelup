@@ -105,10 +105,10 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                     className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1"
                                 >
 
-                                    <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
+                                    {/* <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
                                         <FileText className="w-4 h-4" />
 
-                                    </span>
+                                    </span> */}
                                     <span>Inicio</span>
 
                                 </Link>
@@ -125,10 +125,10 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                         className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1"
                                     >
 
-                                        <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
+                                        {/* <span className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded-md">
                                             <FileText className="w-4 h-4" />
 
-                                        </span>
+                                        </span> */}
                                         <span>documentacion</span>
 
                                     </a>

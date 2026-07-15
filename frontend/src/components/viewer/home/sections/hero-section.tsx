@@ -5,8 +5,8 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
-const heroCode = 
-`import { P, Layout, HR, Strong, H4, Em } from '@react-pdf-levelup/core'
+const heroCode =
+  `import { P, Layout, HR, Strong, H4, Em } from '@react-pdf-levelup/core'
 import { QR } from '@react-pdf-levelup/qr'
 
 const Component = ({ data }) => {
@@ -60,7 +60,7 @@ export function HeroSection() {
               {t("hero.badge")}
             </div>
 
-            
+
             <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl lg:text-6xl text-balance">
               {t("hero.title_start")} <span className="text-accent">{t("hero.title_highlight")}</span>
             </h1>
@@ -73,6 +73,12 @@ export function HeroSection() {
               <Link to="/playground">
                 <Button size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
                   {t("hero.playground")}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/templates">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary">
+                  templates
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

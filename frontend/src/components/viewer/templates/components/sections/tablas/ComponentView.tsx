@@ -47,14 +47,26 @@ const ComponentView: React.FC<ComponentViewProps> = ({ section, sectionBasePath,
       <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6">{meta.title}</h1>
 
       <Tabs defaultValue="resultado" className="w-full">
-        <TabsList className="mb-6">
-          <TabsTrigger value="resultado" className="gap-1.5">
+        <TabsList
+          className="mb-6 w-full max-w-full min-h-[42px] overflow-x-auto overflow-y-hidden flex-nowrap justify-start items-center"
+          style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.2) transparent" }}
+        >
+          <TabsTrigger
+            value="resultado"
+            className="gap-1.5 shrink-0 py-2 data-[state=active]:bg-[#10b981] data-[state=active]:text-white"
+          >
             <ImageIcon className="w-4 h-4" /> Resultado
           </TabsTrigger>
-          <TabsTrigger value="levelup" className="gap-1.5">
+          <TabsTrigger
+            value="levelup"
+            className="gap-1.5 shrink-0 py-2 data-[state=active]:bg-[#10b981] data-[state=active]:text-white"
+          >
             <Code2 className="w-4 h-4" /> react-pdf-levelup
           </TabsTrigger>
-          <TabsTrigger value="react-pdf" className="gap-1.5">
+          <TabsTrigger
+            value="react-pdf"
+            className="gap-1.5 shrink-0 py-2 data-[state=active]:bg-[#10b981] data-[state=active]:text-white"
+          >
             <FileCode className="w-4 h-4" /> react-pdf/renderer
           </TabsTrigger>
         </TabsList>

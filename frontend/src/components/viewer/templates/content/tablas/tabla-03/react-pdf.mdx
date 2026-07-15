@@ -1,0 +1,93 @@
+```tsx
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+
+type Producto = {
+  id: string
+  nombre: string
+  categoria: string
+  precio: string
+}
+
+const productos: Producto[] = [
+  { id: "Lorem", nombre: "Ipsum dolor sit", categoria: "Amet consectetur", precio: "Adipiscing elit" },
+  { id: "Sed do", nombre: "Eiusmod tempor", categoria: "Incididunt ut", precio: "Labore magna" },
+  { id: "Aliqua", nombre: "Enim ad minim", categoria: "Veniam quis", precio: "Nostrud exerci" },
+  { id: "Tation", nombre: "Ullamco laboris", categoria: "Nisi aliquip", precio: "Ex ea commodo" },
+  { id: "Consequat", nombre: "Duis aute irure", categoria: "Dolor in", precio: "Reprehenderit" },
+  { id: "Voluptate", nombre: "Velit esse cillum", categoria: "Fugiat nulla", precio: "Pariatur excepteur" },
+]
+
+const columnas: { key: keyof Producto; label: string }[] = [
+  { key: "id", label: "Lorem" },
+  { key: "nombre", label: "Ipsum" },
+  { key: "categoria", label: "Dolor" },
+  { key: "precio", label: "Sit" },
+]
+
+const base = StyleSheet.create({
+  page: { padding: 40, fontSize: 10, fontFamily: "Helvetica", color: "#222222" },
+})
+
+const minimal = StyleSheet.create({
+  table: { display: "flex", flexDirection: "column" },
+  headerRow: {
+    display: "flex",
+    flexDirection: "row",
+    paddingBottom: 8,
+    borderBottomWidth: 2,
+    borderBottomColor: "#0f766e",
+  },
+  headerCell: {
+    flex: 1,
+    fontSize: 9.5,
+    fontFamily: "Helvetica",
+    color: "#0f766e",
+    letterSpacing: 0.5,
+    paddingRight: 12,
+  },
+  row: { display: "flex", flexDirection: "row", paddingVertical: 10 },
+  cell: { flex: 1, fontSize: 10, fontFamily: "Helvetica", color: "#333333", paddingRight: 12 },
+})
+
+function TablaMinimalista() {
+  return (
+    <View style={minimal.table}>
+      <View style={minimal.headerRow}>
+        {columnas.map((c, i) => (
+          <Text
+            key={c.key}
+            style={[minimal.headerCell, i === columnas.length - 1 ? { textAlign: "right" } : {}]}
+          >
+            {c.label}
+          </Text>
+        ))}
+      </View>
+      {productos.map((p) => (
+        <View style={minimal.row} key={p.id}>
+          {columnas.map((c, i) => (
+            <Text
+              key={c.key}
+              style={[minimal.cell, i === columnas.length - 1 ? { textAlign: "right" } : {}]}
+            >
+              {p[c.key]}
+            </Text>
+          ))}
+        </View>
+      ))}
+    </View>
+  )
+}
+
+const TablasDemoDoc = () => (
+  <Document>
+    <Page size="A4" style={base.page}>
+      <Text style={{ fontSize: 20, fontFamily: "Helvetica-Bold", marginBottom: 6 }}>
+        Lorem Ipsum Dolor Sit Amet
+      </Text>
+      <TablaMinimalista />
+    </Page>
+  </Document>
+)
+
+export default TablasDemoDoc
+```
