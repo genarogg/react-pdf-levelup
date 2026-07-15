@@ -10,7 +10,7 @@ const Home = lazy(() => import("./components/viewer/home"))
 const PdfViewer = lazy(() => import("./components/viewer/pdfViewer"))
 const Playground = lazy(() => import("./components/viewer/playground"))
 const Templates = lazy(() => import("./components/viewer/templates"))
-const TablasSection = lazy(() => import("./components/viewer/templates/sections/tablas"))
+const TablasSection = lazy(() => import("./components/viewer/templates/components/sections/tablas"))
 
 const root = document.getElementById("root")
 if (!root) {

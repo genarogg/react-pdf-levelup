@@ -1,18 +1,6 @@
 import React from "react"
 import CodeBlock from "./CodeBlock"
 
-/**
- * MDX compila un code fence (```tsx ... ```) a una de estas dos formas,
- * según versión/config de @mdx-js/mdx:
- *
- *   A) <pre><code className="language-tsx">texto</code></pre>
- *   B) <pre className="language-tsx">texto</pre>   (sin <code> hijo)
- *
- * getCodeInfo cubre ambos casos con una sola lógica: primero busca el
- * className en el propio <pre>, y si no está, en un <code> hijo directo.
- * El texto se extrae recursivamente por si vinieran nodos anidados.
- */
-
 function extractText(node: React.ReactNode): string {
   if (typeof node === "string") return node
   if (typeof node === "number") return String(node)

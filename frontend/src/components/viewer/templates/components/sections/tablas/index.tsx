@@ -1,6 +1,6 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
-import Layout from "../../../layout"
+import Layout from "../../../../layout"
 import SectionIndex from "./SectionIndex"
 import ComponentView from "./ComponentView"
 

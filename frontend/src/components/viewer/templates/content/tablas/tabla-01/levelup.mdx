@@ -1,0 +1,67 @@
+# Tabla 1 — Corporativa
+
+
+```tsx
+import { Layout, H1, P, Table, Thead, Tbody, Tr, Th, Td } from '@react-pdf-levelup/core'
+
+interface ProductoBase {
+  sku: string
+  producto: string
+  categoria: string
+  precio: string
+}
+
+const productosCorporativa: ProductoBase[] = [
+  { sku: "LOR-1001", producto: "Lorem ipsum dolor", categoria: "Sit amet", precio: "$1,299.00" },
+  { sku: "LOR-1002", producto: "Consectetur adipiscing", categoria: "Elit sed", precio: "$549.00" },
+  { sku: "LOR-1003", producto: "Sed do eiusmod", categoria: "Tempor incididunt", precio: "$89.90" },
+  { sku: "LOR-1004", producto: "Ut labore et dolore", categoria: "Magna aliqua", precio: "$320.00" },
+  { sku: "LOR-1005", producto: "Ut enim ad minim", categoria: "Veniam quis", precio: "$129.50" },
+  { sku: "LOR-1006", producto: "Nostrud exercitation", categoria: "Ullamco laboris", precio: "$179.00" },
+]
+
+const COLORS = {
+  ink: "#1a1a2e",
+  borderGray: "#cccccc",
+  corporateHeaderBg: "#1a1a2e",
+}
+
+const TablaCorporativa: React.FC = () => (
+  <Layout size="A4">
+
+    <Table
+      cellHeight={28}
+      grid="grid"
+      borderColor={COLORS.borderGray}
+      textColor={COLORS.ink}
+      headerBackground={COLORS.corporateHeaderBg}
+      style={{ marginBottom: 24 }}
+    >
+      <Thead textColor="#ffffff">
+        <Tr>
+          <Th style={{ fontWeight: 700, paddingLeft: 10, paddingRight: 10 }}>SKU</Th>
+          <Th style={{ fontWeight: 700, paddingLeft: 10, paddingRight: 10 }}>Producto</Th>
+          <Th style={{ fontWeight: 700, paddingLeft: 10, paddingRight: 10 }}>Categoría</Th>
+          <Th style={{ fontWeight: 700, paddingLeft: 10, paddingRight: 10 }} textAlign="right">
+            Precio
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {productosCorporativa.map((p) => (
+          <Tr key={p.sku}>
+            <Td style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8 }}>{p.sku}</Td>
+            <Td style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8 }}>{p.producto}</Td>
+            <Td style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8 }}>{p.categoria}</Td>
+            <Td style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8 }} textAlign="right">
+              {p.precio}
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </Layout>
+)
+
+export default TablaCorporativa
+```

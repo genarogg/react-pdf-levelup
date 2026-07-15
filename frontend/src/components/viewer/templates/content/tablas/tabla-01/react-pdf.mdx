@@ -1,0 +1,98 @@
+# Tabla 1 — Corporativa
+
+```tsx
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+
+type Producto = {
+  id: string
+  nombre: string
+  categoria: string
+  precio: string
+}
+
+const productos: Producto[] = [
+  { id: "LOR-001", nombre: "Lorem ipsum dolor", categoria: "Sit amet", precio: "$49.99" },
+  { id: "LOR-002", nombre: "Consectetur adipiscing", categoria: "Elit sed", precio: "$219.00" },
+  { id: "LOR-003", nombre: "Do eiusmod tempor", categoria: "Incididunt ut", precio: "$29.50" },
+  { id: "LOR-004", nombre: "Labore et dolore", categoria: "Magna aliqua", precio: "$89.90" },
+  { id: "LOR-005", nombre: "Enim ad minim veniam", categoria: "Quis nostrud", precio: "$39.00" },
+  { id: "LOR-006", nombre: "Exercitation ullamco", categoria: "Laboris nisi", precio: "$310.00" },
+]
+
+const columnas: { key: keyof Producto; label: string }[] = [
+  { key: "id", label: "ID" },
+  { key: "nombre", label: "Producto" },
+  { key: "categoria", label: "Categoría" },
+  { key: "precio", label: "Precio" },
+]
+
+const base = StyleSheet.create({
+  page: { padding: 40, fontSize: 10, fontFamily: "Helvetica", color: "#222222" },
+})
+
+const corp = StyleSheet.create({
+  table: { display: "flex", flexDirection: "column", borderWidth: 1, borderColor: "#cccccc" },
+  row: { display: "flex", flexDirection: "row" },
+  headerRow: { display: "flex", flexDirection: "row", backgroundColor: "#1a1a2e" },
+  headerCell: {
+    flex: 1,
+    padding: 9,
+    color: "#ffffff",
+    fontFamily: "Helvetica-Bold",
+    fontSize: 9.5,
+    borderRightWidth: 1,
+    borderRightColor: "#3a3a5e",
+  },
+  cell: {
+    flex: 1,
+    padding: 9,
+    fontSize: 9.5,
+    borderRightWidth: 1,
+    borderRightColor: "#cccccc",
+    borderTopWidth: 1,
+    borderTopColor: "#cccccc",
+  },
+})
+
+function TablaCorporativa() {
+  return (
+    <View style={corp.table}>
+      <View style={corp.headerRow}>
+        {columnas.map((c, i) => (
+          <Text
+            key={c.key}
+            style={[corp.headerCell, i === columnas.length - 1 ? { borderRightWidth: 0 } : {}]}
+          >
+            {c.label}
+          </Text>
+        ))}
+      </View>
+      {productos.map((p) => (
+        <View style={corp.row} key={p.id}>
+          {columnas.map((c, i) => (
+            <Text
+              key={c.key}
+              style={[corp.cell, i === columnas.length - 1 ? { borderRightWidth: 0 } : {}]}
+            >
+              {p[c.key]}
+            </Text>
+          ))}
+        </View>
+      ))}
+    </View>
+  )
+}
+
+const TablasDemoDoc = () => (
+  <Document>
+    <Page size="A4" style={base.page}>
+      <Text style={{ fontSize: 20, fontFamily: "Helvetica-Bold", marginBottom: 6 }}>
+        Lorem Ipsum Dolor Sit Amet
+      </Text>
+      <TablaCorporativa />
+    </Page>
+  </Document>
+)
+
+export default TablasDemoDoc
+```

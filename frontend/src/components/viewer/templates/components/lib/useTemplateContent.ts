@@ -24,19 +24,22 @@ type MDXComponentProps = {
  */
 
 // --- Imágenes: eager + ?url, son livianas (solo la URL final, no el binario en el JS bundle) ---
+
+const PATH = "../../content"
+
 const imageModules = import.meta.glob(
-  "../content/*/*/image.{png,jpg,jpeg,webp}",
+  "../../content/*/*/image.{png,jpg,jpeg,webp}",
   { eager: true, query: "?url", import: "default" }
 ) as Record<string, string>
 
 // --- MDX: NO eager. Cada .mdx puede traer bloques de código largos; solo se
 // compila/descarga cuando el usuario realmente abre ese componente/tab. ---
 const levelupModules = import.meta.glob(
-  "../content/*/*/levelup.mdx"
+ "../../content/*/*/levelup.mdx"
 ) as Record<string, () => Promise<{ default: React.ComponentType<MDXComponentProps> }>>
 
 const reactPdfModules = import.meta.glob(
-  "../content/*/*/react-pdf.mdx"
+  "../../content/*/*/react-pdf.mdx"
 ) as Record<string, () => Promise<{ default: React.ComponentType<MDXComponentProps> }>>
 
 // Todas las globs anteriores comparten esta forma de ruta:
