@@ -1,0 +1,93 @@
+# Tabla 4 
+
+```tsx
+import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
+
+type Producto = {
+  id: string
+  nombre: string
+  categoria: string
+  precio: string
+  estado: "Activo" | "Pendiente" | "Cancelado"
+}
+
+const productos: Producto[] = [
+  { id: "P-001", nombre: "Teclado mecánico", categoria: "Periféricos", precio: "$49.99", estado: "Activo" },
+  { id: "P-002", nombre: "Monitor 27\"", categoria: "Pantallas", precio: "$219.00", estado: "Pendiente" },
+  { id: "P-003", nombre: "Mouse inalámbrico", categoria: "Periféricos", precio: "$29.50", estado: "Activo" },
+  { id: "P-004", nombre: "Docking station", categoria: "Accesorios", precio: "$89.90", estado: "Cancelado" },
+  { id: "P-005", nombre: "Webcam HD", categoria: "Periféricos", precio: "$39.00", estado: "Activo" },
+  { id: "P-006", nombre: "Silla ergonómica", categoria: "Mobiliario", precio: "$310.00", estado: "Pendiente" },
+]
+
+const columnas: { key: keyof Producto; label: string }[] = [
+  { key: "id", label: "ID" },
+  { key: "nombre", label: "Producto" },
+  { key: "categoria", label: "Categoría" },
+  { key: "precio", label: "Precio" },
+]
+
+const base = StyleSheet.create({
+  page: { padding: 40, fontSize: 10, fontFamily: "Helvetica", color: "#222222" },
+})
+
+const dash = StyleSheet.create({
+  table: { display: "flex", flexDirection: "column", borderRadius: 10, overflow: "hidden", border: "1px solid #5b21b6" },
+  headerRow: { display: "flex", flexDirection: "row", backgroundColor: "#5b21b6" },
+  headerCell: { flex: 1, padding: 9, color: "#ffffff", fontFamily: "Helvetica-Bold", fontSize: 9.5 },
+  row: {
+    display: "flex", flexDirection: "row", alignItems: "center", paddingVertical: 7, paddingHorizontal: 9,
+    borderBottomWidth: 0.5, borderBottomColor: "#5b21b6",
+  },
+  cell: { flex: 1, fontSize: 9.5 },
+  badgeWrap: { flex: 1 },
+  badge: {
+    fontSize: 8.5, fontFamily: "Helvetica-Bold", paddingVertical: 3,
+    width: 62,
+    textAlign: "center",
+    borderRadius: 10,
+  },
+  badgeActivo: { backgroundColor: "#dcfce7", color: "#166534" },
+  badgePendiente: { backgroundColor: "#fef9c3", color: "#854d0e" },
+  badgeCancelado: { backgroundColor: "#fee2e2", color: "#991b1b" },
+})
+
+function badgeStyle(estado: Producto["estado"]) {
+  if (estado === "Activo") return dash.badgeActivo
+  if (estado === "Pendiente") return dash.badgePendiente
+  return dash.badgeCancelado
+}
+
+function TablaDashboard({ data = productos }: any ) {
+  return (
+    <View style={dash.table}>
+      <View style={dash.headerRow}>
+        {columnas.map((c) => (
+          <Text key={c.key} style={dash.headerCell}>{c.label}</Text>
+        ))}
+        <Text style={dash.headerCell}>Estado</Text>
+      </View>
+      {data.map((p) => (
+        <View style={dash.row} key={p.id}>
+          {columnas.map((c) => (
+            <Text key={c.key} style={dash.cell}>{p[c.key]}</Text>
+          ))}
+          <View style={dash.badgeWrap}>
+            <Text style={[dash.badge, badgeStyle(p.estado)]}>{p.estado}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  )
+}
+
+const TablasDemoDoc = () => (
+  <Document>
+    <Page size="A4" style={base.page}>
+      <TablaDashboard />
+    </Page>
+  </Document>
+)
+
+export default TablasDemoDoc
+```

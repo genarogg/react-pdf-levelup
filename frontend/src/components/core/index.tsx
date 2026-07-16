@@ -11,6 +11,8 @@ import { UL, OL, LI } from "./basic/Lista"
 
 import Gradiant from "./basic/Gradiant"
 
+import Badge from "./extend/Badges"
+
 import QR from "./qr/QR"
 import QRstyle from "./qr/QRstyle"
 import ChartJS from "./charts/ChartJS"
@@ -105,6 +107,7 @@ export {
   Icon,
   ChartJS,
   Gradiant,
+  Badge,
   // funciones
   decodeBase64Pdf,
   generatePDF,

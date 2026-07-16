@@ -1,0 +1,89 @@
+# Tabla 4
+
+```tsx
+interface ProductoConEstado {
+  sku: string
+  producto: string
+  categoria: string
+  precio: string
+  estado: "Activo" | "Pendiente" | "Cancelado"
+}
+
+const productosDashboard: ProductoConEstado[] = [
+  { sku: "SKU-4001", producto: "Servidor Rack 2U", categoria: "Infraestructura", precio: "$3,450.00", estado: "Activo" },
+  { sku: "SKU-4002", producto: "Switch Gestionable 24p", categoria: "Redes", precio: "$610.00", estado: "Activo" },
+  { sku: "SKU-4003", producto: "UPS 1500VA", categoria: "Energía", precio: "$285.00", estado: "Pendiente" },
+  { sku: "SKU-4004", producto: "Licencia Software Anual", categoria: "Software", precio: "$999.00", estado: "Pendiente" },
+  { sku: "SKU-4005", producto: "Kit de Cableado Cat6", categoria: "Redes", precio: "$75.00", estado: "Cancelado" },
+  { sku: "SKU-4006", producto: "Estación de Carga USB", categoria: "Accesorios", precio: "$58.00", estado: "Activo" },
+]
+
+const COLORS = {
+  ink: "#1a1a2e",
+  borderGray: "#5b21b6",
+  accentPrimary: "#5b21b6",
+  zebraStripe: "#ffffffff",
+}
+
+const thStyle = { fontWeight: 700, paddingLeft: 10, paddingRight: 10 }
+const tdStyle = { paddingLeft: 10, paddingRight: 10 }
+
+// Mapeo de estado -> variante soportada por Badge
+const estadoVariante: Record<ProductoConEstado["estado"], "success" | "warning" | "error"> = {
+  Activo: "success",
+  Pendiente: "warning",
+  Cancelado: "error",
+}
+
+const TablaDashboard: React.FC = ({ data = productosDashboard }: any) => {
+  return (
+    <Layout size="A4">
+      <Table
+        cellHeight={30}
+        grid="modern"
+        borderColor={COLORS.borderGray}
+        textColor={COLORS.ink}
+        headerBackground={COLORS.accentPrimary}
+        zebraColor={COLORS.zebraStripe}
+        style={{ marginTop: 4, borderRadius: 10, border: "1px solid #5b21b6" }}
+      >
+        <Thead textColor="#ffffff">
+          <Tr style={{ borderBottom: "none" }}>
+            <Th style={thStyle}>SKU</Th>
+            <Th style={thStyle}>Producto</Th>
+            <Th style={thStyle}>Categoría</Th>
+            <Th style={thStyle}>Estado</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((p) => (
+            <Tr key={p.sku}>
+              <Td style={tdStyle}>{p.sku}</Td>
+              <Td style={tdStyle}>
+                {p.producto}
+              </Td>
+              <Td style={tdStyle}>{p.categoria}</Td>
+              <Td style={tdStyle} text={false}>
+                <Badge
+                  variant={estadoVariante[p.estado]}
+                  size="sm"
+                  style={{
+                    borderRadius: 20,
+                    width: 66,
+                    fontSize: 8,
+                    textAlign: "center",
+                  }}
+                >
+                  {p.estado}
+                </Badge>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Layout>
+  )
+}
+
+export default TablaDashboard
+```
