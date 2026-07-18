@@ -1,0 +1,130 @@
+# tabla 70 - Heatmap
+
+```tsx
+const COLORS = {
+  ink: "#1a1a2e",
+  slate: "#5c6079",
+  muted: "#94a0b8",
+  accentPrimary: "#4338ca",
+  border: "#ffffff",
+};
+
+const heatmapFilas: { region: string; ene: number; feb: number; mar: number; abr: number; may: number }[] = [
+  { region: "Norte", ene: 20, feb: 45, mar: 60, abr: 80, may: 95 },
+  { region: "Sur", ene: 55, feb: 40, mar: 35, abr: 50, may: 65 },
+  { region: "Este", ene: 90, feb: 85, mar: 70, abr: 60, may: 40 },
+  { region: "Oeste", ene: 15, feb: 25, mar: 45, abr: 55, may: 70 },
+  { region: "Centro", ene: 70, feb: 75, mar: 80, abr: 90, may: 100 },
+];
+
+const heatColor = (v: number) => {
+  const t = Math.max(0, Math.min(1, v / 100));
+  const from = { r: 0xed, g: 0xec, b: 0xfd };
+  const to = { r: 0x43, g: 0x38, b: 0xca };
+  const r = Math.round(from.r + (to.r - from.r) * t);
+  const g = Math.round(from.g + (to.g - from.g) * t);
+  const b = Math.round(from.b + (to.b - from.b) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 32,
+    backgroundColor: "#ffffff",
+  },
+  table: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  headerRow: {
+    display: "flex",
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    borderBottomStyle: "solid",
+    paddingBottom: 6,
+    marginBottom: 4,
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    height: 26,
+    marginBottom: 3
+  },
+  labelCol: {
+    flex: 22,
+    justifyContent: "center",
+  },
+  labelColHeader: {
+    flex: 22,
+  },
+  valueCol: {
+    flex: 15.6,
+    paddingRight: 3,
+    paddingBottom: 3,
+  },
+  headerCellText: {
+    fontSize: 8,
+    color: COLORS.muted,
+    fontWeight: 700,
+    textAlign: "center",
+  },
+  regionText: {
+    fontSize: 9,
+    fontWeight: 700,
+    color: COLORS.ink,
+  },
+  heatCell: {
+    height: 26,
+    borderRadius: 5,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  heatCellText: {
+    fontSize: 8,
+    fontWeight: 700,
+  },
+});
+
+const HeatmapDatos: React.FC = () => (
+  <View style={styles.table}>
+    {/* Header */}
+    <View style={styles.headerRow}>
+      <View style={styles.labelColHeader} />
+      {(["Ene", "Feb", "Mar", "Abr", "May"] as const).map((mes) => (
+        <View key={mes} style={styles.valueCol}>
+          <Text style={styles.headerCellText}>{mes}</Text>
+        </View>
+      ))}
+    </View>
+
+    {/* Filas */}
+    {heatmapFilas.map((fila) => (
+      <View key={fila.region} style={styles.row}>
+        <View style={styles.labelCol}>
+          <Text style={styles.regionText}>{fila.region}</Text>
+        </View>
+        {[fila.ene, fila.feb, fila.mar, fila.abr, fila.may].map((v, i) => (
+          <View key={i} style={styles.valueCol}>
+            <View style={[styles.heatCell, { backgroundColor: heatColor(v) }]}>
+              <Text style={[styles.heatCellText, { color: v > 55 ? "#ffffff" : COLORS.ink }]}>{v}</Text>
+            </View>
+          </View>
+        ))}
+      </View>
+    ))}
+  </View>
+);
+
+const HeatmapVentasDocumento: React.FC = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <HeatmapDatos />
+    </Page>
+  </Document>
+);
+
+export default HeatmapVentasDocumento;
+```

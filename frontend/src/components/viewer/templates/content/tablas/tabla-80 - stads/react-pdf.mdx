@@ -1,0 +1,143 @@
+# tabla 80 - stads
+
+```tsx
+import React from "react";
+import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+
+const COLORS = {
+  ink: "#1a2b4a",
+  muted: "#94a0b8",
+  border: "#e6e8f0",
+  zebra: "#f7f8fc",
+  success: "#22c55e",
+  warning: "#f59e0b",
+  info: "#3b82f6",
+};
+
+interface ProductoRendimiento {
+  sku: string;
+  producto: string;
+  categoria: string;
+  ventas: number;
+}
+
+const rendimientoProductos: ProductoRendimiento[] = [
+  { sku: "SKU-7001", producto: "Café en Grano 1kg", categoria: "Alimentos", ventas: 92 },
+  { sku: "SKU-7002", producto: "Té Verde Orgánico", categoria: "Alimentos", ventas: 68 },
+  { sku: "SKU-7003", producto: "Chocolate Artesanal", categoria: "Alimentos", ventas: 54 },
+  { sku: "SKU-7004", producto: "Miel Pura 500g", categoria: "Alimentos", ventas: 39 },
+  { sku: "SKU-7005", producto: "Granola Casera", categoria: "Alimentos", ventas: 81 },
+];
+
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: "#ffffff",
+    padding: 30,
+    fontFamily: "Helvetica",
+  },
+  headerRow: {
+    flexDirection: "row",
+    paddingBottom: 10,
+    marginBottom: 2,
+  },
+  headerCellSku: { flex: 16 },
+  headerCellProducto: { flex: 34 },
+  headerCellDesempeno: { flex: 30 },
+  headerCellVentas: { flex: 20 },
+  headerLabel: {
+    fontSize: 8,
+    fontFamily: "Helvetica-Bold",
+    color: COLORS.ink,
+    letterSpacing: 0.3,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 4,
+    paddingRight: 4,
+  },
+  cellSku: { flex: 16 },
+  cellProducto: { flex: 34 },
+  cellDesempeno: { flex: 30 },
+  cellVentas: { flex: 20 },
+  skuText: {
+    fontSize: 9,
+    color: COLORS.ink,
+  },
+  productoText: {
+    fontSize: 10,
+    color: COLORS.ink,
+  },
+  barTrack: {
+    width: 120,
+    height: 7,
+    backgroundColor: "#eef0f5",
+    borderRadius: 4,
+  },
+  barFill: {
+    height: 7,
+    borderRadius: 4,
+  },
+  ventasText: {
+    fontSize: 10,
+    fontFamily: "Helvetica-Bold",
+    textAlign: "right",
+  },
+});
+
+const RendimientoBarrasPuro = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      {/* Encabezado */}
+      <View style={styles.headerRow}>
+        <View style={styles.headerCellSku}>
+          <Text style={styles.headerLabel}>SKU</Text>
+        </View>
+        <View style={styles.headerCellProducto}>
+          <Text style={styles.headerLabel}>PRODUCTO</Text>
+        </View>
+        <View style={styles.headerCellDesempeno}>
+          <Text style={styles.headerLabel}>DESEMPEÑO</Text>
+        </View>
+        <View style={styles.headerCellVentas}>
+          <Text style={[styles.headerLabel, { textAlign: "right" }]}>VENTAS</Text>
+        </View>
+      </View>
+
+      {/* Filas */}
+      {rendimientoProductos.map((p) => {
+        const barColor =
+          p.ventas >= 75 ? COLORS.success : p.ventas >= 50 ? COLORS.info : COLORS.warning;
+
+        return (
+          <View key={p.sku} style={styles.row} wrap={false}>
+            <View style={styles.cellSku}>
+              <Text style={styles.skuText}>{p.sku}</Text>
+            </View>
+            <View style={styles.cellProducto}>
+              <Text style={styles.productoText}>{p.producto}</Text>
+            </View>
+            <View style={styles.cellDesempeno}>
+              <View style={styles.barTrack}>
+                <View
+                  style={[
+                    styles.barFill,
+                    { width: `${p.ventas}%`, backgroundColor: barColor },
+                  ]}
+                />
+              </View>
+            </View>
+            <View style={styles.cellVentas}>
+              <Text style={[styles.ventasText, { color: barColor }]}>{p.ventas}%</Text>
+            </View>
+          </View>
+        );
+      })}
+    </Page>
+  </Document>
+);
+
+export default RendimientoBarrasPuro;
+```

@@ -1,0 +1,136 @@
+# Tabla 6 -> Gradiant
+
+```tsx
+import React from "react";
+import {
+  Gradiant,
+  Layout,
+  Span,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+const COLORS = {
+  border: "#e6e8f0",
+  accentPrimary: "#4338ca",
+  accentSecondary: "#7c3aed",
+  slate: "#5c6079",
+  pageBg: "#ffffff",
+  zebra: "#faf9ff"
+};
+
+interface ProductoFicha {
+  campo: string;
+  valor: string;
+}
+
+const productosGradiente: ProductoFicha[][] = [
+  [
+    { campo: "SKU", valor: "SKU-5001" },
+    { campo: "Producto", valor: "Sofá Modular" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$890.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5002" },
+    { campo: "Producto", valor: "Mesa de Centro" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$310.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5003" },
+    { campo: "Producto", valor: "Lámpara de Piso" },
+    { campo: "Categoría", valor: "Iluminación" },
+    { campo: "Precio", valor: "$145.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5001" },
+    { campo: "Producto", valor: "Sofá Modular" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$890.00" },
+  ],
+];
+
+const HeaderGradiente: React.FC = () => {
+  return (
+    <Layout
+      size="A4"
+      orientation="portrait"
+      margin="normal"
+      backgroundColor={COLORS.pageBg}
+      meta={{
+        title: "Encabezado en Degradado — react-pdf-levelup",
+        author: "react-pdf-levelup",
+        subject: "Estilo 06 — Header en degradado",
+        language: "es-ES",
+      }}>
+
+      <Table
+        cellHeight={26}
+        grid="grid"
+        textColor="#fff"
+        borderColor={COLORS.border}
+        zebraColor={COLORS.zebra}
+        style={{
+          border: `2px solid ${COLORS.border}`,
+          borderRadius: 10,
+          overflow: "hidden"
+        }}
+      >
+        <Thead>
+          <Gradiant
+            colors={[COLORS.accentPrimary, COLORS.accentSecondary]}
+            width={531}
+            height={26}
+            angle={0}
+            style={{
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0
+            }}
+          >
+            <Tr style={{ borderBottom: "none" }}>
+              <Th width="15%">SKU</Th>
+              <Th width="10%">Producto</Th>
+              <Th width="10%">Categoría</Th>
+              <Th width="10%" textAlign="right" >
+                Precio
+              </Th>
+            </Tr>
+          </Gradiant>
+        </Thead>
+
+        <Tbody borderColor={COLORS.border} textColor="#1a1a2e" zebraColor="#faf9ff">
+          {productosGradiente.map((fila) => (
+            <Tr key={fila[0].valor}>
+              <Td width="20%" style={{ paddingLeft: 10, fontSize: 9.5 }}>
+                {fila[0].valor}
+              </Td>
+              <Td width="36%" style={{ paddingLeft: 10, fontSize: 9.5 }}>
+                {fila[1].valor}
+              </Td>
+              <Td width="24%" style={{ paddingLeft: 10, fontSize: 9.5, color: COLORS.slate }}>
+                {fila[2].valor}
+              </Td>
+              <Td
+                width="20%"
+                textAlign="right"
+                style={{ paddingRight: 10, fontSize: 9.5, fontWeight: 700 }}
+              >
+                <Span style={{ color: COLORS.accentPrimary }}>{fila[3].valor}</Span>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Layout>
+  );
+};
+
+export default HeaderGradiente;
+```

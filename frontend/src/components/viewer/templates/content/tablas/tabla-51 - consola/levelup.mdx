@@ -1,0 +1,126 @@
+# Tabla 6 -> Consola
+
+```tsx
+import React from "react";
+import {
+  Div,
+  H2,
+  Layout,
+  P,
+  Small,
+  Span,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+const COLORS = {
+  slate: "#5c6079",
+  accentPrimary: "#4338ca",
+
+  terminalBg: "#0d1117",
+  terminalDim: "#8b949e",
+  terminalText: "#c9d1d9",
+  terminalBorder: "#21262d",
+};
+
+const SPACING = { xs: 2, sm: 4, md: 8, base: 12, lg: 16, xl: 24 };
+
+const styles = {
+  sectionRuleAccent: { height: 2, width: 40, backgroundColor: COLORS.accentPrimary, marginBottom: SPACING.md } as const,
+  intro: { fontSize: 10, color: COLORS.slate, lineHeight: 1.5, marginBottom: SPACING.lg } as const,
+  eyebrow: { fontSize: 9, color: COLORS.accentPrimary, letterSpacing: 2, marginBottom: SPACING.xs } as const,
+};
+
+const logsTerminal: { hora: string; nivel: "OK" | "WARN" | "ERROR"; servicio: string; mensaje: string }[] = [
+  { hora: "09:12:03", nivel: "OK", servicio: "api-gateway", mensaje: "healthcheck passed" },
+  { hora: "09:14:41", nivel: "WARN", servicio: "auth-service", mensaje: "token near expiry" },
+  { hora: "09:15:02", nivel: "OK", servicio: "billing", mensaje: "invoice batch completed" },
+  { hora: "09:18:37", nivel: "ERROR", servicio: "worker-queue", mensaje: "job retry limit reached" },
+  { hora: "09:21:10", nivel: "OK", servicio: "cache", mensaje: "eviction cycle finished" },
+  { hora: "09:23:55", nivel: "WARN", servicio: "storage", mensaje: "disk usage above 80%" },
+];
+
+const nivelColor: Record<string, string> = { OK: "#39d353", WARN: "#e3b341", ERROR: "#f85149" };
+
+const SectionIntro: React.FC<{ eyebrow: string; title: string; description: string }> = ({
+  eyebrow,
+  title,
+  description,
+}) => (
+  <Div style={{ marginBottom: SPACING.base }}>
+    <Small style={styles.eyebrow}>{eyebrow}</Small>
+    <H2>{title}</H2>
+    <Div style={styles.sectionRuleAccent} />
+    <P style={styles.intro}>{description}</P>
+  </Div>
+);
+
+const cellBase = {
+  fontFamily: "Courier",
+  fontSize: 8,
+  color: COLORS.terminalText,
+  backgroundColor: COLORS.terminalBg,
+} as const;
+
+const headCellBase = {
+  fontFamily: "Courier-Bold",
+  fontSize: 8,
+  color: COLORS.terminalDim,
+  backgroundColor: COLORS.terminalBg,
+  textTransform: "uppercase",
+} as const;
+
+const TerminalConsola: React.FC = () => (
+  <>
+    <Div style={{ backgroundColor: COLORS.terminalBg, borderRadius: 6, padding: 12 }}>
+      <Table
+        cellHeight={20}
+        grid="modern"
+        borderColor={COLORS.terminalBorder}
+        textColor={COLORS.terminalText}
+        headerBackground={COLORS.terminalBg}
+        zebraColor={COLORS.terminalBg}
+        style={{ marginBottom: 0 }}
+      >
+        <Thead>
+          <Tr>
+            <Th colSpan={14} style={headCellBase}>Hora</Th>
+            <Th colSpan={10} style={headCellBase}>Nivel</Th>
+            <Th colSpan={22} style={headCellBase}>Servicio</Th>
+            <Th colSpan={54} style={headCellBase}>Mensaje</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {logsTerminal.map((log, idx) => (
+            <Tr key={idx}>
+              <Td colSpan={14} style={cellBase}>{log.hora}</Td>
+              <Td colSpan={10} style={{ cellBase }} >
+                <Span style={{
+                  fontFamily: "Courier-Bold",
+                  color: nivelColor[log.nivel]
+                }}>
+                  {log.nivel}
+                </Span>
+              </Td>
+              <Td colSpan={22} style={cellBase}>{log.servicio}</Td>
+              <Td colSpan={54} style={cellBase}>{log.mensaje}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Div>
+  </>
+);
+
+const App: React.FC = () => (
+  <Layout>
+    <TerminalConsola />
+  </Layout>
+);
+
+export default App;
+```

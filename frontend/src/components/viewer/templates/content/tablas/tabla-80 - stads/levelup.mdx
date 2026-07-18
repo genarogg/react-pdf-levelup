@@ -1,0 +1,105 @@
+# tabla 80 - stads
+
+```tsx
+import React from "react";
+import {
+  Div,
+  Layout,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+const COLORS = {
+  muted: "#94a0b8",
+  border: "#fff",
+  success: "#22c55e",
+  warning: "#f59e0b",
+  info: "#3b82f6",
+};
+
+interface ProductoRendimiento {
+  sku: string;
+  producto: string;
+  categoria: string;
+  ventas: number;
+}
+
+const rendimientoProductos: ProductoRendimiento[] = [
+  { sku: "SKU-7001", producto: "Café en Grano 1kg", categoria: "Alimentos", ventas: 92 },
+  { sku: "SKU-7002", producto: "Té Verde Orgánico", categoria: "Alimentos", ventas: 68 },
+  { sku: "SKU-7003", producto: "Chocolate Artesanal", categoria: "Alimentos", ventas: 54 },
+  { sku: "SKU-7004", producto: "Miel Pura 500g", categoria: "Alimentos", ventas: 39 },
+  { sku: "SKU-7005", producto: "Granola Casera", categoria: "Alimentos", ventas: 81 },
+];
+
+const RendimientoBarrasTabla: React.FC = () => (
+  <Table
+    cellHeight={34}
+    borderColor={COLORS.border}
+    textColor="#1a1a2e"
+    headerBackground="#ffffff"
+    zebraColor="#fff"
+    grid="modern"
+  >
+    <Thead>
+      <Tr>
+        <Th style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}>SKU</Th>
+        <Th style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}>PRODUCTO</Th>
+        <Th style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}>DESEMPEÑO</Th>
+        <Th textAlign="right" style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}>
+          VENTAS
+        </Th>
+      </Tr>
+    </Thead>
+    <Tbody>
+      {rendimientoProductos.map((p) => {
+        const barColor =
+          p.ventas >= 75 ? COLORS.success : p.ventas >= 50 ? COLORS.info : COLORS.warning;
+        return (
+          <Tr key={p.sku}>
+            <Td style={{ fontSize: 8.5, color: COLORS.muted }}>{p.sku}</Td>
+            <Td style={{ fontSize: 10 }}>{p.producto}</Td>
+            <Td text={false}>
+              <Div
+                style={{
+                  width: 120,
+                  height: 7,
+                  backgroundColor: "#eef0f5",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                }}
+              >
+                <Div
+                  style={{
+                    width: `${p.ventas}%`,
+                    height: 7,
+                    backgroundColor: barColor,
+                    borderRadius: 4,
+                  }}
+                />
+              </Div>
+            </Td>
+            <Td textAlign="right" style={{ fontSize: 10, fontWeight: 700, color: barColor }}>
+              {p.ventas}%
+            </Td>
+          </Tr>
+        );
+      })}
+    </Tbody>
+  </Table>
+);
+
+function RendimientoBarrasTablaDoc() {
+  return (
+    <Layout>
+      <RendimientoBarrasTabla />
+    </Layout>
+  );
+}
+
+export default RendimientoBarrasTablaDoc;
+```

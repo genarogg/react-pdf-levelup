@@ -1,0 +1,145 @@
+# Tabla 6 -> Consola
+
+```tsx
+import React from "react";
+import {
+  Div,
+  Layout,
+  Small,
+  Strong,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+type Producto = {
+  id: string;
+  nombre: string;
+  categoria: string;
+  precio: string;
+  estado: "Activo" | "Pendiente" | "Cancelado";
+};
+
+const productos: Producto[] = [
+  { id: "P-001", nombre: "Teclado mecánico", categoria: "Periféricos", precio: "$49.99", estado: "Activo" },
+  { id: "P-002", nombre: "Monitor 27\"", categoria: "Pantallas", precio: "$219.00", estado: "Pendiente" },
+  { id: "P-003", nombre: "Mouse inalámbrico", categoria: "Periféricos", precio: "$29.50", estado: "Activo" },
+  { id: "P-004", nombre: "Docking station", categoria: "Accesorios", precio: "$89.90", estado: "Cancelado" },
+  { id: "P-005", nombre: "Webcam HD", categoria: "Periféricos", precio: "$39.00", estado: "Activo" },
+  { id: "P-006", nombre: "Silla ergonómica", categoria: "Mobiliario", precio: "$310.00", estado: "Pendiente" },
+];
+
+const columnas: { key: keyof Producto; label: string }[] = [
+  { key: "id", label: "ID" },
+  { key: "nombre", label: "Producto" },
+  { key: "categoria", label: "Categoría" },
+  { key: "precio", label: "Precio" },
+];
+
+const COLORS = {
+  windowBg: "#1e1e1e",
+  titleBarBg: "#2d2d2d",
+  cyan: "#22d3ee",
+  green: "#4ade80",
+  gray: "#999999",
+  dotRed: "#ff5f56",
+  dotYellow: "#ffbd2e",
+  dotGreen: "#27c93f",
+};
+
+const Dot: React.FC<{ color: string }> = ({ color }) => (
+  <Div style={{ width: 8, height: 8, borderRadius: 4, marginRight: 6, backgroundColor: color }} />
+);
+
+const TerminalWindow: React.FC = () => {
+  return (
+    <Div style={{ backgroundColor: COLORS.windowBg, borderRadius: 8, overflow: "hidden" }}>
+      {/* Barra de título estilo macOS */}
+      <Div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingVertical: 8,
+          paddingHorizontal: 10,
+          backgroundColor: COLORS.titleBarBg,
+        }}
+      >
+        <Dot color={COLORS.dotRed} />
+        <Dot color={COLORS.dotYellow} />
+        <Dot color={COLORS.dotGreen} />
+        <Small
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontSize: 8,
+            color: COLORS.gray,
+            fontFamily: "Courier",
+            marginRight: 30,
+          }}
+        >
+          productos.sh — 80x24
+        </Small>
+      </Div>
+
+      {/* Cuerpo tipo consola — ahora construido con el componente Table */}
+      <Div style={{ padding: 16 }}>
+        <Table
+          grid="not-grid"
+          cellHeight={18}
+          background={COLORS.windowBg}
+          headerBackground={COLORS.windowBg}
+          zebraColor={COLORS.windowBg}
+          textColor={COLORS.green}
+          style={{ marginBottom: 0 }}
+          borderColor="#fff"
+        >
+          <Thead>
+            <Tr>
+              <Th style={{ fontFamily: "Courier-Bold", paddingLeft: 0 }} />
+              {columnas.map((c) => (
+                <Th
+                  key={c.key}
+                  colSpan={4}
+                  style={{ fontFamily: "Courier-Bold", fontSize: 9, paddingLeft: 0 }}
+                >
+                  <Strong style={{ color: "#22d3ee" }}>{c.label.toUpperCase()}</Strong>
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {productos.map((p) => (
+              <Tr key={p.id}>
+                <Td style={{ fontFamily: "Courier-Bold", paddingLeft: 0 }}>$</Td>
+                {columnas.map((c) => (
+                  <Td
+                    key={c.key}
+                    colSpan={4}
+                    style={{ fontFamily: "Courier", fontSize: 9, paddingLeft: 0 }}
+                  >
+                    {p[c.key]}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Div>
+    </Div>
+  );
+};
+
+const TerminalDocument: React.FC = () => {
+  return (
+    <Layout>
+      <TerminalWindow />
+    </Layout>
+  );
+};
+
+export default TerminalDocument;
+```

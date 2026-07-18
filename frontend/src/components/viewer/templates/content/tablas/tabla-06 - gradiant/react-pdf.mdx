@@ -1,0 +1,222 @@
+# Tabla 6 -> Gradiant
+
+```tsx
+import React from "react";
+import {
+  Defs,
+  Document,
+  LinearGradient,
+  Page,
+  Rect,
+  Stop,
+  StyleSheet,
+  Svg,
+  Text,
+  View
+} from "@react-pdf-levelup/core";
+
+const COLORS = {
+  border: "#e6e8f0",
+  accentPrimary: "#4338ca",
+  accentSecondary: "#7c3aed",
+  slate: "#5c6079",
+  pageBg: "#ffffff",
+  zebra: "#faf9ff",
+};
+
+const PAGE_CONTENT_WIDTH = 515;
+const TABLE_BORDER_WIDTH = 2;
+const TABLE_INNER_WIDTH = PAGE_CONTENT_WIDTH - TABLE_BORDER_WIDTH * 2;
+const HEADER_HEIGHT = 26;
+
+interface ProductoFicha {
+  campo: string;
+  valor: string;
+}
+
+const productosGradiente: ProductoFicha[][] = [
+  [
+    { campo: "SKU", valor: "SKU-5001" },
+    { campo: "Producto", valor: "Sofá Modular" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$890.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5002" },
+    { campo: "Producto", valor: "Mesa de Centro" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$310.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5003" },
+    { campo: "Producto", valor: "Lámpara de Piso" },
+    { campo: "Categoría", valor: "Iluminación" },
+    { campo: "Precio", valor: "$145.00" },
+  ],
+  [
+    { campo: "SKU", valor: "SKU-5001" },
+    { campo: "Producto", valor: "Sofá Modular" },
+    { campo: "Categoría", valor: "Mobiliario" },
+    { campo: "Precio", valor: "$890.00" },
+  ],
+];
+
+// Anchos de columna en % (deben sumar 100)
+const COL = { sku: "20%", producto: "36%", categoria: "24%", precio: "20%" };
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 40,
+    backgroundColor: COLORS.pageBg,
+    fontSize: 9.5,
+  },
+  tableWrapper: {
+    width: PAGE_CONTENT_WIDTH,
+    borderRadius: 10,
+    overflow: "hidden",
+    borderWidth: TABLE_BORDER_WIDTH,
+    borderColor: COLORS.border,
+    borderStyle: "solid",
+  },
+  headerStack: {
+    position: "relative",
+    width: TABLE_INNER_WIDTH,
+    height: HEADER_HEIGHT,
+  },
+  headerBackground: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+  headerRow: {
+    width: TABLE_INNER_WIDTH,
+    height: HEADER_HEIGHT,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerCell: {
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: 9,
+    paddingLeft: 10,
+  },
+  headerCellRight: {
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: 9,
+    paddingRight: 10,
+    textAlign: "right",
+  },
+  bodyRow: {
+    width: TABLE_INNER_WIDTH,
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 26,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+    borderBottomStyle: "solid",
+  },
+  bodyRowZebra: {
+    backgroundColor: COLORS.zebra,
+  },
+  cell: {
+    paddingLeft: 10,
+    fontSize: 9.5,
+    color: "#1a1a2e",
+  },
+  cellSlate: {
+    paddingLeft: 10,
+    fontSize: 9.5,
+    color: COLORS.slate,
+  },
+  cellRight: {
+    paddingRight: 10,
+    fontSize: 9.5,
+    fontWeight: 700,
+    textAlign: "right",
+    color: COLORS.accentPrimary,
+  },
+});
+
+const HeaderGradientBackground: React.FC = () => {
+  return (
+    <Svg
+      width={TABLE_INNER_WIDTH}
+      height={HEADER_HEIGHT}
+      style={styles.headerBackground}
+    >
+      <Defs>
+        <LinearGradient id="headerGrad" x1="0" y1="0" x2="1" y2="0">
+          <Stop offset="0" stopColor={COLORS.accentPrimary} />
+          <Stop offset="1" stopColor={COLORS.accentSecondary} />
+        </LinearGradient>
+      </Defs>
+      <Rect
+        x="0"
+        y="0"
+        width={TABLE_INNER_WIDTH}
+        height={HEADER_HEIGHT}
+        fill="url(#headerGrad)"
+      />
+    </Svg>
+  );
+};
+
+const HeaderGradiente: React.FC = () => {
+  return (
+    <Document
+      title="Encabezado en Degradado — react-pdf-levelup"
+      author="react-pdf-levelup"
+      subject="Estilo 06 — Header en degradado"
+      language="es-ES"
+    >
+      <Page size="A4" orientation="portrait" style={styles.page}>
+        <View style={styles.tableWrapper}>
+          {/* Header con degradado (SVG detrás + fila de texto encima) */}
+          <View style={styles.headerStack}>
+            <HeaderGradientBackground />
+            <View style={styles.headerRow}>
+              <Text style={[styles.headerCell, { width: COL.sku }]}>SKU</Text>
+              <Text style={[styles.headerCell, { width: COL.producto }]}>
+                Producto
+              </Text>
+              <Text style={[styles.headerCell, { width: COL.categoria }]}>
+                Categoría
+              </Text>
+              <Text style={[styles.headerCellRight, { width: COL.precio }]}>
+                Precio
+              </Text>
+            </View>
+          </View>
+
+          {/* Cuerpo con zebra manual */}
+          {productosGradiente.map((fila, idx) => (
+            <View
+              key={`${fila[0].valor}-${idx}`}
+              style={[
+                styles.bodyRow,
+                idx % 2 === 1 ? styles.bodyRowZebra : {},
+              ]}
+            >
+              <Text style={[styles.cell, { width: COL.sku }]}>
+                {fila[0].valor}
+              </Text>
+              <Text style={[styles.cell, { width: COL.producto }]}>
+                {fila[1].valor}
+              </Text>
+              <Text style={[styles.cellSlate, { width: COL.categoria }]}>
+                {fila[2].valor}
+              </Text>
+              <Text style={[styles.cellRight, { width: COL.precio }]}>
+                {fila[3].valor}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+export default HeaderGradiente;
+```

@@ -1,0 +1,106 @@
+# tabla 70 - Heatmap
+
+```tsx
+import React from "react";
+import {
+  Layout,
+  Small,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+
+const COLORS = {
+  ink: "#1a1a2e",
+  slate: "#5c6079",
+  muted: "#94a0b8",
+  accentPrimary: "#4338ca",
+  border: "#e6e8f0",
+};
+
+const styleTd = {
+  borderRadius: 5, marginBottom: 3, marginRight: 3
+}
+
+const heatmapFilas: { region: string; ene: number; feb: number; mar: number; abr: number; may: number }[] = [
+  { region: "Norte", ene: 20, feb: 45, mar: 60, abr: 80, may: 95 },
+  { region: "Sur", ene: 55, feb: 40, mar: 35, abr: 50, may: 65 },
+  { region: "Este", ene: 90, feb: 85, mar: 70, abr: 60, may: 40 },
+  { region: "Oeste", ene: 15, feb: 25, mar: 45, abr: 55, may: 70 },
+  { region: "Centro", ene: 70, feb: 75, mar: 80, abr: 90, may: 100 },
+];
+
+const heatColor = (v: number) => {
+  const t = Math.max(0, Math.min(1, v / 100));
+  const from = { r: 0xed, g: 0xec, b: 0xfd };
+  const to = { r: 0x43, g: 0x38, b: 0xca };
+  const r = Math.round(from.r + (to.r - from.r) * t);
+  const g = Math.round(from.g + (to.g - from.g) * t);
+  const b = Math.round(from.b + (to.b - from.b) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+};
+
+const heatCellContent = (v: number) => (
+  <Small style={{ fontSize: 8, fontWeight: 700, color: v > 55 ? "#ffffff" : COLORS.ink }}>{v}</Small>
+);
+
+const HeatmapDatos: React.FC = () => (
+  <Table
+    cellHeight={26}
+    grid="not-grid"
+    borderColor={COLORS.border}
+    textColor={COLORS.ink}
+    zebraColor="#ffffff"
+    headerBackground="#ffffff"
+  >
+    <Thead>
+      <Tr>
+        <Th>
+          <Small style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}> </Small>
+        </Th>
+        {(["Ene", "Feb", "Mar", "Abr", "May"] as const).map((mes) => (
+          <Th key={mes} textAlign="center">
+            <Small style={{ fontSize: 8, color: COLORS.muted, fontWeight: 700 }}>{mes}</Small>
+          </Th>
+        ))}
+      </Tr>
+    </Thead>
+    <Tbody>
+      {heatmapFilas.map((fila) => (
+        <Tr key={fila.region}>
+          <Td>
+            <Small style={{ fontSize: 9, fontWeight: 700, color: COLORS.ink }}>{fila.region}</Small>
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.ene) }}>
+            {heatCellContent(fila.ene)}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.feb) }}>
+            {heatCellContent(fila.feb)}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.mar) }}>
+            {heatCellContent(fila.mar)}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.abr) }}>
+            {heatCellContent(fila.abr)}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.may) }}>
+            {heatCellContent(fila.may)}
+          </Td>
+        </Tr>
+      ))}
+    </Tbody>
+  </Table>
+);
+
+const HeatmapVentasDocumento: React.FC = () => (
+  <Layout>
+    <HeatmapDatos />
+  </Layout>
+);
+
+export default HeatmapVentasDocumento;
+```

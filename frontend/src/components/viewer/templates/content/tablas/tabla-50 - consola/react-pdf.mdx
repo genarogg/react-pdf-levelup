@@ -1,0 +1,102 @@
+# Tabla 8 -> Consola
+
+```tsx
+import React from "react";
+import { 
+      Document,
+      Page,
+      StyleSheet,
+      Text,
+      View
+    } from "@react-pdf-levelup/core";
+
+
+type Producto = {
+  id: string;
+  nombre: string;
+  categoria: string;
+  precio: string;
+  estado: "Activo" | "Pendiente" | "Cancelado";
+};
+
+const productos: Producto[] = [
+  { id: "P-001", nombre: "Teclado mecánico", categoria: "Periféricos", precio: "$49.99", estado: "Activo" },
+  { id: "P-002", nombre: "Monitor 27\"", categoria: "Pantallas", precio: "$219.00", estado: "Pendiente" },
+  { id: "P-003", nombre: "Mouse inalámbrico", categoria: "Periféricos", precio: "$29.50", estado: "Activo" },
+  { id: "P-004", nombre: "Docking station", categoria: "Accesorios", precio: "$89.90", estado: "Cancelado" },
+  { id: "P-005", nombre: "Webcam HD", categoria: "Periféricos", precio: "$39.00", estado: "Activo" },
+  { id: "P-006", nombre: "Silla ergonómica", categoria: "Mobiliario", precio: "$310.00", estado: "Pendiente" },
+];
+
+const columnas: { key: keyof Producto; label: string }[] = [
+  { key: "id", label: "ID" },
+  { key: "nombre", label: "Producto" },
+  { key: "categoria", label: "Categoría" },
+  { key: "precio", label: "Precio" },
+];
+
+// ============================================================
+// Tabla 9: Terminal / Consola
+// ============================================================
+
+const term = StyleSheet.create({
+  window: { backgroundColor: "#1e1e1e", borderRadius: 8, overflow: "hidden" },
+  titleBar: {
+    display: "flex", flexDirection: "row", alignItems: "center",
+    paddingVertical: 8, paddingHorizontal: 10, backgroundColor: "#2d2d2d",
+  },
+  dot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
+  titleText: { flex: 1, textAlign: "center", fontSize: 8, color: "#999999", fontFamily: "Courier", marginRight: 30 },
+  body: { padding: 16 },
+  headerRow: { display: "flex", flexDirection: "row", marginBottom: 9 },
+  headerCell: { flex: 1, fontSize: 9, fontFamily: "Courier-Bold", color: "#22d3ee" },
+  row: { display: "flex", flexDirection: "row", marginBottom: 7 },
+  prompt: { width: 14, fontSize: 9, fontFamily: "Courier-Bold", color: "#4ade80" },
+  cell: { flex: 1, fontSize: 9, fontFamily: "Courier", color: "#4ade80" },
+});
+
+function TerminalWindow() {
+  return (
+    <View style={term.window}>
+      <View style={term.titleBar}>
+        <View style={[term.dot, { backgroundColor: "#ff5f56" }]} />
+        <View style={[term.dot, { backgroundColor: "#ffbd2e" }]} />
+        <View style={[term.dot, { backgroundColor: "#27c93f" }]} />
+        <Text style={term.titleText}>productos.sh — 80x24</Text>
+      </View>
+      <View style={term.body}>
+        <View style={term.headerRow}>
+          <Text style={term.prompt}> </Text>
+          {columnas.map((c) => (
+            <Text key={c.key} style={term.headerCell}>{c.label.toUpperCase()}</Text>
+          ))}
+        </View>
+        {productos.map((p) => (
+          <View style={term.row} key={p.id}>
+            <Text style={term.prompt}>$</Text>
+            {columnas.map((c) => (
+              <Text key={c.key} style={term.cell}>{p[c.key]}</Text>
+            ))}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+const pageStyles = StyleSheet.create({
+  page: { padding: 30, backgroundColor: "#ffffff" },
+});
+
+function App() {
+  return (
+    <Document>
+      <Page size="A4" style={pageStyles.page}>
+        <TerminalWindow />
+      </Page>
+    </Document>
+  );
+}
+
+export default App
+```

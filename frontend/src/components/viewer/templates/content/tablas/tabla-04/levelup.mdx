@@ -1,6 +1,17 @@
 # Tabla 4
 
 ```tsx
+import { 
+      Badge,
+      Layout,
+      Table,
+      Tbody,
+      Td,
+      Th,
+      Thead,
+      Tr
+    } from "@react-pdf-levelup/core";
+    
 interface ProductoConEstado {
   sku: string
   producto: string
@@ -13,9 +24,7 @@ const productosDashboard: ProductoConEstado[] = [
   { sku: "SKU-4001", producto: "Servidor Rack 2U", categoria: "Infraestructura", precio: "$3,450.00", estado: "Activo" },
   { sku: "SKU-4002", producto: "Switch Gestionable 24p", categoria: "Redes", precio: "$610.00", estado: "Activo" },
   { sku: "SKU-4003", producto: "UPS 1500VA", categoria: "Energía", precio: "$285.00", estado: "Pendiente" },
-  { sku: "SKU-4004", producto: "Licencia Software Anual", categoria: "Software", precio: "$999.00", estado: "Pendiente" },
-  { sku: "SKU-4005", producto: "Kit de Cableado Cat6", categoria: "Redes", precio: "$75.00", estado: "Cancelado" },
-  { sku: "SKU-4006", producto: "Estación de Carga USB", categoria: "Accesorios", precio: "$58.00", estado: "Activo" },
+  { sku: "SKU-4004", producto: "Licencia Software Anual", categoria: "Software", precio: "$999.00", estado: "Pendiente" }
 ]
 
 const COLORS = {

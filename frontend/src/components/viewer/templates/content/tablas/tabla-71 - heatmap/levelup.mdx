@@ -1,0 +1,124 @@
+# tabla 71 - Heatmap
+
+```tsx
+import React from "react";
+import {
+  Layout,
+  Small,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr
+} from "@react-pdf-levelup/core";
+
+const COLORS = {
+  ink: "#1a1a2e",
+  slate: "#5c6079",
+  muted: "#94a0b8",
+  border: "#e6e8f0",
+};
+
+const styleTd = {
+  borderRadius: 5,
+  marginBottom: 3,
+  marginRight: 3,
+};
+
+const heatData: { nombre: string; valores: number[] }[] = [
+  { nombre: "Teclado mecánico", valores: [72, 65, 88, 91] },
+  { nombre: "Monitor 27\"", valores: [40, 55, 60, 48] },
+  { nombre: "Mouse inalámbrico", valores: [85, 90, 95, 99] },
+  { nombre: "Docking station", valores: [20, 15, 30, 25] },
+  { nombre: "Webcam HD", valores: [58, 62, 70, 66] },
+  { nombre: "Silla ergonómica", valores: [45, 50, 68, 72] },
+];
+
+function toHex(n: number) {
+  const h = Math.max(0, Math.min(255, Math.round(n))).toString(16);
+  return h.length === 1 ? "0" + h : h;
+}
+
+function heatColor(valor: number) {
+  const stops = [
+    { v: 0, c: [254, 243, 199] },
+    { v: 50, c: [251, 146, 60] },
+    { v: 100, c: [185, 28, 28] },
+  ];
+  let lower = stops[0];
+  let upper = stops[stops.length - 1];
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (valor >= stops[i].v && valor <= stops[i + 1].v) {
+      lower = stops[i];
+      upper = stops[i + 1];
+      break;
+    }
+  }
+  const range = upper.v - lower.v || 1;
+  const t = (valor - lower.v) / range;
+  const rgb = lower.c.map((c, i) => c + t * (upper.c[i] - c));
+  return `#${toHex(rgb[0])}${toHex(rgb[1])}${toHex(rgb[2])}`;
+}
+
+function heatTextColor(valor: number) {
+  return valor >= 55 ? "#ffffff" : "#3a2b00";
+}
+
+const heatCellContent = (v: number) => (
+  <Small style={{ fontSize: 8.5, fontWeight: 700, color: heatTextColor(v) }}>{v}%</Small>
+);
+
+const TablaHeatmap: React.FC = () => (
+  <Table
+    cellHeight={26}
+    grid="not-grid"
+    borderColor={COLORS.border}
+    textColor={COLORS.ink}
+    zebraColor="#ffffff"
+    headerBackground="#ffffff"
+  >
+    <Thead>
+      <Tr>
+        <Th>
+          <Small style={{ fontSize: 9, color: COLORS.slate, fontWeight: 700 }}>Producto</Small>
+        </Th>
+        {trimestres.map((t) => (
+          <Th key={t} textAlign="center">
+            <Small style={{ fontSize: 9, color: COLORS.slate, fontWeight: 700 }}>{t}</Small>
+          </Th>
+        ))}
+      </Tr>
+    </Thead>
+    <Tbody>
+      {heatData.map((fila) => (
+        <Tr key={fila.nombre}>
+          <Td>
+            <Small style={{ fontSize: 9, color: COLORS.ink }}>{fila.nombre}</Small>
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.valores[0]) }}>
+            {heatCellContent(fila.valores[0])}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.valores[1]) }}>
+            {heatCellContent(fila.valores[1])}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.valores[2]) }}>
+            {heatCellContent(fila.valores[2])}
+          </Td>
+          <Td textAlign="center" style={{ ...styleTd, backgroundColor: heatColor(fila.valores[3]) }}>
+            {heatCellContent(fila.valores[3])}
+          </Td>
+        </Tr>
+      ))}
+    </Tbody>
+  </Table>
+);
+
+const TablaHeatmapDocumento: React.FC = () => (
+  <Layout>
+    <TablaHeatmap />
+  </Layout>
+);
+
+export default TablaHeatmapDocumento;
+```

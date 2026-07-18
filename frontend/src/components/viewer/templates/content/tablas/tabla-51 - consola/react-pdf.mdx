@@ -1,0 +1,151 @@
+# Tabla 8 -> Consola
+
+```tsx
+import React from "react";
+import { 
+      Document,
+      Page,
+      StyleSheet,
+      Text,
+      View
+    } from "@react-pdf-levelup/core";
+
+const COLORS = {
+  slate: "#5c6079",
+  accentPrimary: "#4338ca",
+
+  terminalBg: "#0d1117",
+  terminalDim: "#8b949e",
+  terminalText: "#c9d1d9",
+  terminalBorder: "#21262d",
+};
+
+const SPACING = { xs: 2, sm: 4, md: 8, base: 12, lg: 16, xl: 24 };
+
+const logsTerminal: { hora: string; nivel: "OK" | "WARN" | "ERROR"; servicio: string; mensaje: string }[] = [
+  { hora: "09:12:03", nivel: "OK", servicio: "api-gateway", mensaje: "healthcheck passed" },
+  { hora: "09:14:41", nivel: "WARN", servicio: "auth-service", mensaje: "token near expiry" },
+  { hora: "09:15:02", nivel: "OK", servicio: "billing", mensaje: "invoice batch completed" },
+  { hora: "09:18:37", nivel: "ERROR", servicio: "worker-queue", mensaje: "job retry limit reached" },
+  { hora: "09:21:10", nivel: "OK", servicio: "cache", mensaje: "eviction cycle finished" },
+  { hora: "09:23:55", nivel: "WARN", servicio: "storage", mensaje: "disk usage above 80%" },
+];
+
+const nivelColor: Record<string, string> = { OK: "#39d353", WARN: "#e3b341", ERROR: "#f85149" };
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 30,
+    backgroundColor: "#ffffff",
+  },
+
+  eyebrow: {
+    fontSize: 9,
+    color: COLORS.accentPrimary,
+    letterSpacing: 2,
+    marginBottom: SPACING.xs,
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: "Helvetica-Bold",
+    color: "#1a1a1a",
+    marginBottom: SPACING.md,
+  },
+  sectionRuleAccent: {
+    height: 2,
+    width: 40,
+    backgroundColor: COLORS.accentPrimary,
+    marginBottom: SPACING.md,
+  },
+  intro: {
+    fontSize: 10,
+    color: COLORS.slate,
+    lineHeight: 1.5,
+    marginBottom: SPACING.lg,
+  },
+
+  window: {
+    backgroundColor: COLORS.terminalBg,
+    borderRadius: 6,
+    padding: 12,
+  },
+  headerRow: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 8,
+  },
+  headerCell: {
+    fontFamily: "Courier-Bold",
+    fontSize: 8,
+    color: COLORS.terminalDim,
+    textTransform: "uppercase",
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  rowBorder: {
+    borderTopWidth: 0.5,
+    borderTopColor: COLORS.terminalBorder,
+    borderTopStyle: "solid",
+  },
+  cell: {
+    fontFamily: "Courier",
+    fontSize: 8,
+    color: COLORS.terminalText,
+  },
+  cellNivel: {
+    fontFamily: "Courier-Bold",
+    fontSize: 8,
+  },
+
+  colHora: { flex: 14 },
+  colNivel: { flex: 10 },
+  colServicio: { flex: 22 },
+  colMensaje: { flex: 54 },
+});
+
+const TerminalConsola: React.FC = () => (
+  <>
+    <View style={styles.window}>
+      <View style={styles.headerRow}>
+        <Text style={[styles.headerCell, styles.colHora]}>Hora</Text>
+        <Text style={[styles.headerCell, styles.colNivel]}>Nivel</Text>
+        <Text style={[styles.headerCell, styles.colServicio]}>Servicio</Text>
+        <Text style={[styles.headerCell, styles.colMensaje]}>Mensaje</Text>
+      </View>
+      {logsTerminal.map((log, idx) => (
+        <View
+          key={idx}
+          style={idx === 0 ? styles.row : [styles.row, styles.rowBorder]}
+        >
+          <Text style={[styles.cell, styles.colHora]}>{log.hora}</Text>
+          <Text
+            style={[
+              styles.cellNivel,
+              styles.colNivel,
+              { color: nivelColor[log.nivel] },
+            ]}
+          >
+            {log.nivel}
+          </Text>
+          <Text style={[styles.cell, styles.colServicio]}>{log.servicio}</Text>
+          <Text style={[styles.cell, styles.colMensaje]}>{log.mensaje}</Text>
+        </View>
+      ))}
+    </View>
+  </>
+);
+
+const App: React.FC = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <TerminalConsola />
+    </Page>
+  </Document>
+);
+
+export default App
+```
