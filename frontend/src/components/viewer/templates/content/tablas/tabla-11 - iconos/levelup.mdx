@@ -1,0 +1,84 @@
+# Tabla 6 -> Gradiant
+
+```tsx
+import * as React from "react";
+import {
+  Layout,
+  Div,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+} from "@react-pdf-levelup/core";
+import { Icon } from "@react-pdf-levelup/icons";
+
+
+const COLORS = {
+  border: "#e6e8f0",
+  accentPrimary: "#4338ca",
+  muted: "#94a0b8",
+  slate: "#5c6079",
+  ink: "#1a1a2e",
+};
+
+interface Empleado {
+  id: string;
+  nombre: string;
+  departamento: string;
+  antiguedad: string;
+}
+
+const empleadosCompacta: (Empleado & { icono: string })[] = [
+  { id: "C-01", nombre: "Julián Peña", departamento: "Ventas", antiguedad: "3 años", icono: "TrendingUp" },
+  { id: "C-02", nombre: "Renata Salas", departamento: "Soporte", antiguedad: "2 años", icono: "Headset" },
+  { id: "C-03", nombre: "Óscar Lima", departamento: "Logística", antiguedad: "5 años", icono: "Truck" },
+  { id: "C-04", nombre: "Paula Nieto", departamento: "Recursos Humanos", antiguedad: "6 años", icono: "Users" },
+  { id: "C-05", nombre: "Iván Cabrera", departamento: "Finanzas", antiguedad: "1 año", icono: "Wallet" },
+];
+
+// Estilos reutilizables — evitan repetir paddingLeft/paddingRight/fontSize en cada celda
+const cellPad = { paddingLeft: 8, paddingRight: 8 };
+const tdSmall = { ...cellPad, fontSize: 8, color: COLORS.muted };
+const tdText = { ...cellPad, fontSize: 9.5 };
+const tdMuted = { ...tdText, color: COLORS.slate };
+
+const CompactaIconos: React.FC = () => (
+  <>
+    <Table
+      cellHeight={22}
+      grid="modern"
+      borderColor={COLORS.border}
+      textColor={COLORS.ink}
+      headerBackground="#fff"
+      zebraColor="transparent"
+      style={{ borderRadius: 4, border: `1px solid ${COLORS.border}` }}
+      
+    >
+      <Tbody >
+        {empleadosCompacta.map((emp) => (
+          <Tr key={emp.id} >
+            <Td style={cellPad} text={false} width="10%">
+              <Icon ico={emp.icono} size={11} color={COLORS.accentPrimary} />
+            </Td>
+            <Td style={tdSmall} width="10%">{emp.id}</Td>
+            <Td style={tdText} >{emp.nombre}</Td>
+            <Td style={tdMuted}>{emp.departamento}</Td>
+            <Td style={tdText} textAlign="right">
+              {emp.antiguedad}
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </>
+);
+
+const Components: React.FC = () => (
+  <Layout>
+    <CompactaIconos />
+  </Layout>
+);
+
+export default Components;
+
+```

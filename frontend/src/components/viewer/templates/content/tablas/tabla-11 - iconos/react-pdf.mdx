@@ -1,0 +1,114 @@
+# Tabla 6 -> Gradiant
+
+```tsx
+import * as React from "react";
+import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+import { Icon } from "@react-pdf-levelup/icons"; // opcional, ver nota al final
+
+const COLORS = {
+  border: "#e6e8f0",
+  accentPrimary: "#4338ca",
+  muted: "#94a0b8",
+  slate: "#5c6079",
+  ink: "#1a1a2e",
+};
+
+interface Empleado {
+  id: string;
+  nombre: string;
+  departamento: string;
+  antiguedad: string;
+}
+
+const empleadosCompacta: (Empleado & { icono: string })[] = [
+  { id: "C-01", nombre: "Julián Peña", departamento: "Ventas", antiguedad: "3 años", icono: "TrendingUp" },
+  { id: "C-02", nombre: "Renata Salas", departamento: "Soporte", antiguedad: "2 años", icono: "Headset" },
+  { id: "C-03", nombre: "Óscar Lima", departamento: "Logística", antiguedad: "5 años", icono: "Truck" },
+  { id: "C-04", nombre: "Paula Nieto", departamento: "Recursos Humanos", antiguedad: "6 años", icono: "Users" },
+  { id: "C-05", nombre: "Iván Cabrera", departamento: "Finanzas", antiguedad: "1 año", icono: "Wallet" },
+];
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 32,
+    backgroundColor: "#ffffff",
+  },
+  table: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 22,
+  },
+  rowBorder: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+  },
+  cellPad: {
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  colIcon: { flex: 6 },
+  colId: { flex: 14 },
+  colNombre: { flex: 35 },
+  colDepartamento: { flex: 30 },
+  colAntiguedad: { flex: 15 },
+  tdSmall: {
+    fontSize: 8,
+    color: COLORS.muted,
+  },
+  tdText: {
+    fontSize: 9.5,
+    color: COLORS.ink,
+  },
+  tdMuted: {
+    fontSize: 9.5,
+    color: COLORS.slate,
+  },
+  tdRight: {
+    textAlign: "right",
+  },
+});
+
+const CompactaIconos: React.FC = () => (
+  <View style={styles.table}>
+    {empleadosCompacta.map((emp, idx) => (
+      <View
+        key={emp.id}
+        style={[styles.row, idx > 0 && styles.rowBorder]}
+      >
+        <View style={[styles.cellPad, styles.colIcon]}>
+          <Icon ico={emp.icono} size={11} color={COLORS.accentPrimary} />
+        </View>
+        <View style={[styles.cellPad, styles.colId]}>
+          <Text style={styles.tdSmall}>{emp.id}</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colNombre]}>
+          <Text style={styles.tdText}>{emp.nombre}</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colDepartamento]}>
+          <Text style={styles.tdMuted}>{emp.departamento}</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colAntiguedad]}>
+          <Text style={[styles.tdText, styles.tdRight]}>{emp.antiguedad}</Text>
+        </View>
+      </View>
+    ))}
+  </View>
+);
+
+const MyDocument: React.FC = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <CompactaIconos />
+    </Page>
+  </Document>
+);
+
+export default MyDocument;
+```

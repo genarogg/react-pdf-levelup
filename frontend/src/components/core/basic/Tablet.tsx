@@ -24,6 +24,8 @@ interface TableProps {
    */
   background?: string;
   grid?: GridMode;
+  /** Cualquier otra prop de View (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
+  [key: string]: any;
 }
 
 interface TheadProps {
@@ -32,12 +34,29 @@ interface TheadProps {
   textAlign?: "left" | "center" | "right";
   borderColor?: string;
   textColor?: string;
+  /** Cualquier otra prop de View (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
+  [key: string]: any;
 }
 
 interface CellProps {
   children?: React.ReactNode;
   style?: any;
+  /**
+   * Ancho de la celda, igual que en `style={{ width: ... }}`.
+   * Acepta cualquier valor válido de @react-pdf/renderer:
+   *   width="100%"   width="120px"   width={120}
+   * Si no se especifica, Tr calcula el ancho proporcional automáticamente
+   * según el colSpan de todas las celdas de la fila. Si SÍ se especifica,
+   * ese valor manual tiene prioridad y el cálculo automático se omite
+   * para esta celda.
+   */
   width?: string | number;
+  /**
+   * Alto de la celda, igual que en `style={{ height: ... }}` (se aplica
+   * como minHeight internamente). Acepta cualquier valor válido:
+   *   height="40px"   height={40}
+   * Si no se especifica, usa el `cellHeight` del Table (default 22).
+   */
   height?: string | number;
   colSpan?: number;
   isFirst?: boolean;
@@ -58,6 +77,8 @@ interface CellProps {
    * sin el `Text` intermedio.
    */
   text?: boolean;
+  /** Cualquier otra prop de View/Text (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
+  [key: string]: any;
 }
 
 /* ================= HELPERS ================= */
@@ -182,6 +203,7 @@ const Table: React.FC<TableProps> = ({
   zebraColor = "#eeeeee",
   background = "#fff",
   grid = "grid",
+  ...rest
 }) => {
   const flatStyle = flattenStyle(style);
   const outerRadius = toNumber(flatStyle.borderRadius);
@@ -254,6 +276,7 @@ const Table: React.FC<TableProps> = ({
             : null,
           restStyle,
         ]}
+        {...rest}
       >
         {content}
       </View>
@@ -269,6 +292,7 @@ const Thead: React.FC<TheadProps> = ({
   textAlign = "left",
   borderColor,
   textColor,
+  ...rest
 }) => {
   const context = useContext(TableContext);
 
@@ -296,6 +320,7 @@ const Thead: React.FC<TheadProps> = ({
             : null,
           style,
         ]}
+        {...rest}
       >
         {children}
       </View>
@@ -305,7 +330,7 @@ const Thead: React.FC<TheadProps> = ({
 
 /* ================= TBODY ================= */
 
-const Tbody: React.FC<TableProps> = ({ children, borderColor, textColor }) => {
+const Tbody: React.FC<TableProps> = ({ children, borderColor, textColor, ...rest }) => {
   const context = useContext(TableContext);
 
   const rows = React.Children.toArray(children) as React.ReactElement<any>[];
@@ -324,6 +349,7 @@ const Tbody: React.FC<TableProps> = ({ children, borderColor, textColor }) => {
           React.cloneElement(row, {
             isLastRow: idx === count - 1,
             isOdd: idx % 2 === 1,
+            ...rest,
           })
         )}
       </>
@@ -338,6 +364,7 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
   style,
   isLastRow = false,
   isOdd = false,
+  ...rest
 }) => {
   const { grid, borderColor } = useContext(TableContext);
 
@@ -364,14 +391,20 @@ const Tr: React.FC<TableProps & { isLastRow?: boolean; isOdd?: boolean }> = ({
         },
         style,
       ]}
+      {...rest}
     >
       {elements.map((child, idx) => {
         const isFirst = idx === 0;
         const isLast = idx === count - 1;
         const span = child.props.colSpan ?? 1;
-        // El ancho ya incluye el colSpan resuelto: Td/Th solo lo aplican,
-        // no vuelven a multiplicarlo.
-        const width = `${((100 * span) / totalUnits).toFixed(2)}%`;
+        // Si la celda ya trae su propio width (ej. width="120px" o
+        // width="30%"), se respeta tal cual. Si no lo trae, se calcula
+        // el ancho proporcional por colSpan como antes. El ancho
+        // calculado ya incluye el colSpan resuelto: Td/Th solo lo
+        // aplican, no vuelven a multiplicarlo.
+        const width =
+          child.props.width ??
+          `${((100 * span) / totalUnits).toFixed(2)}%`;
 
         return React.cloneElement(child, {
           width,
@@ -396,6 +429,7 @@ const Th: React.FC<CellProps> = ({
   isLastRow = false,
   textAlign: propTextAlign,
   text = true,
+  ...rest
 }) => {
   const { cellHeight, textAlign, borderColor, textColor, grid } =
     useContext(TableContext);
@@ -425,6 +459,7 @@ const Th: React.FC<CellProps> = ({
         },
         style,
       ]}
+      {...rest}
     >
       {text
         ? children != null && (
@@ -450,6 +485,7 @@ const Td: React.FC<CellProps> = ({
   isOdd = false,
   textAlign: propTextAlign,
   text = true,
+  ...rest
 }) => {
   const { cellHeight, textAlign, borderColor, textColor, zebraColor, grid, innerRadius } =
     useContext(TableContext);
@@ -486,6 +522,7 @@ const Td: React.FC<CellProps> = ({
           : null,
         style,
       ]}
+      {...rest}
     >
       {text
         ? children != null && (
