@@ -46,8 +46,23 @@ const QRstyle: React.FC<QRstyleProps> = ({
   ...rest
 }) => {
 
+  // Ver nota en QR.tsx: el tamaño forzado va DESPUÉS de `style` para que no
+  // pueda ser sobreescrito, y flexShrink/alignSelf blindan contra padres flex
+  // (Row/Col) que intenten estirar o comprimir el contenedor.
+  const squareForce = {
+    width: size,
+    height: size,
+    minWidth: size,
+    minHeight: size,
+    maxWidth: size,
+    maxHeight: size,
+    flexShrink: 0,
+    flexGrow: 0,
+    alignSelf: "center" as const,
+  }
+
   return (
-    <View style={[styles.qrContainer, style]} {...rest}>
+    <View style={[styles.qrContainer, style, squareForce]} {...rest}>
       <Image
         style={{ width: size, height: size }}
         src={generateQRstyleAsBase64({

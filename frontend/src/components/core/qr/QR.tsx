@@ -1,19 +1,23 @@
 import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
-import { generateQRAsBase64, addLogoToQR } from "./QRGenerator"
+import { generateQRstyleAsBase64, type QRstyleOptions } from "./QRstyleGenerator"
 
 type ViewBaseProps = React.ComponentProps<typeof View>
 
-interface QRProps extends Omit<ViewBaseProps, "style"> {
+export interface QRstyleProps extends Omit<ViewBaseProps, "style"> {
   url: string
   size?: number
   style?: any
+  image?: string
+  dotsOptions?: QRstyleOptions["dotsOptions"]
+  backgroundOptions?: QRstyleOptions["backgroundOptions"]
+  imageOptions?: QRstyleOptions["imageOptions"]
+  cornersSquareOptions?: QRstyleOptions["cornersSquareOptions"]
+  cornersDotOptions?: QRstyleOptions["cornersDotOptions"]
+  // Fallback/Compatibility props
   colorDark?: string
   colorLight?: string
   margin?: number
-  logo?: string
-  logoWidth?: number
-  logoHeight?: number
   errorCorrectionLevel?: "L" | "M" | "Q" | "H"
 }
 
@@ -22,67 +26,66 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    margin: 10,
   },
 })
 
-const errorLevelMap: Record<number, "L" | "M" | "Q" | "H"> = {
-  0: "L",
-  1: "M",
-  2: "Q",
-  3: "H",
-}
-
-const QR: React.FC<QRProps> = ({
+const QRstyle: React.FC<QRstyleProps> = ({
   url,
-  size = 150,
+  size = 300,
   style,
-  colorDark = "#000000",
-  colorLight = "#ffffff",
-  margin = 0,
-  logo = "",
-  logoWidth = 30,
-  logoHeight = 30,
+  image,
+  dotsOptions,
+  backgroundOptions,
+  imageOptions,
+  cornersSquareOptions,
+  cornersDotOptions,
+  colorDark,
+  colorLight,
+  margin,
   errorCorrectionLevel,
   ...rest
 }) => {
-  const resolvedErrorLevel = errorCorrectionLevel ?? (logo ? "H" : "M")
 
-  // Factory function: `@react-pdf/renderer` acepta que `src` sea una función
-  // (la invoca y espera su resultado) — ver `resolveSource` en
-  // `@react-pdf/layout`. No hay fallback a un servicio externo: si la
-  // generación local falla, no hay nada confiable que mostrar, así que se
-  // deja sin imagen en vez de depender de la disponibilidad de un tercero.
-  const resolveQRSrc = async (): Promise<string | undefined> => {
-    try {
-      const baseQrDataUrl = await generateQRAsBase64({
-        url,
-        size,
-        colorDark,
-        colorLight,
-        margin,
-        errorCorrectionLevel:
-          typeof resolvedErrorLevel === "number"
-            ? errorLevelMap[resolvedErrorLevel] ?? "M"
-            : resolvedErrorLevel,
-      })
-
-      if (!baseQrDataUrl) return undefined
-
-      return logo && logoWidth && logoHeight
-        ? await addLogoToQR(baseQrDataUrl, logo, logoWidth, logoHeight)
-        : baseQrDataUrl
-    } catch (error) {
-      console.error("Error generando QR:", error)
-      return undefined
-    }
+  // Ver nota en QR.tsx: el tamaño forzado va DESPUÉS de `style` para que no
+  // pueda ser sobreescrito, y flexShrink/alignSelf blindan contra padres flex
+  // (Row/Col) que intenten estirar o comprimir el contenedor.
+  const squareForce = {
+    width: size,
+    height: size,
+    minWidth: size,
+    minHeight: size,
+    maxWidth: size,
+    maxHeight: size,
+    flexShrink: 0,
+    flexGrow: 0,
+    alignSelf: "center" as const,
   }
 
   return (
-    <View style={[styles.qrContainer, style]} {...rest}>
-      <Image src={resolveQRSrc} style={{ width: size, height: size }} />
+    <View style={[styles.qrContainer, style, squareForce]} {...rest}>
+      <Image
+        style={{ width: size, height: size }}
+        src={generateQRstyleAsBase64({
+          url,
+          width: size,
+          height: size,
+          image,
+          dotsOptions: dotsOptions ?? (colorDark ? { color: colorDark } : undefined),
+          backgroundOptions: backgroundOptions ?? (colorLight ? { color: colorLight } : undefined),
+          imageOptions: {
+            ...imageOptions,
+            margin: imageOptions?.margin !== undefined ? imageOptions.margin : margin,
+          },
+          cornersSquareOptions,
+          cornersDotOptions,
+          fallbackColorDark: colorDark,
+          fallbackColorLight: colorLight,
+          fallbackMargin: margin,
+          fallbackErrorCorrectionLevel: errorCorrectionLevel,
+        })}
+      />
     </View>
   )
 }
 
-export default QR
+export default QRstyle
