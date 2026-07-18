@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "@react-pdf/renderer";
 
 /* ================= TYPES ================= */
 
-type GridMode = "grid" | "modern";
+type GridMode = "grid" | "modern" | "not-grid";
 
 interface TableProps {
   children: React.ReactNode;
@@ -187,10 +187,14 @@ const Table: React.FC<TableProps> = ({
   const outerRadius = toNumber(flatStyle.borderRadius);
   const styleBorderWidth = extractBorderWidth(flatStyle);
   // grid="grid" agrega su propio borde fino de 1 al Table (ver más abajo).
-  // Si además hay borderRadius, ese borde también dispara el bug #395, así
-  // que lo tratamos igual que un borde explícito del `style`.
+  // grid="not-grid" NO dibuja ningún borde real: @react-pdf/renderer (vía
+  // pdfkit) no reconoce la keyword CSS "transparent" ni rgba() con alpha
+  // como borderColor — _normalizeColor devuelve null para esos valores, lo
+  // que hace que el motor conserve el último color de stroke usado
+  // (típicamente negro) en vez de no dibujar nada. Por eso "not-grid" usa
+  // borderWidth 0 en vez de intentar un borde "invisible" por color.
   const gridBorderWidth = grid === "grid" ? 1 : 0;
-  const outerBorderWidth = styleBorderWidth || gridBorderWidth;
+  const outerBorderWidth = grid === "not-grid" ? 0 : styleBorderWidth || gridBorderWidth;
   const outerBorderColor = extractBorderColor(flatStyle) ?? borderColor;
 
   const useRadiusFix = outerRadius > 0 && outerBorderWidth > 0;
@@ -235,6 +239,8 @@ const Table: React.FC<TableProps> = ({
           // queda absorbido por esa simulación (backgroundColor + padding),
           // así que no lo agregamos aparte: hacerlo reintroduciría el
           // mismo combo borderWidth+borderRadius que causa el bug #395.
+          // not-grid nunca llega acá con outerBorderWidth > 0, así que no
+          // necesita su propia rama.
           grid === "grid" && !useRadiusFix && {
             borderWidth: 1,
             borderColor,
@@ -409,16 +415,24 @@ const Th: React.FC<CellProps> = ({
           borderRightWidth: isLast ? 0 : 1,
           borderBottomWidth: isLastRow ? 0 : 1,
         },
+        // not-grid no dibuja borde (@react-pdf/renderer no soporta
+        // colores "transparentes" — ver nota en Table más arriba), pero
+        // compensa con padding el mismo pixel que ocuparía la línea de
+        // grid, para que el tamaño de celda no cambie entre modos.
+        grid === "not-grid" && {
+          paddingRight: isLast ? 8 : 9,
+          paddingBottom: isLastRow ? 0 : 1,
+        },
         style,
       ]}
     >
-      {text ? (
-        <Text style={{ textAlign: finalTextAlign, color: textColor }}>
-          {children}
-        </Text>
-      ) : (
-        children
-      )}
+      {text
+        ? children != null && (
+            <Text style={{ textAlign: finalTextAlign, color: textColor }}>
+              {children}
+            </Text>
+          )
+        : children}
     </View>
   );
 };
@@ -456,6 +470,14 @@ const Td: React.FC<CellProps> = ({
           borderRightWidth: isLast ? 0 : 1,
           borderBottomWidth: isLastRow ? 0 : 1,
         },
+        // not-grid no dibuja borde (@react-pdf/renderer no soporta
+        // colores "transparentes" — ver nota en Table más arriba), pero
+        // compensa con padding el mismo pixel que ocuparía la línea de
+        // grid, para que el tamaño de celda no cambie entre modos.
+        grid === "not-grid" && {
+          paddingRight: isLast ? 8 : 9,
+          paddingBottom: isLastRow ? 0 : 1,
+        },
         isLastRow && isFirst && innerRadius
           ? { borderBottomLeftRadius: innerRadius }
           : null,
@@ -465,13 +487,13 @@ const Td: React.FC<CellProps> = ({
         style,
       ]}
     >
-      {text ? (
-        <Text style={{ textAlign: finalTextAlign, color: textColor }}>
-          {children}
-        </Text>
-      ) : (
-        children
-      )}
+      {text
+        ? children != null && (
+            <Text style={{ textAlign: finalTextAlign, color: textColor }}>
+              {children}
+            </Text>
+          )
+        : children}
     </View>
   );
 };
