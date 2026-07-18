@@ -1,0 +1,97 @@
+# tabla 40 - planes
+
+```tsx
+import React from "react";
+import { 
+      Document,
+      Page,
+      StyleSheet,
+      Text,
+      View
+    } from "@react-pdf-levelup/core";
+
+type Plan = { nombre: string; destacado?: boolean; valores: string[] };
+
+const filasComparativa = ["Precio", "Usuarios", "Almacenamiento", "Soporte", "Exportar PDF", "Integraciones"];
+
+const planes: Plan[] = [
+  { nombre: "Básico", valores: ["$9/mes", "1", "5 GB", "Email", "No", "No"] },
+  { nombre: "Pro", destacado: true, valores: ["$29/mes", "5", "50 GB", "Prioritario", "Sí", "Sí"] },
+  { nombre: "Premium", valores: ["$79/mes", "Ilimitado", "500 GB", "24/7 dedicado", "Sí", "Sí"] },
+];
+
+const comp = StyleSheet.create({
+  table: {
+    display: "flex", flexDirection: "column", borderWidth: 1, borderColor: "#e5e5e5",
+    borderRadius: 8, overflow: "hidden",
+  },
+  headerRow: { display: "flex", flexDirection: "row" },
+  labelCellEmpty: { width: 140, backgroundColor: "#fafafa", borderRightWidth: 0.5, borderRightColor: "#e5e5e5" },
+  planHeader: {
+    flex: 1, padding: 10, borderRightWidth: 0.5, borderRightColor: "#e5e5e5",
+    alignItems: "center", backgroundColor: "#fafafa",
+  },
+  planHeaderDestacado: { backgroundColor: "#4f46e5" },
+  planBadge: {
+    fontSize: 6.5, fontFamily: "Helvetica-Bold", color: "#ffffff", backgroundColor: "#a5b4fc",
+    paddingVertical: 2, paddingHorizontal: 6, borderRadius: 8, marginBottom: 4, textTransform: "uppercase",
+  },
+  planNombre: { fontSize: 11, fontFamily: "Helvetica-Bold", color: "#1a1a1a" },
+  planNombreDestacado: { color: "#ffffff" },
+  row: { display: "flex", flexDirection: "row", borderTopWidth: 0.5, borderTopColor: "#eeeeee" },
+  labelCell: {
+    width: 140, padding: 9, fontSize: 8.5, fontFamily: "Helvetica-Bold", color: "#555555",
+    backgroundColor: "#fafafa", borderRightWidth: 0.5, borderRightColor: "#e5e5e5",
+  },
+  valueCell: {
+    flex: 1, padding: 9, fontSize: 9, textAlign: "center", color: "#333333",
+    borderRightWidth: 0.5, borderRightColor: "#e5e5e5",
+  },
+  valueCellDestacado: { backgroundColor: "#eef2ff", fontFamily: "Helvetica-Bold", color: "#4338ca" },
+  page: { padding: 32, backgroundColor: "#ffffff" },
+});
+
+function TablaComparativa() {
+  return (
+    <View style={comp.table}>
+      <View style={comp.headerRow}>
+        <View style={comp.labelCellEmpty} />
+        {planes.map((pl) => (
+          <View
+            key={pl.nombre}
+            style={[comp.planHeader, pl.destacado ? comp.planHeaderDestacado : {}]}
+          >
+            <Text style={[comp.planNombre, pl.destacado ? comp.planNombreDestacado : {}]}>
+              {pl.nombre}
+            </Text>
+            {pl.destacado && <Text style={comp.planBadge}>Más popular</Text>}
+          </View>
+        ))}
+      </View>
+      {filasComparativa.map((fila, ri) => (
+        <View style={comp.row} key={fila}>
+          <Text style={comp.labelCell}>{fila}</Text>
+          {planes.map((pl) => (
+            <Text
+              key={pl.nombre}
+              style={[comp.valueCell, pl.destacado ? comp.valueCellDestacado : {}]}
+            >
+              {pl.valores[ri]}
+            </Text>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+const MyDocument: React.FC = () => (
+  <Document>
+    <Page size="A4" style={comp.page}>
+      <TablaComparativa />
+    </Page>
+  </Document>
+);
+
+export default MyDocument;
+```

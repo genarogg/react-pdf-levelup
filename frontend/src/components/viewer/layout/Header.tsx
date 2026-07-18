@@ -114,6 +114,16 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 </Link>
                             )}
 
+                            {isTemplates && (
+                                <Link
+                                    to="/templates"
+
+                                    className="group relative flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-all duration-300 rounded-md px-2 py-1"
+                                >
+                                    <span>Templates</span>
+                                </Link>
+                            )}
+
 
 
                             {isPlayground && (

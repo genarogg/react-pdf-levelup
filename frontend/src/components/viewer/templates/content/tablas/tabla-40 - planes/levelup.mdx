@@ -1,0 +1,101 @@
+# tabla 40 - planes
+
+```tsx
+type Plan = { nombre: string; destacado?: boolean; valores: string[] };
+
+const planes: Plan[] = [
+  { nombre: "", valores: ["", "", "", "", "", ""] },
+  { nombre: "", valores: ["Precio", "Usuarios", "Almacenamiento", "Soporte", "Exportar PDF", "Integraciones"] },
+  { nombre: "Básico", valores: ["$9/mes", "1", "5 GB", "Email", "No", "No"] },
+  {
+    nombre: "Pro",
+    destacado: true,
+    valores: ["$29/mes", "5", "50 GB", "Prioritario", "Sí", "Sí"],
+  },
+  {
+    nombre: "Premium",
+    valores: ["$79/mes", "Ilimitado", "500 GB", "24/7 dedicado", "Sí", "Sí"],
+  },
+];
+
+const [columnaLabels, ...planesReales] = planes;
+const filasComparativa = columnaLabels.valores;
+
+const planHeader = { alignItems: "center", paddingTop: 10, paddingBottom: 10 };
+const planHeaderDestacado = { backgroundColor: "#4f46e5" };
+const planBadge = {
+  fontSize: 6.5,
+  fontFamily: "Helvetica-Bold",
+  color: "#ffffff",
+  backgroundColor: "#a5b4fc",
+  paddingVertical: 2,
+  paddingHorizontal: 6,
+  borderRadius: 8,
+  marginBottom: 4,
+  textTransform: "uppercase",
+};
+const planNombre = { fontSize: 11, fontFamily: "Helvetica-Bold", color: "#1a1a1a" };
+const planNombreDestacado = { color: "#ffffff" };
+const valueCellDestacado = { backgroundColor: "#eef2ff" };
+
+function TablaComparativa() {
+  return (
+    <Table
+      style={{ borderRadius: 8, overflow: "hidden", borderWidth: 2 }}
+      borderColor="#e6e8f0"
+      cellHeight={32}
+      zebraColor="#fff"
+      headerBackground="#fafafa"
+    >
+      <Thead>
+        <Tr>
+          {planesReales.map((pl) => (
+            <Th
+              key={pl.nombre}
+              text={false}
+              style={[planHeader, pl.destacado ? planHeaderDestacado : {}]}
+            >
+              <Text style={[planNombre, pl.destacado ? planNombreDestacado : {}]}>
+                {pl.nombre}
+              </Text>
+              {pl.destacado && <Text style={planBadge}>Más popular</Text>}
+            </Th>
+          ))}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {filasComparativa.map((fila, ri) => (
+          <Tr key={fila}>
+            {planesReales.map((pl) => (
+              <Td
+                key={pl.nombre}
+                text={false}
+                style={pl.destacado ? valueCellDestacado : undefined}
+              >
+                <Text
+                  style={{
+                    fontSize: 9,
+                    textAlign: "center",
+                    color: pl.destacado ? "#4338ca" : "#333333",
+                    fontFamily: pl.destacado ? "Helvetica-Bold" : "Helvetica",
+                  }}
+                >
+                  {pl.valores[ri]}
+                </Text>
+              </Td>
+            ))}
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  );
+}
+
+const MyDocument: React.FC = () => (
+  <Layout size="A4" meta={{ title: "Comparativa de Planes", language: "es-ES" }}>
+    <TablaComparativa />
+  </Layout>
+);
+
+export default MyDocument;
+```
