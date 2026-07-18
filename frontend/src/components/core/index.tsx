@@ -17,6 +17,8 @@ import QR from "./qr/QR"
 import QRstyle from "./qr/QRstyle"
 import ChartJS from "./charts/ChartJS"
 
+import Divider from "./extend/Divider"
+
 import {
   PDFViewer,
   Document,
@@ -108,6 +110,7 @@ export {
   ChartJS,
   Gradiant,
   Badge,
+  Divider,
   // funciones
   decodeBase64Pdf,
   generatePDF,
