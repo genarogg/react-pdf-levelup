@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom"
-import { Table2, BadgeCheck, IdCard } from "lucide-react"
+import { Table2, BadgeCheck, IdCard, List } from "lucide-react"
 import Layout from "../layout"
 
 interface TemplateSectionCard {
@@ -38,6 +38,13 @@ const SECTIONS: TemplateSectionCard[] = [
         description: "Plantillas de carnets e identificaciones.",
         icon: <IdCard className="w-6 h-6" />,
         available: false,
+    },
+    {
+        slug: "list",
+        title: "Listas",
+        description: "Componentes de lista: simples, con iconos y variantes.",
+        icon: <List className="w-6 h-6" />,
+        available: true,
     },
 ]
 
