@@ -1,11 +1,19 @@
 import React from "react"
-import { View, Text, StyleSheet } from "@react-pdf/renderer"
+import { View, Text, StyleSheet, Svg, Circle, Rect } from "@react-pdf/renderer"
 
 interface ListProps {
   children: React.ReactNode
   style?: any
   start?: number
   type?: "disc" | "circle" | "square" | "decimal" | "lower-alpha" | "upper-alpha" | "lower-roman" | "upper-roman"
+  fontSize?: number
+  // Color del bullet (marcador de texto o forma SVG). Si no se especifica:
+  // - Marcador de texto (disc/decimal/alpha/roman): hereda el color del texto ambiente
+  //   (de cualquier View/Text ancestro con `color` en su style), igual que cualquier <Text>.
+  // - Forma SVG (circle/square): @react-pdf/renderer NO resuelve herencia de color para
+  //   fill/stroke de Svg (probado con currentColor y sin fill: siempre cae a un valor fijo,
+  //   nunca al color heredado). Sin bulletColor, se usa negro (#000) como default seguro.
+  bulletColor?: string
 }
 
 interface ListItemProps {
@@ -25,28 +33,59 @@ const styles = StyleSheet.create({
   li: {
     marginBottom: 5,
     flexDirection: "row",
+    alignItems: "center",
   },
   bulletPoint: {
     width: 15,
     marginRight: 5,
-    fontSize: 12,
+  },
+  bulletShapeWrap: {
+    width: 15,
+    marginRight: 5,
+    alignItems: "center",
   },
   itemContent: {
     flex: 1,
   },
 })
 
-// Marcadores lista desordenada
-const getBulletPoint = (type = "disc") => {
+// Marcadores lista desordenada que SÍ existen en WinAnsi (fuentes base tipo Helvetica)
+// "circle" y "square" NO se resuelven de forma fiable como glifo de texto: se dibujan aparte (ver ShapeBullet)
+const getBulletPoint = (type: string) => {
   switch (type) {
-    case "circle":
-      return "○"
-    case "square":
-      return "■"
     case "disc":
+      return "•"
+    case "none":
+      return ""
     default:
       return "•"
   }
+}
+
+// Formas dibujadas 100% en SVG vectorial: no dependen de ningún glifo de fuente,
+// así que nunca se corrompen (a diferencia de "○" U+25CB, que Helvetica no mapea bien).
+const SHAPE_SIZE = 6
+
+const ShapeBullet: React.FC<{ type: "circle" | "square"; color?: string }> = ({
+  type,
+  color = "#000",
+}) => {
+  return (
+    <Svg width={SHAPE_SIZE} height={SHAPE_SIZE} viewBox={`0 0 ${SHAPE_SIZE} ${SHAPE_SIZE}`}>
+      {type === "circle" ? (
+        <Circle
+          cx={SHAPE_SIZE / 2}
+          cy={SHAPE_SIZE / 2}
+          r={SHAPE_SIZE / 2 - 0.5}
+          stroke={color}
+          strokeWidth={1}
+          fill="none"
+        />
+      ) : (
+        <Rect x={0} y={0} width={SHAPE_SIZE} height={SHAPE_SIZE} fill={color} />
+      )}
+    </Svg>
+  )
 }
 
 // Marcadores lista ordenada
@@ -88,13 +127,18 @@ const toRoman = (num: number): string => {
 }
 
 // UL
-export const UL: React.FC<ListProps> = ({ children, style, type = "disc" }) => {
+export const UL: React.FC<ListProps> = ({ children, style, type = "disc", fontSize, bulletColor }) => {
   const childrenWithBullets = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
+      const childProps = child.props as { fontSize?: number; bulletColor?: string }
       return React.cloneElement(child as React.ReactElement<any>, {
         bulletType: type,
         isOrdered: false,
         index: index + 1,
+        // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del UL —
+        // de lo contrario cloneElement siempre pisa la prop local con la del padre.
+        fontSize: childProps.fontSize ?? fontSize,
+        bulletColor: childProps.bulletColor ?? bulletColor,
       })
     }
     return child
@@ -104,14 +148,19 @@ export const UL: React.FC<ListProps> = ({ children, style, type = "disc" }) => {
 }
 
 // OL
-export const OL: React.FC<ListProps> = ({ children, style, type = "decimal", start = 1 }) => {
+export const OL: React.FC<ListProps> = ({ children, style, type = "decimal", start = 1, fontSize, bulletColor }) => {
   const childrenWithNumbers = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
+      const childProps = child.props as { fontSize?: number; bulletColor?: string }
       return React.cloneElement(child as React.ReactElement<any>, {
         bulletType: type,
         isOrdered: true,
         index: index + 1,
         start,
+        // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del OL —
+        // de lo contrario cloneElement siempre pisa la prop local con la del padre.
+        fontSize: childProps.fontSize ?? fontSize,
+        bulletColor: childProps.bulletColor ?? bulletColor,
       })
     }
     return child
@@ -127,17 +176,74 @@ export const LI: React.FC<
     isOrdered?: boolean
     index?: number
     start?: number
+    fontSize?: number
+    bulletColor?: string
   }
-> = ({ children, style, bulletType = "disc", isOrdered = false, index = 1, start = 1 }) => {
+> = ({
+  children,
+  style,
+  bulletType = "disc",
+  isOrdered = false,
+  index = 1,
+  start = 1,
+  fontSize,
+  bulletColor,
+}) => {
+  const isShapeBullet = !isOrdered && (bulletType === "circle" || bulletType === "square")
+  const hasExplicitFontSize = fontSize !== undefined
+  const hasExplicitBulletColor = bulletColor !== undefined
+
   const marker = isOrdered
     ? getOrderedMarker(index, bulletType, start)
     : getBulletPoint(bulletType)
 
+  // Sin fontSize explícito: dejamos que `alignItems: "center"` del row centre el bullet
+  // dinámicamente contra la altura real del texto (funciona bien en el caso default,
+  // sin lineHeight custom, que es lo más común).
+  //
+  // Con fontSize explícito: el usuario nos dijo el tamaño real del texto, así que
+  // calculamos el offset nosotros mismos y lo forzamos con alignSelf: "flex-start",
+  // anulando el auto-centrado del row. Esto es necesario porque un lineHeight > 1
+  // en @react-pdf/renderer añade espacio extra DEBAJO de la tinta (no repartido
+  // arriba/abajo), así que el auto-centrado por altura de caja se desvía cuanto
+  // mayor es el lineHeight — con fontSize conocido evitamos depender de esa caja.
+  //
+  // Nota: se usa spread condicional (array vacío vs array de un elemento) en vez de
+  // `condicion ? {...} : null`, porque el tipado de Style en @react-pdf/renderer no
+  // acepta `null` como miembro de un array de estilos.
+  const shapeExtraStyles = hasExplicitFontSize
+    ? [{ alignSelf: "flex-start" as const, marginTop: (fontSize! - SHAPE_SIZE) / 2 }]
+    : []
+
+  // Marcador de TEXTO (disc/decimal/alpha/roman): si no se pasa bulletColor, NO fijamos
+  // color explícito — así el <Text> hereda de forma nativa el color de cualquier
+  // View/Text ancestro (confirmado: @react-pdf/renderer sí cascada `color` en Text).
+  const markerExtraStyles = [
+    ...(hasExplicitFontSize ? [{ fontSize: fontSize! }] : []),
+    ...(hasExplicitBulletColor ? [{ color: bulletColor! }] : []),
+  ]
+
   return (
     <View style={[styles.li, style]}>
-      <Text style={styles.bulletPoint}>{marker}</Text>
+      {isShapeBullet ? (
+        <View style={[styles.bulletShapeWrap, ...shapeExtraStyles]}>
+          {/* Marcador de FORMA (circle/square, SVG): a diferencia del Text de arriba,
+              @react-pdf/renderer NO resuelve herencia de color para fill/stroke de Svg
+              (probado con currentColor como atributo, como style, y con fill omitido:
+              las 3 vías caen a un valor fijo, nunca al color heredado del ancestro).
+              Por eso aquí SÍ hace falta un fallback fijo — ShapeBullet usa "#000" si
+              no se pasa bulletColor. */}
+          <ShapeBullet type={bulletType as "circle" | "square"} color={bulletColor} />
+        </View>
+      ) : (
+        <Text style={[styles.bulletPoint, ...markerExtraStyles]}>{marker}</Text>
+      )}
       <View style={styles.itemContent}>
-        {typeof children === "string" ? <Text>{children}</Text> : children}
+        {typeof children === "string" ? (
+          <Text style={hasExplicitFontSize ? { fontSize } : undefined}>{children}</Text>
+        ) : (
+          children
+        )}
       </View>
     </View>
   )
