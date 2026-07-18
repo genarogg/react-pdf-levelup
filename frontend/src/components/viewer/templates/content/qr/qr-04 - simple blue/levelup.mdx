@@ -1,0 +1,42 @@
+# qr 04 - simple blue
+
+```tsx
+import React from "react";
+import {
+  Container,
+  Div,
+  H1,
+  Layout,
+  P,
+  Small
+} from "@react-pdf-levelup/core";
+import {
+  QR
+} from "@react-pdf-levelup/qr";
+
+const Components = ({ data = {} }) => {
+  const { restaurantName = 'Trattoria Bella Vista', url = 'https://example.com/menu' } = data;
+
+  return (
+    <Layout
+      size="A4"
+      backgroundColor="#1a1a2e"
+      footer={<Small style={{ color: '#8890b5' }}>Escanea para ver el menú digital · {restaurantName}</Small>}
+    >
+      <Container>
+        <Div style={{ alignItems: 'center', paddingTop: 60 }}>
+          <Small style={{ fontSize: 10, color: '#c9a869', letterSpacing: 3 }}>BIENVENIDOS</Small>
+          <H1 style={{ color: '#ffffff', marginTop: 6 }}>{restaurantName}</H1>
+          <Div style={{ height: 2, width: 60, backgroundColor: '#c9a869', borderRadius: 2, marginTop: 10, marginBottom: 30 }} />
+          <Div style={{ backgroundColor: '#ffffff', padding: 18, borderRadius: 14 }}>
+            <QR url={url} size={200} colorDark="#1a1a2e" colorLight="#ffffff" margin={4} />
+          </Div>
+          <P style={{ color: '#c8cbe0', marginTop: 20, fontSize: 11 }}>Escanea el código para ver nuestro menú</P>
+        </Div>
+      </Container>
+    </Layout>
+  );
+};
+
+export default Components;
+```

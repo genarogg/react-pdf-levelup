@@ -1,0 +1,65 @@
+```tsx
+const COLORS = {
+  ink: "#1a1a2e",
+  roseBg: "#fdf2f8",
+  roseAccent: "#db2777",
+};
+
+interface Empleado {
+  id: string;
+  nombre: string;
+  departamento: string;
+  antiguedad: string;
+}
+
+const empleadosPastel: (Empleado & { equipo: string })[] = [
+  { id: "EQ-01", nombre: "Sofía Delgado", departamento: "Diseño", antiguedad: "3 años", equipo: "Producto" },
+  { id: "EQ-02", nombre: "Mateo Rojas", departamento: "UX Research", antiguedad: "2 años", equipo: "Producto" },
+  { id: "EQ-03", nombre: "Valentina Cruz", departamento: "Frontend", antiguedad: "1 año", equipo: "Ingeniería" },
+  { id: "EQ-04", nombre: "Andrés Morales", departamento: "Backend", antiguedad: "4 años", equipo: "Ingeniería" },
+  { id: "EQ-05", nombre: "Camila Vidal", departamento: "QA", antiguedad: "2 años", equipo: "Ingeniería" },
+];
+
+const PastelSuave: React.FC = () => (
+  <>
+    <Div style={{ backgroundColor: COLORS.roseBg, borderRadius: 10, padding: 10 }}>
+      <Table
+        cellHeight={26}
+        grid="modern"
+        borderColor={COLORS.roseBg}
+        textColor={COLORS.ink}
+        headerBackground="#fbe3ef"
+        zebraColor={COLORS.roseBg}
+        style={{marginBottom: 0}}
+      >
+        <Thead textColor={COLORS.roseAccent} style={{ borderRadius: 10 }}>
+          <Tr>
+            <Th style={{ fontWeight: 700, paddingLeft: 8 }}>ID</Th>
+            <Th style={{ fontWeight: 700, paddingLeft: 8 }}>Nombre</Th>
+            <Th style={{ fontWeight: 700, paddingLeft: 8 }}>Equipo</Th>
+            <Th style={{ fontWeight: 700, paddingLeft: 8 }}>Antigüedad</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {empleadosPastel.map((p) => (
+            <Tr key={p.id}>
+              <Td style={{ paddingLeft: 8 }}>{p.id}</Td>
+              <Td style={{ paddingLeft: 8 }}>{p.nombre}</Td>
+              <Td style={{ paddingLeft: 8 }}>{p.equipo}</Td>
+              <Td style={{ paddingLeft: 8 }}>{p.antiguedad}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </Div>
+  </>
+);
+
+const Components: React.FC = () => (
+  <Layout>
+    <PastelSuave />
+  </Layout>
+);
+
+export default Components;
+```

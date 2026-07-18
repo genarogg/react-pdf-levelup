@@ -1,0 +1,64 @@
+# qr 06 - simple social network
+
+```tsx
+import React from "react";
+import {
+  Col6,
+  Container,
+  Div,
+  Layout,
+  Row,
+  Strong
+} from "@react-pdf-levelup/core";
+import {
+  QR
+} from "@react-pdf-levelup/qr";
+
+const COLORS = {
+  border: '#e6e8f0',
+  cardBg: '#ffffff',
+  accentPrimary: '#4338ca',
+};
+
+const card = {
+  backgroundColor: COLORS.cardBg,
+  border: `1px solid ${COLORS.border}`,
+  borderRadius: 10,
+  padding: 16,
+};
+
+const frame = (bg = '#fafafa') => ({ padding: 10, backgroundColor: bg, borderRadius: 8, marginBottom: 10 });
+
+const Components = ({ data = {} }) => {
+  const networks = data.networks || [
+    { label: 'Instagram', url: 'https://instagram.com/example', color: '#E1306C' },
+    { label: 'LinkedIn', url: 'https://linkedin.com/company/example', color: '#0A66C2' },
+    { label: 'YouTube', url: 'https://youtube.com/@example', color: '#FF0000' },
+    { label: 'Sitio Web', url: 'https://example.com', color: COLORS.accentPrimary },
+  ];
+  const colWrap = { paddingLeft: 7, paddingRight: 7, marginBottom: 14 };
+
+  return (
+    <Layout size="A4" backgroundColor="#ffffff">
+      <Container>
+        <Row>
+          {networks.map((n, i) => (
+            <Col6 key={i}>
+              <Div style={colWrap}>
+                <Div style={{ ...card, alignItems: 'center' }}>
+                  <Div style={{ ...frame('#fff') }}>
+                    <QR url={n.url} size={110} colorDark={n.color} colorLight="#ffffff" margin={2} />
+                  </Div>
+                  <Strong style={{ fontSize: 11 }}>{n.label}</Strong>
+                </Div>
+              </Div>
+            </Col6>
+          ))}
+        </Row>
+      </Container>
+    </Layout>
+  );
+};
+
+export default Components;
+```

@@ -1,0 +1,43 @@
+# Qr-12 - Style Orange
+
+```tsx
+import React from "react";
+import { 
+      Container,
+      Div,
+      H1,
+      Layout,
+      Small
+    } from "@react-pdf-levelup/core";
+import { 
+      QRstyle
+    } from "@react-pdf-levelup/qr";
+
+
+const Components = () => {
+  return (
+    <Layout size="A4" backgroundColor="#ea580c">
+       <Container>
+        <Div style={{ alignItems: 'center', paddingTop: 40 }}>
+          <Small style={{ color: '#ffedd5', letterSpacing: 3 }}>EN VIVO · 19/20</Small>
+          <H1 style={{ color: '#ffffff', marginTop: 8, textAlign: 'center' }}>REACT PDF LEVELUP QR</H1>
+          <Div style={{ backgroundColor: '#ffffff', padding: 18, borderRadius: 16 }}>
+            <QRstyle
+              url="https://react-pdf-levelup.com"
+              size={200}
+              dotsOptions={{ color: '#ea580c', type: 'classy-rounded' }}
+              backgroundOptions={{ color: '#ffffff' }}
+              imageOptions={{ imageSize: 0.3, margin: 4 }}
+              cornersSquareOptions={{ type: 'extra-rounded', color: '#ea580c' }}
+              cornersDotOptions={{ type: 'dot', color: '#ea580c' }}
+            />
+          </Div>
+          <Small style={{ color: '#ffedd5', marginTop: 16 }}>Boletos y línea de tiempo del festival</Small>
+        </Div>
+    </Container>
+    </Layout>
+  );
+};
+
+export default Components;
+```

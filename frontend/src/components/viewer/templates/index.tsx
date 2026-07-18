@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from "react-router-dom"
-import { Table2, BadgeCheck, IdCard, List } from "lucide-react"
+import { Table2, BadgeCheck, IdCard, List, Package, QrCode, Barcode } from "lucide-react"
 import Layout from "../layout"
 
 interface TemplateSectionCard {
@@ -41,9 +41,30 @@ const SECTIONS: TemplateSectionCard[] = [
     },
     {
         slug: "list",
-        title: "Listas",
+        title: "Lists",
         description: "Componentes de lista: simples, con iconos y variantes.",
         icon: <List className="w-6 h-6" />,
+        available: true,
+    },
+    {
+        slug: "catalog",
+        title: "Catálogo",
+        description: "Componentes de catálogo listos para mostrar productos y datos.",
+        icon: <Package className="w-6 h-6" />,
+        available: true,
+    },
+    {
+        slug: "qr",
+        title: "QR",
+        description: "Generadores y diseños de códigos QR para documentos y tickets.",
+        icon: <QrCode className="w-6 h-6" />,
+        available: true,
+    },
+    {
+        slug: "codebar",
+        title: "Codebar",
+        description: "Componentes de código de barras y etiquetas listos para imprimir.",
+        icon: <Barcode className="w-6 h-6" />,
         available: true,
     },
 ]

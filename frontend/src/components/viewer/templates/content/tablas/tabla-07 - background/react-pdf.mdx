@@ -1,0 +1,128 @@
+```tsx
+import * as React from "react";
+import { Document, Page, View, Text, StyleSheet } from "@react-pdf/renderer";
+
+const COLORS = {
+  ink: "#1a1a2e",
+  roseBg: "#fdf2f8",
+  roseHeader: "#fbe3ef",
+  roseAccent: "#db2777",
+};
+
+interface Empleado {
+  id: string;
+  nombre: string;
+  departamento: string;
+  antiguedad: string;
+}
+
+const empleadosPastel: (Empleado & { equipo: string })[] = [
+  { id: "EQ-01", nombre: "Sofía Delgado", departamento: "Diseño", antiguedad: "3 años", equipo: "Producto" },
+  { id: "EQ-02", nombre: "Mateo Rojas", departamento: "UX Research", antiguedad: "2 años", equipo: "Producto" },
+  { id: "EQ-03", nombre: "Valentina Cruz", departamento: "Frontend", antiguedad: "1 año", equipo: "Ingeniería" },
+  { id: "EQ-04", nombre: "Andrés Morales", departamento: "Backend", antiguedad: "4 años", equipo: "Ingeniería" },
+  { id: "EQ-05", nombre: "Camila Vidal", departamento: "QA", antiguedad: "2 años", equipo: "Ingeniería" },
+];
+
+const styles = StyleSheet.create({
+  page: {
+    padding: 32,
+    backgroundColor: "#ffffff",
+  },
+  wrapper: {
+    backgroundColor: COLORS.roseBg,
+    borderRadius: 10,
+    padding: 10,
+  },
+  table: {
+    display: "flex",
+    flexDirection: "column",
+    borderRadius: 6,
+    overflow: "hidden",
+  },
+  headerRow: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: COLORS.roseHeader,
+    minHeight: 26,
+    alignItems: "center",
+  },
+  row: {
+    display: "flex",
+    flexDirection: "row",
+    minHeight: 26,
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.roseBg,
+  },
+  rowZebra: {
+    backgroundColor: "#fbe9f2",
+  },
+  cellPad: {
+    paddingLeft: 8,
+  },
+  colId: { flex: 20 },
+  colNombre: { flex: 30 },
+  colEquipo: { flex: 25 },
+  colAntiguedad: { flex: 25 },
+  thText: {
+    fontSize: 9.5,
+    fontWeight: 700,
+    color: COLORS.roseAccent,
+  },
+  tdText: {
+    fontSize: 9.5,
+    color: COLORS.ink,
+  },
+});
+
+const PastelSuave: React.FC = () => (
+  <View style={styles.wrapper}>
+    <View style={styles.table}>
+      <View style={styles.headerRow}>
+        <View style={[styles.cellPad, styles.colId]}>
+          <Text style={styles.thText}>ID</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colNombre]}>
+          <Text style={styles.thText}>Nombre</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colEquipo]}>
+          <Text style={styles.thText}>Equipo</Text>
+        </View>
+        <View style={[styles.cellPad, styles.colAntiguedad]}>
+          <Text style={styles.thText}>Antigüedad</Text>
+        </View>
+      </View>
+      {empleadosPastel.map((p, idx) => (
+        <View
+          key={p.id}
+          style={[styles.row, idx % 2 === 1 ? styles.rowZebra : {}]}
+        >
+          <View style={[styles.cellPad, styles.colId]}>
+            <Text style={styles.tdText}>{p.id}</Text>
+          </View>
+          <View style={[styles.cellPad, styles.colNombre]}>
+            <Text style={styles.tdText}>{p.nombre}</Text>
+          </View>
+          <View style={[styles.cellPad, styles.colEquipo]}>
+            <Text style={styles.tdText}>{p.equipo}</Text>
+          </View>
+          <View style={[styles.cellPad, styles.colAntiguedad]}>
+            <Text style={styles.tdText}>{p.antiguedad}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  </View>
+);
+
+const MyDocument: React.FC = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <PastelSuave />
+    </Page>
+  </Document>
+);
+
+export default MyDocument;
+```

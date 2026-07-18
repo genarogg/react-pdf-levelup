@@ -11,6 +11,10 @@ const PdfViewer = lazy(() => import("./components/viewer/pdfViewer"))
 const Playground = lazy(() => import("./components/viewer/playground"))
 const Templates = lazy(() => import("./components/viewer/templates"))
 const TablasSection = lazy(() => import("./components/viewer/templates/components/sections/tablas"))
+const ListSection = lazy(() => import("./components/viewer/templates/components/sections/list"))
+const CatalogSection = lazy(() => import("./components/viewer/templates/components/sections/catalog"))
+const QrSection = lazy(() => import("./components/viewer/templates/components/sections/qr"))
+const CodebarSection = lazy(() => import("./components/viewer/templates/components/sections/codebar"))
 
 const root = document.getElementById("root")
 if (!root) {
@@ -27,6 +31,10 @@ createRoot(root).render(
           <Route path="/playground/template/:templateId" element={<Playground />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/templates/tablas/*" element={<TablasSection />} />
+          <Route path="/templates/list/*" element={<ListSection />} />
+          <Route path="/templates/catalog/*" element={<CatalogSection />} />
+          <Route path="/templates/qr/*" element={<QrSection />} />
+          <Route path="/templates/codebar/*" element={<CodebarSection />} />
           {/* <Route path="/viewer" element={<PdfViewer />} /> */}
         </Routes>
       </Suspense>

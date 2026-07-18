@@ -1,0 +1,39 @@
+# Qr-13 - Style Ollama
+
+```tsx
+import React from "react";
+import {
+  Container,
+  Div,
+  H2,
+  Layout,
+  Small
+} from "@react-pdf-levelup/core";
+import {
+  QRstyle
+} from "@react-pdf-levelup/qr";
+
+const Components = () => {
+  return (
+    <Layout size="A4" backgroundColor="#fbf7ef">
+      <Container>
+        <Div style={{ alignItems: 'center', paddingTop: 60 }}>
+          <H2 style={{ marginTop: 10, color: '#4a3f2f' }}>Elena & Mateo</H2>
+          <Div style={{ height: 1, width: 50, backgroundColor: '#b08d57', marginTop: 3, marginBottom: 3 }} />
+          <QRstyle
+            url="https://react-pdf-levelup.com"
+            size={170}
+            dotsOptions={{ color: '#b08d57', type: 'dots' }}
+            backgroundOptions={{ color: '#fbf7ef' }}
+            cornersSquareOptions={{ type: 'dot', color: '#b08d57' }}
+            cornersDotOptions={{ type: 'dot', color: '#b08d57' }}
+          />
+          <Small style={{ color: '#8a7a5c', marginTop: 14 }}>Confirma tu asistencia (RSVP)</Small>
+        </Div>
+      </Container>
+    </Layout>
+  );
+};
+
+export default Components;
+```

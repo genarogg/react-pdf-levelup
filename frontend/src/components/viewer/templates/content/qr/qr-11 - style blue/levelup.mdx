@@ -1,0 +1,38 @@
+# Tabla 1 — Corporativa 
+
+```tsx
+import React from "react";
+import {
+  Container,
+  Div,
+  H3,
+  Layout
+} from "@react-pdf-levelup/core";
+import {
+  QRstyle
+} from "@react-pdf-levelup/qr";
+
+const Components = () => {
+  return (
+    <Layout size="A4" backgroundColor="#0f0f1a">
+      <Container>
+        <Div style={{ alignItems: 'center', paddingTop: 30 }}>
+          <Div style={{ marginTop: 24, backgroundColor: '#151527', padding: 20, borderRadius: 16 }}>
+            <QRstyle
+              url="https://react-pdf-levelup.com"
+              size={200}
+              dotsOptions={{ color: '#7dd3fc', type: 'extra-rounded' }}
+              backgroundOptions={{ color: '#151527' }}
+              cornersSquareOptions={{ type: 'extra-rounded', color: '#38bdf8' }}
+              cornersDotOptions={{ type: 'dot', color: '#7dd3fc' }}
+            />
+          </Div>
+          <H3 style={{ color: '#ffffff', marginTop: 6, textTransform: " uppercase" }}>React pdf levelup / qr</H3>
+        </Div>
+      </Container>
+    </Layout>
+  );
+};
+
+export default Components;
+```

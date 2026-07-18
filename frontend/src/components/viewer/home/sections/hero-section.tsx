@@ -79,7 +79,7 @@ export function HeroSection() {
               <Link to="/templates">
                 <Button size="lg" variant="outline" className="w-full sm:w-auto border-border bg-transparent text-foreground hover:bg-secondary">
                   templates
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  {/* <ArrowRight className="ml-2 h-4 w-4" /> */}
                 </Button>
               </Link>
               <a href="/docs/es/get-started">

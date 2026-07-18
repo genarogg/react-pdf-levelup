@@ -1,0 +1,71 @@
+# Tabla 1 — Corporativa 
+
+```tsx
+import { Layout, H1, P, Table, Thead, Tbody, Tr, Th, Td } from '@react-pdf-levelup/core'
+
+interface ProductoBase {
+  sku: string
+  producto: string
+  categoria: string
+  precio: string
+}
+
+const productosCorporativa: ProductoBase[] = [
+  { sku: "LOR-1001", producto: "Lorem ipsum dolor", categoria: "Sit amet", precio: "$1,299.00" },
+  { sku: "LOR-1002", producto: "Consectetur adipiscing", categoria: "Elit sed", precio: "$549.00" },
+  { sku: "LOR-1003", producto: "Sed do eiusmod", categoria: "Tempor incididunt", precio: "$89.90" },
+  { sku: "LOR-1004", producto: "Ut labore et dolore", categoria: "Magna aliqua", precio: "$320.00" },
+  { sku: "LOR-1005", producto: "Ut enim ad minim", categoria: "Veniam quis", precio: "$129.50" },
+  { sku: "LOR-1006", producto: "Nostrud exercitation", categoria: "Ullamco laboris", precio: "$179.00" },
+]
+
+const COLORS = {
+  ink: "#1a1a2e",
+  borderGray: "#cccccc",
+  corporateHeaderBg: "#1a1a2e",
+  zebraStripe: "#f5f5f5",
+}
+
+const thStyle = { fontWeight: 700, paddingLeft: 10, paddingRight: 10 }
+const tdStyle = { paddingLeft: 10, paddingRight: 10, paddingTop: 8, paddingBottom: 8 }
+
+const TablaCorporativa: React.FC = ({data = productosCorporativa} : any) => (
+  <Layout size="A4" meta={{ title: "Tabla Corporativa", language: "es" }}>
+
+    <Table
+      cellHeight={28}
+      grid="grid"
+      borderColor={COLORS.borderGray}
+      textColor={COLORS.ink}
+      headerBackground={COLORS.corporateHeaderBg}
+      zebraColor={COLORS.zebraStripe}
+      style={{ marginBottom: 24 }}
+    >
+      <Thead textColor="#ffffff">
+        <Tr>
+          <Th style={thStyle}>SKU</Th>
+          <Th style={thStyle}>Producto</Th>
+          <Th style={thStyle}>Categoría</Th>
+          <Th style={thStyle} textAlign="right">
+            Precio
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.map((p) => (
+          <Tr key={p.sku}>
+            <Td style={tdStyle}>{p.sku}</Td>
+            <Td style={tdStyle}>{p.producto}</Td>
+            <Td style={tdStyle}>{p.categoria}</Td>
+            <Td style={tdStyle} textAlign="right">
+              {p.precio}
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </Layout>
+)
+
+export default TablaCorporativa
+```
