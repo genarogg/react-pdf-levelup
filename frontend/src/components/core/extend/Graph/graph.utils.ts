@@ -16,11 +16,16 @@ export const DEFAULT_COLORS = [
   "#65a30d",
 ]
 
+// FIX: si `colors` llega como array vacío (explícito), colors[index % 0] da
+// NaN -> undefined. Cae a DEFAULT_COLORS en vez de romper.
 export const colorFor = (
   index: number,
   explicit?: string,
   colors: string[] = DEFAULT_COLORS,
-): string => explicit ?? colors[index % colors.length]
+): string => {
+  const palette = colors.length ? colors : DEFAULT_COLORS
+  return explicit ?? palette[index % palette.length]
+}
 
 // ---------------------------------------------------------------------------
 // Formato de número consistente para labels dentro del SVG: sin separador
@@ -35,8 +40,8 @@ export const truncate = (label: string, maxChars = 12): string =>
 
 // ---------------------------------------------------------------------------
 // Dominio Y y ticks. yMin = 0 si todos los valores son >= 0 (caso común de
-// bar/line), si no yMin = mínimo real. yMax siempre con 8% de padding para
-// que la barra/línea más alta no toque el borde del área de dibujo.
+// bar/line), si no yMin = mínimo real con el mismo padding del 8% que yMax
+// (antes solo se aplicaba arriba, dejando el punto más bajo pegado al borde).
 // ---------------------------------------------------------------------------
 
 export const computeYDomain = (series: GraphSeries[]): { yMin: number; yMax: number } => {
@@ -44,14 +49,18 @@ export const computeYDomain = (series: GraphSeries[]): { yMin: number; yMax: num
   const min = Math.min(...values, 0)
   const max = Math.max(...values, 0)
 
-  const yMin = min >= 0 ? 0 : min
-  const range = max - yMin
+  const yMinBase = min >= 0 ? 0 : min
+  const range = max - yMinBase
   const yMax = max + range * 0.08 || 1
+  // FIX: mismo padding proporcional para el mínimo cuando es negativo.
+  const yMin = yMinBase === 0 ? 0 : yMinBase - range * 0.08
 
   return { yMin, yMax }
 }
 
+// FIX: count=1 hacía (count-1)=0 -> step=Infinity -> Infinity*0=NaN.
 export const computeYTicks = (yMin: number, yMax: number, count = 5): number[] => {
+  if (count <= 1) return [yMin]
   const step = (yMax - yMin) / (count - 1)
   return Array.from({ length: count }, (_, i) => yMin + step * i)
 }
@@ -156,8 +165,12 @@ export const arcPath = (
 // polilínea recta directamente (no necesita esta función).
 // ---------------------------------------------------------------------------
 
+// FIX: separado el caso de 1 punto del de "menos de 2" — antes ambos
+// devolvían "" y, en un área con un punto aislado (gap a los dos lados),
+// el path final terminaba arrancando con "L" en vez de "M" (inválido).
 export const smoothPath = (points: Array<{ x: number; y: number }>): string => {
-  if (points.length < 2) return ""
+  if (points.length === 0) return ""
+  if (points.length === 1) return `M ${points[0].x} ${points[0].y}`
   if (points.length === 2) {
     return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`
   }
@@ -186,6 +199,9 @@ export const smoothPath = (points: Array<{ x: number; y: number }>): string => {
 // bar, line y area.
 // ---------------------------------------------------------------------------
 
+// Escala "point": reparte N posiciones de punta a punta del área (la primera
+// pegada al borde izquierdo, la última al derecho). Correcta para line/area,
+// donde cada dato es un punto puntual sobre el eje.
 export const xForIndex = (
   index: number,
   count: number,
@@ -195,8 +211,31 @@ export const xForIndex = (
   return layout.chartX + (index / (count - 1)) * layout.chartW
 }
 
+// NUEVO (fix bug 1): escala "banda": cada categoría ocupa un slot de ancho
+// chartW/count, centrado. Es exactamente el centro de grupo que ya usa
+// renderBarChart (chartX + i*groupW + groupW/2), así que labels y barras
+// quedan alineadas.
+export const xForBand = (
+  index: number,
+  count: number,
+  layout: ChartLayout,
+): number => {
+  const bandW = layout.chartW / count
+  return layout.chartX + (index + 0.5) * bandW
+}
+
 export const yForValue = (value: number, layout: ChartLayout): number => {
   const { yMin, yMax, chartY, chartH } = layout
   const range = yMax - yMin || 1
   return chartY + chartH - ((value - yMin) / range) * chartH
+}
+
+// NUEVO (fix bug 3): equivalente a yForValue pero para el eje horizontal,
+// usado por horizontal-bar. A diferencia del cálculo anterior
+// (value/maxValue), este sí contempla yMin negativo, así que el cero no
+// queda fijo en chartX cuando hay valores negativos en el dataset.
+export const xForValue = (value: number, layout: ChartLayout): number => {
+  const { yMin, yMax, chartX, chartW } = layout
+  const range = yMax - yMin || 1
+  return chartX + ((value - yMin) / range) * chartW
 }

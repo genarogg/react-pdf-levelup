@@ -5,6 +5,7 @@ export type {
   GraphSeries,
   ChartLayout,
   PdfGraphProps,
+  LegendEntry,
 } from "./graph.types"
 export {
   DEFAULT_COLORS,
@@ -18,5 +19,7 @@ export {
   arcPath,
   smoothPath,
   xForIndex,
+  xForBand,
+  xForValue,
   yForValue,
 } from "./graph.utils"

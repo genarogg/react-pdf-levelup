@@ -1,6 +1,6 @@
 import React from "react"
 import { Circle, G, Line, Path, Rect, Svg, Text as SvgText, View, Text as PdfText } from "@react-pdf/renderer"
-import type { ChartLayout, GraphSeries, PdfGraphProps } from "./graph.types"
+import type { ChartLayout, GraphSeries, LegendEntry, PdfGraphProps } from "./graph.types"
 import {
   DEFAULT_COLORS,
   arcPath,
@@ -9,7 +9,9 @@ import {
   fmtNum,
   smoothPath,
   truncate,
+  xForBand,
   xForIndex,
+  xForValue,
   yForValue,
 } from "./graph.utils"
 import { styles } from "./graph.styles"
@@ -84,7 +86,12 @@ const YAxis: React.FC<{ layout: ChartLayout }> = ({ layout }) => (
   </G>
 )
 
-const XAxisLabels: React.FC<{ layout: ChartLayout }> = ({ layout }) => (
+// FIX (bug 1): antes posicionaba siempre con xForIndex (escala "point"),
+// que reparte las N labels de punta a punta del área. Eso solo coincide con
+// donde caen los puntos en line/area. Para bar, las barras se agrupan en
+// bandas centradas (ver renderBarChart), así que la label tiene que usar
+// xForBand para quedar alineada con su grupo. `mode` decide cuál usar.
+const XAxisLabels: React.FC<{ layout: ChartLayout; mode: "band" | "point" }> = ({ layout, mode }) => (
   <G>
     <Line
       x1={layout.chartX}
@@ -95,7 +102,10 @@ const XAxisLabels: React.FC<{ layout: ChartLayout }> = ({ layout }) => (
       strokeWidth={1}
     />
     {layout.xLabels.map((label, i) => {
-      const x = xForIndex(i, layout.xLabels.length, layout)
+      const x =
+        mode === "band"
+          ? xForBand(i, layout.xLabels.length, layout)
+          : xForIndex(i, layout.xLabels.length, layout)
       return (
         <AxisText
           key={i}
@@ -150,7 +160,16 @@ const renderBarChart = (
                 fill={colorFor(sIndex, point.color ?? serie.color, colors)}
               />
               {showValues && (
-                <AxisText x={x + barW / 2} y={yTop - 3} fill={AXIS_TEXT_COLOR} textAnchor="middle">
+                // FIX (bug 5): offset invertido según el signo. Antes
+                // siempre restaba 3 (asumiendo barra positiva creciendo
+                // hacia abajo del label); con valores negativos el label
+                // quedaba pegado adentro de la barra.
+                <AxisText
+                  x={x + barW / 2}
+                  y={point.value < 0 ? yTop + 9 : yTop - 3}
+                  fill={AXIS_TEXT_COLOR}
+                  textAnchor="middle"
+                >
                   {fmtNum(point.value)}
                 </AxisText>
               )}
@@ -165,6 +184,15 @@ const renderBarChart = (
 // ---------------------------------------------------------------------------
 // Horizontal-bar: mismo esquema rotado — filas en vez de columnas, barra al
 // 50% del alto de fila, ancho proporcional al valor.
+//
+// FIX (bug 3): antes el ancho salía de (value/maxValue) e ignoraba yMin,
+// asumiendo que el cero siempre está en chartX. Con valores negativos eso
+// clampeaba a 0 (Math.max(0, barW)) y la barra desaparecía. Ahora se usa
+// xForValue, que sí contempla yMin, y el origen/ancho de la barra se
+// calculan contra zeroX (dónde cae el valor 0), no contra chartX fijo.
+// También se agrega el eje de valores (ticks + labels) que antes no existía
+// — layout.yTicks ya estaba calculado (horizontal-bar no es isRadial) pero
+// no se usaba en ningún lado.
 // ---------------------------------------------------------------------------
 
 const renderHorizontalBarChart = (
@@ -177,7 +205,7 @@ const renderHorizontalBarChart = (
   const nSeries = series.length
   const rowH = layout.chartH / nCategories
   const barH = (rowH * 0.5) / nSeries
-  const maxValue = layout.yMax || 1
+  const zeroX = xForValue(0, layout)
 
   return (
     <G>
@@ -189,6 +217,32 @@ const renderHorizontalBarChart = (
         stroke={AXIS_COLOR}
         strokeWidth={1}
       />
+      <Line
+        x1={layout.chartX}
+        y1={layout.chartY + layout.chartH}
+        x2={layout.chartX + layout.chartW}
+        y2={layout.chartY + layout.chartH}
+        stroke={AXIS_COLOR}
+        strokeWidth={1}
+      />
+      {layout.yTicks.map((tick, i) => {
+        const x = xForValue(tick, layout)
+        return (
+          <G key={`vtick-${i}`}>
+            <Line
+              x1={x}
+              y1={layout.chartY + layout.chartH}
+              x2={x}
+              y2={layout.chartY + layout.chartH + 3}
+              stroke={AXIS_COLOR}
+              strokeWidth={1}
+            />
+            <AxisText x={x} y={layout.chartY + layout.chartH + 12} fill={AXIS_TEXT_COLOR} textAnchor="middle">
+              {fmtNum(tick)}
+            </AxisText>
+          </G>
+        )
+      })}
       {layout.xLabels.map((label, i) => {
         const y = layout.chartY + i * rowH + rowH / 2
         return (
@@ -203,19 +257,26 @@ const renderHorizontalBarChart = (
 
           const rowStart = layout.chartY + i * rowH + rowH * 0.25
           const y = rowStart + sIndex * barH
-          const barW = (point.value / maxValue) * layout.chartW
+          const valueX = xForValue(point.value, layout)
+          const barX = Math.min(zeroX, valueX)
+          const barW = Math.abs(valueX - zeroX)
 
           return (
             <G key={`${sIndex}-${i}`}>
               <Rect
-                x={layout.chartX}
+                x={barX}
                 y={y}
-                width={Math.max(0, barW)}
+                width={barW}
                 height={barH}
                 fill={colorFor(sIndex, point.color ?? serie.color, colors)}
               />
               {showValues && (
-                <AxisText x={layout.chartX + barW + 3} y={y + barH / 2 + 3} fill={AXIS_TEXT_COLOR}>
+                <AxisText
+                  x={valueX + (point.value < 0 ? -3 : 3)}
+                  y={y + barH / 2 + 3}
+                  fill={AXIS_TEXT_COLOR}
+                  textAnchor={point.value < 0 ? "end" : "start"}
+                >
                   {fmtNum(point.value)}
                 </AxisText>
               )}
@@ -362,16 +423,22 @@ const renderPieDonutChart = (
 // Leyenda: swatch de color como <Rect> dentro de un <Svg> chico, texto como
 // Text de bloque (no SVG). Título/subtítulo/leyenda son siempre bloque para
 // no depender de fuentes SVG donde no hace falta.
+//
+// FIX (bug 2): antes recibía `series` directo y armaba una entrada por
+// serie — funciona para bar/line/area, pero pie/donut solo tienen 1 serie
+// (las porciones son data points, no series), así que nunca había nada
+// coherente para mostrar. Ahora recibe `entries` ya resueltas por el
+// caller (PdfGraph), que decide la fuente según la variante.
 // ---------------------------------------------------------------------------
 
-const Legend: React.FC<{ series: GraphSeries[]; colors: string[] }> = ({ series, colors }) => (
+const Legend: React.FC<{ entries: LegendEntry[] }> = ({ entries }) => (
   <View style={styles.legendRow}>
-    {series.map((serie, i) => (
+    {entries.map((entry, i) => (
       <View style={styles.legendItem} key={i}>
         <Svg width={9} height={9} style={styles.legendSwatchWrapper}>
-          <Rect x={0} y={0} width={9} height={9} fill={colorFor(i, serie.color, colors)} />
+          <Rect x={0} y={0} width={9} height={9} fill={entry.color} />
         </Svg>
-        <PdfText style={styles.legendText}>{serie.name}</PdfText>
+        <PdfText style={styles.legendText}>{entry.label}</PdfText>
       </View>
     ))}
   </View>
@@ -411,6 +478,13 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
 }) => {
   const layout = buildLayout(variant, series, width, height, yTickCount)
   const resolvedColors = colors ?? DEFAULT_COLORS
+  const isRadial = variant === "pie" || variant === "donut"
+
+  // FIX (bug 2): fuente de la leyenda según variante — series para
+  // bar/line/area, data points de la primera serie para pie/donut.
+  const legendEntries: LegendEntry[] = isRadial
+    ? (series[0]?.data ?? []).map((p, i) => ({ label: p.label, color: colorFor(i, p.color, resolvedColors) }))
+    : series.map((s, i) => ({ label: s.name, color: colorFor(i, s.color, resolvedColors) }))
 
   const renderChart = (): React.ReactNode => {
     switch (variant) {
@@ -418,7 +492,7 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
         return (
           <>
             <YAxis layout={layout} />
-            <XAxisLabels layout={layout} />
+            <XAxisLabels layout={layout} mode="band" />
             {renderBarChart(series, layout, resolvedColors, showValues)}
           </>
         )
@@ -428,7 +502,7 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
         return (
           <>
             <YAxis layout={layout} />
-            <XAxisLabels layout={layout} />
+            <XAxisLabels layout={layout} mode="point" />
             {renderLineAreaChart(series, layout, resolvedColors, smooth, showDots, false)}
           </>
         )
@@ -436,7 +510,7 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
         return (
           <>
             <YAxis layout={layout} />
-            <XAxisLabels layout={layout} />
+            <XAxisLabels layout={layout} mode="point" />
             {renderLineAreaChart(series, layout, resolvedColors, smooth, showDots, true)}
           </>
         )
@@ -456,7 +530,7 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
       <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
         {renderChart()}
       </Svg>
-      {showLegend && series.length > 1 && <Legend series={series} colors={resolvedColors} />}
+      {showLegend && legendEntries.length > 1 && <Legend entries={legendEntries} />}
     </View>
   )
 }

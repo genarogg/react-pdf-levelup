@@ -43,9 +43,9 @@ import {
   Canvas,
   Polygon,
   ClipPath,
-  RadialGradient
-
-
+  RadialGradient,
+  Line,
+Path
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
@@ -142,6 +142,8 @@ export {
   Canvas,
   Polygon,
   ClipPath,
-  RadialGradient
+  RadialGradient,
+  Line,
+  Path
 }
 

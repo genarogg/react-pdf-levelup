@@ -26,6 +26,14 @@ export interface GraphSeries {
   color?: string
 }
 
+// Entrada genérica de leyenda. Para bar/line/area sale de `series` (una
+// entrada por serie); para pie/donut sale de `series[0].data` (una entrada
+// por porción), porque ahí no hay múltiples series sino múltiples puntos.
+export interface LegendEntry {
+  label: string
+  color: string
+}
+
 // ---------------------------------------------------------------------------
 // Layout: todo lo que buildLayout() calcula una sola vez y que los distintos
 // render*Chart consumen. Coordenadas ya resueltas en unidades del <Svg>
