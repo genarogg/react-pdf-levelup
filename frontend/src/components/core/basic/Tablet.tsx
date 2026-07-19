@@ -14,6 +14,12 @@ interface TableProps {
   headerBackground?: string;
   zebraColor?: string;
   /**
+   * Activa/desactiva el efecto zebra (fondo alternado en filas impares).
+   * Default: `true`. Si se pasa `false`, ninguna fila recibe `zebraColor`
+   * sin importar `isOdd`.
+   */
+  zebra?: boolean;
+  /**
    * Fondo del cuerpo de la tabla (detrás de Thead/Tbody). Solo se usa
    * cuando se activa el "fix" de borde+radio (ver useRadiusFix más abajo):
    * al simular el borde con backgroundColor + padding en el Table, ese
@@ -162,6 +168,7 @@ const TableContext = createContext({
   textColor: "#000",
   headerBackground: "#ccc",
   zebraColor: "#eeeeee",
+  zebra: true,
   grid: "grid" as GridMode,
   outerRadius: 0,
   outerBorderWidth: 0,
@@ -201,6 +208,7 @@ const Table: React.FC<TableProps> = ({
   textColor = "#000",
   headerBackground = "#ccc",
   zebraColor = "#eeeeee",
+  zebra = true,
   background = "#fff",
   grid = "grid",
   ...rest
@@ -248,6 +256,7 @@ const Table: React.FC<TableProps> = ({
         textColor,
         headerBackground,
         zebraColor,
+        zebra,
         grid,
         outerRadius,
         outerBorderWidth,
@@ -487,7 +496,7 @@ const Td: React.FC<CellProps> = ({
   text = true,
   ...rest
 }) => {
-  const { cellHeight, textAlign, borderColor, textColor, zebraColor, grid, innerRadius } =
+  const { cellHeight, textAlign, borderColor, textColor, zebraColor, zebra, grid, innerRadius } =
     useContext(TableContext);
 
   const finalTextAlign = propTextAlign || textAlign || "left";
@@ -500,7 +509,7 @@ const Td: React.FC<CellProps> = ({
           width, // ya resuelto en Tr, colSpan incluido
           borderColor,
           minHeight: height ?? cellHeight,
-          backgroundColor: isOdd ? zebraColor : undefined,
+          backgroundColor: zebra && isOdd ? zebraColor : undefined,
         },
         grid === "grid" && {
           borderRightWidth: isLast ? 0 : 1,

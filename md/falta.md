@@ -21,3 +21,5 @@
 ** agg button a la documentacion
 
 ** agg Graph a la documentacion
+
+** agg el props zebra:boolean
