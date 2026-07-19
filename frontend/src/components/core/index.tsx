@@ -9,6 +9,8 @@ import { Form, Input, Checkbox, TextArea } from "./basic/Form"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
 import { UL, OL, LI } from "./basic/Lista"
 
+import Button from "./basic/Button"
+
 import Gradiant from "./basic/Gradiant"
 
 import Badge from "./extend/Badges"
@@ -18,6 +20,8 @@ import QRstyle from "./qr/QRstyle"
 import ChartJS from "./charts/ChartJS"
 
 import Divider from "./extend/Divider"
+
+import Graph from "./extend/Graph"
 
 import {
   PDFViewer,
@@ -111,6 +115,8 @@ export {
   Gradiant,
   Badge,
   Divider,
+  Button,
+  Graph,
   // funciones
   decodeBase64Pdf,
   generatePDF,

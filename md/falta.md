@@ -17,3 +17,7 @@
 ** agregar linea divisoria a la documentacion y libreria
 
 ** agregar las nuevas listas a la ducumentacion como bullet color
+
+** agg button a la documentacion
+
+** agg Graph a la documentacion
