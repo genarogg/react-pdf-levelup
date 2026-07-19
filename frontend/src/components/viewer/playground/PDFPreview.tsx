@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import { PDFViewer } from "@react-pdf/renderer"
 import * as React from "react"
 import * as CoreComponents from "@/components/core"
@@ -112,13 +112,25 @@ const PDFPreview = ({ code }: PDFPreviewProps) => {
     }
   }, [code, compileCode])
 
+  // Memoizado: `PDFPreview` se re-renderiza en cada cambio de `code` y en
+  // cada paso de `compileCode` (isCompiling true -> Component -> isCompiling
+  // false). Sin este useMemo, `<Component />` crea un elemento NUEVO en cada
+  // uno de esos renders aunque `Component` no haya cambiado, y PDFViewer
+  // regenera el PDF completo (nuevo blob + reload del iframe) cada vez que
+  // la referencia de `children` cambia -- ver useEffect(..., [children]) en
+  // su código fuente. Resultado: varios parpadeos por cada edición en vez
+  // de uno solo. Al depender únicamente de `Component`, este elemento se
+  // mantiene estable entre esos renders intermedios y solo cambia cuando de
+  // verdad hay un componente nuevo que mostrar.
+  const documentElement = useMemo(() => <Component />, [Component])
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
       {isCompiling && <CompilingIndicator />}
 
       <ErrorBoundary>
         <PDFViewer width="100%" height="100%" showToolbar>
-          <Component />
+          {documentElement}
         </PDFViewer>
       </ErrorBoundary>
     </div>
