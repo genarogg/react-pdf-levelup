@@ -6,12 +6,12 @@ import { Left, Right, Center } from "./basic/Position"
 import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "./basic/Etiquetas"
 import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/Tablet"
 import { Form, Input, Checkbox, TextArea } from "./basic/Form"
-import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./basic/Grid"
+import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./extend/Grid"
 import { UL, OL, LI } from "./basic/Lista"
 
 import Button from "./basic/Button"
 
-import Gradiant from "./basic/Gradiant"
+import Gradiant from "./extend/Gradiant"
 
 import Badge from "./extend/Badges"
 

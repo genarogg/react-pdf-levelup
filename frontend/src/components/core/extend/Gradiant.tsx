@@ -13,19 +13,12 @@ import {
 type ViewBaseProps = React.ComponentProps<typeof View>
 
 interface GradiantProps extends Omit<ViewBaseProps, "style"> {
-  /** Colores del degradado. Puede ser ["#fff", "#000"] o [{ color: "#fff", offset: "0%" }, ...] */
   colors: (string | { color: string; offset?: string | number })[]
-  /** Ancho del bloque */
   width?: number | string
-  /** Alto del bloque */
   height?: number | string
-  /** Tipo de degradado: lineal o radial */
   type?: "linear" | "radial"
-  /** Forma del contenedor: cuadrado/rectangular o circular */
   shape?: "square" | "circle"
-  /** Ángulo del degradado lineal en grados (0 = izq->der, 90 = arriba->abajo) */
   angle?: number
-  /** Contenido interno: texto, imágenes, íconos, etc. */
   children?: React.ReactNode
   style?: any
 }
@@ -75,6 +68,24 @@ const normalizeStops = (
     }
   })
 
+// opacity solo se hereda dentro del árbol de <Svg> como PROP (Svg -> G -> Rect),
+// nunca desde el `style` de un View ancestro (resolveInheritance corta la
+// herencia en cuanto encuentra un nodo Svg). Por eso hay que extraerlo del
+// style que llega (que puede ser objeto plano, array, o incluso undefined)
+// y reenviarlo explícitamente como prop del propio <Svg>.
+const extractOpacity = (s: any): number | undefined => {
+  if (s == null) return undefined
+  if (Array.isArray(s)) {
+    // Recorremos en orden: el último valor definido gana, igual que
+    // pasaría si React Native/StyleSheet mezclara el array por spread.
+    return s.reduce<number | undefined>((acc, item) => {
+      const o = extractOpacity(item)
+      return o === undefined ? acc : o
+    }, undefined)
+  }
+  return s.opacity
+}
+
 const Gradiant: React.FC<GradiantProps> = React.memo(
   ({
     colors,
@@ -94,6 +105,10 @@ const Gradiant: React.FC<GradiantProps> = React.memo(
 
     const isCircle = shape === "circle"
     const { x1, y1, x2, y2 } = angleToCoords(angle)
+
+    // opacity extraído del style que llega desde afuera (prop `style` del
+    // propio Gradiant), para reenviarlo como prop nativa del <Svg> más abajo.
+    const svgOpacity = extractOpacity(style)
 
     // viewBox proporcional al aspect ratio real del bloque, para que el
     // radial gradient no se deforme en elipse cuando width !== height.
@@ -150,6 +165,7 @@ const Gradiant: React.FC<GradiantProps> = React.memo(
         <Svg
           style={styles.svgLayer}
           viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+          opacity={svgOpacity}
         >
           <Defs>
             {type === "radial" ? (
