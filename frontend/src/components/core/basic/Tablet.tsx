@@ -207,8 +207,23 @@ const Table: React.FC<TableProps> = ({
   // que hace que el motor conserve el último color de stroke usado
   // (típicamente negro) en vez de no dibujar nada. Por eso "not-grid" usa
   // borderWidth 0 en vez de intentar un borde "invisible" por color.
+  //
+  // OJO: esto describe el borde IMPLÍCITO que grid agregaría por su
+  // cuenta si el usuario no puso nada — no debe confundirse con un
+  // borderWidth real que el usuario sí puso a mano en `style`. Antes,
+  // outerBorderWidth colapsaba ambos casos a 0 en "not-grid", lo cual
+  // además apagaba useRadiusFix más abajo y exponía el bug #395 cada vez
+  // que alguien combinaba grid="not-grid" con borderWidth+borderRadius
+  // en el mismo style (marco visualmente distorsionado en las esquinas).
   const gridBorderWidth = grid === "grid" ? 1 : 0;
-  const outerBorderWidth = grid === "not-grid" ? 0 : styleBorderWidth || gridBorderWidth;
+  const hasExplicitBorderWidth =
+    flatStyle.borderWidth !== undefined || typeof flatStyle.border === "string";
+  // outerBorderWidth ahora solo decide el grosor del borde EXTERIOR real
+  // (lo que se ve/dibuja), respetando siempre un borderWidth explícito
+  // del usuario. "not-grid" ya no lo fuerza a 0 de forma incondicional:
+  // solo cae al default de grid (0 para not-grid, 1 para grid) cuando el
+  // usuario no especificó nada.
+  const outerBorderWidth = hasExplicitBorderWidth ? styleBorderWidth : gridBorderWidth;
   const outerBorderColor = extractBorderColor(flatStyle) ?? borderColor;
 
   const useRadiusFix = outerRadius > 0 && outerBorderWidth > 0;
@@ -263,8 +278,10 @@ const Table: React.FC<TableProps> = ({
           // queda absorbido por esa simulación (backgroundColor + padding),
           // así que no lo agregamos aparte: hacerlo reintroduciría el
           // mismo combo borderWidth+borderRadius que causa el bug #395.
-          // not-grid nunca llega acá con outerBorderWidth > 0, así que no
-          // necesita su propia rama.
+          // Ahora useRadiusFix también se activa en not-grid cuando el
+          // usuario puso un borderWidth real junto con borderRadius (ver
+          // hasExplicitBorderWidth más arriba), así que ese caso también
+          // queda cubierto acá sin necesitar una rama propia.
           grid === "grid" && !useRadiusFix && {
             borderWidth: 1,
             borderColor,
@@ -427,8 +444,10 @@ const Th: React.FC<CellProps> = ({
   style,
   width,
   height,
+  isFirst = false,
   isLast = false,
   isLastRow = false,
+  isOdd = false,
   textAlign: propTextAlign,
   text = true,
   ...rest
