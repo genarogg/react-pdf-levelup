@@ -13,22 +13,7 @@ interface TableProps {
   textColor?: string;
   headerBackground?: string;
   zebraColor?: string;
-  /**
-   * Activa/desactiva el efecto zebra (fondo alternado en filas impares).
-   * Default: `true`. Si se pasa `false`, ninguna fila recibe `zebraColor`
-   * sin importar `isOdd`.
-   */
   zebra?: boolean;
-  /**
-   * Fondo del cuerpo de la tabla (detrás de Thead/Tbody). Solo se usa
-   * cuando se activa el "fix" de borde+radio (ver useRadiusFix más abajo):
-   * al simular el borde con backgroundColor + padding en el Table, ese
-   * color de borde llena TODA la caja exterior. Sin una capa de fondo por
-   * detrás de las filas, cualquier celda sin backgroundColor propio (filas
-   * no-zebra) dejaría ver el color del borde en vez de un fondo normal.
-   * Default: blanco. Cambialo si la tabla vive sobre un fondo distinto.
-   */
-  background?: string;
   grid?: GridMode;
   /** Cualquier otra prop de View (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
   [key: string]: any;
@@ -209,7 +194,6 @@ const Table: React.FC<TableProps> = ({
   headerBackground = "#ccc",
   zebraColor = "#eeeeee",
   zebra = true,
-  background = "#fff",
   grid = "grid",
   ...rest
 }) => {
@@ -230,8 +214,13 @@ const Table: React.FC<TableProps> = ({
   const useRadiusFix = outerRadius > 0 && outerBorderWidth > 0;
   const innerRadius = innerRadiusOf(outerRadius, outerBorderWidth);
 
+  // Si useRadiusFix está activo, el `backgroundColor` del usuario se
+  // reserva para la capa interna (ver `content` más abajo): el View
+  // exterior ya tiene su propio backgroundColor forzado (outerBorderColor,
+  // simulando el borde) y dejar pasar el de restStyle lo pisaría, tapando
+  // el efecto de borde.
   const restStyle = useRadiusFix
-    ? omitKeys(flatStyle, [...BORDER_SHORTHAND_KEYS, "overflow"])
+    ? omitKeys(flatStyle, [...BORDER_SHORTHAND_KEYS, "overflow", "backgroundColor"])
     : style;
 
   // Capa de fondo del cuerpo: obligatoria cuando useRadiusFix está activo.
@@ -239,8 +228,12 @@ const Table: React.FC<TableProps> = ({
   // dejarían ver el outerBorderColor que llena toda la View exterior.
   // También le damos su propio borderRadius (innerRadius) para que sus
   // esquinas no asomen cuadradas por debajo de la curva del borde exterior.
+  // El color sale del `backgroundColor` que el usuario haya puesto en
+  // `style` (mismo mecanismo que en cualquier View de
+  // @react-pdf/renderer); si no puso ninguno, queda `undefined` — el
+  // default nativo de la librería, sin forzar blanco.
   const content = useRadiusFix ? (
-    <View style={{ backgroundColor: background, borderRadius: innerRadius }}>
+    <View style={{ backgroundColor: flatStyle.backgroundColor, borderRadius: innerRadius }}>
       {children}
     </View>
   ) : (
