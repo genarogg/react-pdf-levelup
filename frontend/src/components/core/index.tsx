@@ -45,7 +45,8 @@ import {
   ClipPath,
   RadialGradient,
   Line,
-Path
+Path,
+ Circle
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
@@ -123,6 +124,7 @@ export {
 
 
   // herencia de react-pdf
+  Circle,
   PDFViewer,
   Document,
   Page,

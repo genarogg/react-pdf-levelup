@@ -23,3 +23,5 @@
 ** agg Graph a la documentacion
 
 ** agg el props zebra:boolean
+
+** documenta por qué existen sus workarounds citando bugs reales de la librería subyacente
