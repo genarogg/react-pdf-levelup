@@ -32,70 +32,7 @@ y una solución posible.
 18. [`wrap={false}` como arreglo manual tiene sus propios bugs](#18)
 19. [Resumen de prioridad sugerida](#resumen)
 
----
 
-<a id="1"></a>
-## 1. `isFirst`/`isOdd` se filtran hacia la `View` en `Th`
-
-**Descripción.** `Tr` clona cada celda con `isFirst`, `isLast`, `isLastRow`,
-`isOdd`. `Td` destructura las cuatro; `Th` solo destructura `isLast` e
-`isLastRow`. `isFirst` e `isOdd` caen en `...rest` de `Th` y se pasan como
-atributos sueltos a la `View` final, sin haber sido consumidos.
-
-**Cómo replicarlo.**
-
-```tsx
-// Bug01_ThPropLeak.tsx
-import React from "react";
-import { Document, Page, StyleSheet } from "@react-pdf/renderer";
-import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet";
-
-const styles = StyleSheet.create({ page: { padding: 30 } });
-
-// FALLA ESPERADA: Th no destructura isFirst/isOdd, así que llegan como
-// atributos sueltos a la View final sin usarse. No es visible a simple
-// vista en el PDF; hay que inspeccionar el árbol de props (debug o logs).
-export default function Bug01_ThPropLeak() {
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <Table grid="grid">
-          <Thead>
-            <Tr>
-              <Th>Col A</Th>
-              <Th>Col B</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>1</Td>
-              <Td>2</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </Page>
-    </Document>
-  );
-}
-```
-
-**Solución posible.** Destructurar `isFirst` e `isOdd` en `Th` igual que en
-`Td`, aunque no se usen, para que no lleguen a `...rest`:
-
-```tsx
-const Th: React.FC<CellProps> = ({
-  children, style, width, height,
-  isFirst = false,
-  isLast = false,
-  isLastRow = false,
-  isOdd = false,
-  textAlign: propTextAlign,
-  text = true,
-  ...rest
-}) => { /* ... */ };
-```
-
----
 
 <a id="2"></a>
 ## 2. Posible reaparición del bug de borde+radio (#395) en la última fila

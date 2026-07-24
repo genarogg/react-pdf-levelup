@@ -18,6 +18,36 @@ import type { CellProps, CellBaseProps } from "./types";
  * `variant` decide esas tres diferencias; todo lo demás vive acá una
  * sola vez. `Th`/`Td` son wrappers finos con la misma firma pública de
  * siempre.
+ *
+ * --- Por qué colSpan/rowSpan no son primitivos reales acá ---
+ * @react-pdf/renderer no tiene motor de tabla: usa Yoga (flexbox) sobre
+ * Views. No existe merge de celdas a nivel de renderer, así que:
+ *
+ *   - `colSpan` SÍ se simula, y funciona bien: como es horizontal y
+ *     ocurre dentro del mismo `Tr` (un View con flexDirection: row), Tr
+ *     puede calcular, con toda la info a mano (sus propios children y el
+ *     total de unidades de la fila), un `width` proporcional más grande
+ *     para esa celda. Es simplemente flexbox estirando un elemento; no
+ *     hay fusión real, solo una celda más ancha que las demás. Por eso
+ *     `Cell` ya no hace nada con `colSpan` — se recibe acá únicamente
+ *     para excluirlo de `rest` y que no se filtre al `View` nativo; el
+ *     cálculo real vive en `Tr`.
+ *
+ *   - `rowSpan` NO se soporta, a propósito. Fusionar verticalmente
+ *     requeriría que una celda de la fila N invada el espacio de las
+ *     filas N+1, N+2, y que esas filas siguientes sepan que esa columna
+ *     ya está "tomada" para no dibujar su propia celda ahí. Pero cada
+ *     `Tr` es un View hermano independiente en el árbol de layout: no
+ *     tiene visibilidad de lo que renderizó el `Tr` anterior. Resolverlo
+ *     de verdad exigiría estado compartido en `Tbody` rastreando
+ *     ocupación por columna entre filas, más posicionamiento fuera del
+ *     flujo normal de flexbox (con los riesgos que eso trae en paginado
+ *     de PDF). No es una limitación de cálculo (el alto en sí es trivial:
+ *     `rowSpan * cellHeight`), es que ningún componente del árbol tiene
+ *     el contexto para actuar sobre ese número. Por eso no existe como
+ *     prop de `CellProps`: si se necesita el efecto visual, la solución
+ *     es un `View` posicionado a mano por fuera del modelo de `Tr`, como
+ *     caso especial — no una feature genérica de `Cell`.
  * ======================================================================= */
 
 const Cell: React.FC<CellBaseProps> = ({
@@ -32,6 +62,7 @@ const Cell: React.FC<CellBaseProps> = ({
   textAlign: propTextAlign,
   text = true,
   variant,
+  colSpan, // se consume acá solo para excluirlo de rest; ya fue resuelto en Tr
   ...rest
 }) => {
   const { cellHeight, textAlign, borderColor, textColor, zebraColor, zebra, grid, innerRadius } =

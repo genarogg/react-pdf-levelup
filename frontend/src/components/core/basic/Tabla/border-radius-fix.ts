@@ -34,7 +34,14 @@ const BORDER_SHORTHAND_KEYS = [
 ];
 
 export interface BorderRadiusFixResult {
-  /** true cuando Table necesita el workaround (hay borderRadius + borderWidth reales combinados). */
+  /**
+   * true cuando Table necesita el workaround. Se dispara únicamente por
+   * la presencia de un `borderRadius` explícito (`outerRadius > 0`),
+   * sin importar si además hay `borderWidth` real: el bug de
+   * @react-pdf/renderer con radios grandes también aparece sin borde
+   * (ej. `grid="not-grid"` sin `borderWidth` explícito), así que atar
+   * el fix a `outerBorderWidth > 0` dejaba esos casos sin protección.
+   */
   useFix: boolean;
   outerBorderColor: string;
   outerBorderWidth: number;
@@ -86,7 +93,13 @@ export function resolveBorderRadiusFix(
   const outerBorderWidth = hasExplicitBorderWidth ? styleBorderWidth : gridBorderWidth;
   const outerBorderColor = extractBorderColor(flatStyle) ?? borderColor;
 
-  const useFix = outerRadius > 0 && outerBorderWidth > 0;
+  // El fix se dispara solo por `borderRadius` explícito (outerRadius > 0
+  // ya lo garantiza: el default es 0, no hay radio implícito en ningún
+  // lado). Ya NO exige `outerBorderWidth > 0`: el bug de renderizado con
+  // radios grandes en @react-pdf/renderer ocurre tenga o no borde real,
+  // así que gatearlo por el borde dejaba sin fix, por ejemplo, a
+  // grid="not-grid" (sin borderWidth explícito) con radios grandes.
+  const useFix = outerRadius > 0;
   const innerRadius = innerRadiusOf(outerRadius, outerBorderWidth);
 
   // Si useFix está activo, el `backgroundColor` del usuario se reserva

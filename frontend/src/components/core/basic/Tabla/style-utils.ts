@@ -37,7 +37,19 @@ export function extractBorderColor(flat: Record<string, any>): string | undefine
     const parts = flat.border.trim().split(/\s+/);
     return parts[parts.length - 1];
   }
-  return undefined;
+  // Fallback a colores por lado (borderTopColor, borderRightColor, etc.).
+  // El borde simulado por el "radius fix" es un solo relleno uniforme —
+  // no puede representar cuatro colores distintos a la vez — así que acá
+  // sólo importa no ignorarlos por completo: si el usuario definió algún
+  // lado, se usa ese color en vez de caer silenciosamente al `borderColor`
+  // default del Table. Prioridad fija top > right > bottom > left; si hay
+  // varios lados con colores distintos, gana el primero de esa lista.
+  return (
+    flat.borderTopColor ??
+    flat.borderRightColor ??
+    flat.borderBottomColor ??
+    flat.borderLeftColor
+  );
 }
 
 export function innerRadiusOf(outerRadius: number, outerBorderWidth: number): number {
