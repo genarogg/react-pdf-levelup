@@ -34,68 +34,6 @@ y una solución posible.
 
 
 
-<a id="2"></a>
-## 2. Posible reaparición del bug de borde+radio (#395) en la última fila
-
-**Descripción.** El `useRadiusFix` evita combinar `borderWidth` +
-`borderRadius` en la `Table`, pero en modo `grid` con radio activo, la
-celda inferior-izquierda (o derecha) de la última fila termina con
-`borderRightWidth`/`borderBottomWidth` (stroke, por grid) **y**
-`borderBottomLeftRadius`/`borderBottomRightRadius` (radio) en la misma
-`View` — exactamente la combinación que el fix de `Table` quiso evitar,
-pero a nivel celda.
-
-**Cómo replicarlo.**
-
-```tsx
-// Bug02_RadiusBorderCorner.tsx
-import React from "react";
-import { Document, Page, StyleSheet } from "@react-pdf/renderer";
-import { Table, Thead, Tbody, Tr, Th, Td } from "./Tablet";
-
-const styles = StyleSheet.create({ page: { padding: 30 } });
-
-// FALLA ESPERADA: mirá de cerca la esquina inferior-izquierda de la
-// tabla. Si la curva sale distorsionada (no es un arco limpio), es el
-// bug de borde+radio (#395) reapareciendo a nivel celda de última fila.
-export default function Bug02_RadiusBorderCorner() {
-  return (
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <Table grid="grid" style={{ borderRadius: 16 }}>
-          <Thead>
-            <Tr>
-              <Th>A</Th>
-              <Th>B</Th>
-              <Th>C</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>1</Td>
-              <Td>2</Td>
-              <Td>3</Td>
-            </Tr>
-            <Tr>
-              <Td>4</Td>
-              <Td>5</Td>
-              <Td>6</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </Page>
-    </Document>
-  );
-}
-```
-
-**Solución posible.** En la celda que combina ambas cosas, no dibujar el
-borde como stroke normal: simular esa línea puntual con un `View` fino
-adicional (mismo truco que ya usa `Table`), o quitar el borde interno
-justo en el lado que coincide con la esquina redondeada de esa celda.
-
----
-
 <a id="3"></a>
 ## 3. `Tbody` esparce `...rest` sobre todos los `Tr`
 
