@@ -24,7 +24,7 @@
     "build:lib": "tsup --config tsup.config.ts"
   },
   "dependencies": {
-    "@react-pdf/renderer": "^4",
+    "@react-pdf/renderer": "4.5.1",
     "jsbarcode": "^3.12.3",
     "react": ">=18 <=19",
     "react-dom": ">=18 <=19"

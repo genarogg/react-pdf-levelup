@@ -22,7 +22,6 @@
     "-----lib-----": "-----------------------------------------",
     "publish-all": "cd lib && pnpm run publish-all",
     "build:lib": "cd lib && pnpm run build:lib",
-    
     "demo:frontend": "cd frontend && pnpm run demo",
     "demo:api": "cd api && pnpm run demo",
     "demo:studio": "cd ./lib/mod/studio && pnpm build:lib &&  node ./bin/cli.js studio",
@@ -33,6 +32,10 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "turbo": "^2.7.2"
+  },
+  "overrides": {
+    "@react-pdf/renderer": "4.5.1",
+    "@react-pdf/stylesheet": "6.2.1"
   },
   "packageManager": "pnpm@8.15.0"
 }
