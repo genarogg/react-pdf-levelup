@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/studio",
-  "version": "1.1.16",
+  "version": "2.1.1",
   "description": "Studio: editor en vivo con playground para plantillas de react-pdf-levelup. Levanta un servidor local con API REST y cliente Vite ya compilados.",
   "keywords": [
     "javascript",
