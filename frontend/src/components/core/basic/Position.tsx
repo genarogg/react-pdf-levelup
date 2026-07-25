@@ -1,10 +1,14 @@
 import React from "react";
-import { View, StyleSheet } from "@react-pdf/renderer";
+import { View, StyleSheet, type ViewProps } from "@react-pdf/renderer";
 
-interface PositionProps {
+type Align = "left" | "right" | "center";
+
+type _ViewStyleRaw = NonNullable<ViewProps["style"]>;
+type ViewStyle = Exclude<_ViewStyleRaw, _ViewStyleRaw[]>;
+
+interface PositionProps extends ViewProps {
   children: React.ReactNode;
-  style?: any;
-  vertical?: boolean; // -> centra vertical también
+  vertical?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -20,55 +24,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     textAlign: "center",
   },
-
   vertical: {
     justifyContent: "center",
   },
 });
 
-/* ================= LEFT ================= */
+const mergeStyles = (
+  ...entries: Array<ViewStyle | ViewStyle[] | false | undefined>
+): ViewStyle[] =>
+  entries.flatMap((entry) =>
+    entry ? (Array.isArray(entry) ? entry : [entry]) : []
+  );
 
-const Left: React.FC<PositionProps> = ({
+/* ================= INTERNO ================= */
+
+const Position: React.FC<PositionProps & { align: Align }> = ({
   children,
   style,
   vertical,
+  align,
   ...rest
 }) => {
   return (
-    <View style={[styles.left, vertical && styles.vertical, style]} {...rest}>
+    <View
+      style={mergeStyles(styles[align], vertical && styles.vertical, style)}
+      {...rest}
+    >
       {children}
     </View>
   );
 };
 
-/* ================= RIGHT ================= */
+/* ================= PÚBLICOS ================= */
 
-const Right: React.FC<PositionProps> = ({
-  children,
-  style,
-  vertical,
-  ...rest
-}) => {
-  return (
-    <View style={[styles.right, vertical && styles.vertical, style]} {...rest}>
-      {children}
-    </View>
-  );
-};
-
-/* ================= CENTER ================= */
-
-const Center: React.FC<PositionProps> = ({
-  children,
-  style,
-  vertical,
-  ...rest
-}) => {
-  return (
-    <View style={[styles.center, vertical && styles.vertical, style]} {...rest}>
-      {children}
-    </View>
-  );
-};
+const Left: React.FC<PositionProps> = (props) => <Position {...props} align="left" />;
+const Right: React.FC<PositionProps> = (props) => <Position {...props} align="right" />;
+const Center: React.FC<PositionProps> = (props) => <Position {...props} align="center" />;
 
 export { Left, Right, Center };
