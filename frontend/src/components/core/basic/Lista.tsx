@@ -94,9 +94,9 @@ const getOrderedMarker = (index: number, type = "decimal", start = 1) => {
 
   switch (type) {
     case "lower-alpha":
-      return String.fromCharCode(97 + ((actualIndex - 1) % 26)) + "."
+      return String.fromCharCode(97 + (((actualIndex - 1) % 26) + 26) % 26) + "."
     case "upper-alpha":
-      return String.fromCharCode(65 + ((actualIndex - 1) % 26)) + "."
+      return String.fromCharCode(65 + (((actualIndex - 1) % 26) + 26) % 26) + "."
     case "lower-roman":
       return toRoman(actualIndex).toLowerCase() + "."
     case "upper-roman":
@@ -128,20 +128,25 @@ const toRoman = (num: number): string => {
 
 // UL
 export const UL: React.FC<ListProps> = ({ children, style, type = "disc", fontSize, bulletColor }) => {
-  const childrenWithBullets = React.Children.map(children, (child, index) => {
-    if (React.isValidElement(child)) {
-      const childProps = child.props as { fontSize?: number; bulletColor?: string }
-      return React.cloneElement(child as React.ReactElement<any>, {
-        bulletType: type,
-        isOrdered: false,
-        index: index + 1,
-        // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del UL —
-        // de lo contrario cloneElement siempre pisa la prop local con la del padre.
-        fontSize: childProps.fontSize ?? fontSize,
-        bulletColor: childProps.bulletColor ?? bulletColor,
-      })
-    }
-    return child
+  // Se filtra primero (React.Children.toArray ya descarta null/false/undefined) y RECIÉN
+  // ahí se indexa con .map(). Si se indexara con React.Children.map sobre los children
+  // originales, un hueco (null) proveniente de un `cond ? <LI/> : null` consumiría un
+  // índice sin renderizar nada, desalineando el orden de los que sí se muestran.
+  const validChildren = React.Children.toArray(children).filter(
+    React.isValidElement
+  ) as React.ReactElement<any>[]
+
+  const childrenWithBullets = validChildren.map((child, index) => {
+    const childProps = child.props as { fontSize?: number; bulletColor?: string }
+    return React.cloneElement(child, {
+      bulletType: type,
+      isOrdered: false,
+      index: index + 1,
+      // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del UL —
+      // de lo contrario cloneElement siempre pisa la prop local con la del padre.
+      fontSize: childProps.fontSize ?? fontSize,
+      bulletColor: childProps.bulletColor ?? bulletColor,
+    })
   })
 
   return <View style={[styles.ul, style]}>{childrenWithBullets}</View>
@@ -149,21 +154,24 @@ export const UL: React.FC<ListProps> = ({ children, style, type = "disc", fontSi
 
 // OL
 export const OL: React.FC<ListProps> = ({ children, style, type = "decimal", start = 1, fontSize, bulletColor }) => {
-  const childrenWithNumbers = React.Children.map(children, (child, index) => {
-    if (React.isValidElement(child)) {
-      const childProps = child.props as { fontSize?: number; bulletColor?: string }
-      return React.cloneElement(child as React.ReactElement<any>, {
-        bulletType: type,
-        isOrdered: true,
-        index: index + 1,
-        start,
-        // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del OL —
-        // de lo contrario cloneElement siempre pisa la prop local con la del padre.
-        fontSize: childProps.fontSize ?? fontSize,
-        bulletColor: childProps.bulletColor ?? bulletColor,
-      })
-    }
-    return child
+  // Mismo fix que en UL: filtrar antes de indexar. Acá el bug es más grave que en UL
+  // porque el índice es visible (numeración), no solo un valor interno para el bullet.
+  const validChildren = React.Children.toArray(children).filter(
+    React.isValidElement
+  ) as React.ReactElement<any>[]
+
+  const childrenWithNumbers = validChildren.map((child, index) => {
+    const childProps = child.props as { fontSize?: number; bulletColor?: string }
+    return React.cloneElement(child, {
+      bulletType: type,
+      isOrdered: true,
+      index: index + 1,
+      start,
+      // Si el LI ya trae su propio fontSize/bulletColor, ese gana sobre el heredado del OL —
+      // de lo contrario cloneElement siempre pisa la prop local con la del padre.
+      fontSize: childProps.fontSize ?? fontSize,
+      bulletColor: childProps.bulletColor ?? bulletColor,
+    })
   })
 
   return <View style={[styles.ol, style]}>{childrenWithNumbers}</View>
