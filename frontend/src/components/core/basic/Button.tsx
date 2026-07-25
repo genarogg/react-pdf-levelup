@@ -20,21 +20,16 @@ interface ButtonOwnProps {
   disabled?: boolean
 }
 
-// Cuando hay `href` el botón se renderiza como <Link> (acepta props de Link
-// menos las que ya definimos arriba); sin `href` se renderiza como <View>
-// (acepta props de View menos las que ya definimos arriba). El spread de
-// `...rest` termina siendo válido para cualquiera de los dos casos porque
-// solo se le pasan las props que el elemento final entiende.
 type ButtonProps = ButtonOwnProps &
   Omit<ViewBaseProps, keyof ButtonOwnProps> &
   Omit<LinkBaseProps, keyof ButtonOwnProps>
 
 const COLORS = {
-  primary: { bg: "#4338ca", bgPressed: "#372fa3", text: "#ffffff", border: "#4338ca" },
-  secondary: { bg: "#e6e8f0", bgPressed: "#d3d6e3", text: "#1a1a2e", border: "#e6e8f0" },
-  success: { bg: "#22C55E", bgPressed: "#1a9d4a", text: "#ffffff", border: "#22C55E" },
-  danger: { bg: "#EF4444", bgPressed: "#cc3636", text: "#ffffff", border: "#EF4444" },
-  outline: { bg: "transparent", bgPressed: "#f5f6fa", text: "#4338ca", border: "#4338ca" },
+  primary: { bg: "#4338ca", text: "#ffffff", border: "#4338ca" },
+  secondary: { bg: "#e6e8f0", text: "#1a1a2e", border: "#e6e8f0" },
+  success: { bg: "#22C55E", text: "#ffffff", border: "#22C55E" },
+  danger: { bg: "#EF4444", text: "#ffffff", border: "#EF4444" },
+  outline: { bg: "transparent", text: "#4338ca", border: "#4338ca" },
 }
 
 const SIZES: Record<ButtonSize, { paddingVertical: number; paddingHorizontal: number; fontSize: number; borderRadius: number }> = {
@@ -42,6 +37,16 @@ const SIZES: Record<ButtonSize, { paddingVertical: number; paddingHorizontal: nu
   md: { paddingVertical: 8, paddingHorizontal: 16, fontSize: 11, borderRadius: 6 },
   lg: { paddingVertical: 12, paddingHorizontal: 22, fontSize: 13, borderRadius: 8 },
 }
+
+// Grosor del "anillo" que simula el borde en variant="outline".
+// No se usa borderWidth real para evitar issue #395 de @react-pdf/renderer
+// (stroke + borderRadius distorsiona las curvas de las esquinas).
+const OUTLINE_RING_WIDTH = 1.5
+
+// Color de fondo asumido detrás del botón (página/contenedor).
+// Se necesita porque la simulación por fill requiere pintar el interior
+// con un color opaco conocido en vez de dejarlo transparente.
+const ASSUMED_BACKGROUND = "#ffffff"
 
 const styles = StyleSheet.create({
   base: {
@@ -71,17 +76,17 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const palette = COLORS[variant] ?? COLORS.primary
   const dims = SIZES[size] ?? SIZES.md
+  const isOutline = variant === "outline"
+  const ringColor = disabled ? "#c7c9d6" : palette.border
 
   const containerStyle = [
     styles.base,
     {
-      backgroundColor: disabled ? "#c7c9d6" : palette.bg,
-      borderColor: disabled ? "#c7c9d6" : palette.border,
-      borderWidth: variant === "outline" ? 1.5 : 0,
-      borderStyle: "solid" as const,
-      paddingVertical: dims.paddingVertical,
-      paddingHorizontal: dims.paddingHorizontal,
+      backgroundColor: isOutline ? ringColor : disabled ? "#c7c9d6" : palette.bg,
       borderRadius: dims.borderRadius,
+      ...(isOutline
+        ? { padding: OUTLINE_RING_WIDTH }
+        : { paddingVertical: dims.paddingVertical, paddingHorizontal: dims.paddingHorizontal }),
       ...(width !== undefined ? { width } : {}),
       ...(height !== undefined ? { height } : {}),
     },
@@ -94,17 +99,36 @@ const Button: React.FC<ButtonProps> = ({
     </Text>
   )
 
+  const content = isOutline ? (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: ASSUMED_BACKGROUND,
+        borderRadius: Math.max(dims.borderRadius - OUTLINE_RING_WIDTH, 0),
+        paddingVertical: Math.max(dims.paddingVertical - OUTLINE_RING_WIDTH, 0),
+        paddingHorizontal: Math.max(dims.paddingHorizontal - OUTLINE_RING_WIDTH, 0),
+      }}
+    >
+      {label}
+    </View>
+  ) : (
+    label
+  )
+
   if (href && !disabled) {
     return (
-      <Link src={href} style={containerStyle} {...(rest as LinkBaseProps)}>
-        {label}
+      <Link {...(rest as LinkBaseProps)} src={href} style={containerStyle}>
+        {content}
       </Link>
     )
   }
 
   return (
     <View style={containerStyle} {...(rest as ViewBaseProps)}>
-      {label}
+      {content}
     </View>
   )
 }
