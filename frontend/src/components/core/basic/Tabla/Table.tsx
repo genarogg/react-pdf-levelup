@@ -3,6 +3,7 @@ import { View } from "@react-pdf/renderer";
 import { TableContext } from "./TableContext";
 import { styles } from "./styles";
 import { resolveBorderRadiusFix } from "./border-radius-fix";
+import { BorderRadiusSvgOverlay } from "./border-radius-svg-fix";
 import type { TableProps } from "./types";
 
 const Table: React.FC<TableProps> = ({
@@ -29,7 +30,10 @@ const Table: React.FC<TableProps> = ({
     restStyle,
   } = resolveBorderRadiusFix(style, grid, borderColor, borderRadiusMethod);
 
-  // Capa de fondo del cuerpo: obligatoria cuando useFix está activo. Sin
+  const isViewFix = useFix && method === "view";
+  const isSvgFix = useFix && method === "svg";
+
+  // Capa de fondo del cuerpo: obligatoria SOLO en el método "view". Sin
   // ella, las celdas sin backgroundColor propio (filas no-zebra) dejarían
   // ver el outerBorderColor que llena toda la View exterior. También le
   // damos su propio borderRadius (innerRadius) para que sus esquinas no
@@ -38,14 +42,13 @@ const Table: React.FC<TableProps> = ({
   // no puso ninguno, queda `undefined` — el default nativo de la
   // librería, sin forzar blanco.
   //
-  // NOTA: este sándwich (View exterior con padding simulando el borde +
-  // View interior con el backgroundColor real) es específico del método
-  // "view". Hoy `method` siempre termina siendo "view" (ver
-  // `resolveBorderRadiusFixSvg` en border-radius-fix.ts), así que no hace
-  // falta bifurcar el JSX todavía — pero cuando exista una implementación
-  // real de "svg" esta sección va a necesitar su propia rama, no solo el
-  // cálculo de geometría.
-  const content = useFix ? (
+  // El método "svg" no arma esta capa: no hay ningún fondo que simular
+  // (el borde se dibuja aparte, ver `BorderRadiusSvgOverlay` más abajo),
+  // así que `children` se renderiza directo — el interior queda "hueco"
+  // salvo que el usuario haya puesto su propio backgroundColor en
+  // `style` (que sí se respeta: `resolveBorderRadiusFixSvg` no lo saca
+  // de `restStyle`).
+  const content = isViewFix ? (
     <View style={{ backgroundColor, borderRadius: innerRadius }}>{children}</View>
   ) : (
     children
@@ -71,18 +74,31 @@ const Table: React.FC<TableProps> = ({
       <View
         style={[
           styles.table,
-          // Si useFix ya está activo, el borde fino de grid="grid" queda
-          // absorbido por esa simulación (backgroundColor + padding), así
+          // Si useFix ya está activo (cualquiera de los dos métodos), el
+          // borde fino de grid="grid" queda absorbido por esa simulación
+          // (backgroundColor+padding en "view", padding+Svg en "svg"), así
           // que no lo agregamos aparte: hacerlo reintroduciría el mismo
           // combo borderWidth+borderRadius que causa el bug #395.
           grid === "grid" && !useFix && {
             borderWidth: 1,
             borderColor,
           },
-          useFix
+          isViewFix
             ? {
                 backgroundColor: outerBorderColor,
                 borderRadius: outerRadius,
+                padding: outerBorderWidth,
+              }
+            : null,
+          // "svg" no necesita backgroundColor ni borderRadius en esta
+          // View — no clipearía nada igual (issue #640), y el trazo real
+          // lo dibuja `BorderRadiusSvgOverlay` aparte. Solo necesita
+          // `position: relative` como referencia para ese overlay
+          // absoluto, y el mismo `padding: outerBorderWidth` que "view"
+          // usa, para que el contenido no quede pegado contra el trazo.
+          isSvgFix
+            ? {
+                position: "relative",
                 padding: outerBorderWidth,
               }
             : null,
@@ -91,6 +107,13 @@ const Table: React.FC<TableProps> = ({
         {...rest}
       >
         {content}
+        {isSvgFix && (
+          <BorderRadiusSvgOverlay
+            outerRadius={outerRadius}
+            outerBorderWidth={outerBorderWidth}
+            outerBorderColor={outerBorderColor}
+          />
+        )}
       </View>
     </TableContext.Provider>
   );

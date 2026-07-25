@@ -9,14 +9,18 @@ export type GridMode = "grid" | "modern" | "not-grid";
  * borderRadius de @react-pdf/renderer (issue #395 — ver la lógica en
  * `border-radius-fix.ts`):
  *
- *   - "view": simula el borde combinando `backgroundColor` + `padding`
- *     en un `View` exterior en vez de un stroke real + radio en la
- *     misma View. Es el único método implementado hoy.
- *   - "svg": reservado para una futura implementación basada en
- *     `Svg`/`Path` de @react-pdf/renderer, que evitaría el límite
- *     práctico de radio ~12 del método "view" (ver `bug.md`, punto 2).
- *     Todavía no existe: pedirlo cae a "view" con un warning (ver
- *     `resolveBorderRadiusFixSvg` en `border-radius-fix.ts`).
+ *   - "view" (`border-radius-fix.ts`): simula el borde combinando
+ *     `backgroundColor` + `padding` en un `View` exterior en vez de un
+ *     stroke real + radio en la misma View. Como consecuencia, el
+ *     interior de la tabla SIEMPRE queda con ese color de fondo — no
+ *     hay forma de dejarlo transparente.
+ *   - "svg" (`border-radius-svg-fix.tsx`): dibuja el contorno con un
+ *     trazo de `<Svg><Rect stroke .../></Svg>` sin `fill`, superpuesto
+ *     al contenido real. El interior queda "hueco" (o con el
+ *     `backgroundColor` que el usuario haya puesto), y de paso evita el
+ *     límite práctico de radio ~12 del método "view" (ver `bug.md`,
+ *     punto 2), porque dibuja una sola curva real en vez de aproximarla
+ *     con dos `View`s anidados.
  *
  * El *método* es independiente de si el fix se *activa* o no: la
  * activación sigue dependiendo únicamente de un `borderRadius` explícito
@@ -131,13 +135,15 @@ export interface TableContextValue {
   outerBorderWidth: number;
   innerRadius: number;
   /**
-   * Método EFECTIVAMENTE aplicado por `resolveBorderRadiusFix` — no
-   * necesariamente el `borderRadiusMethod` que pidió el usuario en
-   * `Table`. Por ejemplo, hoy pedir "svg" siempre resuelve en "view"
-   * (fallback, ver `resolveBorderRadiusFixSvg`), así que esto va a decir
-   * "view" en ambos casos. Se expone en el contexto para que
-   * `Cell`/`Thead`/etc. puedan bifurcar su propia lógica por método el
-   * día que exista una segunda implementación real.
+   * Método EFECTIVAMENTE aplicado por `resolveBorderRadiusFix` — hoy
+   * coincide siempre con el `borderRadiusMethod` pedido en `Table`
+   * ("view" en `border-radius-fix.ts`, "svg" en
+   * `border-radius-svg-fix.tsx`, ambos implementados). Se expone acá,
+   * en vez de que cada componente lea el prop crudo de `Table`, para
+   * que `Cell`/`Thead`/etc. puedan bifurcar su propia lógica por método
+   * si algún día lo necesitan — hoy ninguno de los dos lo necesita: los
+   * dos métodos calculan `innerRadius` igual, y ese es el único valor
+   * del que depende el redondeo de esquinas de `Thead`/`Cell`.
    */
   borderRadiusMethod: BorderRadiusMethod;
 }

@@ -5,24 +5,10 @@ import {
   extractBorderColor,
   innerRadiusOf,
   omitKeys,
+  BORDER_SHORTHAND_KEYS,
 } from "./style-utils";
+import { resolveBorderRadiusFixSvg } from "./border-radius-svg-fix";
 import type { GridMode, BorderRadiusMethod } from "./types";
-
-const BORDER_SHORTHAND_KEYS = [
-  "border",
-  "borderWidth",
-  "borderStyle",
-  "borderColor",
-  "borderTopWidth",
-  "borderRightWidth",
-  "borderBottomWidth",
-  "borderLeftWidth",
-  "borderTopColor",
-  "borderRightColor",
-  "borderBottomColor",
-  "borderLeftColor",
-  "borderRadius",
-];
 
 export interface BorderRadiusFixResult {
   /**
@@ -39,17 +25,27 @@ export interface BorderRadiusFixResult {
    */
   useFix: boolean;
   /**
-   * Método efectivamente aplicado. Puede diferir del `borderRadiusMethod`
-   * pedido en `Table` si ese método todavía no está implementado (hoy,
-   * "svg" cae a "view" — ver `resolveBorderRadiusFixSvg`). `Table` guarda
-   * este valor (no el prop crudo) en `TableContext`.
+   * Método efectivamente aplicado — hoy siempre coincide con el
+   * `borderRadiusMethod` pedido en `Table`, porque los dos métodos
+   * ("view" y "svg") ya están implementados. Se mantiene como campo
+   * aparte, en vez de que `Table` reutilice directamente el prop crudo,
+   * pensando en el día en que un tercer método necesite resolver a otro
+   * como fallback (por ejemplo, si no está disponible en cierto
+   * contexto). `Table` guarda este valor en `TableContext`, no el prop.
    */
   method: BorderRadiusMethod;
   outerBorderColor: string;
   outerBorderWidth: number;
   outerRadius: number;
   innerRadius: number;
-  /** backgroundColor original del usuario, reservado para la capa interna cuando useFix está activo. */
+  /**
+   * backgroundColor original del usuario. Solo tiene un uso real en el
+   * método "view" (se reserva para la capa interna del sándwich — ver
+   * `content` en Table.tsx). En "svg" no hay ninguna capa que lo
+   * necesite aparte — el `backgroundColor` del usuario ya viaja tal cual
+   * dentro de `restStyle` — así que ahí este campo queda solo por
+   * completitud de la interfaz, sin que `Table.tsx` lo use.
+   */
   backgroundColor: any;
   /** `style` ya resuelto: sin las keys de borde/radius cuando useFix está activo, o el `style` original sin tocar si no. */
   restStyle: any;
@@ -59,11 +55,20 @@ export interface BorderRadiusFixResult {
  * Resuelve el workaround del bug #395 para `Table`.
  *
  * Es un dispatcher fino: la geometría real vive en una función privada
- * por método (`resolveBorderRadiusFixView`, `resolveBorderRadiusFixSvg`).
- * Agregar un método nuevo el día de mañana es sumar un `case` acá + su
- * función, sin tocar `Table.tsx` ni el resto del árbol (que ya leen
+ * por método (`resolveBorderRadiusFixView` acá abajo,
+ * `resolveBorderRadiusFixSvg` en `border-radius-svg-fix.tsx`). Agregar un
+ * método nuevo el día de mañana es sumar un `case` acá + su función, sin
+ * tocar `Table.tsx` ni el resto del árbol (que ya leen
  * `useFix`/`method`/la geometría desde el resultado, no el método
  * pedido).
+ *
+ * OJO con la dirección de las dependencias: este archivo importa
+ * `resolveBorderRadiusFixSvg` desde `border-radius-svg-fix.tsx`, pero
+ * ese archivo NUNCA importa nada (en tiempo de ejecución) desde acá — lo
+ * que necesita compartir (`BORDER_SHORTHAND_KEYS`) vive en
+ * `style-utils.ts`, un tercer archivo neutral. Si `border-radius-svg-fix`
+ * necesitara importar un valor de acá, se armaría una dependencia
+ * circular entre los dos.
  *
  * A propósito NO se llama `useBorderRadiusFix`: no usa ningún hook de
  * React por dentro (nada de useState/useContext/useEffect), es una
@@ -98,8 +103,13 @@ export function resolveBorderRadiusFix(
 // backgroundColor de Views hijas), por eso además redondeamos a mano las
 // esquinas de Thead/Td en vez de confiar en overflow:hidden.
 //
-// Este es el método "view" — el único implementado hoy (ver
-// `BorderRadiusMethod` en types.ts).
+// Este es el método "view". El otro método implementado, "svg", vive en
+// `border-radius-svg-fix.tsx` y resuelve el mismo bug de otra forma: en
+// vez de simular el borde con un relleno, lo dibuja con un trazo de SVG
+// sin fill, así el interior de la tabla puede quedar completamente
+// "hueco" (sin ningún backgroundColor forzado) si el usuario no puso
+// ninguno — cosa que "view" no puede hacer, porque necesita ese relleno
+// para armar el efecto de borde.
 function resolveBorderRadiusFixView(
   style: any,
   grid: GridMode,
@@ -158,41 +168,4 @@ function resolveBorderRadiusFixView(
     backgroundColor: flatStyle.backgroundColor,
     restStyle,
   };
-}
-
-// Evita spamear la consola si Table se re-renderiza varias veces con
-// borderRadiusMethod="svg" (ej. una preview en vivo con <PDFViewer>): el
-// warning es útil una vez, no en cada render.
-let hasWarnedAboutSvgMethod = false;
-
-/**
- * Método "svg": TODO — no implementado todavía.
- *
- * La idea a futuro es dibujar el borde redondeado con un `Svg`/`Path` de
- * @react-pdf/renderer en vez de la simulación con View +
- * backgroundColor + padding del método "view". Eso evitaría el límite
- * práctico de radio ~12 documentado en `bug.md` (punto 2): un `Path`
- * dibuja la curva real en vez de aproximarla restando
- * `outerRadius - outerBorderWidth` (`innerRadiusOf()`), que es lineal y
- * deja de calzar visualmente a partir de cierto tamaño. También podría
- * eventualmente ayudar con el punto 1 de `bug.md` (la celda de esquina
- * de la última fila), aunque eso además requeriría cambios en `Cell.tsx`.
- *
- * Mientras tanto, pedir "svg" no debe romper el render ni dejar la tabla
- * sin ningún fix — cae a "view" con un warning, para que quien lo pida
- * hoy siga viendo una tabla funcional (con el límite de radio ~12 del
- * método "view") en vez de un radio roto o una excepción.
- */
-function resolveBorderRadiusFixSvg(
-  style: any,
-  grid: GridMode,
-  borderColor: string
-): BorderRadiusFixResult {
-  if (!hasWarnedAboutSvgMethod) {
-    hasWarnedAboutSvgMethod = true;
-    console.warn(
-      '[Table] borderRadiusMethod="svg" todavía no está implementado. Usando "view" como fallback.'
-    );
-  }
-  return resolveBorderRadiusFixView(style, grid, borderColor);
 }

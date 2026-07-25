@@ -5,6 +5,32 @@
  * reimplementarlas.
  * ================================================================= */
 
+// Antes vivía en `border-radius-fix.ts`, pegado a la implementación del
+// método "view". Se movió acá porque dejó de ser exclusivo de ese
+// método: `border-radius-svg-fix.ts` también necesita saber qué keys de
+// `style` son "border/radius real" para sacarlas antes de aplicar su
+// propio workaround (evitar volver a combinar borderWidth+borderRadius
+// reales en la View — issue #395 de @react-pdf/renderer, ver
+// `border-radius-fix.ts`). Ponerlo acá, en el archivo genérico, evita que
+// `border-radius-fix.ts` y `border-radius-svg-fix.ts` tengan que
+// importarse valores entre sí (que sería una dependencia circular): los
+// dos importan esta lista desde un tercer archivo neutral.
+export const BORDER_SHORTHAND_KEYS = [
+  "border",
+  "borderWidth",
+  "borderStyle",
+  "borderColor",
+  "borderTopWidth",
+  "borderRightWidth",
+  "borderBottomWidth",
+  "borderLeftWidth",
+  "borderTopColor",
+  "borderRightColor",
+  "borderBottomColor",
+  "borderLeftColor",
+  "borderRadius",
+];
+
 export function flattenStyle(style: any): Record<string, any> {
   if (!style) return {};
   if (Array.isArray(style)) {
