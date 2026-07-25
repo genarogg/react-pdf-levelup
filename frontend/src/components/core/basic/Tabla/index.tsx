@@ -4,4 +4,10 @@ export { Tbody } from "./Tbody";
 export { Tr } from "./Tr";
 export { Th, Td } from "./Cell";
 
-export type { TableProps, TheadProps, CellProps, GridMode } from "./types";
+export type {
+  TableProps,
+  TheadProps,
+  CellProps,
+  GridMode,
+  BorderRadiusMethod,
+} from "./types";

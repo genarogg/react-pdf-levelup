@@ -13,4 +13,5 @@ export const TableContext = createContext<TableContextValue>({
   outerRadius: 0,
   outerBorderWidth: 0,
   innerRadius: 0,
+  borderRadiusMethod: "view",
 });

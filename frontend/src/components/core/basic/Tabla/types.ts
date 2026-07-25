@@ -5,6 +5,26 @@ import type React from "react";
 export type GridMode = "grid" | "modern" | "not-grid";
 
 /**
+ * Método usado para aplicar el workaround del bug de borderWidth +
+ * borderRadius de @react-pdf/renderer (issue #395 — ver la lógica en
+ * `border-radius-fix.ts`):
+ *
+ *   - "view": simula el borde combinando `backgroundColor` + `padding`
+ *     en un `View` exterior en vez de un stroke real + radio en la
+ *     misma View. Es el único método implementado hoy.
+ *   - "svg": reservado para una futura implementación basada en
+ *     `Svg`/`Path` de @react-pdf/renderer, que evitaría el límite
+ *     práctico de radio ~12 del método "view" (ver `bug.md`, punto 2).
+ *     Todavía no existe: pedirlo cae a "view" con un warning (ver
+ *     `resolveBorderRadiusFixSvg` en `border-radius-fix.ts`).
+ *
+ * El *método* es independiente de si el fix se *activa* o no: la
+ * activación sigue dependiendo únicamente de un `borderRadius` explícito
+ * en `style` (ver `TableProps.borderRadiusMethod` y `resolveBorderRadiusFix`).
+ */
+export type BorderRadiusMethod = "view" | "svg";
+
+/**
  * Distingue si una celda compartida (`Cell`) se está usando como `Th` o
  * `Td`. Es un detalle interno — no se expone en la API pública de
  * `Th`/`Td`, que siguen recibiendo `CellProps` como siempre.
@@ -21,6 +41,17 @@ export interface TableProps {
   zebraColor?: string;
   zebra?: boolean;
   grid?: GridMode;
+  /**
+   * Qué implementación usar para el workaround del bug de border-radius
+   * cuando ese workaround está activo (ver `BorderRadiusMethod` arriba).
+   * Default: "view".
+   *
+   * Este prop NO decide si el fix se activa — eso sigue pasando
+   * automáticamente cuando `style` trae un `borderRadius` explícito
+   * (`style={{ borderRadius }}`), igual que antes. `borderRadiusMethod`
+   * solo elige QUÉ implementación se usa una vez que ya está activo.
+   */
+  borderRadiusMethod?: BorderRadiusMethod;
   /** Cualquier otra prop de View (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
   [key: string]: any;
 }
@@ -99,4 +130,14 @@ export interface TableContextValue {
   outerRadius: number;
   outerBorderWidth: number;
   innerRadius: number;
+  /**
+   * Método EFECTIVAMENTE aplicado por `resolveBorderRadiusFix` — no
+   * necesariamente el `borderRadiusMethod` que pidió el usuario en
+   * `Table`. Por ejemplo, hoy pedir "svg" siempre resuelve en "view"
+   * (fallback, ver `resolveBorderRadiusFixSvg`), así que esto va a decir
+   * "view" en ambos casos. Se expone en el contexto para que
+   * `Cell`/`Thead`/etc. puedan bifurcar su propia lógica por método el
+   * día que exista una segunda implementación real.
+   */
+  borderRadiusMethod: BorderRadiusMethod;
 }

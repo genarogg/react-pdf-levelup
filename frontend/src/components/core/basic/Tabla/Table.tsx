@@ -15,17 +15,19 @@ const Table: React.FC<TableProps> = ({
   zebraColor = "#eeeeee",
   zebra = true,
   grid = "grid",
+  borderRadiusMethod = "view",
   ...rest
 }) => {
   const {
     useFix,
+    method,
     outerBorderColor,
     outerBorderWidth,
     outerRadius,
     innerRadius,
     backgroundColor,
     restStyle,
-  } = resolveBorderRadiusFix(style, grid, borderColor);
+  } = resolveBorderRadiusFix(style, grid, borderColor, borderRadiusMethod);
 
   // Capa de fondo del cuerpo: obligatoria cuando useFix está activo. Sin
   // ella, las celdas sin backgroundColor propio (filas no-zebra) dejarían
@@ -35,6 +37,14 @@ const Table: React.FC<TableProps> = ({
   // sale del `backgroundColor` que el usuario haya puesto en `style`; si
   // no puso ninguno, queda `undefined` — el default nativo de la
   // librería, sin forzar blanco.
+  //
+  // NOTA: este sándwich (View exterior con padding simulando el borde +
+  // View interior con el backgroundColor real) es específico del método
+  // "view". Hoy `method` siempre termina siendo "view" (ver
+  // `resolveBorderRadiusFixSvg` en border-radius-fix.ts), así que no hace
+  // falta bifurcar el JSX todavía — pero cuando exista una implementación
+  // real de "svg" esta sección va a necesitar su propia rama, no solo el
+  // cálculo de geometría.
   const content = useFix ? (
     <View style={{ backgroundColor, borderRadius: innerRadius }}>{children}</View>
   ) : (
@@ -55,6 +65,7 @@ const Table: React.FC<TableProps> = ({
         outerRadius,
         outerBorderWidth,
         innerRadius,
+        borderRadiusMethod: method,
       }}
     >
       <View
