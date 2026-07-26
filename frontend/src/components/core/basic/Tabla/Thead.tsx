@@ -13,6 +13,21 @@ const Thead: React.FC<TheadProps> = ({
 }) => {
   const context = useContext(TableContext);
 
+  // El (o los) `Tr` que vienen como children acá nunca pasan por
+  // `Tbody` — son los únicos `Tr` de toda la tabla que no reciben
+  // `isLastRow` desde afuera. En grid="modern", `Tr` dibuja su propio
+  // borderBottom salvo que sea la última fila (ver Tr.tsx), así que sin
+  // este forzado ese `Tr` de encabezado dibujaría SU borde inferior,
+  // duplicando el que este mismo componente ya agrega más abajo en el
+  // `View` contenedor (`context.grid === "modern" && borderBottomWidth:
+  // 1`). Forzar `isLastRow: true` acá apaga el borde propio del `Tr`,
+  // dejando un único borde de cierre para el encabezado: el de `Thead`.
+  const rows = React.Children.map(children, (child) =>
+    React.isValidElement(child)
+      ? React.cloneElement(child as React.ReactElement<any>, { isLastRow: true })
+      : child
+  );
+
   return (
     <TableContext.Provider
       value={{
@@ -39,7 +54,7 @@ const Thead: React.FC<TheadProps> = ({
         ]}
         {...rest}
       >
-        {children}
+        {rows}
       </View>
     </TableContext.Provider>
   );

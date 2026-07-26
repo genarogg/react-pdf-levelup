@@ -35,6 +35,22 @@ export type BorderRadiusMethod = "view" | "svg";
  */
 export type CellVariant = "th" | "td";
 
+/**
+ * Una tanda de `rowsPerPage`: cuántas filas tiene y si fuerza salto de
+ * página antes de renderizarse.
+ *
+ *   - `nRow`: cantidad de filas de ESTA tabla (no acumulado).
+ *   - `break`: opcional. Si se omite, default `false` — o sea, salvo
+ *     que lo pidas explícitamente, ninguna tabla fuerza salto de
+ *     página por sí sola. Esto es distinto del comportamiento viejo
+ *     (donde toda tabla != la primera saltaba automáticamente): ahora
+ *     el salto es 100% explícito, entrada por entrada.
+ */
+export interface RowsPerPageEntry {
+  nRow: number;
+  break?: boolean;
+}
+
 export interface TableProps {
   children: React.ReactNode;
   style?: any;
@@ -56,6 +72,50 @@ export interface TableProps {
    * solo elige QUÉ implementación se usa una vez que ya está activo.
    */
   borderRadiusMethod?: BorderRadiusMethod;
+  /**
+   * Corta la tabla en tablas independientes de verdad — una por página —
+   * en vez de dejar que @react-pdf/renderer parta el contenido
+   * automáticamente en medio de las filas.
+   *
+   * Por qué existe: @react-pdf/renderer NO expone el tamaño de página ni
+   * el espacio restante a los componentes hijos (no hay un
+   * `usePageSize()` ni nada parecido) — así que `Table` no tiene forma
+   * de calcular solo cuántas filas entran. `rowsPerPage` evita ese
+   * problema pidiéndoselo directo: vos ya sabés cuántas filas entran por
+   * página (según tu `cellHeight`, el tamaño de página, y cuánto otro
+   * contenido comparte esa página).
+   *
+   * Formato: un array de `{ nRow, break? }`, uno por tanda, en orden —
+   * no acumulado. `[{ nRow: 5 }, { nRow: 10, break: true }]` es "la
+   * primera tabla tiene 5 filas y no fuerza salto; la segunda tiene 10
+   * filas y sí fuerza salto de página antes de renderizarse". `break`
+   * es opcional en cada entrada — si se omite, esa tabla NO fuerza
+   * salto (default `false`).
+   *
+   * Si `Tbody` tiene más filas de las que cubre el array, las que
+   * sobran se siguen cortando repitiendo la ÚLTIMA entrada completa
+   * (mismo `nRow` Y mismo `break`): con
+   * `[{ nRow: 5 }, { nRow: 10, break: true }]` y 27 filas en total,
+   * queda 5 + 10 + 10 + 2, y las tablas 3ª y 4ª (las que vienen de
+   * repetir la última entrada) también fuerzan `break: true`.
+   *
+   * Cada tabla resultante es una tabla `Table` completa e
+   * independiente — repite el `Thead`, y tiene su propio borde/esquinas
+   * redondeadas de arriba a abajo (con cualquiera de los dos métodos,
+   * "view" o "svg") como si hubieras escrito varios `<Table>` a mano.
+   *
+   * IMPORTANTE: mientras `rowsPerPage` esté activo (y realmente parta
+   * las filas en más de una tabla), la prop `break` de nivel `Table`
+   * (la de @react-pdf/renderer, para la tabla entera) se ignora — el
+   * salto de página entre tandas se controla ÚNICAMENTE con el `break`
+   * de cada entrada de `rowsPerPage`. Si querés controlar el `break` de
+   * la tabla completa vos mismo, no uses `rowsPerPage`.
+   *
+   * Sin este prop (default), `Table` se comporta como siempre: una sola
+   * tabla que @react-pdf parte automáticamente donde no entre más — sin
+   * cierre/apertura prolijos en el corte.
+   */
+  rowsPerPage?: RowsPerPageEntry[];
   /** Cualquier otra prop de View (@react-pdf/renderer): wrap, break, id, fixed, debug, etc. */
   [key: string]: any;
 }
