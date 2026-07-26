@@ -194,6 +194,27 @@ export function BorderRadiusSvgOverlay({
   const R = outerRadius;
   const r = Math.max(R - outerBorderWidth / 2, 0);
 
+  // Las 8 piezas (4 arcos + 4 rectas) se calculan para tocarse justo en
+  // R, sin superponerse ni dejar hueco — en teoría. En la práctica, R no
+  // suele ser un número entero de píxeles en el DPI final del PDF, así
+  // que cada pieza redondea SU PROPIO límite por separado al rasterizar
+  // (la caja del arco redondea "para adentro", la recta redondea "para
+  // afuera", o viceversa, según el caso) y puede quedar una columna/fila
+  // de menos de 1pt sin cubrir en la costura — se ve como una rayita del
+  // color de fondo cortando el borde justo donde el arco termina y
+  // empieza la recta. Encontrado renderizando a 600dpi y muestreando
+  // píxeles ahí mismo, no a simple vista.
+  //
+  // El arreglo: las piezas RECTAS (no los arcos) avanzan un toque hacia
+  // adentro de cada esquina, solapándose con el arco en vez de terminar
+  // justo en el límite teórico. Como ambas piezas pintan el mismo
+  // `outerBorderColor`, el solape no se nota (es lo mismo que pintar dos
+  // veces encima), pero el hueco de redondeo desaparece. No toco el
+  // tamaño de los arcos (`width/height: R`) porque ahí SÍ importa la
+  // coordenada exacta para que `cornerArcPath` dé el radio correcto.
+  const SEAM_OVERLAP = 0.5;
+  const edgeInset = Math.max(R - SEAM_OVERLAP, 0);
+
   const corner = (name: "tl" | "tr" | "br" | "bl", pos: Record<string, number>) => (
     <Svg key={name} style={{ position: "absolute", width: R, height: R, ...pos }}>
       <Path
@@ -216,8 +237,8 @@ export function BorderRadiusSvgOverlay({
         style={{
           position: "absolute",
           top: 0,
-          left: R,
-          right: R,
+          left: edgeInset,
+          right: edgeInset,
           height: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
@@ -226,8 +247,8 @@ export function BorderRadiusSvgOverlay({
         style={{
           position: "absolute",
           bottom: 0,
-          left: R,
-          right: R,
+          left: edgeInset,
+          right: edgeInset,
           height: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
@@ -236,8 +257,8 @@ export function BorderRadiusSvgOverlay({
         style={{
           position: "absolute",
           left: 0,
-          top: R,
-          bottom: R,
+          top: edgeInset,
+          bottom: edgeInset,
           width: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
@@ -246,8 +267,8 @@ export function BorderRadiusSvgOverlay({
         style={{
           position: "absolute",
           right: 0,
-          top: R,
-          bottom: R,
+          top: edgeInset,
+          bottom: edgeInset,
           width: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}

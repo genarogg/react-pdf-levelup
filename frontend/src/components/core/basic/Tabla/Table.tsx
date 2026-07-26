@@ -90,16 +90,25 @@ const Table: React.FC<TableProps> = ({
                 padding: outerBorderWidth,
               }
             : null,
-          // "svg" no necesita backgroundColor ni borderRadius en esta
-          // View — no clipearía nada igual (issue #640), y el trazo real
-          // lo dibuja `BorderRadiusSvgOverlay` aparte. Solo necesita
-          // `position: relative` como referencia para ese overlay
-          // absoluto, y el mismo `padding: outerBorderWidth` que "view"
-          // usa, para que el contenido no quede pegado contra el trazo.
+          // "svg" SÍ necesita `borderRadius: outerRadius` acá, aunque el
+          // trazo real lo dibuje `BorderRadiusSvgOverlay` aparte: sin
+          // esto, el `backgroundColor` que el usuario haya puesto en
+          // `style` (que `restStyle` deja pasar tal cual, ver
+          // `resolveBorderRadiusFixSvg`) se pintaría CUADRADO en esta
+          // View, asomando por detrás de la curva del trazo en las 4
+          // esquinas. Agregar `borderRadius` acá es seguro — no dispara
+          // el bug #395 — porque esta View NO tiene `borderWidth` real
+          // (lo saca `restStyle`): el bug es específicamente
+          // borderWidth+borderRadius juntos, no backgroundColor+
+          // borderRadius. `position: relative` sirve de referencia para
+          // el overlay absoluto, y el mismo `padding: outerBorderWidth`
+          // que "view" usa evita que el contenido quede pegado contra
+          // el trazo.
           isSvgFix
             ? {
                 position: "relative",
                 padding: outerBorderWidth,
+                borderRadius: outerRadius,
               }
             : null,
           restStyle,
