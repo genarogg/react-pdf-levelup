@@ -15,9 +15,9 @@ import Gradiant from "./extend/Gradiant"
 
 import Badge from "./extend/Badges"
 
-import QR from "./qr/QR"
-import QRstyle from "./qr/QRstyle"
-import ChartJS from "./charts/ChartJS"
+import QR from "./plugins/qr/QR"
+import QRstyle from "./plugins/qr/QRstyle"
+import ChartJS from "./plugins/charts/ChartJS"
 
 import Divider from "./extend/Divider"
 
@@ -50,11 +50,11 @@ Path,
 } from "@react-pdf/renderer"
 
 import { decodeBase64Pdf, generatePDF } from "../../functions"
-import Icon from "./icono/Icon"
+import Icon from "./plugins/icono/Icon"
 
 import { LayoutMultiPage, Section } from "./basic/layout/LayoutMultiPage"
 
-import CodeBar from "./codeBar/CodeBar"
+import CodeBar from "./plugins/codeBar/CodeBar"
 
 
 export {
