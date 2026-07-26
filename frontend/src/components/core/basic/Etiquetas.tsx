@@ -8,7 +8,6 @@ type LinkBaseProps = React.ComponentProps<typeof Link>
 interface TextProps extends Omit<TextBaseProps, "style"> {
   children?: React.ReactNode
   style?: any
-  href?: string
 }
 
 interface DivProps extends Omit<ViewBaseProps, "style"> {
@@ -154,7 +153,7 @@ const A: React.FC<LinkProps & { src?: string }> = ({ children, style, href, src,
 )
 
 const BR: React.FC<TextProps> = ({ style, ...rest }) => (
-  <Text style={[styles.br, style]} {...rest}>{"\n"}</Text>
+  <Text style={[styles.br, style]} {...rest} />
 )
 
 const HR: React.FC<DivProps> = ({ style, ...rest }) => (
