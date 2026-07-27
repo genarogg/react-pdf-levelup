@@ -13,21 +13,6 @@ const Thead: React.FC<TheadProps> = ({
 }) => {
   const context = useContext(TableContext);
 
-  // El (o los) `Tr` que vienen como children acá nunca pasan por
-  // `Tbody` — son los únicos `Tr` de toda la tabla que no reciben
-  // `isLastRow` desde afuera. En grid="modern", `Tr` dibuja su propio
-  // borderBottom salvo que sea la última fila (ver Tr.tsx), así que sin
-  // este forzado ese `Tr` de encabezado dibujaría SU borde inferior,
-  // duplicando el que este mismo componente ya agrega más abajo en el
-  // `View` contenedor (`context.grid === "modern" && borderBottomWidth:
-  // 1`). Forzar `isLastRow: true` acá apaga el borde propio del `Tr`,
-  // dejando un único borde de cierre para el encabezado: el de `Thead`.
-  const rows = React.Children.map(children, (child) =>
-    React.isValidElement(child)
-      ? React.cloneElement(child as React.ReactElement<any>, { isLastRow: true })
-      : child
-  );
-
   return (
     <TableContext.Provider
       value={{
@@ -40,10 +25,12 @@ const Thead: React.FC<TheadProps> = ({
       <View
         style={[
           { backgroundColor: context.headerBackground },
-          context.grid === "modern" && {
-            borderBottomWidth: 1,
-            borderColor: context.borderColor,
-          },
+          // El borde inferior de grid="modern" para la cabecera lo dibuja
+          // el propio Tr interno (ver Tr.tsx: borderBottomWidth cuando
+          // isLastRow es false, que es siempre el caso para la fila de
+          // Thead). Agregarlo también acá duplicaba la línea — las dos
+          // se apilaban y se veía como un borde doble/más grueso
+          // únicamente en la fila de encabezado.
           context.innerRadius
             ? {
                 borderTopLeftRadius: context.innerRadius,
@@ -54,7 +41,7 @@ const Thead: React.FC<TheadProps> = ({
         ]}
         {...rest}
       >
-        {rows}
+        {children}
       </View>
     </TableContext.Provider>
   );
