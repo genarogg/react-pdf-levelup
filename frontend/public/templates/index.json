@@ -1,4 +1,11 @@
 [
+
+  {
+    "id": "Invoice Fanton",
+    "name": "factura invoice",
+    "path": "/templates/invoice/Invoice-v1.tsx"
+  },
+  
   {
     "id": "default",
     "name": "Predeterminada",
@@ -9,11 +16,7 @@
     "name": "Factura",
     "path": "/templates/facturas/Factura.tsx"
   },
-  {
-    "id": "facturaInvoice",
-    "name": "factura invoice",
-    "path": "/templates/facturas/facturaInvoice.tsx"
-  },
+  
   {
     "id": "certificate",
     "name": "Certificado",
