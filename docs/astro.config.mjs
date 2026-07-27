@@ -22,7 +22,7 @@ export default defineConfig({
 				})
 			],
 			title: 'REACT PDF LEVELUP',
-			favicon: './public/iconos/favicon-32x32.png',
+			favicon: 'https://react-pdf-levelup.nimbux.cloud/iconos/favicon-32x32.png',
 			logo: {
 				src: './public/iconos/favicon-192x192.png',
 			},
