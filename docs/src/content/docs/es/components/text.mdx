@@ -169,7 +169,8 @@ Enlace (Link). Soporta todas las propiedades del componente `Link` de `@react-pd
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `href` | `string` | `""` | URL del enlace. |
+| `href` | `string` | `""` | URL del enlace (preferido). |
+| `src` | `string` | `""` | URL del enlace (compatibilidad). Si `href` no se provee, se usa `src`. |
 | `style` | `object` | `{}` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |

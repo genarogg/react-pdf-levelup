@@ -167,13 +167,14 @@ Link. Supports all properties of the `Link` component from `@react-pdf/renderer`
 
 ### Props
 
-| Name    | Type     | Default | Description           |
-| :------ | :------- | :------ | :-------------------- |
-| `href`  | `string` | `""`    | Link URL.             |
-| `style` | `object` | `{}`    | Additional styles.    |
-| `debug` | `boolean` | `false` | Enables debug mode (borders). |
-| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
-| `break` | `boolean` | `false` | Forces a page break before the element. |
+| Name    | Type     | Default | Description                                                                 |
+| :------ | :------- | :------ | :-------------------------------------------------------------------------- |
+| `href`  | `string` | `""`    | Link URL (preferred).                                                       |
+| `src`   | `string` | `""`    | Link URL (fallback). If `href` is not provided, `src` is used.              |
+| `style` | `object` | `{}`    | Additional styles.                                                          |
+| `debug` | `boolean` | `false` | Enables debug mode (borders).                                                |
+| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages.                        |
+| `break` | `boolean` | `false` | Forces a page break before the element.                                     |
 
 ### Example
 

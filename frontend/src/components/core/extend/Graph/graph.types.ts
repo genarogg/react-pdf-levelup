@@ -16,7 +16,12 @@ export type GraphVariant =
 
 export interface GraphDataPoint {
   label: string
-  value: number
+  // FIX (bug 11): el runtime (buildLineSegments, renderBarChart,
+  // renderHorizontalBarChart) trata `null`/`undefined` como gap intencional
+  // (spanGaps: false, ver comentario en graph.tsx), pero el tipo decía
+  // `number` a secas — cualquiera que quisiera usar esa feature documentada
+  // necesitaba un `as any`. El tipo ahora refleja el contrato real.
+  value: number | null
   color?: string
 }
 

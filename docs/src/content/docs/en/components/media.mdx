@@ -5,47 +5,61 @@ description: Components for images.
 
 ## Img
 
-Component for displaying images.
+Component for displaying images. Supports all properties of the `Image` component from `@react-pdf/renderer`. By default applies `width: "100%"` and `height: "auto"`.
 
 ### Props
 
-| Name    | Type     | Default    | Description           |
-| :------ | :------- | :--------- | :-------------------- |
-| `src`   | `string` | `""`       | Image URL.            |
-| `style` | `object` | `{}`       | Additional styles.    |
-| `debug` | `boolean` | `false` | Enables debug mode (borders). |
-| `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
-| `break` | `boolean` | `false` | Forces a page break before the element. |
+| Name    | Type     | Default    | Description                                                                       |
+| :------ | :------- | :--------- | :-------------------------------------------------------------------------------- |
+| `src`   | `string` | `""`       | Image URL or path.                                                                |
+| `style` | `object` | `{}`       | Additional styles.                                                                |
+| `debug` | `boolean`| `false`    | Enables debug mode (borders).                                                     |
+| `fixed` | `boolean`| `false`    | Indicates if the element should appear on all pages.                              |
+| `break` | `boolean`| `false`    | Forces a page break before the element.                                           |
 
 ### Example
 
 ```tsx
+import { Img } from '@react-pdf-levelup/core';
+
 <Img src="https://picsum.photos/400/200" style={{ width: 200 }} />
 ```
 
 ## ImgBg
 
-Background image with overlaid content.
+Background image with overlaid content. Places an image as an absolute background layer and renders `children` on top.
 
 ### Props
 
-| Name           | Type            | Default    | Description                       |
-| :------------- | :-------------- | :--------- | :-------------------------------- |
-| `src`          | `string`        | `""`       | Background image URL.             |
-| `width`        | `number\|string` | `"100%"`   | Background width.                 |
-| `height`       | `number\|string` | `"100%"`   | Background height.                |
-| `opacity`      | `number`        | `0.2`      | Background opacity (0-1).         |
-| `objectFit`    | `string`        | `"cover"`  | Image fit (cover, contain, fill, none, scale-down). |
-| `objectPosition` | `string`      | `"center"` | Image position.                   |
-| `fixed`        | `boolean`       | `false`    | Fix on all pages.                 |
-| `style`        | `object`        | `{}`       | Additional styles.                |
-| `debug` | `boolean` | `false` | Enables debug mode (borders). |
-| `break` | `boolean` | `false` | Forces a page break before the element. |
+| Name             | Type                                                              | Default    | Description                                                                         |
+| :--------------- | :---------------------------------------------------------------- | :--------- | :---------------------------------------------------------------------------------- |
+| `src`            | `string`                                                          | `N/A`      | **Required.** Background image URL or path.                                         |
+| `width`          | `number \| string`                                                | `"100%"`   | Container and image width.                                                          |
+| `height`         | `number \| string`                                                | `"100%"`   | Container and image height.                                                         |
+| `opacity`        | `number`                                                          | `0.2`      | Background image opacity (0 transparent — 1 opaque).                               |
+| `objectFit`      | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"`       | `"cover"`  | How the image fits within the container.                                            |
+| `objectPosition` | `"center" \| "top" \| "left" \| "right" \| "bottom"`             | `"center"` | Image position within the container.                                                |
+| `fixed`          | `boolean`                                                         | `false`    | Fixes the image on all pages (passed directly to `Image.fixed`).                    |
+| `children`       | `React.ReactNode`                                                 | `N/A`      | Content rendered on top of the background image.                                    |
+| `style`          | `object`                                                          | `{}`       | Additional styles for the container.                                                |
+| `debug`          | `boolean`                                                         | `false`    | Enables debug mode (borders).                                                       |
+| `break`          | `boolean`                                                         | `false`    | Forces a page break before the element.                                             |
+
+Additionally, it inherits all properties from `View` of `@react-pdf/renderer`.
 
 ### Example
 
 ```tsx
-<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
-  <P>Text over background image</P>
+import { ImgBg, P, Center } from '@react-pdf-levelup/core';
+
+<ImgBg
+  src="https://picsum.photos/600/400"
+  opacity={0.3}
+  objectFit="cover"
+  objectPosition="center"
+>
+  <Center>
+    <P style={{ fontSize: 18, color: '#fff' }}>Text over background image</P>
+  </Center>
 </ImgBg>
 ```

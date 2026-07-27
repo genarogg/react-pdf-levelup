@@ -62,7 +62,22 @@ export const computeYDomain = (
   series: GraphSeries[],
   forceZero = true,
 ): { yMin: number; yMax: number } => {
-  const values = series.flatMap((s) => s.data.map((d) => d.value))
+  // FIX (bug 13): antes se usaban los `value` crudos (incluyendo gaps null/
+  // undefined). Math.min/Math.max coaccionan `null` a 0, así que un hueco
+  // intencional contaminaba el dominio como si fuera un dato real en 0 —
+  // mucho más grave ahora que forceZero=false permite zoomear, porque el
+  // gap arrastraba el dominio de vuelta hacia 0 y anulaba el zoom.
+  const values = series
+    .flatMap((s) => s.data.map((d) => d.value))
+    .filter((v): v is number => v !== null && v !== undefined)
+
+  // FIX (bug 12, regresión del fix del bug 6): con forceZero=false y CERO
+  // valores válidos (serie vacía o solo gaps), Math.min(...[]) da Infinity
+  // y Math.max(...[]) da -Infinity. Con forceZero=true esto no pasaba
+  // porque el 0 forzado siempre entraba en el spread; al separar el camino
+  // para permitir el zoom quedó expuesto este caso.
+  if (values.length === 0) return { yMin: 0, yMax: 1 }
+
   const min = forceZero ? Math.min(...values, 0) : Math.min(...values)
   const max = forceZero ? Math.max(...values, 0) : Math.max(...values)
 

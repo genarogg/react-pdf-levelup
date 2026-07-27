@@ -1,0 +1,72 @@
+---
+title: Button
+description: Button component with predefined variants and sizes.
+---
+
+## Button
+
+Styled button component with multiple color variants and sizes. Supports links (`href`) and disabled state.
+
+The `Button` component avoids using real `borderWidth` on the `outline` variant to prevent issue #395 from `@react-pdf/renderer` (stroke + borderRadius distorts corner curves). Instead, it simulates the border through a fill ring.
+
+### Props
+
+| Name         | Type                                                                      | Default       | Description                                                                             |
+| :----------- | :------------------------------------------------------------------------ | :------------ | :-------------------------------------------------------------------------------------- |
+| `children`   | `React.ReactNode`                                                         | `N/A`         | Text or inner content of the button.                                                    |
+| `variant`    | `"primary" \| "secondary" \| "success" \| "danger" \| "outline"`         | `"primary"`   | Color variant of the button.                                                            |
+| `size`       | `"sm" \| "md" \| "lg"`                                                    | `"md"`        | Predefined size (affects padding and fontSize).                                        |
+| `disabled`   | `boolean`                                                                 | `false`       | Disables the button (muted colors, no link behavior).                                   |
+| `href`       | `string`                                                                  | `undefined`   | If provided and `disabled` is `false`, renders as a `Link`.                             |
+| `width`      | `number \| string`                                                        | `undefined`   | Explicit width for the button.                                                          |
+| `height`     | `number \| string`                                                        | `undefined`   | Explicit height for the button.                                                         |
+| `style`      | `any`                                                                     | `undefined`   | Additional styles for the button outer container.                                       |
+| `textStyle`  | `any`                                                                     | `undefined`   | Additional styles for the button inner text.                                            |
+
+Additionally, it inherits all properties from `View` of `@react-pdf/renderer`, and when used with `href`, it also inherits `Link` properties.
+
+### Variants
+
+| Variant       | Background  | Text        | Border      |
+| :------------ | :---------- | :---------- | :---------- |
+| `primary`     | `#4338ca`   | `#ffffff`   | `#4338ca`   |
+| `secondary`   | `#e6e8f0`   | `#1a1a2e`   | `#e6e8f0`   |
+| `success`     | `#22C55E`   | `#ffffff`   | `#22C55E`   |
+| `danger`      | `#EF4444`   | `#ffffff`   | `#EF4444`   |
+| `outline`     | transparent | `#4338ca`   | `#4338ca`   |
+
+### Sizes
+
+| Size | Vertical Padding | Horizontal Padding | FontSize | BorderRadius |
+| :--- | :--------------- | :----------------- | :------- | :----------- |
+| `sm` | 4                | 10                 | 9        | 4            |
+| `md` | 8                | 16                 | 11       | 6            |
+| `lg` | 12               | 22                 | 13       | 8            |
+
+### Example
+
+```tsx
+import { Button, Center } from '@react-pdf-levelup/core';
+
+// Medium primary button
+<Button variant="primary">Accept</Button>
+
+// Small outline button as link
+<Button
+  variant="outline"
+  size="sm"
+  href="https://example.com"
+>
+  See more
+</Button>
+
+// Large danger button disabled
+<Button variant="danger" size="lg" disabled>
+  Delete (disabled)
+</Button>
+
+// Success button with fixed width
+<Button variant="success" width={200}>
+  Save Changes
+</Button>
+```

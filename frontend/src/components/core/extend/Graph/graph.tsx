@@ -431,7 +431,14 @@ const renderPieDonutChart = (
   showValues: boolean,
 ): React.ReactNode => {
   const points = series[0]?.data ?? []
-  const total = points.reduce((sum, p) => sum + (p.value ?? 0), 0) || 1
+  // FIX (bug 14): una porción de pie/donut no tiene una representación
+  // gráfica válida para un valor negativo (no existe "proporción negativa"
+  // de un círculo). Sin clampear, un total negativo o mixto generaba
+  // sweeps negativos o mayores a 360° en arcPath, con cuñas invertidas o
+  // superpuestas. Se clampea a 0 solo para el ángulo — la porción no ocupa
+  // espacio visual, pero si showValues el label sigue mostrando el valor
+  // real (sin ocultar el signo).
+  const total = points.reduce((sum, p) => sum + Math.max(p.value ?? 0, 0), 0) || 1
 
   const cx = layout.chartX + layout.chartW / 2
   const cy = layout.chartY + layout.chartH / 2
@@ -457,8 +464,9 @@ const renderPieDonutChart = (
   return (
     <G>
       {points.map((point, i) => {
-        const value = point.value ?? 0
-        const sliceAngle = (value / total) * 360
+        const rawValue = point.value ?? 0
+        const angularValue = Math.max(rawValue, 0)
+        const sliceAngle = (angularValue / total) * 360
         const startAngle = angle
         const endAngle = angle + sliceAngle
         angle = endAngle
@@ -478,7 +486,7 @@ const renderPieDonutChart = (
             />
             {showValues && sliceAngle > 15 && (
               <AxisText x={lx} y={ly} fill={AXIS_TEXT_COLOR} textAnchor={anchor as "start" | "end" | "middle"}>
-                {`${truncate(point.label, 10)} (${fmtNum(value)})`}
+                {`${truncate(point.label, 10)} (${fmtNum(rawValue)})`}
               </AxisText>
             )}
           </G>

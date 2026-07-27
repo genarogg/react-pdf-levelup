@@ -102,6 +102,7 @@ export default defineConfig({
 								{ slug: 'components/table', label: 'Table' },
 								{ slug: 'components/lists', label: 'Lists' },
 								{ slug: 'components/media', label: 'Media' },
+								{ slug: 'components/button', label: 'Button' },
 							],
 						},
 						{

@@ -5,57 +5,87 @@ description: Components for creating ordered and unordered lists.
 
 ## UL
 
-Unordered List.
+Unordered List. Container for `LI` elements with bullets.
 
 ### Props
 
-| Name    | Type     | Default    | Description           |
-| :------ | :------- | :--------- | :-------------------- |
-| `style` | `object` | `{}`       | Additional styles.    |
-| `type`  | `string` | `"disc"`   | Bullet type (disc, circle, square). |
+| Name          | Type                                                                                           | Default     | Description                                                                                                                        |
+| :------------ | :--------------------------------------------------------------------------------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                              | `N/A`       | `LI` elements that make up the list.                                                                                               |
+| `style`       | `object`                                                                                       | `{}`        | Additional styles for the container.                                                                                               |
+| `type`        | `"disc" \| "circle" \| "square" \| "none"`                                                     | `"disc"`    | Bullet style. `"circle"` and `"square"` are drawn via SVG (better precision). `"none"` = no bullet.                                |
+| `fontSize`    | `number`                                                                                       | `undefined` | Font size for bullets and `LI` text (can be overridden by individual `LI`).                                                        |
+| `bulletColor` | `string`                                                                                       | `undefined` | Bullet color (can be overridden by individual `LI`).                                                                              |
 
 ### Example
 
 ```tsx
-<UL type="square">
+import { UL, LI } from '@react-pdf-levelup/core';
+
+<UL type="square" bulletColor="#4338ca">
   <LI>Element 1</LI>
   <LI>Element 2</LI>
+  <LI>Element 3</LI>
 </UL>
 ```
 
 ## OL
 
-Ordered List.
+Ordered List. Container for `LI` elements with automatic numbering.
 
 ### Props
 
-| Name    | Type     | Default     | Description           |
-| :------ | :------- | :---------- | :-------------------- |
-| `style` | `object` | `{}`        | Additional styles.    |
-| `type`  | `string` | `"decimal"` | Numbering type (decimal, lower-alpha, upper-alpha, lower-roman, upper-roman). |
-| `start` | `number` | `1`         | Starting number of the list. |
+| Name          | Type                                                                                                                                   | Default     | Description                                                                                                                                   |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                                                                      | `N/A`       | `LI` elements that make up the list.                                                                                                          |
+| `style`       | `object`                                                                                                                               | `{}`        | Additional styles for the container.                                                                                                          |
+| `type`        | `"decimal" \| "lower-alpha" \| "upper-alpha" \| "lower-roman" \| "upper-roman" \| "none"`                                             | `"decimal"` | Numbering style. `"none"` = no marker.                                                                                                        |
+| `start`       | `number`                                                                                                                               | `1`         | Starting number (or its equivalent) for the sequence.                                                                                         |
+| `fontSize`    | `number`                                                                                                                               | `undefined` | Font size for markers and `LI` text (can be overridden by individual `LI`).                                                                   |
+| `bulletColor` | `string`                                                                                                                               | `undefined` | Numeric marker color (can be overridden by individual `LI`).                                                                                  |
 
 ### Example
 
 ```tsx
-<OL type="upper-roman" start={3}>
+import { OL, LI } from '@react-pdf-levelup/core';
+
+<OL type="upper-roman" start={3} fontSize={12}>
   <LI>Item III</LI>
   <LI>Item IV</LI>
+  <LI>Item V</LI>
 </OL>
 ```
 
 ## LI
 
-List Item.
+List Item. Must be used inside `UL` or `OL`. Normally inherits `bulletType`, `isOrdered`, `index`, `start`, `fontSize` and `bulletColor` from the parent, but can also be declared in isolation or override those values.
 
 ### Props
 
-| Name    | Type     | Default | Description           |
-| :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| Name          | Type                                                                                                                                   | Default     | Description                                                                                                                              |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                                                                      | `N/A`       | Item content (text or other components).                                                                                                 |
+| `style`       | `object`                                                                                                                               | `{}`        | Additional styles for the item container.                                                                                                |
+| `bulletType`  | `string`                                                                                                                               | `"disc"`    | Bullet/marker style. Inherited from `UL`/`OL`.                                                                                           |
+| `isOrdered`   | `boolean`                                                                                                                              | `false`     | Whether it renders as numbered. Inherited from `UL`/`OL`.                                                                                |
+| `index`       | `number`                                                                                                                               | `1`         | 1-based position inside the list. Inherited from `UL`/`OL`.                                                                              |
+| `start`       | `number`                                                                                                                               | `1`         | Starting value of the sequence (for ordered lists only). Inherited from `OL`.                                                           |
+| `fontSize`    | `number`                                                                                                                               | `undefined` | Font size for the bullet/marker and any wrapped text content (if `children` is a string).                                               |
+| `bulletColor` | `string`                                                                                                                               | `undefined` | Bullet/marker color.                                                                                                                     |
 
 ### Example
 
 ```tsx
-<LI>Specific Value</LI>
+import { UL, OL, LI } from '@react-pdf-levelup/core';
+
+// Inside a list
+<UL type="circle">
+  <LI bulletColor="red">Red item</LI>
+  <LI bulletColor="blue">Blue item</LI>
+</UL>
+
+// Standalone usage (no UL/OL)
+<LI bulletType="disc" isOrdered={false} index={1} bulletColor="#22C55E">
+  Green bullet item
+</LI>
 ```

@@ -5,57 +5,87 @@ description: Componentes para crear listas ordenadas y desordenadas.
 
 ## UL
 
-Lista desordenada (Unordered List).
+Lista desordenada (Unordered List). Contenedor para elementos `LI` con viñetas.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-| `type` | `string` | `"disc"` | Tipo de viñeta (disc, circle, square). |
+| Nombre        | Tipo                                                                                          | Default     | Descripción                                                                                            |
+| :------------ | :-------------------------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                             | `N/A`       | Elementos `LI` que componen la lista.                                                                  |
+| `style`       | `object`                                                                                      | `{}`        | Estilos adicionales para el contenedor.                                                                |
+| `type`        | `"disc" \| "circle" \| "square" \| "none"`                                                    | `"disc"`    | Tipo de viñeta. `"circle"` y `"square"` se dibujan mediante SVG (mejor precisión). `"none"` sin viñeta. |
+| `fontSize`    | `number`                                                                                      | `undefined` | Tamaño de fuente para viñetas y texto de los `LI` (puede sobreescribirse por `LI` individual).          |
+| `bulletColor` | `string`                                                                                      | `undefined` | Color de la viñeta (puede sobreescribirse por `LI` individual).                                        |
 
 ### Ejemplo
 
 ```tsx
-<UL type="square">
+import { UL, LI } from '@react-pdf-levelup/core';
+
+<UL type="square" bulletColor="#4338ca">
   <LI>Elemento 1</LI>
   <LI>Elemento 2</LI>
+  <LI>Elemento 3</LI>
 </UL>
 ```
 
 ## OL
 
-Lista ordenada (Ordered List).
+Lista ordenada (Ordered List). Contenedor para elementos `LI` con numeración automática.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-| `type` | `string` | `"decimal"` | Tipo de numeración (decimal, lower-alpha, upper-alpha, lower-roman, upper-roman). |
-| `start` | `number` | `1` | Número inicial de la lista. |
+| Nombre        | Tipo                                                                                                                          | Default     | Descripción                                                                                                                               |
+| :------------ | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                                                             | `N/A`       | Elementos `LI` que componen la lista.                                                                                                     |
+| `style`       | `object`                                                                                                                      | `{}`        | Estilos adicionales para el contenedor.                                                                                                   |
+| `type`        | `"decimal" \| "lower-alpha" \| "upper-alpha" \| "lower-roman" \| "upper-roman" \| "none"`                                    | `"decimal"` | Tipo de numeración. `"none"` sin marcador.                                                                                                |
+| `start`       | `number`                                                                                                                      | `1`         | Número (o equivalente) inicial de la secuencia.                                                                                           |
+| `fontSize`    | `number`                                                                                                                      | `undefined` | Tamaño de fuente para marcadores y texto de los `LI` (puede sobreescribirse por `LI` individual).                                         |
+| `bulletColor` | `string`                                                                                                                      | `undefined` | Color del marcador numérico (puede sobreescribirse por `LI` individual).                                                                  |
 
 ### Ejemplo
 
 ```tsx
-<OL type="upper-roman" start={3}>
+import { OL, LI } from '@react-pdf-levelup/core';
+
+<OL type="upper-roman" start={3} fontSize={12}>
   <LI>Item III</LI>
   <LI>Item IV</LI>
+  <LI>Item V</LI>
 </OL>
 ```
 
 ## LI
 
-Elemento de lista (List Item).
+Elemento de lista (List Item). Debe usarse dentro de `UL` o `UL`. Normalmente hereda `bulletType`, `isOrdered`, `index`, `start`, `fontSize` y `bulletColor` del padre, pero también puede declararse de forma aislada o sobreescribir esos valores.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| Nombre        | Tipo                                                                                                                          | Default     | Descripción                                                                                                                    |
+| :------------ | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                                                                                                             | `N/A`       | Contenido del elemento (texto u otros componentes).                                                                            |
+| `style`       | `object`                                                                                                                      | `{}`        | Estilos adicionales para el contenedor del item.                                                                               |
+| `bulletType`  | `string`                                                                                                                      | `"disc"`    | Tipo de viñeta/marcador. Heredado de `UL`/`OL`.                                                                               |
+| `isOrdered`   | `boolean`                                                                                                                     | `false`     | Indica si se renderiza como numerado. Heredado de `UL`/`OL`.                                                                   |
+| `index`       | `number`                                                                                                                      | `1`         | Posición (1-based) dentro de la lista. Heredado de `UL`/`OL`.                                                                  |
+| `start`       | `number`                                                                                                                      | `1`         | Valor inicial de la secuencia (solo para listas ordenadas). Heredado de `OL`.                                                  |
+| `fontSize`    | `number`                                                                                                                      | `undefined` | Tamaño de fuente para viñeta/marcador y el texto contenido (si `children` es string).                                          |
+| `bulletColor` | `string`                                                                                                                      | `undefined` | Color de la viñeta/marcador.                                                                                                   |
 
 ### Ejemplo
 
 ```tsx
-<LI>Valor específico</LI>
+import { UL, OL, LI } from '@react-pdf-levelup/core';
+
+// Dentro de una lista
+<UL type="circle">
+  <LI bulletColor="red">Elemento rojo</LI>
+  <LI bulletColor="blue">Elemento azul</LI>
+</UL>
+
+// Uso aislado (sin UL/OL)
+<LI bulletType="disc" isOrdered={false} index={1} bulletColor="#22C55E">
+  Item con viñeta verde
+</LI>
 ```

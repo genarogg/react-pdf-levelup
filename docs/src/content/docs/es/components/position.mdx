@@ -3,56 +3,48 @@ title: Position
 description: Componentes de utilidad para alinear contenido.
 ---
 
-## Left
+## Left, Right, Center
 
-Alinea el contenido a la izquierda.
+Componentes de utilidad para alinear contenido horizontal y opcionalmente vertical. Todos (`Left`, `Right`, `Center`) comparten el mismo API. Se diferencian únicamente en la alineación horizontal por defecto.
 
-### Props
+- **Left**: Alinea contenido a la izquierda (`alignItems: "flex-start"`).
+- **Right**: Alinea contenido a la derecha (`alignItems: "flex-end"`).
+- **Center**: Alinea contenido al centro horizontalmente (`alignItems: "center"`).
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+Internamente son wrappers sobre `View` de `@react-pdf/renderer`.
 
-### Ejemplo
+### Props (comunes a Left, Right y Center)
 
-```tsx
-import { Left, P } from '@react-pdf-levelup/core';
+| Nombre     | Tipo              | Default     | Descripción                                                                                                              |
+| :--------- | :---------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `children` | `React.ReactNode` | `N/A`       | Contenido a alinear.                                                                                                     |
+| `vertical` | `boolean`         | `false`     | Si es `true`, además centra verticalmente (`justifyContent: "center"`). Útil para contenido con altura conocida.         |
+| `style`    | `any`             | `undefined` | Estilos adicionales (se mezclan al final).                                                                               |
 
-<Left><P>Texto a la izquierda</P></Left>
-```
+Además, heredan todas las propiedades de `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
 
-## Right
-
-Alinea el contenido a la derecha.
-
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-
-### Ejemplo
+### Ejemplos
 
 ```tsx
-import { Right, P } from '@react-pdf-levelup/core';
+import { Left, Right, Center, P, Div } from '@react-pdf-levelup/core';
 
-<Right><P>Texto a la derecha</P></Right>
-```
+// Alineación simple horizontal
+<Left>
+  <P>Texto a la izquierda</P>
+</Left>
 
-## Center
+<Right>
+  <P>Texto a la derecha</P>
+</Right>
 
-Centra el contenido horizontalmente.
+<Center>
+  <P>Texto centrado</P>
+</Center>
 
-### Props
-
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
-
-### Ejemplo
-
-```tsx
-import { Center, P } from '@react-pdf-levelup/core';
-
-<Center><P>Texto centrado</P></Center>
+// Alineación horizontal + centrado vertical en un contenedor alto
+<Div style={{ height: 120, backgroundColor: '#f0f0f0' }}>
+  <Center vertical>
+    <P>Centrado horizontal y vertical</P>
+  </Center>
+</Div>
 ```

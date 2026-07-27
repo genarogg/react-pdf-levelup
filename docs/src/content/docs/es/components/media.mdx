@@ -5,13 +5,13 @@ description: Componentes para imágenes.
 
 ## Img
 
-Componente para mostrar imágenes.
+Componente para mostrar imágenes. Soporta todas las propiedades del componente `Image` de `@react-pdf/renderer`. Por defecto aplica `width: "100%"` y `height: "auto"`.
 
 ### Props
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `src` | `string` | `""` | URL de la imagen. |
+| `src` | `string` | `""` | URL o ruta de la imagen. |
 | `style` | `object` | `{}` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
@@ -27,29 +27,39 @@ import { Img } from '@react-pdf-levelup/core';
 
 ## ImgBg
 
-Imagen de fondo con contenido superpuesto.
+Imagen de fondo con contenido superpuesto. Coloca una imagen como capa de fondo absoluta y renderiza `children` encima.
 
 ### Props
 
-| Nombre | Tipo | Default | Descripción |
-| :--- | :--- | :--- | :--- |
-| `src` | `string` | `""` | URL de la imagen de fondo. |
-| `width` | `number\|string` | `"100%"` | Ancho del fondo. |
-| `height` | `number\|string` | `"100%"` | Alto del fondo. |
-| `opacity` | `number` | `0.2` | Opacidad del fondo (0-1). |
-| `objectFit` | `string` | `"cover"` | Ajuste de la imagen (cover, contain, fill, none, scale-down). |
-| `objectPosition` | `string` | `"center"` | Posición de la imagen. |
-| `fixed` | `boolean` | `false` | Fijar en todas las páginas. |
-| `style` | `object` | `{}` | Estilos adicionales. |
-| `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
-| `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
+| Nombre           | Tipo                                                              | Default    | Descripción                                                                       |
+| :--------------- | :---------------------------------------------------------------- | :--------- | :-------------------------------------------------------------------------------- |
+| `src`            | `string`                                                          | `N/A`      | **Requerido.** URL o ruta de la imagen de fondo.                                  |
+| `width`          | `number \| string`                                                | `"100%"`   | Ancho del contenedor y la imagen.                                                 |
+| `height`         | `number \| string`                                                | `"100%"`   | Alto del contenedor y la imagen.                                                  |
+| `opacity`        | `number`                                                          | `0.2`      | Opacidad de la imagen de fondo (0 transparente — 1 opaca).                       |
+| `objectFit`      | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"`       | `"cover"`  | Ajuste de la imagen en el contenedor.                                             |
+| `objectPosition` | `"center" \| "top" \| "left" \| "right" \| "bottom"`             | `"center"` | Posición de la imagen.                                                            |
+| `fixed`          | `boolean`                                                         | `false`    | Fija la imagen en todas las páginas (se pasa directamente a `Image.fixed`).       |
+| `children`       | `React.ReactNode`                                                 | `N/A`      | Contenido que se renderiza sobre la imagen de fondo.                              |
+| `style`          | `object`                                                          | `{}`       | Estilos adicionales para el contenedor.                                           |
+| `debug`          | `boolean`                                                         | `false`    | Activa el modo debug (bordes).                                                    |
+| `break`          | `boolean`                                                         | `false`    | Fuerza un salto de página antes del elemento.                                     |
+
+Además, hereda todas las propiedades de `View` de `@react-pdf/renderer`.
 
 ### Ejemplo
 
 ```tsx
-import { ImgBg, P } from '@react-pdf-levelup/core';
+import { ImgBg, P, Center } from '@react-pdf-levelup/core';
 
-<ImgBg src="https://picsum.photos/600/400" opacity={0.3}>
-  <P>Texto sobre imagen de fondo</P>
+<ImgBg
+  src="https://picsum.photos/600/400"
+  opacity={0.3}
+  objectFit="cover"
+  objectPosition="center"
+>
+  <Center>
+    <P style={{ fontSize: 18, color: '#fff' }}>Texto sobre imagen de fondo</P>
+  </Center>
 </ImgBg>
 ```
