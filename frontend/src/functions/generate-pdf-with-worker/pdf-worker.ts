@@ -8,7 +8,7 @@ export interface PDFData {
   data?: unknown;
 }
 
-export default async function renderPDF({ templatePath, data }: PDFData): Promise<string> {
+export default async function generatePDFWorker({ templatePath, data }: PDFData): Promise<string> {
   if (!templatePath) throw new Error("templatePath not provided");
 
   // Re-ejecuta el módulo del template dentro de este worker
