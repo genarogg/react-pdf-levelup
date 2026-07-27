@@ -133,6 +133,10 @@ const renderBarChart = (
   showValues: boolean,
 ): React.ReactNode => {
   const nCategories = layout.xLabels.length
+  // FIX (bug 10): sin categorías (todas las series con data=[]) nCategories
+  // daba 0 -> groupW = chartW/0 = Infinity -> barW = NaN, que llegaba crudo
+  // a <Rect> (PDF inválido). No hay nada que dibujar, así que se corta acá.
+  if (nCategories === 0) return null
   const nSeries = series.length
   const groupW = layout.chartW / nCategories
   const gap = groupW * 0.25
@@ -202,6 +206,9 @@ const renderHorizontalBarChart = (
   showValues: boolean,
 ): React.ReactNode => {
   const nCategories = layout.xLabels.length
+  // FIX (bug 10): mismo caso que renderBarChart — sin categorías, rowH
+  // (chartH/0) da Infinity y se propaga a y/height del <Rect>.
+  if (nCategories === 0) return null
   const nSeries = series.length
   const rowH = layout.chartH / nCategories
   const barH = (rowH * 0.5) / nSeries
@@ -305,12 +312,18 @@ const renderHorizontalBarChart = (
 // 2). Se usa layout.xLabels.length como cantidad de categorías compartida
 // para que todas las series usen la misma escala y queden alineadas entre
 // sí y con el eje X.
+// FIX (bug 7): cada punto ahora arrastra su `color` (antes se perdía al
+// reducir el punto a {x,y}), para que los dots puedan respetarlo igual que
+// ya lo hace renderBarChart. La línea/área en sí sigue siendo un único
+// <Path> por segmento, así que su color sigue siendo el de la serie — un
+// trazo continuo no puede cambiar de color punto a punto sin partirlo en
+// un <Path> por tramo, que no es lo que se está pidiendo acá.
 const buildLineSegments = (
   serie: GraphSeries,
   layout: ChartLayout,
-): Array<Array<{ x: number; y: number }>> => {
-  const segments: Array<Array<{ x: number; y: number }>> = []
-  let current: Array<{ x: number; y: number }> = []
+): Array<Array<{ x: number; y: number; color?: string }>> => {
+  const segments: Array<Array<{ x: number; y: number; color?: string }>> = []
+  let current: Array<{ x: number; y: number; color?: string }> = []
   const categoryCount = layout.xLabels.length
 
   serie.data.forEach((point, i) => {
@@ -319,7 +332,11 @@ const buildLineSegments = (
       current = []
       return
     }
-    current.push({ x: xForIndex(i, categoryCount, layout), y: yForValue(point.value, layout) })
+    current.push({
+      x: xForIndex(i, categoryCount, layout),
+      y: yForValue(point.value, layout),
+      color: point.color,
+    })
   })
 
   if (current.length) segments.push(current)
@@ -353,13 +370,41 @@ const renderLineAreaChart = (
                 ? `${linePath} L ${seg[seg.length - 1].x} ${baseline} L ${seg[0].x} ${baseline} Z`
                 : null
 
+              // FIX (bug 8): un segmento de 1 solo punto (aislado entre dos
+              // huecos null) genera un `linePath` de un único comando "M",
+              // que no dibuja ningún trazo — con showDots=false ese dato no
+              // dejaba NINGÚN rastro visible. Un punto aislado siempre
+              // necesita su marcador, sin importar showDots, porque no hay
+              // línea que lo represente.
+              if (seg.length === 1) {
+                return (
+                  <Circle
+                    key={segIndex}
+                    cx={seg[0].x}
+                    cy={seg[0].y}
+                    r={2.2}
+                    fill={colorFor(sIndex, seg[0].color ?? serie.color, colors)}
+                  />
+                )
+              }
+
               return (
                 <G key={segIndex}>
                   {areaPath && <Path d={areaPath} fill={color} fillOpacity={0.15} />}
                   <Path d={linePath} stroke={color} strokeWidth={1.5} fill="none" />
+                  {/* FIX (bug 7): antes usaba `color` (fijo por serie); ahora
+                      cada dot respeta point.color igual que ya lo hacía
+                      renderBarChart, cayendo al color de la serie si el
+                      punto no trae uno propio. */}
                   {showDots &&
                     seg.map((p, i) => (
-                      <Circle key={i} cx={p.x} cy={p.y} r={2.2} fill={color} />
+                      <Circle
+                        key={i}
+                        cx={p.x}
+                        cy={p.y}
+                        r={2.2}
+                        fill={colorFor(sIndex, p.color ?? serie.color, colors)}
+                      />
                     ))}
                 </G>
               )

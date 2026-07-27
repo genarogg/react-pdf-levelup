@@ -32,8 +32,15 @@ export const colorFor = (
 // de miles forzado, máximo 2 decimales si no es entero.
 // ---------------------------------------------------------------------------
 
-export const fmtNum = (value: number): string =>
-  Number.isInteger(value) ? String(value) : value.toFixed(2).replace(/\.?0+$/, "")
+// FIX (bug 9): para valores negativos que redondean a cero (ej. -0.001),
+// toFixed(2) da "-0.00" y el replace de ceros finales deja "-0" — el signo
+// sobrevive aunque el número mostrado sea cero. Se normaliza ese caso puntual
+// a "0" sin tocar el resto del formato.
+export const fmtNum = (value: number): string => {
+  if (Number.isInteger(value)) return String(value)
+  const formatted = value.toFixed(2).replace(/\.?0+$/, "")
+  return formatted === "-0" ? "0" : formatted
+}
 
 export const truncate = (label: string, maxChars = 12): string =>
   label.length > maxChars ? `${label.slice(0, maxChars - 1)}…` : label
@@ -44,15 +51,25 @@ export const truncate = (label: string, maxChars = 12): string =>
 // (antes solo se aplicaba arriba, dejando el punto más bajo pegado al borde).
 // ---------------------------------------------------------------------------
 
-export const computeYDomain = (series: GraphSeries[]): { yMin: number; yMax: number } => {
+// FIX (bug 6): antes `min` siempre se comparaba contra 0 (`Math.min(...values, 0)`),
+// así que con datasets 100% positivos `yMinBase` quedaba fijo en 0 sin excepción —
+// invariante correcto para bar/horizontal-bar (una barra necesita partir de 0 para no
+// mentir visualmente) pero incorrecto para line/area, donde forzar el 0 comprime todo
+// el detalle arriba del chart cuando los valores están lejos de cero (ej. [100,105,110]).
+// `forceZero` (true por defecto, para no romper a los callers existentes) decide si el
+// dominio se ancla en 0 o se ajusta al rango real de los datos con el mismo padding.
+export const computeYDomain = (
+  series: GraphSeries[],
+  forceZero = true,
+): { yMin: number; yMax: number } => {
   const values = series.flatMap((s) => s.data.map((d) => d.value))
-  const min = Math.min(...values, 0)
-  const max = Math.max(...values, 0)
+  const min = forceZero ? Math.min(...values, 0) : Math.min(...values)
+  const max = forceZero ? Math.max(...values, 0) : Math.max(...values)
 
-  const yMinBase = min >= 0 ? 0 : min
+  const yMinBase = min >= 0 ? (forceZero ? 0 : min) : min
   const range = max - yMinBase
   const yMax = max + range * 0.08 || 1
-  // FIX: mismo padding proporcional para el mínimo cuando es negativo.
+  // mismo padding proporcional para el mínimo cuando es negativo o no se fuerza el 0.
   const yMin = yMinBase === 0 ? 0 : yMinBase - range * 0.08
 
   return { yMin, yMax }
@@ -102,7 +119,8 @@ export const buildLayout = (
     }
   }
 
-  const { yMin, yMax } = computeYDomain(series)
+  const forceZero = variant === "bar" || variant === "horizontal-bar"
+  const { yMin, yMax } = computeYDomain(series, forceZero)
   const yTicks = computeYTicks(yMin, yMax, yTickCount)
 
   // FIX (bug 2): antes xLabels salía siempre de series[0]. Si esa serie
