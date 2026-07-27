@@ -104,7 +104,22 @@ export const buildLayout = (
 
   const { yMin, yMax } = computeYDomain(series)
   const yTicks = computeYTicks(yMin, yMax, yTickCount)
-  const xLabels = series[0]?.data.map((d) => d.label) ?? []
+
+  // FIX (bug 2): antes xLabels salía siempre de series[0]. Si esa serie
+  // llegaba vacía mientras otra sí tenía datos, nCategories (=
+  // xLabels.length, consumido en renderBarChart/renderHorizontalBarChart
+  // como chartW/nCategories o chartH/nCategories) daba 0 -> división por
+  // cero -> Infinity propagado a las coordenadas del <Rect> (PDF
+  // inválido). Si otra serie tenía MÁS puntos que series[0], esos índices
+  // extra caían fuera del área calculada. Ahora xLabels sale de la serie
+  // con más puntos, así que nCategories siempre alcanza para cubrir a
+  // todas las series (asumiendo que comparten orden de categorías, que ya
+  // es un requisito documentado del componente).
+  const longestSeries = series.reduce<GraphSeries | undefined>(
+    (longest, s) => (!longest || s.data.length > longest.data.length ? s : longest),
+    undefined,
+  )
+  const xLabels = longestSeries?.data.map((d) => d.label) ?? []
 
   return { svgW: width, svgH: height, chartX, chartY, chartW, chartH, yMin, yMax, yTicks, xLabels }
 }
@@ -125,6 +140,17 @@ export const polarToCartesian = (
   return { x: cx + r * Math.cos(angleRad), y: cy + r * Math.sin(angleRad) }
 }
 
+// FIX (bug 1): cuando el barrido es un círculo completo (una sola porción
+// con valor > 0, o todas las demás en 0), startAngle y endAngle difieren
+// en 360° exactos. polarToCartesian(0°) y polarToCartesian(360°) devuelven
+// el mismo punto (coseno/seno tienen período 360°), así que outerStart ===
+// outerEnd: el comando `A` queda con inicio y fin coincidentes, la spec de
+// SVG lo trata como longitud cero, y el renderer lo omite. El path termina
+// siendo un triángulo/cuña degenerada de superficie cero — la porción no
+// se ve. Partimos el barrido en dos mitades de 180° (arco válido en ambos
+// casos), que juntas cubren el círculo completo.
+const FULL_CIRCLE_EPSILON = 0.001
+
 export const arcPath = (
   cx: number,
   cy: number,
@@ -133,7 +159,16 @@ export const arcPath = (
   endAngle: number,
   innerR = 0,
 ): string => {
-  const large = endAngle - startAngle > 180 ? 1 : 0
+  const sweep = endAngle - startAngle
+
+  if (sweep >= 360 - FULL_CIRCLE_EPSILON) {
+    const midAngle = startAngle + 180
+    const firstHalf = arcPath(cx, cy, r, startAngle, midAngle, innerR)
+    const secondHalf = arcPath(cx, cy, r, midAngle, endAngle, innerR)
+    return `${firstHalf} ${secondHalf}`
+  }
+
+  const large = sweep > 180 ? 1 : 0
 
   const outerStart = polarToCartesian(cx, cy, r, endAngle)
   const outerEnd = polarToCartesian(cx, cy, r, startAngle)

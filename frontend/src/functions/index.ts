@@ -1,4 +1,4 @@
 import decodeBase64Pdf from "./decodeBase64Pdf";
-import generatePDF from "./generate-pdf/generatePDF";
+import generatePDF from "./generatePDF-back";
 
 export { decodeBase64Pdf, generatePDF };
