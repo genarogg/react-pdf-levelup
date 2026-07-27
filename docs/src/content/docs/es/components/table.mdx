@@ -3,225 +3,339 @@ title: Table
 description: Componentes para crear tablas estructuradas y personalizables.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 # Table
 
-Los componentes `Table`, `Thead`, `Tbody`, `Tr`, `Th` y `Td` proporcionan un conjunto completo para construir tablas estructuradas en tus documentos PDF, con opciones de personalización para el diseño y la apariencia.
+Los componentes `Table`, `Thead`, `Tbody`, `Tr`, `Th` y `Td` proporcionan un sistema completo de tablas para documentos PDF, con estilos predefinidos, filas zebra, cabeceras, soporte de bordes redondeados y división automática por páginas.
 
 ---
 
 ## Table
 
-El componente `Table` es el contenedor principal para la construcción de tablas. Permite definir estilos generales y comportamientos para todas las celdas y filas.
+Contenedor principal. Inyecta un contexto compartido (`TableContext`) con colores, tamaños y modo de cuadrícula, y controla el renderizado de bordes/esquinas redondeadas y la paginación manual mediante `rowsPerPage`.
 
 ### Props
 
-| Nombre           | Tipo                      | Default    | Descripción                                                                 |
-| :--------------- | :------------------------ | :--------- | :-------------------------------------------------------------------------- |
-| `children`       | `React.ReactNode`         | `undefined`| El contenido de la tabla (usualmente `Thead` y `Tbody`).                     |
-| `style`          | `any`                     | `{}`       | Estilos adicionales para la tabla.                                          |
-| `cellHeight`     | `number`                  | `22`       | Altura mínima de cada celda en la tabla.                                     |
-| `borderColor`    | `string`                  | `"#000"`   | Color del borde de la tabla y las celdas.                                   |
-| `textColor`      | `string`                  | `"#000"`   | Color del texto por defecto para todas las celdas.                          |
-| `headerBackground` | `string`                  | `"#ccc"`   | Color de fondo para las celdas del encabezado de la tabla.                  |
-| `zebraColor`     | `string`                  | `"#eeeeee"`| Color de fondo para las filas impares en el modo "modern".                   |
-| `grid`           | `"grid" \| "modern"` | `"grid"` | Define el estilo de la cuadrícula de la tabla ("grid" para bordes completos, "modern" para solo bordes inferiores). |
+| Nombre               | Tipo                                                                       | Default     | Descripción                                                                                                                                                                                                                                |
+| :------------------- | :------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`           | `React.ReactNode`                                                          | `N/A`       | Contenido de la tabla. Estructura recomendada: un `Thead` + un `Tbody` con `Tr` adentro.                                                                                                                                                  |
+| `style`              | `any`                                                                      | `{}`        | Estilos adicionales del contenedor exterior (se pasa a un `View`). **Nota:** si `style` incluye un `borderRadius` explícito, se activa automáticamente el workaround del bug de border-radius (issue #395 de `@react-pdf/renderer`).       |
+| `cellHeight`         | `number`                                                                   | `22`        | Altura mínima (`minHeight`) por defecto de las celdas que no declaren su propio `height`.                                                                                                                                                 |
+| `borderColor`        | `string`                                                                   | `"#000"`    | Color del borde exterior y de la cuadrícula interna. También se usa como fallback cuando el usuario no especifica un color de borde propio en `style`.                                                                                     |
+| `textColor`          | `string`                                                                   | `"#000"`    | Color del texto por defecto en toda la tabla (puede sobreescribirse por `Thead`, `Tbody` o cada celda individual).                                                                                                                         |
+| `headerBackground`   | `string`                                                                   | `"#ccc"`    | Color de fondo del contenedor del encabezado (`Thead`).                                                                                                                                                                                   |
+| `zebra`              | `boolean`                                                                  | `true`      | Habilita el patrón zebra (filas impares con fondo alternado).                                                                                                                                                                             |
+| `zebraColor`         | `string`                                                                   | `"#eeeeee"` | Color de fondo usado para las filas impares cuando `zebra: true`. Sólo afecta a `Td` — `Th` nunca se zebra.                                                                                                                               |
+| `grid`               | `"grid" \| "modern" \| "not-grid"`                                         | `"grid"`    | Estilo de la cuadrícula interna: **grid** → bordes completos, **modern** → sólo bordes inferiores entre filas, **not-grid** → sin bordes internos (se compensa con padding para no alterar el tamaño de celda).                             |
+| `borderRadiusMethod` | `"view" \| "svg"`                                                          | `"view"`    | Qué implementación usar para el workaround del bug de `borderRadius`. `"view"` simula el borde con un `View` exterior de relleno; `"svg"` dibuja el contorno con un trazo SVG superpuesto (permite interior transparente).                |
+| `rowsPerPage`        | `Array<{ nRow: number; break?: boolean }>`                                 | `undefined` | Si se provee, **divide el `Tbody` en varias tablas independientes**, una por cada "tanda" de filas, repitiendo el `Thead` en cada una y con bordes/redondeos propios. Ver abajo la sección dedicada.                                        |
+| `[key: string]`      | `any`                                                                      | —           | Cualquier otra prop de `View` de `@react-pdf/renderer`: `wrap`, `break`, `id`, `fixed`, `debug`, etc.                                                                                                                                      |
 
-### Ejemplo
+### Modos de cuadrícula (`grid`)
+
+| Modo         | Borde derecho entre columnas | Borde inferior entre filas | Borde exterior |
+| :----------- | :--------------------------- | :------------------------- | :------------- |
+| `"grid"`     | ✅ (todas menos la última)   | ✅ (todas menos última fila) | ✅ (por `Table`) |
+| `"modern"`   | ❌                           | ✅ (todas menos última fila) | ✅ (por `Table`) |
+| `"not-grid"` | ❌ (compensado con padding)  | ❌ (compensado con padding) | ✅ (por `Table`) |
+
+### Workaround de `borderRadius` (bug #395 de `@react-pdf/renderer`)
+
+`@react-pdf/renderer` distorsiona las curvas de las esquinas cuando una misma `View` combina `borderWidth` (stroke real) + `borderRadius`. Para evitarlo, cuando `style` trae un `borderRadius` explícito, `Table` **no usa border real** en el contenedor exterior. En su lugar aplica uno de estos dos métodos, seleccionables con `borderRadiusMethod`:
+
+- **`"view"`** (default): arma un "sándwich" — una `View` exterior con `backgroundColor: borderColor` + `padding: borderWidth` + `borderRadius`, y dentro el contenido real con un `backgroundColor` propio. Simple y robusto. **Limitación:** el interior de la tabla queda SIEMPRE con algún `backgroundColor` (forzado por la capa intermedia) — no puede ser 100% transparente.
+
+- **`"svg"`**: deja el contenido "hueco" y dibuja **arriba** del mismo, superpuesto, un contorno formado por 4 arcos SVG de esquina + 4 rectas `View` que unen las esquinas. **Ventaja:** el interior de la tabla permanece transparente si el usuario no especificó ningún `backgroundColor` en `style`, y no sufre el límite práctico de radio ≈12 del método "view". **Limitación:** usa 8 piezas, una sintaxis más compleja por dentro.
+
+La activación del fix es **automática por `borderRadius`**, no por `borderRadiusMethod`. Si `style` no tiene `borderRadius`, ninguno de los dos métodos se aplica — la tabla usa `borderWidth` normal como siempre.
+
+> ⚠️ Limitación conocida (método "view"): con `borderRadius` por encima de ~12, la aproximación de dos Views anidadas puede mostrar una pequeña desalineación visual en las esquinas. Para radios grandes usá preferentemente `borderRadiusMethod: "svg"`.
+
+### División manual por páginas (`rowsPerPage`)
+
+Por defecto `@react-pdf/renderer` parte las tablas "donde le queda bien", sin cerrar ni reabrir prolijamente los bordes ni repetir la cabecera. Para controlar esto de forma precisa, `Table` cuenta con `rowsPerPage`.
+
+**Cómo usarlo:** pasá un array de entradas, una por tanda, donde cada entrada define:
+
+- `nRow`: **cuántas filas de esta tabla entran** en esa página (no acumulado).
+- `break` (opcional, default `false`): si antes de renderizar **esa** tanda hay que forzar un salto de página.
+
+Si el `Tbody` tiene más filas que las que cubren tus entradas, el sobrante se sigue cortando **repitiendo la última entrada** (mismo `nRow` y mismo `break`) hasta terminar.
+
+Reglas importantes:
+- Mientras `rowsPerPage` produzca un split real, la prop `break` de nivel `Table` se ignora — cada tanda controla su propio salto con su `break` interno.
+- Si la estructura no es `Thead + Tbody` (por ejemplo, si `children` no tiene esos componentes), `rowsPerPage` se desactiva silenciosamente y cae al comportamiento normal.
+- Cada tanda renderiza su propio `Thead` y su propio borde/radio de punta a punta — como si hubieras escrito N `<Table>` a mano.
+
+### Ejemplos
+
+<Tabs>
+<TabItem label="Básica moderna">
 
 ```tsx
-import { Table, Thead, Tbody, Tr, Th, Td, Text } from '@react-pdf-levelup/core';
+import { Table, Thead, Tbody, Tr, Th, Td } from '@react-pdf-levelup/core';
 
-const MyTable = () => {
-  return (
-    <Table
-      cellHeight={25}
-      borderColor="#FF0000"
-      textColor="#0000FF"
-      headerBackground="#ADD8E6"
-      zebraColor="#D3D3D3"
-      grid="modern"
-    >
-      <Thead>
-        <Tr>
-          <Th>Columna A</Th>
-          <Th textAlign="right">Columna B</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        <Tr>
-          <Td>Dato 1</Td>
-          <Td>Dato 2</Td>
-        </Tr>
-        <Tr>
-          <Td>Dato 3</Td>
-          <Td>Dato 4</Td>
-        </Tr>
-      </Tbody>
-    </Table>
-  );
-}
-
-export default MyTable
+<Table
+  cellHeight={25}
+  borderColor="#4338ca"
+  textColor="#1f2937"
+  headerBackground="#c7d2fe"
+  zebraColor="#eef2ff"
+  zebra
+  grid="modern"
+  style={{ borderRadius: 8 }}
+>
+  <Thead>
+    <Tr>
+      <Th>Producto</Th>
+      <Th textAlign="right">Precio</Th>
+      <Th textAlign="right">Stock</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    <Tr>
+      <Td>Mouse</Td>
+      <Td textAlign="right">$ 29.99</Td>
+      <Td textAlign="right">120</Td>
+    </Tr>
+    <Tr>
+      <Td>Teclado</Td>
+      <Td textAlign="right">$ 49.99</Td>
+      <Td textAlign="right">80</Td>
+    </Tr>
+    <Tr>
+      <Td>Monitor</Td>
+      <Td textAlign="right">$ 299.00</Td>
+      <Td textAlign="right">15</Td>
+    </Tr>
+  </Tbody>
+</Table>
 ```
+
+</TabItem>
+<TabItem label="Con rowsPerPage">
+
+```tsx
+// Sabiendo que mi página entra ~5 filas, y quiero salto explícito antes
+// de la 2da tanda (pero ya no para la 3ra en adelante).
+<Table
+  cellHeight={22}
+  borderColor="#222"
+  style={{ borderRadius: 6 }}
+  rowsPerPage={[
+    { nRow: 5, break: false },
+    { nRow: 5, break: true  },  // salta antes de esta tanda
+    // la 3ra, 4ta, ... repiten la última: nRow=5, break=true
+  ]}
+>
+  <Thead>
+    <Tr><Th>#</Th><Th>Item</Th></Tr>
+  </Thead>
+  <Tbody>
+    {/* 27 filas → 5 + 5 + 5 + 5 + 5 + 2, con break antes de la 2da..6ta  */}
+    {Array.from({ length: 27 }).map((_, i) => (
+      <Tr key={i}><Td>{i + 1}</Td><Td>Item {i + 1}</Td></Tr>
+    ))}
+  </Tbody>
+</Table>
+```
+
+</TabItem>
+<TabItem label="Método SVG (interior transparente)">
+
+```tsx
+// Ejemplo con interior transparente sobre fondo rosa en el contenedor padre
+<Div style={{ backgroundColor: '#ffe4ec', padding: 20 }}>
+  <Table
+    borderColor="#be185d"
+    headerBackground="#fbcfe8"
+    zebraColor="#fce7f3"
+    grid="modern"
+    borderRadiusMethod="svg"
+    style={{ borderRadius: 16 }}  // radio grande, funciona bien en SVG
+  >
+    <Thead>
+      <Tr><Th>A</Th><Th>B</Th></Tr>
+    </Thead>
+    <Tbody>
+      <Tr><Td>1</Td><Td>2</Td></Tr>
+      <Tr><Td>3</Td><Td>4</Td></Tr>
+    </Tbody>
+  </Table>
+</Div>
+```
+
+</TabItem>
+</Tabs>
 
 ---
 
 ## Thead
 
-El componente `Thead` representa la sección del encabezado de la tabla.
+Sección del encabezado. Renderiza un `View` con `backgroundColor: headerBackground` del contexto, aplica `borderTopLeftRadius` / `borderTopRightRadius` cuando el fix de border-radius está activo, y sobreescribe el contexto de `textAlign`, `borderColor` y `textColor` para todos sus descendientes.
 
 ### Props
 
-| Nombre      | Tipo                               | Default     | Descripción                                         |
-| :---------- | :--------------------------------- | :---------- | :-------------------------------------------------- |
-| `children`  | `React.ReactNode`                  | `undefined` | El contenido del encabezado (usualmente componentes `Tr`). |
-| `style`     | `any`                              | `{}`        | Estilos adicionales para el encabezado.             |
-| `textAlign` | `"left" \| "center" \| "right"` | `"left"`  | Alineación del texto para las celdas del encabezado. |
-| `borderColor` | `string`                           | `(del contexto)` | Color del borde para el encabezado (sobrescribe el de `Table`). |
-| `textColor` | `string`                           | `(del contexto)` | Color del texto para el encabezado (sobrescribe el de `Table`). |
+| Nombre        | Tipo                               | Default          | Descripción                                                                   |
+| :------------ | :--------------------------------- | :--------------- | :---------------------------------------------------------------------------- |
+| `children`    | `React.ReactNode`                  | `N/A`            | Filas del encabezado (generalmente uno o más `Tr` con `Th` adentro).         |
+| `style`       | `any`                              | `{}`             | Estilos adicionales del contenedor del encabezado.                            |
+| `textAlign`   | `"left" \| "center" \| "right"`    | `"left"`         | Alineación por defecto de las celdas del encabezado (sobrescribe el Table).   |
+| `borderColor` | `string`                           | `(del contexto)` | Sobrescribe el `borderColor` heredado de `Table` para este `Thead`.           |
+| `textColor`   | `string`                           | `(del contexto)` | Sobrescribe el `textColor` heredado de `Table` para este `Thead`.             |
+| `[key: string]` | `any`                            | —                | Cualquier otra prop de `View` (wrap, break, id, fixed, debug, etc.).          |
 
 ### Ejemplo
 
 ```tsx
-import { Table, Thead, Tr, Th } from '@react-pdf-levelup/core';
-
-function MyTableWithHeader() {
-  return (
-    <Table>
-      <Thead textAlign="center" textColor="white" borderColor="darkgray">
-        <Tr>
-          <Th>Producto</Th>
-          <Th>Cantidad</Th>
-        </Tr>
-      </Thead>
-    </Table>
-  );
-}
+<Thead textAlign="center" textColor="#fff" borderColor="#4338ca">
+  <Tr>
+    <Th>Nombre</Th>
+    <Th>Edad</Th>
+  </Tr>
+</Thead>
 ```
 
 ---
 
 ## Tbody
 
-El componente `Tbody` representa el cuerpo de la tabla, donde se encuentran los datos principales.
+Sección del cuerpo. Por cada `Tr` que contiene le inyecta vía `cloneElement`:
+
+- `isLastRow: idx === count - 1` (usado por `Cell` para redondear esquinas inferiores y/o remover el borde inferior de la última fila).
+- `isOdd: idx % 2 === 1` (usado por `Td` para aplicar zebra).
+- Cualquier `[key: string]` extra que pases al `Tbody` se propaga tal cual a cada `Tr`.
 
 ### Props
 
-| Nombre      | Tipo              | Default        | Descripción                                         |
-| :---------- | :---------------- | :------------- | :-------------------------------------------------- |
-| `children`  | `React.ReactNode` | `undefined`    | El contenido del cuerpo (usualmente componentes `Tr`). |
-| `borderColor` | `string`          | `(del contexto)` | Color del borde para el cuerpo (sobrescribe el de `Table`). |
-| `textColor` | `string`          | `(del contexto)` | Color del texto para el cuerpo (sobrescribe el de `Table`). |
-
-### Ejemplo
-
-```tsx
-import { Table, Tbody, Tr, Td } from '@react-pdf-levelup/core';
-
-function MyTableWithBody() {
-  return (
-    <Table>
-      <Tbody borderColor="lightgray" textColor="gray">
-        <Tr>
-          <Td>Item 1</Td>
-          <Td>10</Td>
-        </Tr>
-        <Tr>
-          <Td>Item 2</Td>
-          <Td>25</Td>
-        </Tr>
-      </Tbody>
-    </Table>
-  );
-}
-```
+| Nombre         | Tipo              | Default          | Descripción                                                            |
+| :------------- | :---------------- | :--------------- | :--------------------------------------------------------------------- |
+| `children`     | `React.ReactNode` | `N/A`            | Filas del cuerpo (componentes `Tr` con `Td` adentro).                 |
+| `borderColor`  | `string`          | `(del contexto)` | Sobrescribe `borderColor` del contexto para este `Tbody`.             |
+| `textColor`    | `string`          | `(del contexto)` | Sobrescribe `textColor` del contexto para este `Tbody`.               |
+| `[key: string]`| `any`             | —                | Cualquier otra prop se propaga tal cual a cada `Tr` interno.          |
 
 ---
 
 ## Tr
 
-El componente `Tr` representa una fila dentro de la tabla (tanto en `Thead` como en `Tbody`).
+Fila de tabla (tanto dentro de `Thead` como de `Tbody`). Su responsabilidad principal es **calcular el ancho real de cada celda**, porque `@react-pdf/renderer` no tiene motor de tabla nativo (todo es flexbox):
+
+- Suma las "unidades de columna" de la fila: cada celda cuenta `colSpan` (default `1`) como tantas unidades.
+- Por cada celda: si la celda ya trae su propio `width` manual, se respeta. Si no, calcula un `width` porcentual: `100% * colSpan / totalUnits`.
+- Además, pasa a cada celda mediante `cloneElement`: `width`, `isFirst`, `isLast`, y reenvía `isLastRow` / `isOdd` que le llegaron desde `Tbody`.
 
 ### Props
 
-| Nombre    | Tipo              | Default | Descripción                       |
-| :-------- | :---------------- | :------ | :-------------------------------- |
-| `children` | `React.ReactNode` | `undefined` | El contenido de la fila (usualmente `Th` o `Td`). |
-| `style`   | `any`             | `{}`    | Estilos adicionales para la fila. |
+| Nombre          | Tipo              | Default     | Descripción                                                                         |
+| :-------------- | :---------------- | :---------- | :---------------------------------------------------------------------------------- |
+| `children`      | `React.ReactNode` | `N/A`       | Celdas de la fila (`Th` o `Td`).                                                    |
+| `style`         | `any`             | `{}`        | Estilos adicionales del `View` de la fila.                                          |
+| `isLastRow`     | `boolean`         | `false`     | Indica si es la última fila del `Tbody`. Inyectado por `Tbody`, pero se puede setear a mano si usás `Tr` suelto. |
+| `isOdd`         | `boolean`         | `false`     | Indica si es una fila impar (para zebra). Inyectado por `Tbody`.                    |
+| `[key: string]` | `any`             | —           | Cualquier otra prop de `View`.                                                      |
 
-### Ejemplo
+---
+
+## Th y Td
+
+`Th` (celda de encabezado) y `Td` (celda de datos) son wrappers idénticos sobre un mismo componente interno `Cell`, que sólo difieren en:
+
+1. **`Th`** usa `styles.th` (`fontWeight: bold`) y **nunca** aplica zebra ni redondea esquinas inferiores.
+2. **`Td`** usa `styles.td`, aplica zebra si `zebra && isOdd`, y redondea las esquinas inferiores de la última fila cuando hay `borderRadius`.
+
+Ambos comparten la siguiente API pública:
+
+### Props comunes a Th y Td
+
+| Nombre          | Tipo                               | Default          | Descripción                                                                                                                                                                                                                                                              |
+| :-------------- | :--------------------------------- | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`      | `React.ReactNode`                  | `undefined`      | Contenido de la celda. Puede ser string, número, o componentes.                                                                                                                                                                                                          |
+| `style`         | `any`                              | `{}`             | Estilos adicionales del `View` contenedor de la celda. Se aplica al final, después de los estilos base.                                                                                                                                                                  |
+| `width`         | `string \| number`                 | `undefined`      | **Ancho explícito** de la celda. Si no se provee, `Tr` calcula automáticamente el ancho proporcional por `colSpan`. Valores válidos: `"100%"`, `"120px"`, `120` (número = puntos). Este valor **tiene prioridad** sobre el cálculo automático — una celda con `width` no entra en `totalUnits`. |
+| `height`        | `string \| number`                 | `(cellHeight)`   | **Alto mínimo** de la celda (se aplica como `minHeight` al `View`). Si no se provee, usa el `cellHeight` del `TableContext` (default 22).                                                                                                                                |
+| `colSpan`       | `number`                           | `1`              | Cantidad de columnas que "abarca" la celda, en unidades lógicas. Sólo afecta el **ancho** (es horizontal, dentro de la misma fila) — no hay fusión real de celdas, simplemente una celda proporcionalmente más ancha. **`rowSpan` no existe / no está soportado.**    |
+| `textAlign`     | `"left" \| "center" \| "right"`    | `(del contexto)` | Alineación del texto. Precedencia: valor explícito en la celda → valor del `Thead`/contexto → `"left"` por defecto.                                                                                                                                                      |
+| `text`          | `boolean`                          | `true`           | **Fundamental.** Si es `true` (default), el contenido se envuelve en un `<Text>` antes de ser renderizado (correcto para strings/números). **Ponelo en `false` cuando `children` sea un componente basado en `View`** (ej.: un `Badge`), porque `Text` no puede contener `View` en `@react-pdf/renderer`. |
+| `isFirst`       | `boolean`                          | `false`          | Inyectado por `Tr`. Indica si es la primera celda de la fila (usado para remover `borderRightWidth` y para `borderBottomLeftRadius` en la última fila). Se puede sobreescribir manualmente si usás `Td`/`Th` fuera de un `Tr`.                                             |
+| `isLast`        | `boolean`                          | `false`          | Inyectado por `Tr`. Análogo al anterior.                                                                                                                                                                                                                                 |
+| `isLastRow`     | `boolean`                          | `false`          | Inyectado por `Tbody` → `Tr`. Usado para redondear esquinas inferiores y para remover `borderBottomWidth` en modo grid.                                                                                                                                                  |
+| `isOdd`         | `boolean`                          | `false`          | Inyectado por `Tbody` → `Tr`. Indica si la fila es impar, para aplicar zebra en `Td`.                                                                                                                                                                                    |
+| `[key: string]` | `any`                              | —                | Cualquier otra prop de `View` (o `Text` si `text=true`): `wrap`, `break`, `id`, `fixed`, `debug`, etc.                                                                                                                                                                   |
+
+### Notas importantes
+
+- **rowSpan no soportado:** la tabla está armada con `View` (flexbox) pura de `@react-pdf/renderer` y cada `Tr` es un hermano independiente del anterior, sin visibilidad de las columnas "ocupadas" entre filas. No hay forma limpia de hacer fusión vertical sin romper el flujo de paginado de PDF. Si necesitás ese efecto visual, usá un `View` posicionado manualmente por fuera del esquema `Tr`/`Td`.
+- **text=false:** si tu celda contiene un componente basado en `View` (p. ej. un badge estilado con `View` redondo interior), **siempre** poné `text={false}`. De lo contrario `@react-pdf/renderer` romperá el render porque intenta anidar un `View` dentro de un `Text`.
+- **colSpan se resuelve en Tr:** `Cell` recibe `colSpan` sólo para excluirlo de las props que se pasan al `View` nativo; el cálculo real del ancho ocurre en `Tr`. No hace nada si `Td` tiene `width` explícito.
+
+### Ejemplos
+
+<Tabs>
+<TabItem label="Anchos manuales y colSpan">
 
 ```tsx
-import { Tr, Td } from '@react-pdf-levelup/core';
-
-function MyTableRow() {
-  return (
-    <Tr style={{ backgroundColor: '#F0F0F0' }}>
-      <Td>Fila personalizada</Td>
-      <Td>Valor</Td>
+<Table borderColor="#222" style={{ borderRadius: 6 }}>
+  <Thead>
+    <Tr>
+      <Th width="20%">Código</Th>
+      <Th width="50%">Descripción</Th>
+      <Th colSpan={2}>Montos</Th>   {/* ocupa 2 unidades lógicas */}
     </Tr>
-  );
-}
+    <Tr>
+      <Th width="20%"></Th>
+      <Th width="50%"></Th>
+      <Th>Precio</Th>
+      <Th>Impuestos</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    <Tr>
+      <Td width="20%">A001</Td>
+      <Td width="50%">Artículo uno</Td>
+      <Td>100</Td>
+      <Td>21</Td>
+    </Tr>
+  </Tbody>
+</Table>
 ```
 
----
-
-## Th
-
-El componente `Th` representa una celda de encabezado individual dentro de una fila (`Tr`) en el `Thead`.
-
-### Props
-
-| Nombre      | Tipo                               | Default        | Descripción                                       |
-| :---------- | :--------------------------------- | :------------- | :------------------------------------------------ |
-| `children`  | `React.ReactNode`                  | `undefined`    | El contenido de la celda de encabezado.           |
-| `style`     | `any`                              | `{}`           | Estilos adicionales para la celda.                |
-| `width`     | `string \| number`                | `undefined`    | Ancho de la celda (ej. "50%", 100).                 |
-| `height`    | `string \| number`                | `(del contexto)` | Alto de la celda. Si no se especifica, usa `cellHeight` del contexto. |
-| `colSpan`   | `number`                           | `undefined`    | Número de columnas que ocupa esta celda.          |
-| `textAlign` | `"left" \| "center" \| "right"` | `"left"`     | Alineación del texto dentro de la celda.          |
-
-### Ejemplo
+</TabItem>
+<TabItem label="Celda con componente View (text=false)">
 
 ```tsx
-import { Th } from '@react-pdf-levelup/core';
+import { Div, P, Td } from '@react-pdf-levelup/core';
 
-function MyTableHeaderCell() {
+// Un badge hecho a mano con Views — NO puede vivir dentro de un <Text>.
+function Badge({ color = '#22c55e', children }) {
   return (
-    <Th width="30%" colSpan={2} textAlign="center" style={{ color: 'blue' }}>
-      Encabezado Combinado
-    </Th>
+    <Div style={{
+      flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start',
+      backgroundColor: color, paddingHorizontal: 6, paddingVertical: 2,
+      borderRadius: 999,
+    }}>
+      <P style={{ color: '#fff', fontSize: 9, fontWeight: 'bold', margin: 0 }}>
+        {children}
+      </P>
+    </Div>
   );
 }
+
+// Dentro de una Td:
+<Td text={false}>
+  <Badge color="#ef4444">BAJA</Badge>
+</Td>
 ```
 
----
-
-## Td
-
-El componente `Td` representa una celda de datos individual dentro de una fila (`Tr`) en el `Tbody`.
-
-### Props
-
-| Nombre      | Tipo                               | Default        | Descripción                                       |
-| :---------- | :--------------------------------- | :------------- | :------------------------------------------------ |
-| `children`  | `React.ReactNode`                  | `undefined`    | El contenido de la celda de datos.                |
-| `style`     | `any`                              | `{}`           | Estilos adicionales para la celda.                |
-| `width`     | `string \| number`                | `undefined`    | Ancho de la celda (ej. "25%", 50).                  |
-| `height`    | `string \| number`                | `(del contexto)` | Alto de la celda. Si no se especifica, usa `cellHeight` del contexto. |
-| `colSpan`   | `number`                           | `undefined`    | Número de columnas que ocupa esta celda.          |
-| `textAlign` | `"left" \| "center" \| "right"` | `"left"`     | Alineación del texto dentro de la celda.          |
-
-### Ejemplo
+</TabItem>
+<TabItem label="Alineaciones mixtas">
 
 ```tsx
-import { Td } from '@react-pdf-levelup/core';
-
-function MyTableDataCell() {
-  return (
-    <Td width="70" textAlign="right" style={{ fontSize: 12 }}>
-      Dato Importante
-    </Td>
-  );
-}
+<Td>Izquierda (default)</Td>
+<Td textAlign="center">Centrado</Td>
+<Td textAlign="right" height={40}>Alto 40, alineado der.</Td>
 ```
+
+</TabItem>
+</Tabs>
