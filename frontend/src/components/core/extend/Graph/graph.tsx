@@ -296,12 +296,22 @@ const renderHorizontalBarChart = (
 // de conectar (equivalente a spanGaps: false).
 // ---------------------------------------------------------------------------
 
+// FIX (bug 3): antes cada serie escalaba su eje X con su propia
+// serie.data.length. Con dos series de line/area de distinta cantidad de
+// puntos, cada una repartía sus puntos de punta a punta de forma
+// independiente: los extremos coincidían pero los puntos intermedios
+// quedaban en X distintas entre series, y distintas de las labels del eje
+// (que salen de layout.xLabels — la serie más larga, desde el fix del bug
+// 2). Se usa layout.xLabels.length como cantidad de categorías compartida
+// para que todas las series usen la misma escala y queden alineadas entre
+// sí y con el eje X.
 const buildLineSegments = (
   serie: GraphSeries,
   layout: ChartLayout,
 ): Array<Array<{ x: number; y: number }>> => {
   const segments: Array<Array<{ x: number; y: number }>> = []
   let current: Array<{ x: number; y: number }> = []
+  const categoryCount = layout.xLabels.length
 
   serie.data.forEach((point, i) => {
     if (point.value === null || point.value === undefined) {
@@ -309,7 +319,7 @@ const buildLineSegments = (
       current = []
       return
     }
-    current.push({ x: xForIndex(i, serie.data.length, layout), y: yForValue(point.value, layout) })
+    current.push({ x: xForIndex(i, categoryCount, layout), y: yForValue(point.value, layout) })
   })
 
   if (current.length) segments.push(current)
@@ -380,7 +390,21 @@ const renderPieDonutChart = (
 
   const cx = layout.chartX + layout.chartW / 2
   const cy = layout.chartY + layout.chartH / 2
-  const r = Math.min(layout.chartW, layout.chartH) / 2
+
+  // FIX (bug 4): antes r usaba casi todo el espacio disponible
+  // (Math.min(chartW, chartH)/2) y los labels se dibujaban a r*1.18 — con
+  // las dimensiones por defecto (500x300) eso deja el label de la porción
+  // que apunta hacia arriba en y=-15.2 (arriba del viewBox) y el de la que
+  // apunta hacia abajo en y=315.2 (debajo de los 300px de alto). No es un
+  // caso límite: pasa con los defaults del componente en cuanto hay una
+  // porción cerca del eje vertical y showValues=true. Cuando showValues
+  // está activo, reservamos ese 18% de radio extra reduciendo r de
+  // entrada, así el anillo de labels (r*LABEL_RADIUS_FACTOR) queda dentro
+  // del área dibujable en vez de salirse. Sin showValues no hay labels que
+  // reservar espacio, así que el radio completo sigue disponible.
+  const LABEL_RADIUS_FACTOR = 1.18
+  const maxR = Math.min(layout.chartW, layout.chartH) / 2
+  const r = showValues ? maxR / LABEL_RADIUS_FACTOR : maxR
   const innerR = isDonut ? r * 0.55 : 0
 
   let angle = 0
@@ -395,7 +419,7 @@ const renderPieDonutChart = (
         angle = endAngle
 
         const midAngle = (startAngle + endAngle) / 2
-        const labelR = r * 1.18
+        const labelR = r * LABEL_RADIUS_FACTOR
         const rad = ((midAngle - 90) * Math.PI) / 180
         const lx = cx + labelR * Math.cos(rad)
         const ly = cy + labelR * Math.sin(rad)
@@ -530,7 +554,14 @@ export const PdfGraph: React.FC<PdfGraphProps> = ({
       <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
         {renderChart()}
       </Svg>
-      {showLegend && legendEntries.length > 1 && <Legend entries={legendEntries} />}
+      {/* FIX (bug 5): antes exigía legendEntries.length > 1, así que con
+          una sola serie (bar/line/area) o un solo dato (pie/donut) la
+          leyenda no se mostraba aunque showLegend viniera en true
+          explícito — no estaba documentado como decisión deliberada.
+          showLegend es ahora la única condición relevante para el caller;
+          > 0 solo evita renderizar una fila vacía cuando no hay series ni
+          datos que mostrar. */}
+      {showLegend && legendEntries.length > 0 && <Legend entries={legendEntries} />}
     </View>
   )
 }
