@@ -11,6 +11,8 @@ This document describes the form components (`Form`, `Input`, `TextArea`, `Check
 
 The `Form` component is a container for all form fields, providing a context for shared styling and behavior.
 
+In addition to the documented props, it inherits all properties from the `View` component of `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
+
 ### Props
 
 | Property      | Type              | Default     | Description                                                     |
@@ -24,9 +26,8 @@ The `Form` component is a container for all form fields, providing a context for
 
 ### Usage Example
 
-```jsx
-import React from 'react';
-import { Layout, Form, Input, TextArea, Checkbox } from '@react-pdf-levelup/core'; // Adjust path
+```tsx
+import { Layout, Form, Input, TextArea, Checkbox } from '@react-pdf-levelup/core';
 
 const MyDocument = () => (
   <Layout>
@@ -43,6 +44,8 @@ export default MyDocument
 
 The `Input` component is used for single-line text input.
 
+In addition to the documented props, it inherits all properties from the `View` component of `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
+
 ### Props
 
 | Property      | Type             | Default     | Description                                                     |
@@ -57,7 +60,7 @@ The `Input` component is used for single-line text input.
 
 ### Usage Example
 
-```jsx
+```tsx
 <Input
   label="Full Name"
   placeholder="Enter your name"
@@ -69,6 +72,8 @@ The `Input` component is used for single-line text input.
 ## TextArea
 
 The `TextArea` component is used for multi-line text input.
+
+In addition to the documented props, it inherits all properties from the `View` component of `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
 
 ### Props
 
@@ -84,7 +89,7 @@ The `TextArea` component is used for multi-line text input.
 
 ### Usage Example
 
-```jsx
+```tsx
 <TextArea
   label="Comments"
   placeholder="Write your comments here..."
@@ -95,6 +100,8 @@ The `TextArea` component is used for multi-line text input.
 ## Checkbox
 
 The `Checkbox` component is used for boolean selections.
+
+In addition to the documented props, it inherits all properties from the `View` component of `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
 
 ### Props
 
@@ -107,6 +114,6 @@ The `Checkbox` component is used for boolean selections.
 
 ### Usage Example
 
-```jsx
+```tsx
 <Checkbox label="I accept the terms and conditions" checked={true} />
 ```

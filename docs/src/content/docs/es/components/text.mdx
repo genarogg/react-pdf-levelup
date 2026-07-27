@@ -11,7 +11,8 @@ Componentes básicos de texto (párrafo y encabezados). Soportan todas las propi
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales para el texto. |
+| `children` | `React.ReactNode` | `undefined` | Contenido interno (texto u otros componentes de texto). |
+| `style` | `object` | `undefined` | Estilos adicionales para el texto. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -39,7 +40,8 @@ Componentes de formato de texto en línea. Soportan todas las propiedades del co
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Contenido interno (texto u otros componentes inline). |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -62,7 +64,8 @@ Bloque de cita para destacar texto importante. Soporta todas las propiedades del
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Texto o contenido interno de la cita. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -83,7 +86,8 @@ Texto resaltado (como con un marcador). Soporta todas las propiedades del compon
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Texto o contenido interno a resaltar. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -104,7 +108,8 @@ Contenedor de texto inline genérico. Soporta todas las propiedades del componen
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Contenido interno inline. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -125,7 +130,7 @@ Salto de línea. Soporta todas las propiedades del componente `Text`.
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -148,7 +153,7 @@ Línea horizontal divisoria. Soporta todas las propiedades del componente `View`
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -169,9 +174,10 @@ Enlace (Link). Soporta todas las propiedades del componente `Link` de `@react-pd
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `href` | `string` | `""` | URL del enlace (preferido). |
-| `src` | `string` | `""` | URL del enlace (compatibilidad). Si `href` no se provee, se usa `src`. |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Texto o contenido visible del enlace. |
+| `href` | `string` | `undefined` | URL del enlace (preferido). |
+| `src` | `string` | `undefined` | URL del enlace (compatibilidad). Si `href` no se provee, se usa `src`. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -192,7 +198,8 @@ Contenedor genérico para agrupar elementos. Soporta todas las propiedades del c
 
 | Nombre | Tipo | Default | Descripción |
 | :--- | :--- | :--- | :--- |
-| `style` | `object` | `{}` | Estilos adicionales. |
+| `children` | `React.ReactNode` | `undefined` | Elementos hijos que se renderizan dentro del contenedor. |
+| `style` | `object` | `undefined` | Estilos adicionales. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |

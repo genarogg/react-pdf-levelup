@@ -11,6 +11,8 @@ Este documento describe los componentes de formulario (`Form`, `Input`, `TextAre
 
 El componente `Form` es un contenedor para todos los campos del formulario, proporcionando un contexto para el estilo y el comportamiento compartido.
 
+Además de las props documentadas, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
+
 ### Props
 
 | Propiedad    | Tipo                 | Predeterminado | Descripción                                                    |
@@ -24,9 +26,8 @@ El componente `Form` es un contenedor para todos los campos del formulario, prop
 
 ### Ejemplo de Uso
 
-```jsx
-import React from 'react';
-import { Layout, Form, Input, TextArea, Checkbox } from '@react-pdf-levelup/core'; 
+```tsx
+import { Layout, Form, Input, TextArea, Checkbox } from '@react-pdf-levelup/core';
 
 const MyDocument = () => (
   <Layout>
@@ -43,6 +44,8 @@ export default MyDocument
 
 El componente `Input` se utiliza para la entrada de texto de una sola línea.
 
+Además de las props documentadas, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
+
 ### Props
 
 | Propiedad     | Tipo                | Predeterminado | Descripción                                                   |
@@ -57,7 +60,7 @@ El componente `Input` se utiliza para la entrada de texto de una sola línea.
 
 ### Ejemplo de Uso
 
-```jsx
+```tsx
 <Input
   label="Nombre Completo"
   placeholder="Introduce tu nombre"
@@ -69,6 +72,8 @@ El componente `Input` se utiliza para la entrada de texto de una sola línea.
 ## TextArea
 
 El componente `TextArea` se utiliza para la entrada de texto de varias líneas.
+
+Además de las props documentadas, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
 
 ### Props
 
@@ -84,7 +89,7 @@ El componente `TextArea` se utiliza para la entrada de texto de varias líneas.
 
 ### Ejemplo de Uso
 
-```jsx
+```tsx
 <TextArea
   label="Comentarios"
   placeholder="Escribe tus comentarios aquí..."
@@ -95,6 +100,8 @@ El componente `TextArea` se utiliza para la entrada de texto de varias líneas.
 ## Checkbox
 
 El componente `Checkbox` se utiliza para selecciones booleanas.
+
+Además de las props documentadas, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, etc.).
 
 ### Props
 
@@ -107,6 +114,6 @@ El componente `Checkbox` se utiliza para selecciones booleanas.
 
 ### Ejemplo de Uso
 
-```jsx
+```tsx
 <Checkbox label="Acepto los términos y condiciones" checked={true} />
 ```

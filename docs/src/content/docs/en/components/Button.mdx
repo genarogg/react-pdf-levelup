@@ -9,6 +9,8 @@ Styled button component with multiple color variants and sizes. Supports links (
 
 The `Button` component avoids using real `borderWidth` on the `outline` variant to prevent issue #395 from `@react-pdf/renderer` (stroke + borderRadius distorts corner curves). Instead, it simulates the border through a fill ring.
 
+> ⚠️ **`outline` variant limitation:** The internal workaround assumes a white background (`#ffffff`) to simulate the ring's "transparent interior". If you place a `Button` with `variant="outline"` on a **non-white** background, the visual border effect will break. In that case, use a custom `style` or place the button only on white backgrounds.
+
 ### Props
 
 | Name         | Type                                                                      | Default       | Description                                                                             |
@@ -16,14 +18,24 @@ The `Button` component avoids using real `borderWidth` on the `outline` variant 
 | `children`   | `React.ReactNode`                                                         | `N/A`         | Text or inner content of the button.                                                    |
 | `variant`    | `"primary" \| "secondary" \| "success" \| "danger" \| "outline"`         | `"primary"`   | Color variant of the button.                                                            |
 | `size`       | `"sm" \| "md" \| "lg"`                                                    | `"md"`        | Predefined size (affects padding and fontSize).                                        |
-| `disabled`   | `boolean`                                                                 | `false`       | Disables the button (muted colors, no link behavior).                                   |
+| `disabled`   | `boolean`                                                                 | `false`       | Disables the button (muted colors, no link behavior). If `href` is present along with `disabled=true`, the link is silently ignored. |
 | `href`       | `string`                                                                  | `undefined`   | If provided and `disabled` is `false`, renders as a `Link`.                             |
-| `width`      | `number \| string`                                                        | `undefined`   | Explicit width for the button.                                                          |
-| `height`     | `number \| string`                                                        | `undefined`   | Explicit height for the button.                                                         |
-| `style`      | `any`                                                                     | `undefined`   | Additional styles for the button outer container.                                       |
-| `textStyle`  | `any`                                                                     | `undefined`   | Additional styles for the button inner text.                                            |
+| `width`      | `number \| string`                                                        | `undefined`   | Explicit width for the button. Accepts numeric values (points) or strings (`"100%"`, `"200px"`). |
+| `height`     | `number \| string`                                                        | `undefined`   | Explicit height for the button. Accepts numeric values (points) or strings.            |
+| `style`      | `any`                                                                     | `undefined`   | Additional styles for the button outer container. Applied last in the styles array, so it can override base styles (backgroundColor, borderRadius, padding, width, height). |
+| `textStyle`  | `any`                                                                     | `undefined`   | Additional styles for the button inner text. Applied last in the styles array, so it can override fontSize, color, fontWeight. |
 
-Additionally, it inherits all properties from `View` of `@react-pdf/renderer`, and when used with `href`, it also inherits `Link` properties.
+Additionally, it inherits all properties from `View` of `@react-pdf/renderer` (e.g. `margin`, `padding`, `flex`, `fixed`, `break`, `debug`), and when used with `href` and without `disabled`, it also inherits `Link` properties (e.g. `onPress`).
+
+### Exported types
+
+```ts
+import { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from '@react-pdf-levelup/core';
+```
+
+- `ButtonProps`: complete type of props accepted by the component.
+- `ButtonVariant`: variant union type (`"primary" \| "secondary" \| "success" \| "danger" \| "outline"`).
+- `ButtonSize`: size union type (`"sm" \| "md" \| "lg"`).
 
 ### Variants
 
@@ -43,7 +55,7 @@ Additionally, it inherits all properties from `View` of `@react-pdf/renderer`, a
 | `md` | 8                | 16                 | 11       | 6            |
 | `lg` | 12               | 22                 | 13       | 8            |
 
-### Example
+### Examples
 
 ```tsx
 import { Button, Center } from '@react-pdf-levelup/core';
@@ -65,8 +77,28 @@ import { Button, Center } from '@react-pdf-levelup/core';
   Delete (disabled)
 </Button>
 
-// Success button with fixed width
-<Button variant="success" width={200}>
+// Success button with fixed width and height
+<Button variant="success" width={200} height={40}>
   Save Changes
+</Button>
+
+// Button with percentage width
+<Button variant="secondary" width="100%">
+  Full-width button
+</Button>
+
+// Button with custom style (overrides base styles)
+<Button variant="primary" style={{ marginTop: 10, marginBottom: 10, borderRadius: 12 }}>
+  With margin and borderRadius
+</Button>
+
+// Button with custom textStyle
+<Button variant="primary" textStyle={{ letterSpacing: 2, fontWeight: 'bold' }}>
+  Styled text
+</Button>
+
+// Button with inherited View prop (margin)
+<Button variant="success" margin={5}>
+  With 5pt margin
 </Button>
 ```

@@ -11,7 +11,8 @@ Basic text components (paragraph and headings). They support all properties of t
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional text styles. |
+| `children` | `React.ReactNode` | `undefined` | Inner content (text or other text components). |
+| `style` | `object` | `undefined` | Additional text styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -39,7 +40,8 @@ Inline text formatting components. They support all properties of the `Text` com
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `children` | `React.ReactNode` | `undefined` | Inner content (text or other inline components). |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -62,7 +64,8 @@ Blockquote for highlighting important text. Supports all properties of the `Text
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `children` | `React.ReactNode` | `undefined` | Text or inner content of the quote. |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -83,7 +86,8 @@ Highlighted text (like with a marker). Supports all properties of the `Text` com
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `children` | `React.ReactNode` | `undefined` | Text or inner content to highlight. |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -104,7 +108,8 @@ Generic inline text container. Supports all properties of the `Text` component.
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `children` | `React.ReactNode` | `undefined` | Inner inline content. |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -125,7 +130,7 @@ Line break. Supports all properties of the `Text` component.
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -148,7 +153,7 @@ Horizontal dividing line. Supports all properties of the `View` component.
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}` | Additional styles. |
+| `style` | `object` | `undefined` | Additional styles. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -169,8 +174,8 @@ Link. Supports all properties of the `Link` component from `@react-pdf/renderer`
 
 | Name    | Type     | Default | Description                                                                 |
 | :------ | :------- | :------ | :-------------------------------------------------------------------------- |
-| `href`  | `string` | `""`    | Link URL (preferred).                                                       |
-| `src`   | `string` | `""`    | Link URL (fallback). If `href` is not provided, `src` is used.              |
+| `href`  | `string` | `undefined` | Link URL (preferred).                                                       |
+| `src`   | `string` | `undefined` | Link URL (fallback). If `href` is not provided, `src` is used.              |
 | `style` | `object` | `{}`    | Additional styles.                                                          |
 | `debug` | `boolean` | `false` | Enables debug mode (borders).                                                |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages.                        |
