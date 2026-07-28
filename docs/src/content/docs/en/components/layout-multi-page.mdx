@@ -17,19 +17,19 @@ These properties apply globally to the entire document but can be overridden ind
 
 | Name | Type | Default | Description |
 |--------|------|---------|-------------|
-| `size` | `PageSize` | `"A4"` | Base page size. |
+| `size` | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"` | Base page size. Can be a preset or a `{ width, height }` object in points. |
 | `orientation` | `Orientation` | `"vertical"` | Base page orientation. |
 | `backgroundColor` | `string` | `"white"` | Base background color. |
 | `backgroundImage` | `string` | `undefined` | Base background image for all pages. |
 | `backgroundImageOpacity` | `number` | `1` | Base background image opacity. |
 | `padding` | `number` | `30` | Base page padding. |
-| `margin` | `MarginPreset` | `"normal"` | Base margin preset. |
+| `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"` | Base margin adjustment. Accepts a preset or a number in points. |
 | `footer` | `ReactNode` | `undefined` | Base footer content. |
 | `footerLines` | `number` | `2` if footer exists, else `1` | Reserved footer space in lines. |
 | `pagination` | `boolean` | `true` | Base page numbering visibility. |
 | `rule` | `boolean` | `false` | Base reference grid visibility. |
 | `debug` | `boolean` | `false` | Base debug mode activation. |
-| `meta` | `DocumentMeta` | `{}` | Document metadata (title, author, etc.). |
+| `meta` | `DocumentMeta` | `{}` | Document metadata (title, author, passwords, permissions, etc.). |
 
 ---
 
@@ -46,12 +46,14 @@ The **Section** component represents an individual page within a `LayoutMultiPag
 | `backgroundImage` | `string` | Inherited | Overrides the background image for this page. |
 | `backgroundImageOpacity` | `number` | Inherited | Overrides the background image opacity. |
 | `padding` | `number` | Inherited | Overrides the padding for this page. |
-| `margin` | `MarginPreset` | Inherited | Overrides the margin preset. |
+| `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | Inherited | Overrides the margin preset or a number in points. |
 | `footer` | `ReactNode` | Inherited | Overrides the footer for this page. |
 | `footerLines` | `number` | Inherited | Overrides the footer space. |
 | `pagination` | `boolean` | Inherited | Enables/disables numbering on this page. |
 | `rule` | `boolean` | Inherited | Enables/disables the grid on this page. |
 | `debug` | `boolean` | Inherited | Enables/disables debug mode on this page. |
+| `dpi` | `number` | `undefined` | Specific DPI resolution for this page. |
+| `id` | `string` | `undefined` | HTML/CSS ID of the underlying `<Page>` element for this Section. |
 
 ---
 

@@ -26,20 +26,22 @@ Internamente gestiona la configuración de página y envuelve el contenido con l
 
 | Nombre | Tipo | Default | Descripción |
 |--------|------|---------|-------------|
-| `size` | `"4A0" \| "2A0" \| "A0" \| "A1" \| "A2" \| "A3" \| "A4" \| "A5" \| "A6" \| "A7" \| "A8" \| "B0" \| "B1" \| "B2" \| "B3" \| "B4" \| "B5" \| "B6" \| "B7" \| "B8" \| "B9" \| "C0" \| "C1" \| "C2" \| "C3" \| "C4" \| "C5" \| "C6" \| "C7" \| "C8" \| "RA0" \| "RA1" \| "RA2" \| "RA3" \| "RA4" \| "SRA0" \| "SRA1" \| "SRA2" \| "SRA3" \| "SRA4" \| "EXECUTIVE" \| "FOLIO" \| "LEGAL" \| "LETTER" \| "TABLOID" \| "ID1"` | `"A4"` | Tamaño de página (ISO 216 y formatos americanos). |
+| `size` | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"` | Tamaño de página. Puede ser un preset ISO/Americano o un objeto `{ width, height }` en puntos (72 dpi). |
 | `orientation` | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"` | `"vertical"` | Orientación de la página. Internamente se transforma a `portrait` o `landscape`. |
 | `backgroundColor` | `string` | `"white"` | Color de fondo de la página. |
 | `backgroundImage` | `string` | `undefined` | URL de imagen de fondo que ocupa toda la página. |
 | `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo (0–1). |
 | `padding` | `number` | `30` | Padding base cuando `margin="normal"`. |
-| `margin` | `"apa" \| "normal" \| "estrecho" \| "ancho"` | `"normal"` | Sistema de márgenes predefinidos. |
+| `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"` | Sistema de márgenes. Acepta un preset o un número en puntos para los 4 lados. |
 | `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
 | `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
-| `footerLines` | `number` | `2` si hay footer | Número de líneas reservadas para el footer. |
+| `footerLines` | `number` | `2` si hay footer, sino `1` | Número de líneas reservadas para el footer. |
 | `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
 | `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
 | `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
-| `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, palabras clave, etc.). |
+| `dpi` | `number` | `undefined` | Resolución DPI de la página (se pasa directamente a `<Page dpi>` de `@react-pdf/renderer`). |
+| `id` | `string` | `undefined` | ID HTML/CSS del elemento `<Page>` subyacente. |
+| `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, palabras clave, contraseñas, permisos, etc.). |
 
 ---
 
@@ -57,9 +59,28 @@ El prop `meta` permite configurar los metadatos estándar del archivo PDF, que s
 | `keywords` | `string` | Palabras clave (separadas por espacios). |
 | `creator` | `string` | Aplicación que creó el documento (Default: `react-pdf-levelup`). |
 | `producer` | `string` | Aplicación que produjo el PDF (Default: `react-pdf-levelup`). |
+| `pdfVersion` | `"1.3" \| "1.4" \| "1.5" \| "1.6" \| "1.7" \| "1.7ext3"` | Versión del estándar PDF. |
 | `language` | `string` | Idioma del documento (ej: `es-ES`). |
 | `pageMode` | `string` | Cómo se debe mostrar el documento al abrirlo (`useNone`, `useOutlines`, `useThumbs`, `fullScreen`). |
 | `pageLayout` | `string` | El diseño de página a utilizar (`singlePage`, `oneColumn`, `twoColumnLeft`, `twoColumnRight`). |
+| `creationDate` | `Date` | Fecha de creación del documento. |
+| `modificationDate` | `Date` | Fecha de última modificación del documento. |
+| `ownerPassword` | `string` | Contraseña de propietario (para proteger el PDF). |
+| `userPassword` | `string` | Contraseña de usuario (para abrir el PDF). |
+| `permissions` | `DocumentPermissions` | Permisos granulares del documento (ver tabla abajo). |
+| `onRender` | `(props: { blob?: Blob }) => any` | Callback ejecutado cuando el documento termina de renderizarse, recibe el `Blob` del PDF. |
+
+### Permisos (`DocumentPermissions`)
+
+| Propiedad | Tipo | Descripción |
+|-----------|------|-------------|
+| `printing` | `"lowResolution" \| "highResolution"` | Permite imprimir el documento en baja o alta resolución. Si se omite, la impresión no está permitida. |
+| `modifying` | `boolean` | Permite modificar el contenido del documento. |
+| `copying` | `boolean` | Permite copiar/extraer texto e imágenes. |
+| `annotating` | `boolean` | Permite agregar o modificar anotaciones. |
+| `fillingForms` | `boolean` | Permite rellenar campos de formulario. |
+| `contentAccessibility` | `boolean` | Permite extraer contenido para accesibilidad (lectores de pantalla). |
+| `documentAssembly` | `boolean` | Permite ensamblar el documento (insertar, rotar o borrar páginas). |
 
 ## Ejemplo de uso de `meta`
 
@@ -105,6 +126,14 @@ Aplica 72pt (1 pulgada) en todos los lados.
 
 Ideal para documentos académicos.
 
+## `margin` como número
+
+También puedes pasar un número directo en puntos (72 dpi = 1 pulgada):
+
+```tsx
+<Layout margin={50} />
+```
+
 ---
 
 # Fondo de Página
@@ -122,6 +151,14 @@ Ideal para documentos académicos.
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.2}
 >
+```
+
+## Tamaño de página personalizado
+
+Puedes definir un tamaño propio pasando un objeto `{ width, height }` en puntos:
+
+```tsx
+<Layout size={{ width: 400, height: 600 }} />
 ```
 
 ---
@@ -202,7 +239,30 @@ El componente **NextPage** permite insertar un salto de página manual dentro de
   footerLines={2}
   pagination
   rule={false}
+  dpi={300}
+  id="pagina-principal"
   style={{ fontFamily: 'Helvetica' }}
+  meta={{
+    title: "Factura #1234",
+    author: "Mi Empresa S.A.",
+    subject: "Facturación Mensual",
+    keywords: "factura pdf react",
+    language: "es-ES",
+    pdfVersion: "1.7",
+    creationDate: new Date("2026-01-15"),
+    modificationDate: new Date("2026-01-20"),
+    userPassword: "cliente123",
+    ownerPassword: "admin-super-seguro",
+    permissions: {
+      printing: "lowResolution",
+      copying: false,
+      modifying: false,
+      contentAccessibility: true,
+    },
+    onRender: ({ blob }) => {
+      console.log("PDF renderizado:", blob?.size, "bytes");
+    },
+  }}
 >
   <H1>Título del Documento</H1>
   <P>Contenido del documento...</P>
