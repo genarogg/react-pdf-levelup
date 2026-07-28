@@ -37,6 +37,18 @@ export interface ColumnItem {
   lineHeight?: number
   /** Key estable opcional; si no se pasa se usa el índice. */
   id?: string | number
+  /**
+   * Texto plano crudo del item — presente SOLO cuando `content` es texto
+   * partible entre columnas (viene seteado automáticamente al usar JSX
+   * normal). Si está presente y el item no tiene `height` explícito,
+   * `Column` puede cortar el texto y continuar el resto en la siguiente
+   * columna/página, igual que un salto de línea normal.
+   *
+   * Los items sin `text` (API avanzada con `height`, ej. Img/QR/firma) nunca
+   * se parten: si no entran completos, el bloque entero salta a la próxima
+   * columna.
+   */
+  text?: string
 }
 
 export interface ColumnProps {
@@ -141,23 +153,32 @@ function isColumnItemArray(
 }
 
 // ─── Extracción de texto plano de un nodo React ─────────────────────────────
-// Recorre children recursivamente para sumar la cantidad de caracteres de
-// texto real (strings/numbers) que contiene un nodo. Es lo que permite
-// estimar `chars` automáticamente cuando Column recibe JSX normal en vez de
-// la API avanzada — sin esto no hay forma de saber cuánto texto hay adentro
-// de un <P>, <Strong>, etc. sin renderizarlo primero.
+// Recorre children recursivamente para concatenar el texto real
+// (strings/numbers) que contiene un nodo. Es lo que permite estimar `chars`
+// automáticamente cuando Column recibe JSX normal en vez de la API
+// avanzada — sin esto no hay forma de saber cuánto texto hay adentro de un
+// <P>, <Strong>, etc. sin renderizarlo primero. El string devuelto (no solo
+// su longitud) es también lo que permite después CORTAR el texto entre
+// columnas: sin el contenido real no hay forma de saber dónde cortar.
 
-function extractTextLength(node: React.ReactNode): number {
-  if (node == null || typeof node === "boolean") return 0
-  if (typeof node === "string" || typeof node === "number") return String(node).length
+function extractText(node: React.ReactNode): string {
+  if (node == null || typeof node === "boolean") return ""
+  if (typeof node === "string" || typeof node === "number") return String(node)
   if (Array.isArray(node)) {
-    return node.reduce((sum: number, child) => sum + extractTextLength(child), 0)
+    return node.map(extractText).join("")
   }
   if (React.isValidElement(node)) {
     const childProps = node.props as { children?: React.ReactNode } | null | undefined
-    return childProps?.children !== undefined ? extractTextLength(childProps.children) : 0
+    return childProps?.children !== undefined ? extractText(childProps.children) : ""
   }
-  return 0
+  return ""
+}
+
+// Solo se usa para el caso `chars` explícito de la API avanzada, donde no
+// hay `content` de React del cual extraer texto y el consumidor ya pasó el
+// conteo a mano.
+function extractTextLength(node: React.ReactNode): number {
+  return extractText(node).length
 }
 
 // Alto por defecto cuando un hijo de JSX normal no tiene texto extraíble
@@ -175,10 +196,13 @@ function normalizeChildren(children: React.ReactNode | ColumnItem[]): ColumnItem
   // null/undefined/boolean, y asigna keys estables — exactamente lo que
   // necesitamos para tratar "uno o varios hijos JSX" de forma uniforme.
   return React.Children.toArray(children).map((child, index) => {
-    const chars = extractTextLength(child)
+    const text = extractText(child)
 
-    if (chars > 0) {
-      return { id: index, content: child, chars }
+    if (text.length > 0) {
+      // Se guarda tanto `chars` (longitud, usada para estimar alto) como
+      // `text` (contenido real, usado para cortar entre columnas si no
+      // entra completo).
+      return { id: index, content: child, chars: text.length, text }
     }
 
     console.warn(
@@ -225,11 +249,155 @@ function estimateItemHeight(
   return defaults.fontSize * defaults.lineHeight * defaults.safetyMargin
 }
 
+// ─── Corte de texto entre columnas ──────────────────────────────────────────
+// Dado un item de texto y el alto disponible restante en la columna actual,
+// calcula cuántos caracteres entran ahí (misma fórmula de estimación que
+// estimateItemHeight, pero invertida: de alto disponible a cantidad de
+// caracteres) y corta el string en el último espacio antes de ese límite,
+// para no partir una palabra a la mitad. Devuelve la porción que entra y la
+// porción restante como dos ColumnItem nuevos — el restante se vuelve a
+// intentar contra la siguiente columna, en cascada.
+//
+// `content` se reconstruye con React.cloneElement reemplazando sus
+// `children` por el texto parcial. Esto asume que `content` es un elemento
+// cuyo children es texto plano (el caso normal de <P>texto</P>) — si el
+// hijo tiene estructura interna compleja (varios <Strong> anidados, etc.)
+// el corte igual funciona a nivel de caracteres totales, pero puede perder
+// el formato interno de esa porción específica; es la misma limitación que
+// ya existe hoy para estimar `chars` en esos casos.
+
+interface SplitResult {
+  fitted: ColumnItem
+  remainder: ColumnItem
+}
+
+function splitTextItem(
+  item: ColumnItem,
+  availableHeight: number,
+  columnWidth: number,
+  defaults: {
+    fontSize: number
+    lineHeight: number
+    charWidthFactor: number
+    safetyMargin: number
+  }
+): SplitResult | null {
+  if (!item.text || availableHeight <= 0) return null
+
+  const fontSize = item.fontSize ?? defaults.fontSize
+  const lineHeightMult = item.lineHeight ?? defaults.lineHeight
+  const avgCharWidth = fontSize * defaults.charWidthFactor
+  const charsPerLine = Math.max(1, Math.floor(columnWidth / avgCharWidth))
+  const lineHeightPt = fontSize * lineHeightMult * defaults.safetyMargin
+
+  // Cuántas líneas completas entran en el espacio restante. Se descuenta el
+  // margen de seguridad también acá para ser consistentes con cómo se mide
+  // el resto del contenido, y para no cortar tan al límite que el render
+  // real desborde por el mismo desfase que safetyMargin busca absorber.
+  const linesThatFit = Math.floor(availableHeight / lineHeightPt)
+
+  // Si ni una línea entra, no vale la pena cortar un fragmento minúsculo:
+  // el item entero pasa a la siguiente columna (mismo comportamiento que un
+  // item atómico que no entra).
+  if (linesThatFit <= 0) return null
+
+  const charLimit = linesThatFit * charsPerLine
+  if (charLimit >= item.text.length) return null // entra completo, no hace falta cortar
+
+  // Cortar en el último espacio antes del límite para no partir una
+  // palabra. Si no hay espacio cercano (una palabra larguísima), se corta
+  // duro en el límite como último recurso.
+  let cutAt = item.text.lastIndexOf(" ", charLimit)
+  if (cutAt <= 0) cutAt = charLimit
+
+  const fittedText = item.text.slice(0, cutAt).trimEnd()
+  const remainderText = item.text.slice(cutAt).trimStart()
+
+  if (fittedText.length === 0 || remainderText.length === 0) return null
+
+  const fitted: ColumnItem = {
+    id: `${item.id}-a`,
+    content: replaceLeafText(item.content, fittedText),
+    text: fittedText,
+    chars: fittedText.length,
+    fontSize: item.fontSize,
+    lineHeight: item.lineHeight,
+  }
+
+  const remainder: ColumnItem = {
+    id: `${item.id}-b`,
+    content: replaceLeafText(item.content, remainderText),
+    text: remainderText,
+    chars: remainderText.length,
+    fontSize: item.fontSize,
+    lineHeight: item.lineHeight,
+  }
+
+  return { fitted, remainder }
+}
+
+// Baja recursivamente por `content` hasta encontrar el nodo hoja cuyos
+// `children` son directamente texto (string/number, o un array compuesto
+// solo por strings/numbers) y reemplaza ESE texto — preservando intactos
+// todos los wrappers intermedios (<View>, <P>, <Strong>, estilos, etc.).
+// Es lo que permite cortar `<View><Text>parrafo largo</Text></View>` sin
+// perder el <View> exterior, a diferencia de clonar solo el nivel superior.
+function replaceLeafText(node: React.ReactNode, newText: string): React.ReactNode {
+  if (!React.isValidElement(node)) return newText
+
+  const props = node.props as { children?: React.ReactNode } | null | undefined
+  const nodeChildren = props?.children
+
+  const isTextLeaf =
+    nodeChildren === undefined ||
+    typeof nodeChildren === "string" ||
+    typeof nodeChildren === "number" ||
+    (Array.isArray(nodeChildren) && nodeChildren.every((c) => typeof c === "string" || typeof c === "number"))
+
+  if (isTextLeaf) {
+    return React.cloneElement(node as React.ReactElement<{ children?: React.ReactNode }>, {
+      children: newText,
+    })
+  }
+
+  // Nodo intermedio (ej. <View> envolviendo un <Text>): se asume un único
+  // hijo relevante que contiene el texto real, que es el patrón usado por
+  // Column (`content: <View><Text>…</Text></View>`, `<P>…</P>`, etc.). Si
+  // hay varios hijos, se reemplaza el texto en el primero que efectivamente
+  // contenga texto extraíble, y el resto se deja igual.
+  const childrenArray = React.Children.toArray(nodeChildren)
+  let replaced = false
+  const newChildren = childrenArray.map((child) => {
+    if (replaced) return child
+    if (extractText(child).length === 0) return child
+    replaced = true
+    return replaceLeafText(child, newText)
+  })
+
+  if (!replaced) return node
+
+  return React.cloneElement(node as React.ReactElement<{ children?: React.ReactNode }>, {
+    children: newChildren,
+  })
+}
+
 // ─── Distribución en columnas y páginas ─────────────────────────────────────
-// Llenado secuencial tipo Word: se llena la columna 1 hasta que no entra el
-// próximo item, se pasa a la columna 2, y cuando ninguna columna de la tanda
-// actual tiene lugar, arranca una tanda nueva (próxima página). No hay
-// "balanceo" de columnas — si lo necesitás, se puede sumar como opción.
+// Llenado secuencial tipo Word:
+//
+// - Texto (items con `text`, sin `height` explícito): si no entra completo
+//   en el espacio restante de la columna actual, se CORTA — se escribe lo
+//   que entra y el resto continúa en la siguiente columna, en cascada,
+//   tantas veces como haga falta (columna → columna → página siguiente).
+//   El corte respeta palabras completas (nunca parte una palabra a la
+//   mitad).
+// - Contenido atómico (items con `height` explícito: Img, QR, firma): NUNCA
+//   se parte. Si no entra en el espacio restante, el bloque entero salta a
+//   la siguiente columna; si tampoco entra en ninguna columna de la tanda
+//   actual, salta a la próxima página. Igual que el ajuste de imágenes en
+//   Word.
+//
+// No hay "balanceo" de columnas (dejar todas más o menos parejas) — si lo
+// necesitás, se puede sumar como opción.
 
 type Distributed = ColumnItem[][][] // [pagina][columna] -> items
 
@@ -260,48 +428,76 @@ function distributeItems(
     colIndex = 0
   }
 
-  for (const item of items) {
-    const itemHeight = estimateItemHeight(item, columnWidth, estimateDefaults)
-
-    if (itemHeight > columnHeight) {
-      console.warn(
-        "Column: un item mide más que el alto disponible por columna; no se puede partir automáticamente y va a desbordar visualmente."
-      )
-    }
-
-    let placed = false
-    while (colIndex < columns) {
-      const spacing = used[colIndex] > 0 ? itemSpacing : 0
-      const fits = used[colIndex] + spacing + itemHeight <= columnHeight
-
-      if (fits || used[colIndex] === 0) {
-        currentPage[colIndex].push(item)
-        used[colIndex] += spacing + itemHeight
-        placed = true
-
-        // Alerta temprana (solo dev): si incluso con safetyMargin una
-        // columna quedó al límite del alto disponible, es una señal de que
-        // la estimación puede estar más desalineada de lo normal con el
-        // contenido real. No sustituye a safetyMargin/allowRowBreak — es
-        // observabilidad adicional para detectar casos límite antes de que
-        // se conviertan en un desborde real.
-        if (process.env.NODE_ENV !== "production" && used[colIndex] > columnHeight * 0.9) {
-          console.warn(
-            `Column: la columna ${colIndex} usa más del 90% del alto disponible incluso con safetyMargin. Verificá con <Column debug> si el fontSize real coincide con el asumido.`
-          )
-        }
-
-        break
-      }
-
+  const advanceColumn = (): boolean => {
+    if (colIndex < columns - 1) {
       colIndex += 1
+      return true
+    }
+    startNewPage()
+    return true
+  }
+
+  // Cola en vez de recorrido simple: al cortar un item de texto, la porción
+  // restante se reinserta al frente de la cola para procesarse a
+  // continuación contra la siguiente columna — así una única <P> larga
+  // puede terminar repartida en cascada entre varias columnas o páginas.
+  const queue: ColumnItem[] = [...items]
+
+  while (queue.length > 0) {
+    const item = queue.shift() as ColumnItem
+    const remainingHeight = columnHeight - used[colIndex] - (used[colIndex] > 0 ? itemSpacing : 0)
+    const itemHeight = estimateItemHeight(item, columnWidth, estimateDefaults)
+    const spacing = used[colIndex] > 0 ? itemSpacing : 0
+    const fits = used[colIndex] + spacing + itemHeight <= columnHeight
+
+    if (fits) {
+      currentPage[colIndex].push(item)
+      used[colIndex] += spacing + itemHeight
+
+      if (process.env.NODE_ENV !== "production" && used[colIndex] > columnHeight * 0.9) {
+        console.warn(
+          `Column: la columna ${colIndex} usa más del 90% del alto disponible incluso con safetyMargin. Verificá con <Column debug> si el fontSize real coincide con el asumido.`
+        )
+      }
+      continue
     }
 
-    if (!placed) {
-      startNewPage()
-      currentPage[0].push(item)
-      used[0] += itemHeight
+    // No entra completo. Si es texto partible (tiene `text` y no tiene
+    // `height` explícito), se intenta cortar por lo que quepa en el
+    // espacio restante de la columna actual — igual que Word: escribe lo
+    // que entra y sigue en la próxima columna.
+    const isSplittable = typeof item.text === "string" && typeof item.height !== "number"
+
+    if (isSplittable) {
+      const split = splitTextItem(item, remainingHeight, columnWidth, estimateDefaults)
+
+      if (split) {
+        currentPage[colIndex].push(split.fitted)
+        used[colIndex] += spacing + estimateItemHeight(split.fitted, columnWidth, estimateDefaults)
+        queue.unshift(split.remainder)
+        continue
+      }
     }
+
+    // Contenido atómico (Img/QR/firma con `height` explícito) o texto que
+    // no tiene ni una línea de espacio disponible: el bloque completo salta
+    // entero a la siguiente columna, sin partirse.
+    if (used[colIndex] === 0) {
+      // La columna está vacía y aun así no entra: no hay dónde más
+      // ponerlo sin desbordar. Se coloca igual (con warning) para no
+      // perder contenido en silencio.
+      if (itemHeight > columnHeight) {
+        console.warn(
+          "Column: un item mide más que el alto disponible por columna; no se puede partir automáticamente y va a desbordar visualmente."
+        )
+      }
+      currentPage[colIndex].push(item)
+      used[colIndex] += itemHeight
+      continue
+    }
+
+    advanceColumn()
+    queue.unshift(item)
   }
 
   pages.push(currentPage)
