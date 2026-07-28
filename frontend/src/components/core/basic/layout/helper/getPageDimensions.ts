@@ -9,6 +9,26 @@ export type PageSize =
 
 export type PdfOrientation = "portrait" | "landscape"
 
+// ─── Tamaño custom ───────────────────────────────────────────────────────────
+// Permite pasar { width, height } en puntos (72dpi) en vez de un preset string.
+
+export interface CustomPageSize {
+  width: number
+  height: number
+}
+
+// Tipo público que aceptan Layout / LayoutMultiPage / Section para `size`.
+export type PageSizeInput = PageSize | CustomPageSize
+
+export function isCustomPageSize(size: unknown): size is CustomPageSize {
+  return (
+    typeof size === "object" &&
+    size !== null &&
+    typeof (size as any).width === "number" &&
+    typeof (size as any).height === "number"
+  )
+}
+
 // Valores en puntos (72dpi), tal como los usa react-pdf internamente
 const PAGE_SIZES: Record<PageSize, [number, number]> = {
   "4A0": [4767.87, 6740.79],
@@ -61,8 +81,21 @@ const PAGE_SIZES: Record<PageSize, [number, number]> = {
 
 export const PAGE_DIMENSIONS = PAGE_SIZES
 
-export function getPageDimensions(pageSize: string, orientation: PdfOrientation) {
-  const [w, h] = PAGE_SIZES[pageSize.toUpperCase() as PageSize] ?? PAGE_SIZES.A4
+export function getPageDimensions(pageSize: PageSizeInput, orientation: PdfOrientation) {
+  // Tamaño custom: ya viene con width/height explícitos, no se busca en el mapa.
+  // Se normaliza igual que los presets: landscape = lado mayor como ancho,
+  // portrait = lado mayor como alto. Así el comportamiento es consistente
+  // sin importar si el tamaño vino de un preset o de un objeto custom.
+  if (isCustomPageSize(pageSize)) {
+    const { width, height } = pageSize
+    const long = Math.max(width, height)
+    const short = Math.min(width, height)
+    return orientation === "landscape"
+      ? { width: long, height: short }
+      : { width: short, height: long }
+  }
+
+  const [w, h] = PAGE_SIZES[pageSize.toString().toUpperCase() as PageSize] ?? PAGE_SIZES.A4
   return orientation === "landscape"
     ? { width: h, height: w }
     : { width: w, height: h }

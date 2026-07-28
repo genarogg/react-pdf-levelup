@@ -1,8 +1,14 @@
 import { useMemo } from "react"
 import { StyleSheet, View, Image } from "@react-pdf/renderer"
 import { type PdfOrientation } from "./helper/toPdfOrientation"
-import { getMargins, type MarginPreset } from "./helper/getMargins"
-import { getPageDimensions, type PageSize, PAGE_DIMENSIONS } from "./helper/getPageDimensions"
+import { getMargins, type MarginPreset, type MarginInput } from "./helper/getMargins"
+import {
+    getPageDimensions,
+    isCustomPageSize,
+    type PageSize,
+    type PageSizeInput,
+    PAGE_DIMENSIONS,
+} from "./helper/getPageDimensions"
 
 // ─── Constantes compartidas ─────────────────────────────────────────────────
 // Únicas en todo el proyecto. Layout y Section ya no mantienen copias propias.
@@ -46,7 +52,13 @@ export const styles = StyleSheet.create({
 // ligeramente distintas (uno emitía console.warn, el otro no). Ahora hay una
 // sola fuente de verdad para cada validación.
 
-export function validateSize(size: unknown): PageSize {
+export function validateSize(size: unknown): PageSizeInput {
+    // Tamaño custom: { width, height } en puntos.
+    if (isCustomPageSize(size)) {
+        if (size.width > 0 && size.height > 0) return size
+        console.warn(`Tamaño custom inválido: ${JSON.stringify(size)}. Usando A4.`)
+        return "A4"
+    }
     if (typeof size === "string" && VALID_SIZES.includes(size.toUpperCase())) {
         return size.toUpperCase() as PageSize
     }
@@ -62,7 +74,13 @@ export function validateOrientation(orientation: unknown): Orientation {
     return "vertical"
 }
 
-export function validateMargin(margin: unknown): MarginPreset {
+export function validateMargin(margin: unknown): MarginInput {
+    // Número directo en puntos.
+    if (typeof margin === "number") {
+        if (margin >= 0) return margin
+        console.warn(`Margen inválido: ${String(margin)}. Usando normal.`)
+        return "normal"
+    }
     if (typeof margin === "string" && VALID_MARGINS.includes(margin as MarginPreset)) {
         return margin as MarginPreset
     }
@@ -92,13 +110,13 @@ export function validateBackgroundColor(backgroundColor: unknown): string {
 // como el valor ya normalizado.
 
 export interface LayoutResolutionInput {
-    size: PageSize | string
+    size: PageSizeInput
     orientation: PdfOrientation
     backgroundColor?: string
     backgroundImage?: string
     backgroundImageOpacity?: number
     padding: number
-    margin: MarginPreset | string
+    margin: MarginInput
     footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
@@ -110,7 +128,7 @@ export interface LayoutResolutionResult {
     footerStyle: Record<string, any>
     grid: React.ReactNode
     bgImageNode: React.ReactNode
-    safeSize: PageSize
+    safeSize: PageSizeInput
     pdfOrientation: PdfOrientation
     footerHeight: number
 }
@@ -126,7 +144,12 @@ export function resolve<T>(local: T | undefined, global: T): T {
 // ─── Hook principal ──────────────────────────────────────────────────────────
 
 export function useLayoutResolution(input: LayoutResolutionInput): LayoutResolutionResult {
-    const safeSize = useMemo(() => validateSize(input.size), [input.size])
+    // Nota: cuando `input.size` es un objeto custom, se reconstruye una key
+    // estable (JSON) para las dependencias de useMemo, ya que un objeto nuevo
+    // en cada render rompería la memoización por referencia.
+    const sizeDepKey = isCustomPageSize(input.size) ? JSON.stringify(input.size) : input.size
+
+    const safeSize = useMemo(() => validateSize(input.size), [sizeDepKey])
     // orientation ya llega normalizado (PdfOrientation) desde Layout/LayoutMultiPage;
     // no se revalida ni se reconvierte acá — ver comentario en LayoutResolutionInput.
     const pdfOrientation = input.orientation

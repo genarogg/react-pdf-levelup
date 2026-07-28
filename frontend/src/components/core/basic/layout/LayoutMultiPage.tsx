@@ -7,23 +7,14 @@ import {
     validateOrientation,
     type Orientation,
 } from "./useLayoutResolution"
-import type { MarginPreset } from "./helper/getMargins"
-import type { PageSize } from "./helper/getPageDimensions"
+import type { MarginInput } from "./helper/getMargins"
+import type { PageSizeInput } from "./helper/getPageDimensions"
 import { toPdfOrientation } from "./helper/toPdfOrientation"
+import type { DocumentMeta } from "./Layout"
 
 // ─── Metadatos del documento ─────────────────────────────────────────────────
-
-interface DocumentMeta {
-    title?: string
-    author?: string
-    subject?: string
-    keywords?: string
-    creator?: string
-    producer?: string
-    language?: string
-    pageMode?: string
-    pageLayout?: string
-}
+// DocumentMeta (y DocumentPermissions) se define una sola vez en Layout.tsx
+// y se reusa acá — misma fuente de verdad para ambos entry points.
 
 const DEFAULT_META: DocumentMeta = {
     creator: "react-pdf-levelup",
@@ -34,14 +25,14 @@ const DEFAULT_META: DocumentMeta = {
 
 interface LayoutMultiPageProps {
     children: React.ReactNode
-    size?: PageSize
+    size?: PageSizeInput
     orientation?: Orientation
     pagination?: boolean
     backgroundColor?: string
     backgroundImage?: string
     backgroundImageOpacity?: number
     padding?: number
-    margin?: MarginPreset
+    margin?: MarginInput
     footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
@@ -56,13 +47,13 @@ interface InjectedPageProps {
     __globalBackgroundImage?: string
     __globalBackgroundImageOpacity?: number
     __globalPadding?: number
-    __globalMargin?: MarginPreset
+    __globalMargin?: MarginInput
     __globalFooter?: React.ReactNode
     __globalFooterLines?: number
     __globalRule?: boolean
     __globalDebug?: boolean
     __globalPagination?: boolean
-    __safeSize?: PageSize
+    __safeSize?: PageSizeInput
     __pdfOrientation?: "portrait" | "landscape"
 }
 
@@ -75,12 +66,14 @@ export interface SectionProps extends InjectedPageProps {
     backgroundImage?: string
     backgroundImageOpacity?: number
     padding?: number
-    margin?: MarginPreset
+    margin?: MarginInput
     footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
     debug?: boolean
     pagination?: boolean
+    dpi?: number
+    id?: string
 }
 
 // ─── Section: renderiza un Page real dentro de LayoutMultiPage ─────────────
@@ -101,6 +94,8 @@ const Section: React.FC<SectionProps> = ({
     rule,
     debug,
     pagination,
+    dpi,
+    id,
     __globalBackgroundColor = "white",
     __globalBackgroundImage,
     __globalBackgroundImageOpacity = 1,
@@ -140,7 +135,15 @@ const Section: React.FC<SectionProps> = ({
     })
 
     return (
-        <Page debug={resolvedDebug} size={__safeSize as any} orientation={__pdfOrientation} style={pageStyle} wrap>
+        <Page
+            debug={resolvedDebug}
+            size={__safeSize as any}
+            orientation={__pdfOrientation}
+            style={pageStyle}
+            dpi={dpi}
+            id={id}
+            wrap
+        >
             {bgImageNode}
             {grid}
             {children}
@@ -176,8 +179,11 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
     debug = false,
     meta = {},
 }) => {
-    const { title, author, subject, keywords, creator, producer, language, pageMode, pageLayout } =
-        { ...DEFAULT_META, ...meta }
+    const {
+        title, author, subject, keywords, creator, producer, pdfVersion, language,
+        pageMode, pageLayout, creationDate, modificationDate,
+        ownerPassword, userPassword, permissions, onRender,
+    } = { ...DEFAULT_META, ...meta }
 
     const safeSize = validateSize(size)
     const safeOrientationKey = validateOrientation(orientation)
@@ -206,8 +212,11 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
     return (
         <Document
             title={title} author={author} subject={subject} keywords={keywords}
-            creator={creator} producer={producer} language={language}
+            creator={creator} producer={producer} pdfVersion={pdfVersion} language={language}
             pageMode={pageMode as any} pageLayout={pageLayout as any}
+            creationDate={creationDate} modificationDate={modificationDate}
+            ownerPassword={ownerPassword} userPassword={userPassword}
+            permissions={permissions} onRender={onRender}
         >
             {pages}
         </Document>
