@@ -23,6 +23,8 @@ import Divider from "./extend/Divider"
 
 import Graph from "./extend/Graph"
 
+import Column from "./extend/Columns"
+
 import {
   PDFViewer,
   Document,
@@ -118,6 +120,7 @@ export {
   Divider,
   Button,
   Graph,
+  Column,
   // funciones
   decodeBase64Pdf,
   generatePDF,
