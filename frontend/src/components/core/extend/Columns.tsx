@@ -84,6 +84,35 @@ export interface ColumnProps {
    * Bajalo si tu fuente es más angosta, subilo si es más ancha.
    */
   charWidthFactor?: number
+  /**
+   * Margen de seguridad sobre la altura estimada de items con `chars`
+   * (texto). Compensa que la estimación por caracteres nunca puede ser
+   * exacta: no conoce el fontSize/lineHeight real del contenido, y
+   * charWidthFactor es un promedio, no un valor exacto por string.
+   *
+   * No aplica a items con `height` explícito (Img, QR, firma) — esos ya
+   * son exactos por definición.
+   *
+   * Default: 1.2 (derivado del caso diagnosticado: un desajuste de 1pt de
+   * fontSize generó un desborde real que solo un margen mayor a ~1.16
+   * hubiese evitado — 1.2 deja un poco de aire adicional sobre ese mínimo).
+   */
+  safetyMargin?: number
+  /**
+   * Si es `false` (default), cada fila de columnas es un bloque atómico
+   * (`wrap={false}`): sus columnas quedan garantizadas en la misma página,
+   * pero si la estimación falla igual —incluso con `safetyMargin`— el
+   * desborde queda invisible hasta que se mira el PDF final.
+   *
+   * Si es `true`, la fila puede partirse entre páginas cuando no entra
+   * completa, igual que cualquier bloque normal de react-pdf. El costo es
+   * que las columnas de una misma fila podrían no quedar alineadas en la
+   * misma página si el corte cae en medio del contenido.
+   *
+   * Recomendado en `true` para cualquier Column cuyo contenido de texto no
+   * tenga un fontSize/lineHeight 100% controlado y verificado.
+   */
+  allowRowBreak?: boolean
   /** Dibuja los límites de fila/columna, para calibrar los estimados a simple vista. */
   debug?: boolean
   style?: any
@@ -164,11 +193,20 @@ function normalizeChildren(children: React.ReactNode | ColumnItem[]): ColumnItem
 // esto es una aproximación: líneas estimadas × alto de línea. Funciona bien
 // para párrafos de largo normal. Para calibrar fino en tu fuente real, usá
 // `debug` y ajustá `charWidthFactor`/`lineHeight`.
+//
+// `safetyMargin` se aplica solo acá, sobre el cálculo por `chars`: el
+// contenido con `height` explícito (Img, QR, firma) ya es exacto por
+// definición y no necesita margen de seguridad.
 
 function estimateItemHeight(
   item: ColumnItem,
   columnWidth: number,
-  defaults: { fontSize: number; lineHeight: number; charWidthFactor: number }
+  defaults: {
+    fontSize: number
+    lineHeight: number
+    charWidthFactor: number
+    safetyMargin: number
+  }
 ): number {
   if (typeof item.height === "number") return item.height
 
@@ -178,13 +216,13 @@ function estimateItemHeight(
     const avgCharWidth = fontSize * defaults.charWidthFactor
     const charsPerLine = Math.max(1, Math.floor(columnWidth / avgCharWidth))
     const lines = Math.max(1, Math.ceil(item.chars / charsPerLine))
-    return lines * fontSize * lineHeightMult
+    return lines * fontSize * lineHeightMult * defaults.safetyMargin
   }
 
   console.warn(
     "Column: un item no trae `chars` ni `height`; se asume el alto de una sola línea. Agregá uno de los dos para una distribución precisa."
   )
-  return defaults.fontSize * defaults.lineHeight
+  return defaults.fontSize * defaults.lineHeight * defaults.safetyMargin
 }
 
 // ─── Distribución en columnas y páginas ─────────────────────────────────────
@@ -205,6 +243,7 @@ function distributeItems(
     fontSize: number
     lineHeight: number
     charWidthFactor: number
+    safetyMargin: number
   }
 ): Distributed {
   const { columns, columnWidth, columnHeight, itemSpacing, ...estimateDefaults } = options
@@ -239,6 +278,19 @@ function distributeItems(
         currentPage[colIndex].push(item)
         used[colIndex] += spacing + itemHeight
         placed = true
+
+        // Alerta temprana (solo dev): si incluso con safetyMargin una
+        // columna quedó al límite del alto disponible, es una señal de que
+        // la estimación puede estar más desalineada de lo normal con el
+        // contenido real. No sustituye a safetyMargin/allowRowBreak — es
+        // observabilidad adicional para detectar casos límite antes de que
+        // se conviertan en un desborde real.
+        if (process.env.NODE_ENV !== "production" && used[colIndex] > columnHeight * 0.9) {
+          console.warn(
+            `Column: la columna ${colIndex} usa más del 90% del alto disponible incluso con safetyMargin. Verificá con <Column debug> si el fontSize real coincide con el asumido.`
+          )
+        }
+
         break
       }
 
@@ -290,6 +342,8 @@ const Column: React.FC<ColumnProps> = React.memo(
     fontSize = 10,
     lineHeight = 1.35,
     charWidthFactor = 0.5,
+    safetyMargin = 1.2,
+    allowRowBreak = false,
     debug = false,
     style,
   }) => {
@@ -297,6 +351,12 @@ const Column: React.FC<ColumnProps> = React.memo(
 
     if (safeColumns !== columns) {
       console.warn(`Column: \`columns\` inválido (${columns}). Usando ${safeColumns}.`)
+    }
+
+    if (safetyMargin < 1) {
+      console.warn(
+        `Column: \`safetyMargin\` (${safetyMargin}) es menor a 1 — esto reduce la estimación en vez de darle margen. ¿Es intencional?`
+      )
     }
 
     const items = React.useMemo(() => normalizeChildren(children), [children])
@@ -312,8 +372,9 @@ const Column: React.FC<ColumnProps> = React.memo(
           fontSize,
           lineHeight,
           charWidthFactor,
+          safetyMargin,
         }),
-      [items, safeColumns, columnWidth, height, itemSpacing, fontSize, lineHeight, charWidthFactor]
+      [items, safeColumns, columnWidth, height, itemSpacing, fontSize, lineHeight, charWidthFactor, safetyMargin]
     )
 
     return (
@@ -328,7 +389,7 @@ const Column: React.FC<ColumnProps> = React.memo(
                 ...(debug ? [styles.debugRow] : []),
                 ...(style ? [style] : []),
               ]}
-              wrap={false}
+              wrap={!allowRowBreak}
             >
               {page.map((columnItems, colIndex) => (
                 <View
