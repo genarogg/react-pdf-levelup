@@ -1,0 +1,118 @@
+/*
+  Paletas para React PDF Levelup.
+  Importa este archivo UNA vez (ej. en src/main.tsx o src/index.css con @import).
+  El tema activo se controla con el atributo data-theme en <html>:
+    <html data-theme="amber">          -> paleta ambar sobre grafito
+    <html> (sin atributo)              -> indigo enfocado (default)
+  Ver useTheme.ts / ThemeSwitcher.tsx para cambiarlo en runtime.
+*/
+
+:root {
+  --color-background: 11 14 20;
+  --color-foreground: 232 234 240;
+  --color-muted: 24 27 33;
+  --color-muted-foreground: 133 135 141;
+  --color-border: 51 54 60;
+  --color-primary: 91 110 245;
+  --color-primary-foreground: 11 14 20;
+  --color-secondary: 42 45 51;
+  --color-accent: 143 160 255;
+  --color-card: 33 36 42;
+  --color-destructive: 239 68 68;
+  --color-gray-300: 204 205 214;
+  --color-gray-400: 158 159 169;
+  --color-gray-500: 113 115 124;
+  --color-gray-600: 83 84 93;
+  --color-gray-700: 66 67 77;
+  --color-gray-800: 42 43 52;
+  --color-gray-900: 28 29 39;
+}
+
+[data-theme="amber"] {
+  --color-background: 20 19 15;
+  --color-foreground: 242 239 233;
+  --color-muted: 33 32 28;
+  --color-muted-foreground: 142 140 135;
+  --color-border: 60 59 54;
+  --color-primary: 232 163 61;
+  --color-primary-foreground: 20 19 15;
+  --color-secondary: 51 50 46;
+  --color-accent: 245 217 168;
+  --color-card: 42 41 37;
+  --color-destructive: 239 68 68;
+  --color-gray-300: 213 209 201;
+  --color-gray-400: 168 163 156;
+  --color-gray-500: 123 118 111;
+  --color-gray-600: 92 88 81;
+  --color-gray-700: 76 71 64;
+  --color-gray-800: 52 47 40;
+  --color-gray-900: 38 33 26;
+}
+
+[data-theme="emerald"] {
+  --color-background: 10 15 13;
+  --color-foreground: 231 242 237;
+  --color-muted: 23 29 26;
+  --color-muted-foreground: 132 140 136;
+  --color-border: 50 56 53;
+  --color-primary: 47 191 143;
+  --color-primary-foreground: 10 15 13;
+  --color-secondary: 41 47 44;
+  --color-accent: 127 230 196;
+  --color-card: 32 38 35;
+  --color-destructive: 239 68 68;
+  --color-gray-300: 200 211 207;
+  --color-gray-400: 155 165 162;
+  --color-gray-500: 110 120 117;
+  --color-gray-600: 80 90 86;
+  --color-gray-700: 63 73 70;
+  --color-gray-800: 39 49 45;
+  --color-gray-900: 25 35 31;
+}
+
+[data-theme="terracotta"] {
+  --color-background: 23 20 18;
+  --color-foreground: 245 239 234;
+  --color-muted: 36 33 31;
+  --color-muted-foreground: 145 140 137;
+  --color-border: 63 59 57;
+  --color-primary: 226 100 59;
+  --color-primary-foreground: 23 20 18;
+  --color-secondary: 54 51 48;
+  --color-accent: 240 184 96;
+  --color-card: 45 42 40;
+  --color-destructive: 239 68 68;
+  --color-gray-300: 213 204 201;
+  --color-gray-400: 167 159 156;
+  --color-gray-500: 123 114 111;
+  --color-gray-600: 92 83 80;
+  --color-gray-700: 75 67 64;
+  --color-gray-800: 51 42 39;
+  --color-gray-900: 37 28 26;
+}
+
+[data-theme="slate-gold"] {
+  --color-background: 16 18 21;
+  --color-foreground: 237 238 240;
+  --color-muted: 29 31 34;
+  --color-muted-foreground: 138 139 141;
+  --color-border: 56 58 60;
+  --color-primary: 212 169 74;
+  --color-primary-foreground: 16 18 21;
+  --color-secondary: 47 49 52;
+  --color-accent: 124 139 153;
+  --color-card: 38 40 43;
+  --color-destructive: 239 68 68;
+  --color-gray-300: 212 209 202;
+  --color-gray-400: 166 163 157;
+  --color-gray-500: 122 119 112;
+  --color-gray-600: 91 88 81;
+  --color-gray-700: 74 71 65;
+  --color-gray-800: 50 47 41;
+  --color-gray-900: 36 33 27;
+}
+
+/* transicion suave al cambiar de tema */
+html {
+  transition: background-color 0.25s ease;
+}

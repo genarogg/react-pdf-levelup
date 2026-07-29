@@ -2,6 +2,7 @@ import React, { useState, useCallback, Suspense, lazy } from "react"
 import { Github, FileText, Play, Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { ThemeSwitcher } from "@/theme/ThemeSwitcher"
 
 const TemplateSelector = lazy(() => import("./TemplateSelector"))
 
@@ -85,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             className="group flex items-center gap-3 transition-transform duration-300 hover:scale-[1.02]"
                         >
 
-                            <h1 className="text-accent text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent whitespace-nowrap uppercase tracking-wide">
+                            <h1 className="text-accent text-xl md:text-2xl font-bold whitespace-nowrap uppercase tracking-wide">
                                 React PDF Levelup
                             </h1>
                         </Link>
@@ -166,6 +167,8 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                     </a>
                                 </>
                             )}
+
+                            <ThemeSwitcher />
                         </div>
                     </div>
 
@@ -203,13 +206,13 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             className="group flex items-center justify-center gap-2 transition-transform duration-300 hover:scale-[1.02] min-w-0"
                         >
 
-                            <h1 className="text-accent font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent truncate uppercase tracking-wide">
+                            <h1 className="text-accent font-bold whitespace-nowrap uppercase tracking-wide truncate">
                                 React PDF Levelup
                             </h1>
                         </Link>
 
-                        {/* Columna Derecha: Solo GitHub */}
-                        <div className="flex justify-end items-center flex-shrink-0">
+                        {/* Columna Derecha: GitHub + selector de tema */}
+                        <div className="flex justify-end items-center gap-1 flex-shrink-0">
                             <a
                                 href="https://github.com/genarogg/react-pdf-levelup"
                                 target="_blank"
@@ -218,6 +221,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             >
                                 <Github className="w-5 h-5 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
                             </a>
+                            <ThemeSwitcher />
                         </div>
                     </div>
                 </div>

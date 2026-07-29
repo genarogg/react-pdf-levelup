@@ -6,32 +6,36 @@ export default {
     "./public/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    colors: {
-      transparent: 'transparent',
-      black: '#000000',
-      white: '#ffffff',
-      background: 'rgb(2 8 23 / <alpha-value>)',
-      foreground: 'rgb(255 255 255 / <alpha-value>)',
-      muted: 'rgb(26 26 26 / <alpha-value>)',
-      'muted-foreground': 'rgb(156 163 175 / <alpha-value>)',
-      border: 'rgb(51 51 51 / <alpha-value>)',
-      primary: 'rgb(59 130 246 / <alpha-value>)',
-      'primary-foreground': 'rgb(255 255 255 / <alpha-value>)',
-      secondary: 'rgb(31 41 55 / <alpha-value>)',
-      accent: 'rgb(16 185 129 / <alpha-value>)',
-      card: 'rgb(255 255 255 / <alpha-value>)',
-      destructive: 'rgb(239 68 68 / <alpha-value>)',
-      gray: {
-        300: '#d1d5db',
-        400: '#9ca3af',
-        500: '#6b7280',
-        600: '#4b5563',
-        700: '#374151',
-        800: '#1f2937',
-        900: '#111827',
-      }
-    },
     extend: {
+      colors: {
+        background: 'rgb(var(--color-background) / <alpha-value>)',
+        foreground: 'rgb(var(--color-foreground) / <alpha-value>)',
+        muted: 'rgb(var(--color-muted) / <alpha-value>)',
+        'muted-foreground': 'rgb(var(--color-muted-foreground) / <alpha-value>)',
+        border: 'rgb(var(--color-border) / <alpha-value>)',
+        primary: 'rgb(var(--color-primary) / <alpha-value>)',
+        'primary-foreground': 'rgb(var(--color-primary-foreground) / <alpha-value>)',
+        secondary: 'rgb(var(--color-secondary) / <alpha-value>)',
+        accent: 'rgb(var(--color-accent) / <alpha-value>)',
+        card: 'rgb(var(--color-card) / <alpha-value>)',
+        destructive: 'rgb(var(--color-destructive) / <alpha-value>)',
+        // Solo pisamos estos 7 tonos de gray (300-900); el resto de la
+        // paleta default de Tailwind (incluyendo gray-50/100/200/950 y
+        // TODAS las demas familias: blue, purple, pink, emerald, cyan,
+        // amber, fuchsia, slate, etc.) se mantiene intacta. Eso es clave:
+        // code-block.tsx colorea su resaltado de sintaxis a mano con
+        // text-fuchsia-400 / text-cyan-400 / text-emerald-400 / text-amber-400,
+        // que son de la paleta default, no tokens custom.
+        gray: {
+          300: 'rgb(var(--color-gray-300) / <alpha-value>)',
+          400: 'rgb(var(--color-gray-400) / <alpha-value>)',
+          500: 'rgb(var(--color-gray-500) / <alpha-value>)',
+          600: 'rgb(var(--color-gray-600) / <alpha-value>)',
+          700: 'rgb(var(--color-gray-700) / <alpha-value>)',
+          800: 'rgb(var(--color-gray-800) / <alpha-value>)',
+          900: 'rgb(var(--color-gray-900) / <alpha-value>)',
+        }
+      },
       animation: {
         pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       }
@@ -51,8 +55,10 @@ export default {
     'text-white', 'text-black', 'text-gray-300', 'text-gray-400', 'text-gray-600', 'text-gray-700', 'text-gray-800', 'text-gray-900',
     'text-foreground', 'text-muted-foreground', 'text-primary', 'text-secondary', 'text-accent',
     'bg-black', 'bg-white', 'bg-background', 'bg-foreground', 'bg-secondary', 'bg-muted', 'bg-transparent',
-    'bg-gradient-to-r', 'from-black', 'via-gray-900', 'to-black', 
+    'bg-gradient-to-r', 'from-black', 'via-gray-900', 'to-black',
     'border-gray-800', 'border-gray-700', 'border-gray-600', 'border-gray-500',
+    // Sintaxis coloreada a mano en code-block.tsx
+    'text-fuchsia-400', 'text-cyan-400', 'text-emerald-400', 'text-amber-400',
     // Borders
     'border', 'border-b', 'border-t', 'border-l', 'border-r', 'rounded', 'rounded-lg',
     // Padding & Margin
