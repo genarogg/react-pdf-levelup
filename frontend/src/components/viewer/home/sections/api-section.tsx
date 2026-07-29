@@ -4,7 +4,7 @@ import { CodeBlock } from "./code-block"
 import { ArrowRight, ExternalLink, Globe, Server, Shield, Zap,Copy } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-const fetchCode = `
+const petitionCode = `
 import fs from "fs";
 import path from "path";
 
@@ -25,13 +25,17 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
   const json = await res.json() as ApiResponse;
   return json?.data?.pdf ?? "";
 }
+`.trim()
 
+const savePDFCode = `
 const savePDF = (resultBase64: string) => {
   const buffer = Buffer.from(resultBase64, "base64");
   const outputPath = path.join(process.cwd(), "example.pdf");
   fs.writeFileSync(outputPath, buffer);
 }
+`.trim()
 
+const generateAndSavePDFCode = `
 const generateAndSavePDF = async () => {
   const data = { nombre: "Genaro Gonzalez" };
   const resultBase64 = await petition({ template: "template.tsx", data });
@@ -168,9 +172,15 @@ export function ApiSection() {
             </div>
           </div>
 
-          <div className="lg:sticky lg:top-8">
+          <div className="lg:sticky lg:top-8 flex flex-col gap-4">
             <div className="shadow-lg" style={{ maxWidth: "90vw" }}>
-              <CodeBlock code={fetchCode} language="ts" filename="API-fetch.ts" />
+              <CodeBlock code={petitionCode} language="ts" filename="API-fetch.ts" />
+            </div>
+            <div className="shadow-lg" style={{ maxWidth: "90vw" }}>
+              <CodeBlock code={savePDFCode} language="ts" filename="API-fetch.ts" />
+            </div>
+            <div className="shadow-lg" style={{ maxWidth: "90vw" }}>
+              <CodeBlock code={generateAndSavePDFCode} language="ts" filename="API-fetch.ts" />
             </div>
           </div>
         </div>
