@@ -1,4 +1,4 @@
-// generatePDFWorker.ts
+// generatePDFonWorkerWorker.ts
 //
 // Archivo único y autocontenido para generar PDFs vía un pool de worker
 // threads (Piscina). Piscina usa ESTE MISMO archivo compilado como entry
@@ -6,7 +6,7 @@
 // roles distintos según el hilo que lo cargue:
 //
 //  - Hilo principal (isMainThread === true): arma el pool UNA sola vez
-//    y expone la API pública `generatePDF` / `closePDFPool`.
+//    y expone la API pública `generatePDFonWorker` / `closePDFPool`.
 //  - Cada worker del pool (isMainThread === false): Piscina vuelve a
 //    cargar este archivo y usa su `export default` como la función que
 //    ejecuta por cada tarea.
@@ -42,7 +42,7 @@ export interface PDFWorkerData {
  * módulo (como GetFuentes) que ocurra en ese archivo.
  *
  * Nota: siempre devuelve Buffer, nunca decide el `output`. La conversión
- * a base64 ocurre después, en `generatePDF` (hilo principal), una vez
+ * a base64 ocurre después, en `generatePDFonWorker` (hilo principal), una vez
  * recibido el resultado -- así se transfiere el binario compacto entre
  * threads en vez de un string base64 (~33% más pesado).
  */
@@ -102,24 +102,24 @@ const pool = isMainThread
     : undefined;
 
 /**
- * Igual que `generatePDF` (no-worker) en su rama backend, pero recibe
+ * Igual que `generatePDFonWorker` (no-worker) en su rama backend, pero recibe
  * `templatePath` en vez de `template`.
  *
  * Backend (default output: "base64"): "base64" | "buffer"
  *
  * @example
- * const base64 = await generatePDF({ templatePath: "/abs/path/Invoice.js", data });
+ * const base64 = await generatePDFonWorker({ templatePath: "/abs/path/Invoice.js", data });
  *
  * @example Forzando buffer
- * const buffer = await generatePDF({ templatePath: "/abs/path/Invoice.js", data, output: "buffer" });
+ * const buffer = await generatePDFonWorker({ templatePath: "/abs/path/Invoice.js", data, output: "buffer" });
  */
-export async function generatePDF({
+export async function generatePDFonWorker({
     templatePath,
     data,
     output = "base64",
 }: PDFWorkerData): Promise<string | Buffer> {
     if (!pool) {
-        throw new Error("generatePDF solo puede invocarse desde el hilo principal.");
+        throw new Error("generatePDFonWorker solo puede invocarse desde el hilo principal.");
     }
 
     const buffer: Buffer = await pool.run({ templatePath, data });
