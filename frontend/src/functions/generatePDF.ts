@@ -12,7 +12,7 @@ interface PDFTemplateData {
  * OUTPUTS POR ENTORNO
  * ───────────────────────────────────────────────────────── */
 
-type BackendOutput = "base64" | "buffer" | "stream";
+type BackendOutput = "base64" | "buffer";
 type FrontendOutput = "blob" | "url" | "download";
 
 interface BackendParams extends PDFTemplateData {
@@ -21,7 +21,7 @@ interface BackendParams extends PDFTemplateData {
 
 interface FrontendParams extends PDFTemplateData {
     output?: FrontendOutput;
-    fileName?: string; 
+    fileName?: string; // solo tiene sentido con output: "download"
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -38,7 +38,7 @@ const generarPDFBackend = async ({
     template: Template,
     data,
     output = "base64",
-}: BackendParams): Promise<string | Buffer | NodeJS.ReadableStream> => {
+}: BackendParams): Promise<string | Buffer> => {
     const { renderToStream } = await import("@react-pdf/renderer");
 
     if (!Template) {
@@ -47,10 +47,6 @@ const generarPDFBackend = async ({
 
     const MyDocument = createElement(Template, { data });
     const stream = await renderToStream(MyDocument);
-
-    if (output === "stream") {
-        return stream;
-    }
 
     const buffer: Buffer = await new Promise((resolve, reject) => {
         const chunks: Buffer[] = [];
@@ -114,7 +110,7 @@ const generarPDFFrontend = async ({
  * si se ejecuta en backend (Node) o frontend (browser) y devolviendo el
  * formato indicado por `output`.
  *
- * Backend  (default output: "base64"): "base64" | "buffer" | "stream"
+ * Backend  (default output: "base64"): "base64" | "buffer"
  * Frontend (default output: "download"): "blob" | "url" | "download"
  *
  * @example Backend
@@ -125,7 +121,7 @@ const generarPDFFrontend = async ({
  */
 async function generarPDF(
     params: BackendParams
-): Promise<string | Buffer | NodeJS.ReadableStream>;
+): Promise<string | Buffer>;
 async function generarPDF(
     params: FrontendParams
 ): Promise<Blob | string | void>;
