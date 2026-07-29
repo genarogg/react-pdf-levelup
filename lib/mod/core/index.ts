@@ -19,6 +19,10 @@ import {
     Left, Right, Center, // alignment
     // extend
     Gradiant,
+    Button,
+    Badge,
+    Divider,
+    Graph,
 
     // herencia de react-pdf
     Note, Svg, PDFViewer, Document, Page, Text,
@@ -65,7 +69,12 @@ export {
     // misc
     Div, HR, Layout, NextPage,
     LayoutMultiPage, Section,
+    // extend
     Gradiant,
+    Button,
+    Badge,
+    Divider,
+    Graph,
 
     // react pdf renderer
     Note, Svg, PDFViewer, Document, Page, Text,

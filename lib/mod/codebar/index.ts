@@ -1,3 +1,3 @@
-import { ChartJS } from "../../../frontend/src/components/core"
+import { CodeBar } from "../../../frontend/src/components/core"
 
-export { ChartJS }
+export { CodeBar }
