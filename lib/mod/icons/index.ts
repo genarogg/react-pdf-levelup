@@ -1,3 +1,3 @@
-import Icon from "../../../frontend/src/components/core/icono/Icon"
+import { Icon } from "../../../frontend/src/components/core"
 
 export { Icon }

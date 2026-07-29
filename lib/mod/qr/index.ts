@@ -1,4 +1,3 @@
-import QR from "../../../frontend/src/components/core/qr/QR"
-import QRstyle from "../../../frontend/src/components/core/qr/QRstyle"
+import { QR, QRstyle } from "../../../frontend/src/components/core"
 
 export { QR, QRstyle }

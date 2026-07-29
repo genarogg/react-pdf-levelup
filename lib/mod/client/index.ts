@@ -1,4 +1,3 @@
-import decodeBase64Pdf from "../../../frontend/src/functions/decodeBase64Pdf"
-import printBase64Pdf from "../../../frontend/src/functions/printBase64Pdf"
+import { decodePDF, generatePDF,  getFont } from "../../../frontend/src/functions"
 
-export { decodeBase64Pdf, printBase64Pdf, }
+export { decodePDF, generatePDF, getFont,  }

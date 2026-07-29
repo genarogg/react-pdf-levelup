@@ -1,67 +1,51 @@
 /// <reference path="./assets.d.ts" />
 
+
+
 import {
-    PDFViewer,
-    Document,
-    Page,
-    Image,
-    Link,
-    Svg,
-    Defs,
-    Rect,
-    LinearGradient,
-    Stop,
-    G,
-    Canvas,
-    Polygon,
-    ClipPath,
-    Text,
-    View,
-    StyleSheet,
-    Font,
+    // core
+    Layout, LayoutMultiPage, Section, NextPage, // layout
+    Img, ImgBg, // imágenes
+    UL, OL, LI, // lista
+
+    P, A, H1, H2, H3, H4, H5, H6, HR, Strong, U, // etiquetas de texto
+    Small, Blockquote, Mark, Span, BR, Div, Em, // etiquetas de texto
+
+    Container, Row, Col1, Col2, Col3, Col4, Col5, // grid
+    Col6, Col7, Col8, Col9, Col10, Col11, Col12, // grid
+
+    Table, Thead, Tbody, Tr, Th, Td, // tabla
+    Form, Input, Checkbox, TextArea, // form
+    Left, Right, Center, // alignment
+    // extend
+    Gradiant,
+
+    // herencia de react-pdf
+    Note, Svg, PDFViewer, Document, Page, Text,
+    View, Image, Link, Canvas, Defs, Rect,
+    LinearGradient, RadialGradient, Stop,
+    G, Polygon, Polyline, ClipPath, Line, Path,
+    Circle, Ellipse, Tspan, PDFDownloadLink,
+    BlobProvider, StyleSheet, Font
+} from "../../../frontend/src/components/core"
+
+import {
+    decodePDF,
+    generatePDF,
+    getFont,
+    pdf,
     renderToStream,
+    renderToBuffer,
     renderToFile,
-    RadialGradient
-} from "@react-pdf/renderer"
-
-
-import Layout from "../../../frontend/src/components/core/basic/layout/Layout"
-import NextPage from "../../../frontend/src/components/core/basic/layout/NextPage"
-import Img from "../../../frontend/src/components/core/basic/Img"
-import ImgBg from "../../../frontend/src/components/core/basic/ImgBg"
-
-import { Left, Right, Center } from "../../../frontend/src/components/core/basic/Position"
-import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "../../../frontend/src/components/core/basic/Etiquetas"
-import { Table, Thead, Tbody, Tr, Th, Td } from "../../../frontend/src/components/core/basic/tabla"
-import { Form, Input, Checkbox, TextArea } from "../../../frontend/src/components/core/basic/Form"
-import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "../../../frontend/src/components/core/extend/Grid"
-import { UL, OL, LI } from "../../../frontend/src/components/core/basic/Lista"
-
-import { LayoutMultiPage, Section } from "../../../frontend/src/components/core/basic/layout/LayoutMultiPage"
-import Gradiant from "../../../frontend/src/components/core/extend/Gradiant"
-
-import { decodePDF, generatePDF, generatePDFonWorker, getFont } from "../../../frontend/src/functions/index"
+    usePDF
+} from "../../../frontend/src/functions"
 
 export {
-    // react pdf renderer
-    View, Text, StyleSheet, Font, renderToStream, renderToFile,
-    PDFViewer,
-    Document,
-    Page,
-    Image,
-    Link,
-    Svg,
-    Defs,
-    Rect,
-    LinearGradient,
-    Stop,
-    G,
-    Canvas,
-    Polygon,
-    ClipPath,
-    RadialGradient,
     // funciones
-    decodePDF, generatePDF, generatePDFonWorker, getFont,
+    decodePDF, generatePDF, getFont,
+    // funciones heredadas
+    pdf, renderToStream, renderToBuffer,
+    renderToFile, usePDF,
     // imgs
     Img, ImgBg,
     // alignment
@@ -81,6 +65,14 @@ export {
     // misc
     Div, HR, Layout, NextPage,
     LayoutMultiPage, Section,
-    Gradiant
+    Gradiant,
+
+    // react pdf renderer
+    Note, Svg, PDFViewer, Document, Page, Text,
+    View, Image, Link, Canvas, Defs, Rect,
+    LinearGradient, RadialGradient, Stop,
+    G, Polygon, Polyline, ClipPath, Line, Path,
+    Circle, Ellipse, Tspan, PDFDownloadLink,
+    BlobProvider, StyleSheet, Font,
 }
 

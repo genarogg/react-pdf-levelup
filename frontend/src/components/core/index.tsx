@@ -8,144 +8,58 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/tabla"
 import { Form, Input, Checkbox, TextArea } from "./basic/Form"
 import { Container, Row, Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9, Col10, Col11, Col12 } from "./extend/Grid"
 import { UL, OL, LI } from "./basic/Lista"
-
-import Button from "./basic/Button"
-
 import Gradiant from "./extend/Gradiant"
 
+import Button from "./basic/Button"
 import Badge from "./extend/Badges"
-
 import QR from "./plugins/qr/QR"
 import QRstyle from "./plugins/qr/QRstyle"
 import ChartJS from "./plugins/charts/ChartJS"
-
 import Divider from "./extend/Divider"
-
 import Graph from "./extend/Graph"
 
-import {
-  PDFViewer,
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-  Image,
-  Link,
-  Svg,
-  Defs,
-  Rect,
-  LinearGradient,
-  Stop,
-  G,
-  renderToStream,
-  Canvas,
-  Polygon,
-  ClipPath,
-  RadialGradient,
-  Line,
-Path,
- Circle
-} from "@react-pdf/renderer"
 
-import { decodeBase64Pdf, generatePDF } from "../../functions"
+
+import { decodePDF, generatePDF } from "../../functions"
 import Icon from "./plugins/icono/Icon"
 
 import { LayoutMultiPage, Section } from "./basic/layout/LayoutMultiPage"
 
 import CodeBar from "./plugins/codeBar/CodeBar"
 
+import {
+  Note, Svg, PDFViewer, Document, Page, Text,
+  View, Image, Link, Canvas, Defs, Rect,
+  LinearGradient, RadialGradient, Stop,
+  G, Polygon, Polyline, ClipPath, Line, Path,
+  Circle, Ellipse, Tspan, PDFDownloadLink,
+  BlobProvider, StyleSheet, Font
+} from "@react-pdf/renderer"
 
 export {
-  ImgBg,
-  Layout,
-  LayoutMultiPage, Section,
-  NextPage,
-  Img,
-  Left,
-  Right,
-  Center,
-  P,
-  A,
-  H1,
-  H2,
-  H3,
-  H4,
-  H5,
-  H6,
-  Strong,
-  Em,
-  U,
-  Small,
-  Blockquote,
-  Mark,
-  Span,
-  BR,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Container,
-  Row,
-  Col1,
-  Col2,
-  Col3,
-  Col4,
-  Col5,
-  Col6,
-  Col7,
-  Col8,
-  Col9,
-  Col10,
-  Col11,
-  Col12,
-  QR,
-  QRstyle,
-  CodeBar,
-  UL,
-  OL,
-  LI,
-  Div,
-  HR,
-  Form, Input, Checkbox, TextArea,
-  Icon,
-  ChartJS,
-  Gradiant,
-  Badge,
-  Divider,
-  Button,
-  Graph,
-  // funciones
-  decodeBase64Pdf,
-  generatePDF,
+  // core
+  Layout, LayoutMultiPage, Section, NextPage, // layout
+  Img, ImgBg, // imágenes
+  UL, OL, LI, // lista
 
+  P, A, H1, H2, H3, H4, H5, H6, HR, Strong, U, // etiquetas de texto
+  Small, Blockquote, Mark, Span, BR, Div, Em, // etiquetas de texto
+
+  Container, Row, Col1, Col2, Col3, Col4, Col5, // grid
+  Col6, Col7, Col8, Col9, Col10, Col11, Col12, // grid
+
+  Table, Thead, Tbody, Tr, Th, Td, // tabla
+  Form, Input, Checkbox, TextArea, // form
+  Left, Right, Center, // alignment
+  // extend
+  Gradiant,
 
   // herencia de react-pdf
-  Circle,
-  PDFViewer,
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-  Image,
-  Link,
-  Svg,
-  Defs,
-  Rect,
-  LinearGradient,
-  Stop,
-  G,
-  renderToStream,
-  Canvas,
-  Polygon,
-  ClipPath,
-  RadialGradient,
-  Line,
-  Path
+  Note, Svg, PDFViewer, Document, Page, Text,
+  View, Image, Link, Canvas, Defs, Rect,
+  LinearGradient, RadialGradient, Stop,
+  G, Polygon, Polyline, ClipPath, Line, Path,
+  Circle, Ellipse, Tspan, PDFDownloadLink,
+  BlobProvider, StyleSheet, Font
 }
 
