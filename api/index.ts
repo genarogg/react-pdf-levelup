@@ -20,7 +20,7 @@ import {
 
 } from "./src/config"
 
-const PRODUCTIONS = PRODUCTION !== "false"
+const PRODUCTIONS = process.env.NODE_ENV === "production"
 
 const registerPlugins = async () => {
   // Plugins de rendimiento (en producción)
