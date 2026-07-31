@@ -117,7 +117,6 @@ export interface LayoutResolutionInput {
     backgroundImageOpacity?: number
     padding: number
     margin: MarginInput
-    footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
     style?: any
@@ -165,8 +164,8 @@ export function useLayoutResolution(input: LayoutResolutionInput): LayoutResolut
     )
 
     const footerHeight = useMemo(
-        () => Math.max(1, input.footerLines ?? (input.footer ? 2 : 1)) * LINE_HEIGHT + FOOTER_PADDING,
-        [input.footerLines, input.footer]
+        () => Math.max(1, input.footerLines ?? 1) * LINE_HEIGHT + FOOTER_PADDING,
+        [input.footerLines]
     )
 
     const margins = useMemo(

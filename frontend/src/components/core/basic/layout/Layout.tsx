@@ -57,7 +57,6 @@ interface LayoutProps {
     margin?: MarginInput
     style?: any
     pagination?: boolean
-    footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
     debug?: boolean
@@ -81,7 +80,6 @@ const Layout: React.FC<LayoutProps> = ({
     margin = "normal",
     style = {},
     pagination = true,
-    footer,
     footerLines,
     rule = false,
     debug = false,
@@ -110,7 +108,6 @@ const Layout: React.FC<LayoutProps> = ({
         backgroundImageOpacity,
         padding,
         margin,
-        footer,
         footerLines,
         rule,
         style,
@@ -149,7 +146,6 @@ const Layout: React.FC<LayoutProps> = ({
                 {children}
 
                 <View style={footerStyle} fixed>
-                    {footer}
                     {pagination && (
                         <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
                     )}

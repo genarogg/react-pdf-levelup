@@ -34,6 +34,7 @@ export default Component`
 
 export function HeroSection() {
   const [copied, setCopied] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const installCommand = "npm install @react-pdf-levelup/core"
   const { t } = useTranslation()
 
@@ -65,9 +66,30 @@ export function HeroSection() {
               {t("hero.title_start")} <span className="text-accent">{t("hero.title_highlight")}</span>
             </h1>
 
-            <p className="text-base sm:text-lg leading-relaxed text-muted-foreground max-w-xl">
-              {t("hero.description")}
-            </p>
+            <div className="max-w-xl">
+              <p
+                className="text-base sm:text-lg leading-relaxed text-muted-foreground"
+                style={
+                  expanded
+                    ? undefined
+                    : {
+                        display: "-webkit-box",
+                        WebkitLineClamp: 4,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }
+                }
+              >
+                {t("hero.description")}
+              </p>
+              <button
+                type="button"
+                onClick={() => setExpanded((v) => !v)}
+                className="mt-1 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
+              >
+                {expanded ? t("hero.read_less", "Leer menos") : t("hero.read_more", "...leer más")}
+              </button>
+            </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Link to="/playground">

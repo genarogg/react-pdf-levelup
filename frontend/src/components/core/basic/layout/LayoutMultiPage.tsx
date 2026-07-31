@@ -33,7 +33,6 @@ interface LayoutMultiPageProps {
     backgroundImageOpacity?: number
     padding?: number
     margin?: MarginInput
-    footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
     debug?: boolean
@@ -48,7 +47,6 @@ interface InjectedPageProps {
     __globalBackgroundImageOpacity?: number
     __globalPadding?: number
     __globalMargin?: MarginInput
-    __globalFooter?: React.ReactNode
     __globalFooterLines?: number
     __globalRule?: boolean
     __globalDebug?: boolean
@@ -67,7 +65,6 @@ export interface SectionProps extends InjectedPageProps {
     backgroundImageOpacity?: number
     padding?: number
     margin?: MarginInput
-    footer?: React.ReactNode
     footerLines?: number
     rule?: boolean
     debug?: boolean
@@ -89,7 +86,6 @@ const Section: React.FC<SectionProps> = ({
     backgroundImageOpacity,
     padding,
     margin,
-    footer,
     footerLines,
     rule,
     debug,
@@ -101,7 +97,6 @@ const Section: React.FC<SectionProps> = ({
     __globalBackgroundImageOpacity = 1,
     __globalPadding = 30,
     __globalMargin = "normal",
-    __globalFooter,
     __globalFooterLines,
     __globalRule = false,
     __globalDebug = false,
@@ -114,7 +109,6 @@ const Section: React.FC<SectionProps> = ({
     const resolvedBackgroundImageOpacity = resolve(backgroundImageOpacity, __globalBackgroundImageOpacity)
     const resolvedPadding = resolve(padding, __globalPadding)
     const resolvedMargin = resolve(margin, __globalMargin)
-    const resolvedFooter = footer !== undefined ? footer : __globalFooter
     const resolvedFooterLines = resolve(footerLines, __globalFooterLines)
     const resolvedRule = resolve(rule, __globalRule)
     const resolvedDebug = resolve(debug, __globalDebug)
@@ -128,7 +122,6 @@ const Section: React.FC<SectionProps> = ({
         backgroundImageOpacity: resolvedBackgroundImageOpacity,
         padding: resolvedPadding,
         margin: resolvedMargin,
-        footer: resolvedFooter,
         footerLines: resolvedFooterLines,
         rule: resolvedRule,
         style,
@@ -149,7 +142,6 @@ const Section: React.FC<SectionProps> = ({
             {children}
 
             <View style={footerStyle} fixed>
-                {resolvedFooter}
                 {resolvedPagination && (
                     <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
                 )}
@@ -173,7 +165,6 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
     backgroundImageOpacity = 1,
     padding = 30,
     margin = "normal",
-    footer,
     footerLines,
     rule = false,
     debug = false,
@@ -195,7 +186,6 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
         __globalBackgroundImageOpacity: backgroundImageOpacity,
         __globalPadding: padding,
         __globalMargin: margin,
-        __globalFooter: footer,
         __globalFooterLines: footerLines,
         __globalRule: rule,
         __globalDebug: debug,

@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@react-pdf/renderer': 4.5.1
+  '@react-pdf/stylesheet': 6.2.1
+  '@types/node': ^22.0.0
+
 importers:
 
   .:
@@ -57,7 +62,7 @@ importers:
         specifier: latest
         version: link:../lib/mod/qr
       '@react-pdf/renderer':
-        specifier: ^4.3.2
+        specifier: 4.5.1
         version: 4.5.1(react@19.2.4)
       accounting:
         specifier: ^0.4.1
@@ -205,10 +210,10 @@ importers:
         specifier: latest
         version: link:../lib/mod/qr
       '@react-pdf/renderer':
-        specifier: ^4.3.2
+        specifier: 4.5.1
         version: 4.5.1(react@19.2.4)
       '@react-pdf/stylesheet':
-        specifier: ^6.2.1
+        specifier: 6.2.1
         version: 6.2.1
       canvas:
         specifier: ^3.2.0
@@ -287,8 +292,8 @@ importers:
         specifier: ^27.0.0
         version: 27.0.0
       '@types/node':
-        specifier: ^24.12.0
-        version: 24.12.0
+        specifier: ^22.0.0
+        version: 22.19.15
       '@types/qrcode':
         specifier: ^1.5.6
         version: 1.5.6
@@ -339,7 +344,7 @@ importers:
         version: 8.57.2(eslint@9.39.4)(typescript@5.9.3)
       vite:
         specifier: ^6.0.0
-        version: 6.4.1(@types/node@24.12.0)(terser@5.46.1)
+        version: 6.4.1(@types/node@22.19.15)(terser@5.46.1)
 
   lib:
     devDependencies:
@@ -366,14 +371,14 @@ importers:
         version: 19.2.4(react@19.2.4)
     devDependencies:
       '@types/node':
-        specifier: ^25.5.0
-        version: 25.5.0
+        specifier: ^22.0.0
+        version: 22.19.15
 
   lib/mod/client:
     devDependencies:
       '@types/node':
-        specifier: ^26.1.2
-        version: 26.1.2
+        specifier: ^22.0.0
+        version: 22.19.15
 
   lib/mod/codebar:
     dependencies:
@@ -391,8 +396,8 @@ importers:
         version: 19.2.4(react@19.2.4)
     devDependencies:
       '@types/node':
-        specifier: ^25.5.0
-        version: 25.5.0
+        specifier: ^22.0.0
+        version: 22.19.15
 
   lib/mod/core:
     dependencies:
@@ -407,8 +412,8 @@ importers:
         version: 19.2.4(react@19.2.4)
     devDependencies:
       '@types/node':
-        specifier: ^25.5.0
-        version: 25.5.0
+        specifier: ^22.0.0
+        version: 22.19.15
       json:
         specifier: ^11.0.0
         version: 11.0.0
@@ -423,8 +428,8 @@ importers:
         version: 0.562.0
     devDependencies:
       '@types/node':
-        specifier: ^25.5.0
-        version: 25.5.0
+        specifier: ^22.0.0
+        version: 22.19.15
       json:
         specifier: ^11.0.0
         version: 11.0.0
@@ -487,7 +492,7 @@ importers:
         specifier: '*'
         version: link:../qr
       '@react-pdf/renderer':
-        specifier: ^4
+        specifier: 4.5.1
         version: 4.5.1(react@19.2.4)
       fastify:
         specifier: ^5.0.0
@@ -570,8 +575,8 @@ importers:
         specifier: ^7.1.9
         version: 7.1.9
       '@types/node':
-        specifier: ^20.14.10
-        version: 20.19.43
+        specifier: ^22.0.0
+        version: 22.19.15
       '@types/react':
         specifier: '>=18 <=19'
         version: 19.2.14
@@ -607,7 +612,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.0.0
-        version: 6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0)
+        version: 6.4.1(@types/node@22.19.15)(sass@1.101.0)(tsx@4.21.0)
 
 packages:
 
@@ -4081,7 +4086,7 @@ packages:
   /@types/jsdom@27.0.0:
     resolution: {integrity: sha512-NZyFl/PViwKzdEkQg96gtnB8wm+1ljhdDay9ahn4hgb+SfVtPCbm3TlmDUFXTA+MGN3CijicnMhG18SI5H3rFw==}
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 22.19.15
       '@types/tough-cookie': 4.0.5
       parse5: 7.3.0
     dev: true
@@ -4110,32 +4115,10 @@ packages:
       '@types/unist': 3.0.3
     dev: false
 
-  /@types/node@20.19.43:
-    resolution: {integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==}
-    dependencies:
-      undici-types: 6.21.0
-
   /@types/node@22.19.15:
     resolution: {integrity: sha512-F0R/h2+dsy5wJAUe3tAU6oqa2qbWY5TpNfL/RGmo1y38hiyO1w3x2jPtt76wmuaJI4DQnOBu21cNXQ2STIUUWg==}
     dependencies:
       undici-types: 6.21.0
-    dev: true
-
-  /@types/node@24.12.0:
-    resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
-    dependencies:
-      undici-types: 7.16.0
-
-  /@types/node@25.5.0:
-    resolution: {integrity: sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==}
-    dependencies:
-      undici-types: 7.18.2
-
-  /@types/node@26.1.2:
-    resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
-    dependencies:
-      undici-types: 8.3.0
-    dev: true
 
   /@types/prismjs@1.26.6:
     resolution: {integrity: sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw==}
@@ -4144,7 +4127,7 @@ packages:
   /@types/qrcode@1.5.6:
     resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 22.19.15
     dev: true
 
   /@types/react-dom@19.2.3(@types/react@19.2.14):
@@ -4162,7 +4145,7 @@ packages:
   /@types/sax@1.2.7:
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
     dependencies:
-      '@types/node': 25.5.0
+      '@types/node': 22.19.15
     dev: false
 
   /@types/tough-cookie@4.0.5:
@@ -4339,7 +4322,7 @@ packages:
       '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: 6.4.1(@types/node@24.12.0)(terser@5.46.1)
+      vite: 6.4.1(@types/node@22.19.15)(terser@5.46.1)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4586,7 +4569,7 @@ packages:
       unist-util-visit: 5.1.0
       unstorage: 1.17.4
       vfile: 6.0.3
-      vite: 6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0)
+      vite: 6.4.1(@types/node@22.19.15)(sass@1.101.0)(tsx@4.21.0)
       vitefu: 1.1.2(vite@6.4.1)
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
@@ -9081,7 +9064,7 @@ packages:
     engines: {node: '>=20.19.5', npm: '>=10.8.2'}
     hasBin: true
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 22.19.15
       '@types/sax': 1.2.7
       arg: 5.0.2
       sax: 1.6.0
@@ -9660,16 +9643,6 @@ packages:
   /undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  /undici-types@7.16.0:
-    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
-
-  /undici-types@7.18.2:
-    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
-
-  /undici-types@8.3.0:
-    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
-    dev: true
-
   /undici@6.24.1:
     resolution: {integrity: sha512-sC+b0tB1whOCzbtlx20fx3WgCXwkW627p4EA9uM+/tNNPkSS+eSEld6pAs9nDv7WbY1UUljBMYPtu9BCOrCWKA==}
     engines: {node: '>=18.17'}
@@ -9937,12 +9910,12 @@ packages:
       util-deprecate: 1.0.2
     dev: false
 
-  /vite@6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0):
+  /vite@6.4.1(@types/node@22.19.15)(sass@1.101.0)(tsx@4.21.0):
     resolution: {integrity: sha512-+Oxm7q9hDoLMyJOYfUYBuHQo+dkAloi33apOPP56pzj+vsdJDzr+j1NISE5pyaAuKL4A3UD34qd0lx5+kfKp2g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      '@types/node': ^22.0.0
       jiti: '>=1.21.0'
       less: '*'
       lightningcss: ^1.21.0
@@ -9977,7 +9950,7 @@ packages:
       yaml:
         optional: true
     dependencies:
-      '@types/node': 20.19.43
+      '@types/node': 22.19.15
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
@@ -9989,12 +9962,12 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vite@6.4.1(@types/node@24.12.0)(terser@5.46.1):
+  /vite@6.4.1(@types/node@22.19.15)(terser@5.46.1):
     resolution: {integrity: sha512-+Oxm7q9hDoLMyJOYfUYBuHQo+dkAloi33apOPP56pzj+vsdJDzr+j1NISE5pyaAuKL4A3UD34qd0lx5+kfKp2g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      '@types/node': ^22.0.0
       jiti: '>=1.21.0'
       less: '*'
       lightningcss: ^1.21.0
@@ -10029,7 +10002,7 @@ packages:
       yaml:
         optional: true
     dependencies:
-      '@types/node': 24.12.0
+      '@types/node': 22.19.15
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
@@ -10049,7 +10022,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 6.4.1(@types/node@20.19.43)(sass@1.101.0)(tsx@4.21.0)
+      vite: 6.4.1(@types/node@22.19.15)(sass@1.101.0)(tsx@4.21.0)
     dev: false
 
   /void-elements@3.1.0:
