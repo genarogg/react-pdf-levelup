@@ -28,6 +28,7 @@ interface LayoutMultiPageProps {
     size?: PageSizeInput
     orientation?: Orientation
     pagination?: boolean
+    paginationStyle?: any
     backgroundColor?: string
     backgroundImage?: string
     backgroundImageOpacity?: number
@@ -51,6 +52,7 @@ interface InjectedPageProps {
     __globalRule?: boolean
     __globalDebug?: boolean
     __globalPagination?: boolean
+    __globalPaginationStyle?: any
     __safeSize?: PageSizeInput
     __pdfOrientation?: "portrait" | "landscape"
 }
@@ -69,6 +71,7 @@ export interface SectionProps extends InjectedPageProps {
     rule?: boolean
     debug?: boolean
     pagination?: boolean
+    paginationStyle?: any
     dpi?: number
     id?: string
 }
@@ -90,6 +93,7 @@ const Section: React.FC<SectionProps> = ({
     rule,
     debug,
     pagination,
+    paginationStyle,
     dpi,
     id,
     __globalBackgroundColor = "white",
@@ -101,6 +105,7 @@ const Section: React.FC<SectionProps> = ({
     __globalRule = false,
     __globalDebug = false,
     __globalPagination = true,
+    __globalPaginationStyle,
     __safeSize = "A4",
     __pdfOrientation = "portrait",
 }) => {
@@ -113,6 +118,7 @@ const Section: React.FC<SectionProps> = ({
     const resolvedRule = resolve(rule, __globalRule)
     const resolvedDebug = resolve(debug, __globalDebug)
     const resolvedPagination = resolve(pagination, __globalPagination)
+    const resolvedPaginationStyle = resolve(paginationStyle, __globalPaginationStyle)
 
     const { pageStyle, footerStyle, grid, bgImageNode } = useLayoutResolution({
         size: __safeSize,
@@ -143,7 +149,10 @@ const Section: React.FC<SectionProps> = ({
 
             <View style={footerStyle} fixed>
                 {resolvedPagination && (
-                    <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
+                    <Text
+                        style={resolvedPaginationStyle}
+                        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+                    />
                 )}
             </View>
         </Page>
@@ -160,6 +169,7 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
     size = "A4",
     orientation = "vertical",
     pagination = true,
+    paginationStyle,
     backgroundColor = "white",
     backgroundImage,
     backgroundImageOpacity = 1,
@@ -190,6 +200,7 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
         __globalRule: rule,
         __globalDebug: debug,
         __globalPagination: pagination,
+        __globalPaginationStyle: paginationStyle,
         __safeSize: safeSize,
         __pdfOrientation: pdfOrientation,
     }
