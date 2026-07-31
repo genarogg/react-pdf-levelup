@@ -5,7 +5,7 @@ import Img from "./basic/Img"
 import ImgBg from "./basic/ImgBg"
 import { Left, Right, Center } from "./basic/Position"
 import { P, A, H1, H2, H3, H4, H5, H6, HR, Strong, Em, U, Small, Blockquote, Mark, Span, BR, Div } from "./basic/Etiquetas"
-import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/tabla"
+import { Table, Thead, Tbody, Tr, Th, Td } from "./basic/tabla/index"
 import { Form, Input, Checkbox, TextArea } from "./basic/Form"
 
 // extens
@@ -16,7 +16,6 @@ import Button from "./basic/Button"
 import Badge from "./extend/Badges"
 import Divider from "./extend/Divider"
 import Graph from "./extend/Graph"
-
 
 // plugins
 import ChartJS from "./plugins/charts/ChartJS"
