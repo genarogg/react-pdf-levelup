@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useLocation } from "react-router-dom"
 import PDFPreview from "./PDFPreview"
 import CodeEditor from "./CodeEditor"
 import ToolBar from "./toolbar/ToolBar"
@@ -11,11 +11,17 @@ import { usePlaygroundCode } from "./hooks/usePlaygroundCode"
 
 function Editor() {
   const { templateId } = useParams<{ templateId: string }>()
+  const location = useLocation()
+  const isDemoMode = location.pathname === "/playground/demo"
   const [showMobileWarning, setShowMobileWarning] = useState(true)
   const isMobile = useMobileDetection()
 
   const { templates, loaded: templatesLoaded } = usePlaygroundTemplates()
-  const { code, setCode, isLoading } = usePlaygroundCode(templateId, templates, templatesLoaded)
+  const { code, setCode, isLoading } = usePlaygroundCode(
+    isDemoMode ? "__demo__" : templateId,
+    templates,
+    templatesLoaded
+  )
 
   // Show mobile warning for mobile devices
   if (isMobile && showMobileWarning) {

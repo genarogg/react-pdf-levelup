@@ -28,6 +28,7 @@ createRoot(root).render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="/playground/demo" element={<Playground />} />
           <Route path="/playground/template/:templateId" element={<Playground />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/templates/tablas/*" element={<TablasSection />} />

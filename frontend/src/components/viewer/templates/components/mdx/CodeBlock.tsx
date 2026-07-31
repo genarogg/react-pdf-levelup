@@ -101,18 +101,58 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, filename }) => {
     }
   }
 
+  const handleOpenInPlayground = () => {
+    try {
+      localStorage.setItem("playground:demo:code", code)
+      localStorage.setItem("playground:demo:ts", Date.now().toString())
+      const base = import.meta.env.BASE_URL || "/"
+      const prefix = base.endsWith("/") ? base.slice(0, -1) : base
+      const url = `${prefix}/playground/demo`
+      window.open(url, "_blank", "noopener,noreferrer")
+    } catch (err) {
+      console.error("[CodeBlock] Error al abrir en playground:", err)
+    }
+  }
+
   return (
     <div className="relative rounded-lg border border-white/10 bg-[#0d1117] overflow-hidden my-4">
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/[0.03]">
         <span className="text-xs font-mono text-gray-400">
           {filename || normalizeLang(language)}
         </span>
-        <button
-          onClick={handleCopy}
-          className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-white/10"
-        >
-          {copied ? "¡Copiado!" : "Copiar"}
-        </button>
+        <div className="flex items-center gap-2">
+          {["tsx", "jsx", "typescript", "javascript", "ts", "js"].includes(
+            normalizeLang(language)
+          ) && (
+            <button
+              onClick={handleOpenInPlayground}
+              className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-white/10 flex items-center gap-1"
+              title="Abrir este código en el Playground"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-3.5 h-3.5"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Abrir en Playground
+            </button>
+          )}
+          <button
+            onClick={handleCopy}
+            className="text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded-md hover:bg-white/10"
+          >
+            {copied ? "¡Copiado!" : "Copiar"}
+          </button>
+        </div>
       </div>
 
       {html ? (

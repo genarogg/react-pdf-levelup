@@ -3,6 +3,9 @@ import { loadTemplateFile } from "../utils/templateLoader"
 import type { TemplateMeta } from "./usePlaygroundTemplates"
 
 const STORAGE_KEY = "react-pdf-levelup-code"
+const DEMO_TEMPLATE_ID = "__demo__"
+const DEMO_CODE_KEY = "playground:demo:code"
+const DEMO_TS_KEY = "playground:demo:ts"
 
 export function usePlaygroundCode(templateId: string | undefined, templates: TemplateMeta[], templatesLoaded: boolean) {
   const [code, setCode] = useState<string>("")
@@ -15,7 +18,17 @@ export function usePlaygroundCode(templateId: string | undefined, templates: Tem
       setIsLoading(true)
 
       try {
-        if (templateId) {
+        if (templateId === DEMO_TEMPLATE_ID) {
+          const demoCode = localStorage.getItem(DEMO_CODE_KEY)
+          if (demoCode) {
+            if (!cancelled) setCode(demoCode)
+            localStorage.removeItem(DEMO_CODE_KEY)
+            localStorage.removeItem(DEMO_TS_KEY)
+            return
+          }
+        }
+
+        if (templateId && templateId !== DEMO_TEMPLATE_ID) {
           const selected = templates.find((t) => t.id === templateId)
           if (selected) {
             const templateContent = await loadTemplateFile(selected.path)
@@ -54,12 +67,6 @@ export function usePlaygroundCode(templateId: string | undefined, templates: Tem
   }, [templateId, templatesLoaded, templates])
 
   useEffect(() => {
-    // Solo persistimos cuando estamos en el playground "libre" (sin :templateId
-    // en la URL). Si guardáramos siempre que !isLoading, visitar cualquier
-    // plantilla sobrescribiría el último código guardado del usuario apenas
-    // termina de cargar (isLoading pasa a false con el contenido de la
-    // plantilla ya en el estado `code`), perdiendo su trabajo previo sin que
-    // el usuario haya editado nada todavía.
     if (!isLoading && !templateId) {
       localStorage.setItem(STORAGE_KEY, code)
     }
