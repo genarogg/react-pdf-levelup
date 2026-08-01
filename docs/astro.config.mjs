@@ -90,7 +90,6 @@ export default defineConfig({
 							items: [
 								{ slug: 'components/layout', label: 'Layout' },
 								{ slug: 'components/layout-multi-page', label: 'LayoutMultiPage' },
-								{ slug: 'components/grid', label: 'Columnas', translations: { en: 'Columns' } },
 								{ slug: 'components/position', label: 'Position' },
 							],
 						},
@@ -110,7 +109,18 @@ export default defineConfig({
 							translations: { en: 'Advanced' },
 							items: [
 								{ slug: 'components/form', label: 'Formulario', translations: { en: 'Form' } },
-								{ slug: 'components/gradiant', label: 'Gradiant', translations: { en: 'Gradiant' } },
+							],
+						},
+						{
+							label: 'Extend',
+							translations: { en: 'Extend' },
+							items: [
+								{ slug: 'components/grid', label: 'Grid (Columnas)', translations: { en: 'Grid (Columns)' } },
+								{ slug: 'components/gradiant', label: 'Gradiant' },
+								{ slug: 'components/badge', label: 'Badge' },
+								{ slug: 'components/divider', label: 'Divider' },
+								{ slug: 'components/graph', label: 'Graph' },
+								{ slug: 'components/pass', label: 'Pass' },
 							],
 						},
 					],
