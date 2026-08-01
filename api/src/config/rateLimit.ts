@@ -3,7 +3,7 @@ import rateLimit from '@fastify/rate-limit';
 
 const rateLimite = (server: FastifyInstance) => {
     return server.register(rateLimit, {
-        max: 100,
+        max: 10,
         timeWindow: '1 minute',
         errorResponseBuilder: (req: any, context: any) => {
             console.log(context)
