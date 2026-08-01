@@ -1,20 +1,13 @@
 import React from "react"
 import { Image, StyleSheet, View } from "@react-pdf/renderer"
-import { generateQRstyleAsBase64, type QRstyleOptions } from "./QRstyleGenerator"
+import { generateQRAsBase64 } from "./QRGenerator"
 
 type ViewBaseProps = React.ComponentProps<typeof View>
 
-export interface QRstyleProps extends Omit<ViewBaseProps, "style"> {
+export interface QRProps extends Omit<ViewBaseProps, "style"> {
   url: string
   size?: number
   style?: any
-  image?: string
-  dotsOptions?: QRstyleOptions["dotsOptions"]
-  backgroundOptions?: QRstyleOptions["backgroundOptions"]
-  imageOptions?: QRstyleOptions["imageOptions"]
-  cornersSquareOptions?: QRstyleOptions["cornersSquareOptions"]
-  cornersDotOptions?: QRstyleOptions["cornersDotOptions"]
-  // Fallback/Compatibility props
   colorDark?: string
   colorLight?: string
   margin?: number
@@ -29,16 +22,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const QRstyle: React.FC<QRstyleProps> = ({
+const QR: React.FC<QRProps> = ({
   url,
-  size = 300,
+  size = 150,
   style,
-  image,
-  dotsOptions,
-  backgroundOptions,
-  imageOptions,
-  cornersSquareOptions,
-  cornersDotOptions,
   colorDark,
   colorLight,
   margin,
@@ -46,8 +33,8 @@ const QRstyle: React.FC<QRstyleProps> = ({
   ...rest
 }) => {
 
-  // Ver nota en QR.tsx: el tamaño forzado va DESPUÉS de `style` para que no
-  // pueda ser sobreescrito, y flexShrink/alignSelf blindan contra padres flex
+  // El tamaño forzado va DESPUÉS de `style` para que no pueda ser
+  // sobreescrito, y flexShrink/alignSelf blindan contra padres flex
   // (Row/Col) que intenten estirar o comprimir el contenedor.
   const squareForce = {
     width: size,
@@ -65,27 +52,17 @@ const QRstyle: React.FC<QRstyleProps> = ({
     <View style={[styles.qrContainer, style, squareForce]} {...rest}>
       <Image
         style={{ width: size, height: size }}
-        src={generateQRstyleAsBase64({
+        src={generateQRAsBase64({
           url,
-          width: size,
-          height: size,
-          image,
-          dotsOptions: dotsOptions ?? (colorDark ? { color: colorDark } : undefined),
-          backgroundOptions: backgroundOptions ?? (colorLight ? { color: colorLight } : undefined),
-          imageOptions: {
-            ...imageOptions,
-            margin: imageOptions?.margin !== undefined ? imageOptions.margin : margin,
-          },
-          cornersSquareOptions,
-          cornersDotOptions,
-          fallbackColorDark: colorDark,
-          fallbackColorLight: colorLight,
-          fallbackMargin: margin,
-          fallbackErrorCorrectionLevel: errorCorrectionLevel,
+          size,
+          colorDark,
+          colorLight,
+          margin,
+          errorCorrectionLevel,
         })}
       />
     </View>
   )
 }
 
-export default QRstyle
+export default QR
