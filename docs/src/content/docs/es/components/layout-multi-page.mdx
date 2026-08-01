@@ -24,9 +24,9 @@ Estas propiedades se aplican de forma global a todo el documento, pero pueden se
 | `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo base. |
 | `padding` | `number` | `30` | Padding base de las páginas. |
 | `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"` | Ajuste de márgenes base. Acepta preset o número en puntos. |
-| `footer` | `ReactNode` | `undefined` | Contenido del pie de página base. |
-| `footerLines` | `number` | `2` si hay footer, sino `1` | Espacio reservado para el footer en líneas. |
+| `footerLines` | `number` | `1` | Espacio reservado para el footer en líneas (usado por el contenedor de paginación). |
 | `pagination` | `boolean` | `true` | Mostrar numeración de páginas base. |
+| `paginationStyle` | `any` | `undefined` | Estilos adicionales para el `<Text>` de paginación dentro del footer. |
 | `rule` | `boolean` | `false` | Mostrar rejilla de referencia base. |
 | `debug` | `boolean` | `false` | Activar modo debug base. |
 | `meta` | `DocumentMeta` | `{}` | Metadatos del documento (título, autor, contraseñas, permisos, etc.). |
@@ -47,9 +47,9 @@ El componente **Section** representa una página individual dentro de un `Layout
 | `backgroundImageOpacity` | `number` | Heredado | Sobrescribe la opacidad de la imagen de fondo. |
 | `padding` | `number` | Heredado | Sobrescribe el padding de esta página. |
 | `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | Heredado | Sobrescribe el preset de márgenes o un número en puntos. |
-| `footer` | `ReactNode` | Heredado | Sobrescribe el footer para esta página. |
-| `footerLines` | `number` | Heredado | Sobrescribe el espacio del footer. |
+| `footerLines` | `number` | Heredado | Sobrescribe el espacio reservado para el footer (en líneas). |
 | `pagination` | `boolean` | Heredado | Activa/desactiva la numeración en esta página. |
+| `paginationStyle` | `any` | Heredado | Sobrescribe los estilos del `<Text>` de paginación. |
 | `rule` | `boolean` | Heredado | Activa/desactiva la rejilla en esta página. |
 | `debug` | `boolean` | Heredado | Activa/desactiva el modo debug en esta página. |
 | `dpi` | `number` | `undefined` | Resolución DPI específica para esta página. |
@@ -69,7 +69,7 @@ const MyMultiPageDocument = () => {
     <LayoutMultiPage 
       size="A4" 
       backgroundColor="#f0f0f0"
-      footer={<P>Documento Corporativo</P>}
+      footerLines={1}
     >
       {/* Primera página: Usa el fondo gris global */}
       <Section>

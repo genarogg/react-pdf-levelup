@@ -5,6 +5,8 @@ description: Plugin para funciones de utilidad del cliente, incluyendo la genera
 
 # Plugin Cliente (`@react-pdf-levelup/client`)
 
+> ⚠️ **Nota de consistencia (no verificado contra el código fuente de `core`):** este documento describe `generatePDF`, `decodeBase64Pdf` y `printBase64Pdf` como parte de un paquete separado `@react-pdf-levelup/client`. Sin embargo, `guides/functions/generate-pdf.mdx` documenta las mismas dos primeras funciones importándolas directamente desde `@react-pdf-levelup/core`. Ninguna de las dos funciones aparece en el código fuente de `core` relevado para esta auditoría, por lo que no fue posible confirmar cuál de las dos rutas de importación es la correcta (pueden vivir en un paquete del monorepo no incluido en esta revisión). **Antes de usar este ejemplo, confirmá el paquete real consultando el `package.json`/exports de tu instalación**, o usá la ruta `@react-pdf-levelup/core` documentada en la [guía de generatePDF](/es/guides/functions/generate-pdf), que es consistente con el resto de componentes de este sitio.
+
 El plugin `@react-pdf-levelup/client` proporciona un conjunto de funciones de utilidad diseñadas para la interacción con PDFs en entornos de cliente (navegadores o Node.js). Exporta funciones de utilidad incluyendo `generatePDF`, `decodeBase64Pdf` y `printBase64Pdf`.
 
 ## Funciones Exportadas
@@ -13,13 +15,13 @@ El plugin `@react-pdf-levelup/client` proporciona un conjunto de funciones de ut
 
 Esta función te permite generar un documento PDF a partir de un componente React. Es la misma función que se describe en la documentación principal de funciones.
 
-- [Ver documentación detallada de `generatePDF`](/es/guides/functions/generatePDF)
+- [Ver documentación detallada de `generatePDF`](/es/guides/functions/generate-pdf)
 
 ### `decodeBase64Pdf`
 
 Esta función ayuda a decodificar una cadena Base64 que representa un PDF y a ofrecerlo para descarga al usuario. Es la misma función que se describe en la documentación principal de funciones.
 
-- [Ver documentación detallada de `decodeBase64Pdf`](/es/guides/functions/decodeBase64Pdf)
+- [Ver documentación detallada de `decodeBase64Pdf`](/es/guides/functions/generate-pdf#decodebase64pdf)
 
 ### `printBase64Pdf`
 
@@ -30,7 +32,7 @@ Esta función imprime un documento PDF a partir de una cadena codificada en Base
 
 ## Uso
 
-Para usar estas funciones, simplemente impórtalas desde el paquete `@react-pdf-levelup/client`:
+Para usar estas funciones, simplemente impórtalas desde el paquete `@react-pdf-levelup/client` (o desde `@react-pdf-levelup/core`, ver nota de advertencia arriba, según cómo esté configurado tu proyecto):
 
 ```tsx
 import { generatePDF, decodeBase64Pdf } from '@react-pdf-levelup/client';

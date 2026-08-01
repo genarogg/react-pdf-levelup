@@ -1,16 +1,26 @@
 ---
 title: QR
-description: Generador de código QR básico con soporte para logo.
+description: "⚠️ Actualmente idéntico a QRstyle — ver advertencia. Generador de código QR."
 ---
 
 # QR
 
-El componente `QR` permite generar códigos QR simples con la opción de incrustar un logo en el centro. Es útil para añadir información codificada de forma rápida y sencilla a tus documentos PDF.
+> ⚠️ **Advertencia de desactualización (bug de código, no solo de documentación):** en la versión actual del código fuente, el archivo `QR.tsx` es **idéntico** a `QRstyle.tsx` — ambos exportan el mismo componente `QRstyle` (basado en `qr-code-styling`, vía `generateQRstyleAsBase64`). Como consecuencia, **el componente `QR` que se importa desde `@react-pdf-levelup/core` hoy se comporta exactamente igual que `QRstyle`**, y las props `colorDark`, `colorLight`, `margin`, `logo`, `logoWidth`, `logoHeight` y `errorCorrectionLevel` documentadas más abajo **no tienen ningún efecto real** en el componente actual, aunque tipográficamente TypeScript las siga aceptando (algunas se mapean como fallback a `dotsOptions`/`backgroundOptions`/`imageOptions`, pero `logo`, `logoWidth` y `logoHeight` no se usan en absoluto).
+>
+> El código que implementaba el `QR` "básico" real (con `generateQRAsBase64` y `addLogoToQR`, en `QRGenerator.ts`) sigue existiendo en el proyecto, pero **ningún componente lo usa actualmente** — quedó huérfano.
+>
+> **Qué hacer mientras tanto:**
+> - Si tu intención es el QR estilizado (esquinas, puntos, imagen central con más control), usá `QRstyle` directamente — es el mismo componente y su documentación sí refleja el comportamiento real. Ver [QRstyle](/es/plugin/qr/QRstyle).
+> - Si tu intención es el QR "simple" descrito en esta página (con `colorDark`/`colorLight`/`logo` planos), reportalo como bug: hoy no hay forma de obtener ese comportamiento específico a través del componente público `QR`.
+>
+> El resto de esta página documenta la **API tal como fue diseñada originalmente** (y tal como sigue tipada en `CodeBarOptions`-equivalente para QR, `QRGenerator.ts`), no el comportamiento actual en tiempo de ejecución.
 
-### Props
+El componente `QR`, **según su diseño original**, permite generar códigos QR simples con la opción de incrustar un logo en el centro. Es útil para añadir información codificada de forma rápida y sencilla a tus documentos PDF.
+
+### Props (diseño original — ver advertencia arriba)
 
 | Nombre               | Tipo                               | Default           | Descripción                                           |
-| :------------------- | :--------------------------------- | :---------------- | :---------------------------------------------------- |
+| :------------------- | :--------------------------------- | :---------------- | :----------------------------------------------------- |
 | `url`              | `string`                           | `""`              | El texto o URL que se codificará en el código QR.     |
 | `size`               | `number`                           | `150`             | Tamaño del código QR en píxeles (ancho y alto).       |
 | `style`              | `any`                              | `{}`              | Estilos adicionales para el contenedor del código QR. |
@@ -25,10 +35,10 @@ El componente `QR` permite generar códigos QR simples con la opción de incrust
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
-### Ejemplo
+### Ejemplo (aspiracional — no representa el comportamiento actual)
 
 ```tsx
-import { QR } from '@react-pdf-levelup/qr';
+import { QR } from '@react-pdf-levelup/core';
 
 function MyQRCode() {
   return (
@@ -46,3 +56,5 @@ function MyQRCode() {
   );
 }
 ```
+
+> Recordá: con el código actual, este ejemplo generará un QR usando el motor de `QRstyle`, así que `colorDark`, `logo`, `logoWidth` y `logoHeight` serán ignorados. Si necesitás ese resultado visual hoy, usá directamente las props de [QRstyle](/es/plugin/qr/QRstyle) (`dotsOptions`, `backgroundOptions`, `image`, `imageOptions`).

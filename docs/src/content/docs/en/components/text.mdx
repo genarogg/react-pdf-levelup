@@ -17,13 +17,31 @@ Basic text components (paragraph and headings). They support all properties of t
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
 
+### Default sizes
+
+Each heading level has its own `fontSize` and `marginBottom` (all bold by default):
+
+| Component | `fontSize` | `marginBottom` |
+| :-------- | :--------- | :------------- |
+| `H1`      | `24`       | `12`           |
+| `H2`      | `20`       | `10`           |
+| `H3`      | `18`       | `8`            |
+| `H4`      | `16`       | `6`            |
+| `H5`      | `14`       | `4`            |
+| `H6`      | `12`       | `0`            |
+| `P`       | (inherited)| `5`            |
+
 ### Example
 
 ```tsx
-import { H1, H3, P } from '@react-pdf-levelup/core';
+import { H1, H2, H3, H4, H5, H6, P } from '@react-pdf-levelup/core';
 
-<H1>Title</H1>
-<H3>Subtitle</H3>
+<H1>Heading level 1</H1>
+<H2>Heading level 2</H2>
+<H3>Heading level 3</H3>
+<H4>Heading level 4</H4>
+<H5>Heading level 5</H5>
+<H6>Heading level 6</H6>
 <P>Paragraph with normal text.</P>
 ```
 

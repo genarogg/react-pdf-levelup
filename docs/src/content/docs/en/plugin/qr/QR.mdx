@@ -1,13 +1,23 @@
 ---
 title: QR
-description: Basic QR code generator with logo support.
+description: "⚠️ Currently identical to QRstyle — see warning. Basic QR code generator."
 ---
 
 # QR
 
-The `QR` component allows generating simple QR codes with the option to embed a logo in the center. It is useful for quickly and easily adding encoded information to your PDF documents.
+> ⚠️ **Documentation/code drift warning (this is a code bug, not just a docs issue):** in the current source code, `QR.tsx` is **identical** to `QRstyle.tsx` — both export the same `QRstyle` component (based on `qr-code-styling`, via `generateQRstyleAsBase64`). As a result, **the `QR` component imported from `@react-pdf-levelup/core` currently behaves exactly like `QRstyle`**, and the `colorDark`, `colorLight`, `margin`, `logo`, `logoWidth`, `logoHeight`, and `errorCorrectionLevel` props documented below **have no real effect** on the current component, even though TypeScript still accepts them (some map as a fallback to `dotsOptions`/`backgroundOptions`/`imageOptions`, but `logo`, `logoWidth`, and `logoHeight` are not used at all).
+>
+> The code that implemented the real "basic" `QR` (using `generateQRAsBase64` and `addLogoToQR`, in `QRGenerator.ts`) still exists in the project, but **no component currently uses it** — it's orphaned code.
+>
+> **What to do in the meantime:**
+> - If you want the styled QR (custom corners, dots, center image with more control), use `QRstyle` directly — it's the same component, and its docs do reflect the actual behavior. See [QRstyle](/en/plugin/qr/QRstyle).
+> - If you want the "simple" QR described on this page (with plain `colorDark`/`colorLight`/`logo`), report it as a bug: there is currently no way to get that specific behavior through the public `QR` component.
+>
+> The rest of this page documents the **API as originally designed** (and as still typed in `QRGenerator.ts`), not the current runtime behavior.
 
-### Props
+The `QR` component, **by original design**, allows generating simple QR codes with the option to embed a logo in the center. It is useful for quickly and easily adding encoded information to your PDF documents.
+
+### Props (original design — see warning above)
 
 | Name                   | Type                               | Default                      | Description                                                     |
 | :--------------------- | :--------------------------------- | :--------------------------- | :-------------------------------------------------------------- |
@@ -25,10 +35,10 @@ The `QR` component allows generating simple QR codes with the option to embed a 
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
 
-### Example
+### Example (aspirational — does not represent current behavior)
 
 ```tsx
-import { QR } from '@react-pdf-levelup/qr';
+import { QR } from '@react-pdf-levelup/core';
 
 function MyQRCode() {
   return (
@@ -46,3 +56,5 @@ function MyQRCode() {
   );
 }
 ```
+
+> Keep in mind: with the current code, this example will render a QR using the `QRstyle` engine, so `colorDark`, `logo`, `logoWidth`, and `logoHeight` will be ignored. If you need that visual result today, use [QRstyle](/en/plugin/qr/QRstyle)'s props directly (`dotsOptions`, `backgroundOptions`, `image`, `imageOptions`).

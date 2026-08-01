@@ -17,13 +17,31 @@ Componentes básicos de texto (párrafo y encabezados). Soportan todas las propi
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
 
+### Tamaños por defecto
+
+Cada nivel de encabezado tiene un `fontSize` y `marginBottom` propios (todos en negrita por defecto):
+
+| Componente | `fontSize` | `marginBottom` |
+| :--------- | :--------- | :------------- |
+| `H1`       | `24`       | `12`           |
+| `H2`       | `20`       | `10`           |
+| `H3`       | `18`       | `8`            |
+| `H4`       | `16`       | `6`            |
+| `H5`       | `14`       | `4`            |
+| `H6`       | `12`       | `0`            |
+| `P`        | (heredado) | `5`            |
+
 ### Ejemplo
 
 ```tsx
-import { H1, H3, P } from '@react-pdf-levelup/core';
+import { H1, H2, H3, H4, H5, H6, P } from '@react-pdf-levelup/core';
 
-<H1>Título</H1>
-<H3>Subtítulo</H3>
+<H1>Título nivel 1</H1>
+<H2>Título nivel 2</H2>
+<H3>Título nivel 3</H3>
+<H4>Título nivel 4</H4>
+<H5>Título nivel 5</H5>
+<H6>Título nivel 6</H6>
 <P>Parrafo con texto normal.</P>
 ```
 
