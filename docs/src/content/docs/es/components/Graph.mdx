@@ -1,0 +1,248 @@
+---
+title: Graph
+description: Componente para dibujar gráficos vectoriales SVG nativos (barras, líneas, áreas, pie, donut) directamente en el PDF, sin rasterizar ni usar Chart.js. El texto de ejes y etiquetas es buscable.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+# Graph
+
+El componente **Graph** dibuja gráficos directamente con primitivas SVG nativas de `@react-pdf/renderer` (`Svg`, `Path`, `Rect`, `Line`, `Circle`, `G` + `Text` del namespace SVG). **No usa canvas ni Chart.js**. Como consecuencia, el texto de ejes, valores y etiquetas nace como nodo de texto PDF real, por lo que es **buscable y copiable** y no pierde calidad al hacer zoom.
+
+> 💡 **Diferencia con `ChartJS`:** Si necesitas gráficos 100% compatibles con la API de Chart.js (incluyendo plugins, escalas avanzadas, leyendas custom, etc.), usa el plugin `ChartJS`, que rasteriza el gráfico a imagen. Si preferís texto vectorial y buscable, con una API reducida pero optimizada para PDF, usá `Graph`.
+
+## Tipos auxiliares
+
+Antes de las props, conviene conocer estas dos interfaces, que forman parte del contrato de entrada:
+
+```ts
+// Un punto individual del gráfico. `value` acepta `null` para expresar
+// un hueco intencional (equivalente a spanGaps: false) en line/area.
+interface GraphDataPoint {
+  label: string;
+  value: number | null;
+  color?: string;  // color opcional para este punto (override por punto)
+}
+
+// Una serie (grupo de barras, una línea, un área, etc.).
+// Pie/Donut usan solo 1 serie: cada `data` es una porción del círculo.
+interface GraphSeries {
+  name: string;           // nombre, usado en la leyenda para bar/line/area
+  data: GraphDataPoint[]; // puntos
+  color?: string;         // color opcional para TODA la serie
+}
+```
+
+## Props
+
+| Nombre         | Tipo                                                                       | Default     | Descripción                                                                                                                                                                                                                                      |
+| :------------- | :------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`      | `"bar" \| "horizontal-bar" \| "line" \| "area" \| "pie" \| "donut"`         | `N/A`       | **Requerido.** Tipo de gráfico a dibujar.                                                                                                                                                                                                       |
+| `series`       | `GraphSeries[]`                                                             | `N/A`       | **Requerido.** Datos del gráfico (una o más series). Pie/Donut usan solo `series[0]`, cada `data` es una porción.                                                                                                                           |
+| `width`        | `number`                                                                    | `500`       | Ancho total del `<Svg>` en unidades del viewBox. Debe ser un número (no acepta `%`).                                                                                                                                                          |
+| `height`       | `number`                                                                    | `300`       | Alto total del `<Svg>` en unidades del viewBox. Debe ser un número.                                                                                                                                                                              |
+| `title`        | `string`                                                                    | `undefined` | Título superior del gráfico. Renderizado como `Text` de bloque (no dentro del SVG).                                                                                                                                                              |
+| `subtitle`     | `string`                                                                    | `undefined` | Subtítulo debajo del título. También es `Text` de bloque.                                                                                                                                                                                       |
+| `colors`       | `string[]`                                                                  | `DEFAULT_COLORS` | Paleta de colores alternativa. Cada serie (o cada porción en pie/donut) toma `colors[index % colors.length]`. Si una serie o un punto declaran su propio `color`, ese tiene prioridad. Ver tabla abajo.                                |
+| `showLegend`   | `boolean`                                                                   | `true`      | Mostrar/ocultar la fila de leyenda debajo del gráfico.                                                                                                                                                                                            |
+| `showValues`   | `boolean`                                                                   | `false`     | Mostrar/ocultar el valor numérico sobre cada barra o al lado de cada porción de pie/donut.                                                                                                                                                       |
+| `showDots`     | `boolean`                                                                   | `true`      | Solo para `line` y `area`. Dibuja un círculo en cada punto válido.                                                                                                                                                                               |
+| `smooth`       | `boolean`                                                                   | `false`     | Solo para `line` y `area`. Suaviza la curva con splines de Catmull-Rom convertidos a Bézier (en vez de polilínea recta).                                                                                                                         |
+| `yTickCount`   | `number`                                                                    | `5`         | Solo para bar, horizontal-bar, line, area. Cantidad aproximada de ticks en el eje de valores (el número final puede ajustarse para redondear "lindo").                                                                                            |
+| `style`        | `any`                                                                       | `undefined` | Estilos adicionales para el `View` contenedor exterior (no el `<Svg>`). Puede usarse para `margin`, `padding`, `border`, `backgroundColor`, etc.                                                                                                  |
+
+Además, como `style` cae sobre un `View`, heredan todas las props de `View` de `@react-pdf/renderer`.
+
+## Paleta por defecto (`DEFAULT_COLORS`)
+
+```ts
+[
+  "#2563eb",  // azul
+  "#dc2626",  // rojo
+  "#16a34a",  // verde
+  "#d97706",  // ámbar
+  "#7c3aed",  // violeta
+  "#0891b2",  // cyan
+  "#db2777",  // rosa
+  "#65a30d",  // lima
+]
+```
+
+## Tipos exportados
+
+```ts
+import {
+  Graph,
+  type GraphVariant,
+  type GraphDataPoint,
+  type GraphSeries,
+  type PdfGraphProps,
+  type LegendEntry,
+} from '@react-pdf-levelup/core';
+```
+
+## Límites y notas importantes
+
+- **SVG Text y fuentes:** el `Text` dentro de `<Svg>` usa atributos de fuente SVG, no el `StyleSheet` de `@react-pdf/renderer`. Si el documento requiere una tipografía registrada vía `Font.register()` que también se vea dentro del gráfico, actualmente hay que inyectar ese `fontFamily` modificando el componente. El color y tamaño sí son configurables vía las constantes internas (`AXIS_FONT_SIZE`, `AXIS_TEXT_COLOR`) de `graph.tsx`.
+- **`width` y `height` deben ser números:** el `viewBox` del `<Svg>` es exactamente ese ancho/alto. Si pasas un string (`"500"`) se coercirá a `NaN` por parte de `@react-pdf/renderer`.
+- **Valores `null` como gaps (line/area):** en `line` y `area`, un punto con `value: null` corta el trazado (equivalente a `spanGaps: false`). Un punto aislado (solo 1 punto no-null entre gaps) se dibuja como un círculo, incluso con `showDots=false`, para que el dato no desaparezca.
+- **Pie/Donut y valores negativos:** una porción no puede representar visualmente un valor negativo. Para el cálculo del ángulo se clampea a 0, pero si `showValues=true` el label continúa mostrando el valor real incluyendo el signo.
+- **`rowSpan` no aplica:** el gráfico no usa tabla; no hay ninguna relación con `rowSpan`.
+
+## Ejemplos
+
+<Tabs>
+<TabItem label="Barras verticales">
+
+```tsx
+import { Graph } from '@react-pdf-levelup/core';
+
+<Graph
+  variant="bar"
+  width={500}
+  height={300}
+  title="Ventas por región (2026)"
+  subtitle="En miles de pesos"
+  showValues
+  yTickCount={4}
+  series={[
+    {
+      name: "Primer semestre",
+      data: [
+        { label: "Norte", value: 120 },
+        { label: "Centro", value: 85 },
+        { label: "Sur", value: 150 },
+        { label: "Este", value: 95 },
+      ],
+    },
+    {
+      name: "Segundo semestre",
+      color: "#16a34a",  // color custom para la serie
+      data: [
+        { label: "Norte", value: 140 },
+        { label: "Centro", value: 110 },
+        { label: "Sur", value: 165 },
+        { label: "Este", value: 120, color: "#dc2626" },  // color solo para este punto
+      ],
+    },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem label="Líneas suavizadas">
+
+```tsx
+<Graph
+  variant="line"
+  width={500}
+  height={300}
+  title="Evolución mensual"
+  smooth
+  showDots
+  yTickCount={6}
+  series={[
+    {
+      name: "Ingresos",
+      data: [
+        { label: "Ene", value: 45 },
+        { label: "Feb", value: 52 },
+        { label: "Mar", value: null },  // gap intencional: no dibuja línea entre Feb y Abr
+        { label: "Abr", value: 61 },
+        { label: "May", value: 58 },
+        { label: "Jun", value: 72 },
+      ],
+    },
+    {
+      name: "Gastos",
+      data: [
+        { label: "Ene", value: 30 },
+        { label: "Feb", value: 35 },
+        { label: "Mar", value: 38 },
+        { label: "Abr", value: 41 },
+        { label: "May", value: 40 },
+        { label: "Jun", value: 44 },
+      ],
+    },
+  ]}
+/>
+```
+
+</TabItem>
+<TabItem label="Pie y Donut">
+
+```tsx
+<Div style={{ flexDirection: 'row', gap: 20 }}>
+  <Graph
+    variant="pie"
+    width={350}
+    height={260}
+    title="Participación de mercado"
+    showValues
+    series={[
+      {
+        name: "Empresas",
+        data: [
+          { label: "Alpha", value: 45 },
+          { label: "Beta", value: 30 },
+          { label: "Gamma", value: 15 },
+          { label: "Otros", value: 10 },
+        ],
+      },
+    ]}
+  />
+
+  <Graph
+    variant="donut"
+    width={350}
+    height={260}
+    title="Categorías (Donut)"
+    showValues
+    series={[
+      {
+        name: "Categorías",
+        data: [
+          { label: "A", value: 40, color: "#2563eb" },
+          { label: "B", value: 30, color: "#16a34a" },
+          { label: "C", value: 20, color: "#d97706" },
+          { label: "D", value: 10, color: "#dc2626" },
+        ],
+      },
+    ]}
+  />
+</Div>
+```
+
+</TabItem>
+<TabItem label="Área">
+
+```tsx
+<Graph
+  variant="area"
+  width={500}
+  height={280}
+  title="Volumen transaccional"
+  showLegend
+  smooth
+  colors={["#2563eb", "#db2777"]}
+  series={[
+    {
+      name: "Aplicación",
+      data: Array.from({ length: 12 }).map((_, i) => ({
+        label: `T${i + 1}`,
+        value: 100 + Math.round(100 * Math.sin(i / 2)),
+      })),
+    },
+    {
+      name: "Web",
+      data: Array.from({ length: 12 }).map((_, i) => ({
+        label: `T${i + 1}`,
+        value: 80 + Math.round(60 * Math.cos(i / 2)),
+      })),
+    },
+  ]}
+/>
+```
+
+</TabItem>
+</Tabs>

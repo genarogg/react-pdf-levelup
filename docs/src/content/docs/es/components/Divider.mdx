@@ -1,0 +1,81 @@
+---
+title: Divider
+description: Componente para separar secciones con una línea (continua, discontinua o punteada) con una etiqueta de texto en el medio.
+---
+
+# Divider
+
+El componente **Divider** renderiza una línea divisoria con una etiqueta de texto centrada entre dos líneas. Es útil para separar secciones dentro de un reporte, agrupar contenido o marcar el inicio de una sección.
+
+Internamente es un `View` con `flexDirection: "row"` que contiene una línea a la izquierda, un `<Text>` con la etiqueta, y otra línea a la derecha. Ambas líneas usan `flex: 1` para ocupar todo el espacio restante.
+
+## Props
+
+| Nombre           | Tipo                                           | Default     | Descripción                                                                                                     |
+| :--------------- | :--------------------------------------------- | :---------- | :-------------------------------------------------------------------------------------------------------------- |
+| `label`          | `string`                                       | `N/A`       | **Requerido.** Texto de la etiqueta central. Se muestra en mayúsculas con un ligero tracking.                          |
+| `variant`        | `"line" \| "dashed" \| "dotted"`              | `"line"`    | Estilo de la línea divisoria: **line** (continua), **dashed** (discontinua), **dotted** (punteada).             |
+| `color`          | `string`                                       | `"#d1d5db"` | Color de la línea divisoria.                                                                                        |
+| `textColor`      | `string`                                       | `"#6b7280"` | Color del texto de la etiqueta.                                                                                   |
+| `fontSize`       | `number`                                       | `9`         | Tamaño de fuente de la etiqueta.                                                                                |
+| `marginVertical` | `number`                                       | `16`        | Margen superior e inferior del componente (espacio vertical antes y después).                                          |
+| `width`          | `number \| string`                              | `"100%"`    | Ancho total del Divider. Por defecto ocupa todo el ancho disponible en el padre.                                        |
+| `style`          | `any`                                          | `undefined` | Estilos adicionales para el contenedor exterior `View`.                                                                 |
+
+Además, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, `id`, etc.).
+
+> ⚠️ **Importante sobre `width`:** La propiedad `width` debe venir por defecto a `"100%"` y el componente usa también `alignSelf: "stretch"`. Esto no es cosmético: sin un ancho explícito, dentro de cualquier padre que centre o encoja a `fit-content` (por ejemplo un wrapper `Center` con `alignItems: 'center'`), el `View` raíz se encogería al ancho del `<Text>`, dejando 0px para repartir entre las dos líneas con `flex: 1`, las líneas serían invisibles aunque el texto sí se vea.
+
+## Variantes de línea
+
+| Variante     | Descripción                                                                                                      |
+| :----------- | :----------------------------------------------------------------------------------------------------------------- |
+| `"line"`     | Línea continua de 1px con `backgroundColor: color` (más fiable en todos los renderers).                                    |
+| `"dashed"`   | Borde superior discontinuo (con `borderTopStyle: "dashed"`.                                                            |
+| `"dotted"`   | Borde superior punteado (con `borderTopStyle: "dotted"`).                                                          |
+
+## Ejemplos
+
+### Básico
+
+```tsx
+import { Divider, P, Div } from '@react-pdf-levelup/core';
+
+<Div style={{ width: 400 }}>
+  <P>Contenido de la sección 1</P>
+
+  <Divider label="Sección 2" />
+
+  <P>Contenido de la sección 2</P>
+</Div>
+```
+
+### Con variantes
+
+```tsx
+<Divider label="Línea continua" variant="line" />
+<Divider label="Discontinua" variant="dashed" color="#6366f1" />
+<Divider label="Punteada" variant="dotted" color="#f59e0b" />
+```
+
+### Colores y tamaño personalizado
+
+```tsx
+<Divider
+  label="Reportes Mensuales"
+  color="#4338ca"
+  textColor="#4338ca"
+  fontSize={10}
+  marginVertical={24}
+/>
+```
+
+### Ancho fijo
+
+```tsx
+<Divider
+  label="SOLO ESTA SECCIÓN"
+  width={300}
+  variant="dashed"
+/>
+```

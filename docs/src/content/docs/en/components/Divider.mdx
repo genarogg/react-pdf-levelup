@@ -1,0 +1,81 @@
+---
+title: Divider
+description: Component to separate sections with a line (solid, dashed or dotted) with a text label in the middle.
+---
+
+# Divider
+
+The **Divider** component renders a dividing line with a centered text label between two lines. It is useful for separating sections within a report, grouping content or marking the start of a new section.
+
+Internally it is a `View` with `flexDirection: "row"` that contains a line on the left, a `<Text>` with the label, and another line on the right. Both lines use `flex: 1` to take up all remaining space.
+
+## Props
+
+| Name             | Type                                           | Default     | Description                                                                                                      |
+| :--------------- | :--------------------------------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------- |
+| `label`          | `string`                                       | `N/A`       | **Required.** Text of the central label. Displayed in uppercase with light letter-spacing.                         |
+| `variant`        | `"line" \| "dashed" \| "dotted"`              | `"line"`    | Line style: **line** (continuous), **dashed**, **dotted**.                                                        |
+| `color`          | `string`                                       | `"#d1d5db"` | Color of the divider line.                                                                                           |
+| `textColor`      | `string`                                       | `"#6b7280"` | Color of the label text.                                                                                             |
+| `fontSize`       | `number`                                       | `9`         | Font size of the label.                                                                                            |
+| `marginVertical` | `number`                                       | `16`        | Top and bottom margin of the component (vertical space before and after).                                          |
+| `width`          | `number \| string`                              | `"100%"`    | Total width of the Divider. By default it occupies all available width in the parent.                              |
+| `style`          | `any`                                          | `undefined` | Additional styles for the outer `View` container.                                                                    |
+
+Additionally, it inherits all properties from the `View` component of `@react-pdf/renderer` (`debug`, `fixed`, `break`, `id`, etc.).
+
+> ⚠️ **Important about `width`:** The `width` property defaults to `"100%"` and the component also uses `alignSelf: "stretch"`. This is not cosmetic: without an explicit width, inside any parent that centers or shrinks to `fit-content` (for example a `Center` wrapper with `alignItems: 'center'`), the root `View` would shrink to the width of the `<Text>`, leaving 0px to distribute between the two lines with `flex: 1` — the lines would be invisible even though the text would still be visible.
+
+## Line variants
+
+| Variant      | Description                                                                                                        |
+| :----------- | :----------------------------------------------------------------------------------------------------------------- |
+| `"line"`     | Continuous 1px line using `backgroundColor: color` (most reliable across all renderers).                                    |
+| `"dashed"`   | Discontinuous top border (with `borderTopStyle: "dashed"`).                                                      |
+| `"dotted"`   | Dotted top border (with `borderTopStyle: "dotted"`).                                                             |
+
+## Examples
+
+### Basic
+
+```tsx
+import { Divider, P, Div } from '@react-pdf-levelup/core';
+
+<Div style={{ width: 400 }}>
+  <P>Section 1 content</P>
+
+  <Divider label="Section 2" />
+
+  <P>Section 2 content</P>
+</Div>
+```
+
+### With variants
+
+```tsx
+<Divider label="Solid line" variant="line" />
+<Divider label="Dashed" variant="dashed" color="#6366f1" />
+<Divider label="Dotted" variant="dotted" color="#f59e0b" />
+```
+
+### Custom colors and size
+
+```tsx
+<Divider
+  label="Monthly Reports"
+  color="#4338ca"
+  textColor="#4338ca"
+  fontSize={10}
+  marginVertical={24}
+/>
+```
+
+### Fixed width
+
+```tsx
+<Divider
+  label="ONLY THIS SECTION"
+  width={300}
+  variant="dashed"
+/>
+```

@@ -1,0 +1,97 @@
+---
+title: Pass
+description: Null placeholder (Python's `pass` equivalent) to satisfy required `children` contracts without rendering anything.
+---
+
+# Pass
+
+**Pass** is the equivalent of the reserved word `pass` in the Python language: a component that **renders absolutely nothing** and exists solely to satisfy required `children` contracts, or to mark points in the component tree where real content will live later on.
+
+Internally it returns an empty `React.Fragment` (`<></>`). As a consequence, it does not generate any node in the PDF layout, occupies no space, and nothing is visible in the final output.
+
+> ⚠️ **Important:** `Pass` does **not** accept `children`. If later you want to put real content at that same point in the tree, simply **delete** `<Pass />` and place the children directly in its place. If you try to pass children to `<Pass>`, TypeScript will flag it as an error (the `PassProps` interface is empty).
+
+## Props
+
+`Pass` **declares no props at all**. Its signature is simply `<Pass />` and nothing else.
+
+## When to use Pass
+
+1. **Parent with required `children`.** If a wrapper you're using declares `children: ReactNode` (non-optional) and for now you want to leave it empty, use `<Pass />` instead of inventing fake content or silencing the error with `// @ts-expect-error`.
+2. **Visual marker ("JSX TODO").** Leave it as a clear signal in the code that this spot is reserved for future content — just like a `pass` inside a stub class or method in Python.
+3. **Branches that should render nothing.** Instead of `cond ? <Something /> : null` you can write `cond ? <Something /> : <Pass />` so the intent of "render nothing here" is explicit and symmetric.
+
+## Examples
+
+### Satisfying a required `children` prop
+
+```tsx
+import { Layout, H1, Div, Pass } from '@react-pdf-levelup/core';
+
+// Imagine a wrapper that DOES require children (not optional):
+function Wrapper({ children }: { children: React.ReactNode }) {
+  return <Div style={{ border: '1px solid red', padding: 10 }}>{children}</Div>;
+}
+
+export default function MyDoc() {
+  return (
+    <Layout>
+      <Wrapper>
+        {/* Temporary stub: when we have real content, remove <Pass /> */}
+        <Pass />
+      </Wrapper>
+    </Layout>
+  );
+}
+```
+
+### As a marker inside a template
+
+```tsx
+import { LayoutMultiPage, Section, H1, Pass } from '@react-pdf-levelup/core';
+
+<LayoutMultiPage size="A4">
+  {/* Cover */}
+  <Section>
+    <H1>Contract #1234</H1>
+    <Pass />
+  </Section>
+
+  {/* Terms & conditions — Legal team owns this */}
+  <Section>
+    <H1>Terms and Conditions</H1>
+    <Pass />
+  </Section>
+
+  {/* Signatures — design pending */}
+  <Section>
+    <H1>Signatures</H1>
+    <Pass />
+  </Section>
+</LayoutMultiPage>
+```
+
+### Empty branch of a ternary (explicit syntax vs `null`)
+
+```tsx
+<Layout>
+  {hasDiscount
+    ? <Badge variant="warning">Discount applied</Badge>
+    : <Pass />}  {/* intent: "nothing goes here" — more expressive than `null` */}
+</Layout>
+```
+
+### Going from stub to real content
+
+When the stub is no longer needed, you **replace** the entire component:
+
+```diff
+ <Section>
+   <H1>Signatures</H1>
+-  <Pass />
++  <Div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
++    <P>____________________________</P>
++    <P>____________________________</P>
++  </Div>
+ </Section>
+```

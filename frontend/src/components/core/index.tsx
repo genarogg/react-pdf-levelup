@@ -16,6 +16,7 @@ import Button from "./basic/Button"
 import Badge from "./extend/Badges"
 import Divider from "./extend/Divider"
 import Graph from "./extend/Graph"
+import Pass from "./extend/Pass"
 
 // plugins
 import ChartJS from "./plugins/charts/ChartJS"
@@ -53,6 +54,7 @@ export {
   Badge,
   Divider,
   Graph,
+  Pass,
 
   // plugins
   ChartJS,

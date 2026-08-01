@@ -11,7 +11,7 @@ import {
       Thead,
       Tr
     } from "@react-pdf-levelup/core";
-    
+     
 interface ProductoConEstado {
   sku: string
   producto: string
@@ -50,6 +50,7 @@ const TablaDashboard: React.FC = ({ data = productosDashboard }: any) => {
       <Table
         cellHeight={30}
         grid="modern"
+        borderRadiusMethod="svg"
         borderColor={COLORS.borderGray}
         textColor={COLORS.ink}
         headerBackground={COLORS.accentPrimary}

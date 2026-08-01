@@ -1,0 +1,96 @@
+---
+title: Pass
+description: Placeholder nulo (equivalente al `pass` de Python) para satisfacer el contrato de `children` obligatorios sin renderizar nada.
+---
+
+# Pass
+
+**Pass** es el equivalente a la palabra reservada `pass` del lenguaje Python: un componente que **no renderiza nada** y que existe exclusivamente para satisfacer contratos de `children` obligatorios, o para marcar puntos del árbol de componentes donde más tarde habrá contenido real.
+
+Internamente devuelve un `React.Fragment` vacío (`<></>`). Como consecuencia, no genera ningún nodo en el layout del PDF, no ocupa espacio y no se ve absolutamente nada en la salida final.
+
+> ⚠️ **Importante:** `Pass` **no acepta** `children`. Si más tarde querés meter contenido real en ese mismo punto del árbol, simplemente **eliminás** `<Pass />` y ponés los hijos directamente en su lugar. Si intentás pasarle children a `<Pass>`, TypeScript te lo marcará como error (la interfaz `PassProps` está vacía).
+
+## Props
+
+`Pass` **no declara ninguna prop**. Su firma es `<Pass />` y nada más.
+
+## Cuándo usar Pass
+
+1. **Componente padre con `children` obligatorio.** Si un wrapper que estás usando declara `children: ReactNode` (no opcional) y por ahora querés dejarlo vacío, usá `<Pass />` para evitar tener que inventarte un contenido falso ni silenciar el error con `// @ts-expect-error`.
+2. **Marcador visual ("TODO de JSX").** Dejalo como señal clara en el código de que ese lugar está reservado para contenido futuro — igual que un `pass` dentro de un `if __name__ == "__main__":` o dentro de una clase/método a medio escribir en Python.
+3. **Condicionales que no quieren nada en una rama.** En vez de `cond ? <Algo /> : null` podés escribir `cond ? <Algo /> : <Pass />` para que la intención de "no renderizar nada aquí" sea explícita y simétrica.
+
+## Ejemplos
+
+### Satisfacer un `children` obligatorio
+
+```tsx
+import { Layout, Section, H1, Pass } from '@react-pdf-levelup/core';
+
+// Supongamos un componente propio que exige children.
+// Como todavía no sabemos qué va adentro, usamos Pass.
+function Wrapper({ children }: { children: React.ReactNode }) {
+  return <Div style={{ border: '1px solid red', padding: 10 }}>{children}</Div>;
+}
+
+export default function MiDoc() {
+  return (
+    <Layout>
+      <Wrapper>
+        {/* Stub temporal: cuando tengamos el contenido real, borramos <Pass /> */}
+        <Pass />
+      </Wrapper>
+    </Layout>
+  );
+}
+```
+
+### Como marcador dentro de una plantilla
+
+```tsx
+<LayoutMultiPage size="A4">
+  {/* Portada */}
+  <Section>
+    <H1>Contrato #1234</H1>
+    <Pass />
+  </Section>
+
+  {/* Términos y condiciones — los escribe Legal */}
+  <Section>
+    <H1>Términos y Condiciones</H1>
+    <Pass />
+  </Section>
+
+  {/* Firmas — diseño pendiente */}
+  <Section>
+    <H1>Firmas</H1>
+    <Pass />
+  </Section>
+</LayoutMultiPage>
+```
+
+### Rama vacía de un ternario (sintaxis explícita vs `null`)
+
+```tsx
+<Layout>
+  {tieneDescuento
+    ? <Badge variant="warning">Descuento aplicado</Badge>
+    : <Pass />}  {/* intencional: "acá no va nada", más expresivo que `null` */}
+</Layout>
+```
+
+### Pasar de stub a contenido real
+
+Cuando el stub deja de tener sentido, **reemplazás** el componente entero:
+
+```diff
+ <Section>
+   <H1>Firmas</H1>
+-  <Pass />
++  <Div style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
++    <P>____________________________</P>
++    <P>____________________________</P>
++  </Div>
+ </Section>
+```

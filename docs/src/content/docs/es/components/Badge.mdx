@@ -1,0 +1,114 @@
+---
+title: Badge
+description: Componente para mostrar insignias estilizadas con variantes de estado y tamaños.
+---
+
+# Badge
+
+El componente **Badge** se utiliza para mostrar pequeñas etiquetas o insignias de estado con colores y variantes predefinidas. Internamente combina un `View` contenedor con un `Text` estilizado, por lo que es un componente basado en `View` (importante al usarlo dentro de una celda de tabla: hay que poner `text={false}` en el `Td`).
+
+## Props
+
+| Nombre     | Tipo                                                                                                                        | Default     | Descripción                                                                                            |
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------- |
+| `children` | `React.ReactNode`                                                                                                           | `N/A`       | Texto o contenido interno de la insignia.                                                              |
+| `variant`  | `"default" \| "active" \| "pending" \| "cancelled" \| "success" \| "warning" \| "error" \| "info"`                           | `"default"` | Variante de color predefinida. Determina tanto el color de fondo como el color del texto.              |
+| `size`     | `"sm" \| "md" \| "lg"`                                                                                                      | `"md"`      | Tamaño de la insignia (afecta el padding horizontal y vertical).                                      |
+| `style`    | `any`                                                                                                                       | `undefined` | Estilos adicionales para el contenedor `View` exterior. Se aplica al final del array y puede sobrescribir estilos base. |
+
+Además, hereda todas las propiedades del componente `View` de `@react-pdf/renderer` (`debug`, `fixed`, `break`, `id`, `margin`, etc.).
+
+## Variantes
+
+Cada variante define un color de fondo y un color de texto de contraste:
+
+| Variante      | Fondo       | Texto       | Uso típico                                  |
+| :------------ | :---------- | :---------- | :------------------------------------------ |
+| `default`     | `#f3f4f6`   | `#1f2937`   | Estado neutro / sin definir.               |
+| `active`      | `#d1fae5`   | `#065f46`   | Registro activo, habilitado, vigente.      |
+| `pending`     | `#fef3c7`   | `#92400e`   | Pendiente de aprobación o procesamiento.   |
+| `cancelled`   | `#fee2e2`   | `#991b1b`   | Cancelado / anulado.                       |
+| `success`     | `#dcfce7`   | `#166534`   | Éxito / completado / aprobado.             |
+| `warning`     | `#fcd34d`   | `#78350f`   | Advertencia / requiere atención.           |
+| `error`       | `#fca5a5`   | `#7c2d12`   | Error / fallido / rechazado.               |
+| `info`        | `#bfdbfe`   | `#1e40af`   | Información general / nota.                |
+
+## Tamaños
+
+| Tamaño | Padding Horizontal | Padding Vertical |
+| :----- | :----------------- | :--------------- |
+| `sm`   | 6                  | 2                |
+| `md`   | 8                  | 4                |
+| `lg`   | 10                 | 6                |
+
+## Ejemplos
+
+### Básico por variante
+
+```tsx
+import { Badge, H3, Div, P } from '@react-pdf-levelup/core';
+
+<H3>Variantes</H3>
+
+<Div style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+  <Badge variant="default">Default</Badge>
+  <Badge variant="active">Activo</Badge>
+  <Badge variant="pending">Pendiente</Badge>
+  <Badge variant="cancelled">Cancelado</Badge>
+  <Badge variant="success">Éxito</Badge>
+  <Badge variant="warning">Advertencia</Badge>
+  <Badge variant="error">Error</Badge>
+  <Badge variant="info">Info</Badge>
+</Div>
+```
+
+### Tamaños
+
+```tsx
+<Div style={{ flexDirection: 'row', gap: 6, alignItems: 'center' }}>
+  <Badge variant="info" size="sm">SM</Badge>
+  <Badge variant="info" size="md">MD</Badge>
+  <Badge variant="info" size="lg">LG</Badge>
+</Div>
+```
+
+### Dentro de una celda de Table (text={false})
+
+Como `Badge` usa un `View` interior, **debe ponerse `text={false}`** en el `Td` para que `@react-pdf/renderer` no intente anidar un `View` dentro de un `Text`:
+
+```tsx
+import { Table, Thead, Tbody, Tr, Th, Td, Badge } from '@react-pdf-levelup/core';
+
+<Table borderColor="#222" style={{ borderRadius: 6 }}>
+  <Thead>
+    <Tr>
+      <Th>Producto</Th>
+      <Th>Precio</Th>
+      <Th>Estado</Th>
+    </Tr>
+  </Thead>
+  <Tbody>
+    <Tr>
+      <Td>Monitor</Td>
+      <Td>$ 299.00</Td>
+      <Td text={false}>
+        <Badge variant="success">En stock</Badge>
+      </Td>
+    </Tr>
+    <Tr>
+      <Td>Teclado</Td>
+      <Td>$ 49.99</Td>
+      <Td text={false}>
+        <Badge variant="pending">Poco stock</Badge>
+      </Td>
+    </Tr>
+    <Tr>
+      <Td>Mouse</Td>
+      <Td>$ 29.99</Td>
+      <Td text={false}>
+        <Badge variant="error">Agotado</Badge>
+      </Td>
+    </Tr>
+  </Tbody>
+</Table>
+```

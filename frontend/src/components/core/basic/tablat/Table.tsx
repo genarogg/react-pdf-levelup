@@ -27,7 +27,7 @@ const SingleTable: React.FC<TableProps> = ({
   zebraColor = "#eeeeee",
   zebra = true,
   grid = "grid",
-  borderRadiusMethod = "view",
+  borderRadiusMethod = "svg",
   ...rest
 }) => {
   const {
