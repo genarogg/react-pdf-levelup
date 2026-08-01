@@ -1,6 +1,6 @@
 ---
 title: Layout
-description: Main component for configuring and rendering PDF documents with advanced control over size, margins, background, and footer.
+description: Main component for configuring and rendering PDF documents with advanced control over size, margins, background, and pagination.
 ---
 
 # Layout
@@ -13,11 +13,9 @@ Internally, it manages page configuration and wraps the content with the appropr
 - Orientation
 - Predefined margin system
 - Background color or image
-- Dynamic footer
 - Automatic numbering
 - Centimeter reference grid
 - Debug mode
-- Automatic footer space reservation
 
 ---
 
@@ -32,10 +30,10 @@ Internally, it manages page configuration and wraps the content with the appropr
 | `backgroundImageOpacity` | `number`                                                                 | `1`            | Opacity of the background image (0–1).                                                                             |
 | `padding`              | `number`                                                                 | `30`           | Base padding when `margin="normal"`.                                                                             |
 | `margin`               | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"`     | Margin system. Accepts a preset or a number in points for all 4 sides. |
-| `style`                | `object`                                                                 | `{}`           | Additional styles for the page (does not override automatic footer reservation).                                   |
-| `footer`               | `ReactNode`                                                              | `undefined`    | Custom footer content.                                                                                             |
-| `footerLines`                | `number`                                                                 | `2` if footer exists, else `1` | Number of footerLines reserved for the footer.                                                                           |
+| `style`                | `object`                                                                 | `{}`           | Additional styles for the page.                                   |
+| `footerLines`                | `number`                                                                 | `1` | Number of footerLines reserved at the bottom (used by the pagination container to avoid overlapping content).                                                                           |
 | `pagination`           | `boolean`                                                                | `true`         | Shows automatic page numbering.                                                                                    |
+| `paginationStyle`      | `any`                                                                    | `undefined`    | Additional styles for the pagination `<Text>` inside the footer container (e.g. `{ fontSize: 10, color: '#999' }`). |
 | `rule`                 | `boolean`                                                                | `false`        | Shows centimeter reference grid.                                                                                   |
 | `debug`                | `boolean`                                                                | `false`        | Activates `@react-pdf/renderer` debug mode.                                                                        |
 | `dpi`                | `number`                                                                | `undefined`        | Page DPI resolution (passed directly to `<Page dpi>` from `@react-pdf/renderer`).                                                                        |
@@ -162,17 +160,6 @@ You can define a custom size by passing a `{ width, height }` object in points:
 
 ---
 
-# Smart Footer
-
-```tsx
-<Layout
-  footer={<P>Confidential Document</P>}
-  footerLines={2}
->
-```
-
----
-
 # Automatic Pagination
 
 ```tsx
@@ -234,9 +221,9 @@ The **NextPage** component allows you to insert a manual page break within the d
   backgroundColor="#ffffff"
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.15}
-  footer={<P>My Company</P>}
-  footerLines={2}
+  footerLines={1}
   pagination
+  paginationStyle={{ fontSize: 10, color: '#666' }}
   rule={false}
   dpi={300}
   id="main-page"

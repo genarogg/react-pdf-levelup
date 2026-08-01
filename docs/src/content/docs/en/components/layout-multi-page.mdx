@@ -24,9 +24,9 @@ These properties apply globally to the entire document but can be overridden ind
 | `backgroundImageOpacity` | `number` | `1` | Base background image opacity. |
 | `padding` | `number` | `30` | Base page padding. |
 | `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"` | Base margin adjustment. Accepts a preset or a number in points. |
-| `footer` | `ReactNode` | `undefined` | Base footer content. |
-| `footerLines` | `number` | `2` if footer exists, else `1` | Reserved footer space in lines. |
+| `footerLines` | `number` | `1` | Reserved footer space in lines (pagination container). |
 | `pagination` | `boolean` | `true` | Base page numbering visibility. |
+| `paginationStyle` | `any` | `undefined` | Additional styles for the pagination `<Text>` inside the footer container. |
 | `rule` | `boolean` | `false` | Base reference grid visibility. |
 | `debug` | `boolean` | `false` | Base debug mode activation. |
 | `meta` | `DocumentMeta` | `{}` | Document metadata (title, author, passwords, permissions, etc.). |
@@ -47,9 +47,9 @@ The **Section** component represents an individual page within a `LayoutMultiPag
 | `backgroundImageOpacity` | `number` | Inherited | Overrides the background image opacity. |
 | `padding` | `number` | Inherited | Overrides the padding for this page. |
 | `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | Inherited | Overrides the margin preset or a number in points. |
-| `footer` | `ReactNode` | Inherited | Overrides the footer for this page. |
-| `footerLines` | `number` | Inherited | Overrides the footer space. |
+| `footerLines` | `number` | Inherited | Overrides the reserved footer space in lines (pagination container). |
 | `pagination` | `boolean` | Inherited | Enables/disables numbering on this page. |
+| `paginationStyle` | `any` | Inherited | Overrides styles for the pagination `<Text>`. |
 | `rule` | `boolean` | Inherited | Enables/disables the grid on this page. |
 | `debug` | `boolean` | Inherited | Enables/disables debug mode on this page. |
 | `dpi` | `number` | `undefined` | Specific DPI resolution for this page. |

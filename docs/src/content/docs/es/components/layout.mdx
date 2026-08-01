@@ -1,7 +1,7 @@
 
 ---
 title: Layout
-description: Componente principal para configurar y renderizar documentos PDF con control avanzado de tamaño, márgenes, fondo y footer.
+description: Componente principal para configurar y renderizar documentos PDF con control avanzado de tamaño, márgenes, fondo y paginación.
 ---
 
 # Layout
@@ -14,11 +14,9 @@ Internamente gestiona la configuración de página y envuelve el contenido con l
 - Orientación
 - Sistema de márgenes predefinidos
 - Fondo de color o imagen
-- Footer dinámico
 - Numeración automática
 - Rejilla de referencia en centímetros
 - Modo debug
-- Reserva automática de espacio para el footer
 
 ---
 
@@ -33,10 +31,10 @@ Internamente gestiona la configuración de página y envuelve el contenido con l
 | `backgroundImageOpacity` | `number` | `1` | Opacidad de la imagen de fondo (0–1). |
 | `padding` | `number` | `30` | Padding base cuando `margin="normal"`. |
 | `margin` | `MarginInput` (`"apa" \| "normal" \| "estrecho" \| "ancho" \| number`) | `"normal"` | Sistema de márgenes. Acepta un preset o un número en puntos para los 4 lados. |
-| `style` | `object` | `{}` | Estilos adicionales para la página (no sobrescribe la reserva automática del footer). |
-| `footer` | `ReactNode` | `undefined` | Contenido personalizado del pie de página. |
-| `footerLines` | `number` | `2` si hay footer, sino `1` | Número de líneas reservadas para el footer. |
+| `style` | `object` | `{}` | Estilos adicionales para la página. |
+| `footerLines` | `number` | `1` | Número de líneas reservadas abajo (usado por el contenedor de paginación para no solapar contenido). |
 | `pagination` | `boolean` | `true` | Muestra numeración automática de páginas. |
+| `paginationStyle` | `any` | `undefined` | Estilos adicionales para el `<Text>` de paginación dentro del footer (ej: `{ fontSize: 10, color: '#999' }`). |
 | `rule` | `boolean` | `false` | Muestra rejilla de referencia en centímetros. |
 | `debug` | `boolean` | `false` | Activa el modo debug de `@react-pdf/renderer`. |
 | `dpi` | `number` | `undefined` | Resolución DPI de la página (se pasa directamente a `<Page dpi>` de `@react-pdf/renderer`). |
@@ -163,17 +161,6 @@ Puedes definir un tamaño propio pasando un objeto `{ width, height }` en puntos
 
 ---
 
-# Footer Inteligente
-
-```tsx
-<Layout
-  footer={<P>Documento confidencial</P>}
-  footerLines={2}
->
-```
-
----
-
 # Paginación Automática
 
 ```tsx
@@ -235,9 +222,9 @@ El componente **NextPage** permite insertar un salto de página manual dentro de
   backgroundColor="#ffffff"
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.15}
-  footer={<P>Mi Empresa</P>}
-  footerLines={2}
+  footerLines={1}
   pagination
+  paginationStyle={{ fontSize: 10, color: '#666' }}
   rule={false}
   dpi={300}
   id="pagina-principal"
