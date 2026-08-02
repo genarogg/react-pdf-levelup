@@ -17,6 +17,8 @@ Unordered List. Container for `LI` elements with bullets.
 | `fontSize`    | `number`                                                                                       | `undefined` | Font size for bullets and `LI` text (can be overridden by individual `LI`).                                                        |
 | `bulletColor` | `string`                                                                                       | `undefined` | Bullet color (can be overridden by individual `LI`).                                                                              |
 
+> `type` on `UL` is strictly typed to these 4 values (`UlBulletType`) — TypeScript raises a compile error if you try to pass an `OL` numbering value (e.g. `"upper-roman"`).
+
 ### Example
 
 ```tsx
@@ -44,6 +46,8 @@ Ordered List. Container for `LI` elements with automatic numbering.
 | `fontSize`    | `number`                                                                                                                               | `undefined` | Font size for markers and `LI` text (can be overridden by individual `LI`).                                                                   |
 | `bulletColor` | `string`                                                                                                                               | `undefined` | Numeric marker color (can be overridden by individual `LI`).                                                                                  |
 
+> `type` on `OL` is strictly typed to these 6 values (`OlBulletType`) — TypeScript raises a compile error if you try to pass a `UL` bullet value (e.g. `"square"`).
+
 ### Example
 
 ```tsx
@@ -66,7 +70,7 @@ List Item. Must be used inside `UL` or `OL`. Normally inherits `bulletType`, `is
 | :------------ | :------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
 | `children`    | `React.ReactNode`                                                                                                                      | `N/A`       | Item content (text or other components).                                                                                                 |
 | `style`       | `object`                                                                                                                               | `{}`        | Additional styles for the item container.                                                                                                |
-| `bulletType`  | `string`                                                                                                                               | `"disc"`    | Bullet/marker style. Inherited from `UL`/`OL`.                                                                                           |
+| `bulletType`  | `"disc" \| "circle" \| "square" \| "none" \| "decimal" \| "lower-alpha" \| "upper-alpha" \| "lower-roman" \| "upper-roman"`            | `"disc"`    | Bullet/marker style. Inherited from `UL`/`OL` (receives whichever its parent injects, `UlBulletType` or `OlBulletType`).                 |
 | `isOrdered`   | `boolean`                                                                                                                              | `false`     | Whether it renders as numbered. Inherited from `UL`/`OL`.                                                                                |
 | `index`       | `number`                                                                                                                               | `1`         | 1-based position inside the list. Inherited from `UL`/`OL`.                                                                              |
 | `start`       | `number`                                                                                                                               | `1`         | Starting value of the sequence (for ordered lists only). Inherited from `OL`.                                                           |

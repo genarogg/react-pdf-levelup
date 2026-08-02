@@ -17,6 +17,8 @@ Lista desordenada (Unordered List). Contenedor para elementos `LI` con viñetas.
 | `fontSize`    | `number`                                                                                      | `undefined` | Tamaño de fuente para viñetas y texto de los `LI` (puede sobreescribirse por `LI` individual).          |
 | `bulletColor` | `string`                                                                                      | `undefined` | Color de la viñeta (puede sobreescribirse por `LI` individual).                                        |
 
+> `type` en `UL` está tipado de forma estricta a estos 4 valores (`UlBulletType`) — TypeScript marca error de compilación si intentás pasarle un valor de numeración de `OL` (ej. `"upper-roman"`).
+
 ### Ejemplo
 
 ```tsx
@@ -44,6 +46,8 @@ Lista ordenada (Ordered List). Contenedor para elementos `LI` con numeración au
 | `fontSize`    | `number`                                                                                                                      | `undefined` | Tamaño de fuente para marcadores y texto de los `LI` (puede sobreescribirse por `LI` individual).                                         |
 | `bulletColor` | `string`                                                                                                                      | `undefined` | Color del marcador numérico (puede sobreescribirse por `LI` individual).                                                                  |
 
+> `type` en `OL` está tipado de forma estricta a estos 6 valores (`OlBulletType`) — TypeScript marca error de compilación si intentás pasarle un valor de viñeta de `UL` (ej. `"square"`).
+
 ### Ejemplo
 
 ```tsx
@@ -66,7 +70,7 @@ Elemento de lista (List Item). Debe usarse dentro de `UL` o `OL`. Normalmente he
 | :------------ | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------- |
 | `children`    | `React.ReactNode`                                                                                                             | `N/A`       | Contenido del elemento (texto u otros componentes).                                                                            |
 | `style`       | `object`                                                                                                                      | `{}`        | Estilos adicionales para el contenedor del item.                                                                               |
-| `bulletType`  | `string`                                                                                                                      | `"disc"`    | Tipo de viñeta/marcador. Heredado de `UL`/`OL`.                                                                               |
+| `bulletType`  | `"disc" \| "circle" \| "square" \| "none" \| "decimal" \| "lower-alpha" \| "upper-alpha" \| "lower-roman" \| "upper-roman"`   | `"disc"`    | Tipo de viñeta/marcador. Heredado de `UL`/`OL` (recibe el que le inyecte su padre, sea `UlBulletType` u `OlBulletType`).      |
 | `isOrdered`   | `boolean`                                                                                                                     | `false`     | Indica si se renderiza como numerado. Heredado de `UL`/`OL`.                                                                   |
 | `index`       | `number`                                                                                                                      | `1`         | Posición (1-based) dentro de la lista. Heredado de `UL`/`OL`.                                                                  |
 | `start`       | `number`                                                                                                                      | `1`         | Valor inicial de la secuencia (solo para listas ordenadas). Heredado de `OL`.                                                  |
