@@ -4,8 +4,10 @@ import { Image, StyleSheet } from "@react-pdf/renderer"
 type ImageBaseProps = React.ComponentProps<typeof Image>
 
 interface ImgProps extends Omit<ImageBaseProps, "style"> {
-  src?: string
-  style?: any
+  src?: string;
+  style?: any;
+  width?: string | number;
+  height?: string | number;
 }
 
 const styles = StyleSheet.create({
@@ -16,8 +18,8 @@ const styles = StyleSheet.create({
   },
 })
 
-const Img: React.FC<ImgProps> = React.memo(({ src, style, ...rest }) => {
-  return <Image src={src} style={[styles.image, style]} {...rest} />
+const Img: React.FC<ImgProps> = React.memo(({ src, style, width, height, ...rest }) => {
+  return <Image src={src} style={[styles.image, style, width && { width }, height && { height }]} {...rest} />
 })
 
 Img.displayName = "Img"

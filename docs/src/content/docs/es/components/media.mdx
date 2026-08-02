@@ -5,7 +5,7 @@ description: Componentes para imágenes.
 
 ## Img
 
-Componente para mostrar imágenes. Soporta todas las propiedades del componente `Image` de `@react-pdf/renderer`. Por defecto aplica `width: "100%"` y `height: "auto"`.
+Componente para mostrar imágenes. Soporta todas las propiedades del componente `Image` de `@react-pdf/renderer`. Por defecto aplica `width: "100%"` y `height: "auto"`, pero puede ser sobreescrito por las propiedades `width` y `height`.
 
 ### Props
 
@@ -13,6 +13,8 @@ Componente para mostrar imágenes. Soporta todas las propiedades del componente 
 | :--- | :--- | :--- | :--- |
 | `src` | `string` | `undefined` | URL o ruta de la imagen. |
 | `style` | `object` | `{}` | Estilos adicionales. |
+| `width` | `string \| number` | `undefined` | Ancho de la imagen. |
+| `height` | `string \| number` | `undefined` | Alto de la imagen. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |

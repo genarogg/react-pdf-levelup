@@ -5,17 +5,19 @@ description: Components for images.
 
 ## Img
 
-Component for displaying images. Supports all properties of the `Image` component from `@react-pdf/renderer`. By default applies `width: "100%"` and `height: "auto"`.
+Component for displaying images. Supports all properties of the `Image` component from `@react-pdf/renderer`. By default applies `width: "100%"` and `height: "auto"`, but can be overridden by `width` and `height` properties.
 
 ### Props
 
 | Name    | Type     | Default    | Description                                                                       |
 | :------ | :------- | :--------- | :-------------------------------------------------------------------------------- |
-| `src`   | `string` | `undefined`| Image URL or path.                                                                |
-| `style` | `object` | `{}`       | Additional styles.                                                                |
-| `debug` | `boolean`| `false`    | Enables debug mode (borders).                                                     |
-| `fixed` | `boolean`| `false`    | Indicates if the element should appear on all pages.                              |
-| `break` | `boolean`| `false`    | Forces a page break before the element.                                           |
+| `src`   | `string` | `undefined`| Image URL or path. |
+| `style` | `object` | `{}` | Additional styles. |
+| `width` | `string \| number` | `undefined` | Image width. |
+| `height` | `string \| number` | `undefined` | Image height. |
+| `debug` | `boolean`| `false`    | Enables debug mode (borders). |
+| `fixed` | `boolean`| `false`    | Indicates if the element should appear on all pages. |
+| `break` | `boolean`| `false`    | Forces a page break before the element. |
 
 ### Example
 
