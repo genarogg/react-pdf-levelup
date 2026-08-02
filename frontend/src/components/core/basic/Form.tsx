@@ -10,6 +10,7 @@ interface FormProps {
   borderRadius?: number
   labelColor?: string
   textColor?: string
+  [key: string]: any
 }
 
 interface BaseFieldProps {
@@ -19,6 +20,7 @@ interface BaseFieldProps {
   labelStyle?: any
   width?: string | number
   height?: number
+  [key: string]: any
 }
 
 interface InputProps extends BaseFieldProps {
@@ -35,6 +37,7 @@ interface CheckboxProps {
   checked?: boolean
   style?: any
   labelStyle?: any
+  [key: string]: any
 }
 
 /* ================= CONTEXT ================= */
@@ -117,6 +120,7 @@ const Form: React.FC<FormProps> = ({
   borderRadius = 5,
   labelColor = "#333",
   textColor = "#000",
+  ...rest
 }) => (
   <FormContext.Provider
     value={{ borderColor, borderRadius, labelColor, textColor }}
@@ -130,6 +134,7 @@ const Form: React.FC<FormProps> = ({
         },
         style,
       ]}
+      {...rest}
     >
       {children}
     </View>
@@ -146,6 +151,7 @@ const Input: React.FC<InputProps> = ({
   height,
   style,
   labelStyle,
+  ...rest
 }) => {
   const { borderColor, borderRadius, labelColor } =
     useContext(FormContext)
@@ -169,6 +175,7 @@ const Input: React.FC<InputProps> = ({
           },
           style,
         ]}
+        {...rest}
       >
         <Text style={styles.placeholder}>
           {placeholder}
@@ -188,6 +195,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   height = 60,
   style,
   labelStyle,
+  ...rest
 }) => {
   const { borderColor, borderRadius, labelColor } =
     useContext(FormContext)
@@ -212,6 +220,7 @@ const TextArea: React.FC<TextAreaProps> = ({
           },
           style,
         ]}
+        {...rest}
       >
         <Text style={styles.placeholder}>
           {placeholder}
@@ -228,12 +237,13 @@ const Checkbox: React.FC<CheckboxProps> = ({
   checked = false,
   style,
   labelStyle,
+  ...rest
 }) => {
   const { borderColor, borderRadius, textColor } =
     useContext(FormContext)
 
   return (
-    <View style={[styles.checkboxContainer, style]}>
+    <View style={[styles.checkboxContainer, style]} {...rest}>
       <View
         style={[
           styles.checkboxBox,
