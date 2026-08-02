@@ -60,6 +60,7 @@ Componentes de formato de texto en línea. Soportan todas las propiedades del co
 | :--- | :--- | :--- | :--- |
 | `children` | `React.ReactNode` | `undefined` | Contenido interno (texto u otros componentes inline). |
 | `style` | `object` | `undefined` | Estilos adicionales. |
+| `color` | `string` | `undefined` | Color para aplicar al subrayado de `U`. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -70,7 +71,7 @@ Componentes de formato de texto en línea. Soportan todas las propiedades del co
 import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
 
 <P>
-  <Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U>Subrayado</U>, <Small>Pequeño</Small>
+  <Strong>Negrita</Strong>, <Em>Cursiva</Em>, <U color="red">Subrayado rojo</U>, <Small>Pequeño</Small>
 </P>
 ```
 
@@ -84,6 +85,7 @@ Bloque de cita para destacar texto importante. Soporta todas las propiedades del
 | :--- | :--- | :--- | :--- |
 | `children` | `React.ReactNode` | `undefined` | Texto o contenido interno de la cita. |
 | `style` | `object` | `undefined` | Estilos adicionales. |
+| `color` | `string` | `undefined` | Color para el borde izquierdo de la cita. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -93,7 +95,7 @@ Bloque de cita para destacar texto importante. Soporta todas las propiedades del
 ```tsx
 import { Blockquote } from '@react-pdf-levelup/core';
 
-<Blockquote>Una cita destacada en el documento.</Blockquote>
+<Blockquote color="blue">Una cita destacada con borde azul.</Blockquote>
 ```
 
 ## Mark
@@ -106,6 +108,7 @@ Texto resaltado (como con un marcador). Soporta todas las propiedades del compon
 | :--- | :--- | :--- | :--- |
 | `children` | `React.ReactNode` | `undefined` | Texto o contenido interno a resaltar. |
 | `style` | `object` | `undefined` | Estilos adicionales. |
+| `color` | `string` | `undefined` | Color de fondo para el resaltado. |
 | `debug` | `boolean` | `false` | Activa el modo debug (bordes). |
 | `fixed` | `boolean` | `false` | Indica si el elemento debe aparecer en todas las páginas. |
 | `break` | `boolean` | `false` | Fuerza un salto de página antes del elemento. |
@@ -115,7 +118,7 @@ Texto resaltado (como con un marcador). Soporta todas las propiedades del compon
 ```tsx
 import { Mark } from '@react-pdf-levelup/core';
 
-<Mark>Texto resaltado</Mark>
+<Mark color="lime">Texto resaltado en lima</Mark>
 ```
 
 ## Span

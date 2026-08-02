@@ -41,7 +41,7 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
   const etiquetaAutoConclusiva = (label: string, atributo?: string) => {
     return {
       label,
-      insertText: `<${label} ${atributo ? atributo : ""}/>\n$1`,
+      insertText: `<${label} ${atributo ? atributo : ""}/>`,
       kind,
       insertTextRules,
     }
@@ -76,7 +76,7 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
     etiqueta("Em"),
     etiqueta("U"),
     etiqueta("Small"),
-    etiqueta("Mark"),
+    etiquetaConAtributo("Mark", 'color="$1"'),
     etiqueta("Span"),
     etiqueta("Div"),
 
@@ -142,7 +142,7 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
     etiquetaConSalto("LI"),
     // Otros componentes
 
-    etiquetaConSalto("Blockquote"),
+    etiquetaConAtributo("Blockquote", 'color="$1"'),
 
     etiquetaAvanzada("QR", `\n        <QR \n          url="https://example.com" \n          size={150} \n          colorDark="#3794ff" \n          colorLight="#ffffff"\n          logo="https://example.com/logo.png" \n          logoWidth={30}\n          logoHeight={30}\n          margin={0}\n          errorCorrectionLevel="H"\n        />`),
 

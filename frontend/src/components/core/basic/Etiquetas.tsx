@@ -8,6 +8,7 @@ type LinkBaseProps = React.ComponentProps<typeof Link>
 interface TextProps extends Omit<TextBaseProps, "style"> {
   children?: React.ReactNode
   style?: any
+  color?: string
 }
 
 interface DivProps extends Omit<ViewBaseProps, "style"> {
@@ -132,20 +133,20 @@ const Em: React.FC<TextProps> = ({ children, style, ...rest }) => (
   <Text style={[styles.em, style]} {...rest}>{children}</Text>
 )
 
-const U: React.FC<TextProps> = ({ children, style, ...rest }) => (
-  <Text style={[styles.u, style]} {...rest}>{children}</Text>
+const U: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+  <Text style={[styles.u, color ? { textDecorationColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 
 const Small: React.FC<TextProps> = ({ children, style, ...rest }) => (
   <Text style={[styles.small, style]} {...rest}>{children}</Text>
 )
 
-const Blockquote: React.FC<TextProps> = ({ children, style, ...rest }) => (
-  <Text style={[styles.blockquote, style]} {...rest}>{children}</Text>
+const Blockquote: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+  <Text style={[styles.blockquote, color ? { borderLeftColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 
-const Mark: React.FC<TextProps> = ({ children, style, ...rest }) => (
-  <Text style={[styles.mark, style]} {...rest}>{children}</Text>
+const Mark: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+  <Text style={[styles.mark, color ? { backgroundColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 
 const A: React.FC<LinkProps & { src?: string }> = ({ children, style, href, src, ...rest }) => (
