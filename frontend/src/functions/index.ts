@@ -14,8 +14,8 @@ import {
 export {
     decodePDF,
     generatePDF,
-    generatePDFonWorker,
     getFont,
+    generatePDFonWorker,
     pdf,
     renderToStream,
     renderToBuffer,

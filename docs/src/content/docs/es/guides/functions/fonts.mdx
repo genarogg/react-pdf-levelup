@@ -58,3 +58,39 @@ Una vez registrada, puedes usar la fuente en tus estilos (`StyleSheet.create` o 
   <p>Puedes ver un ejemplo completo de cómo registrar y usar una fuente personalizada en nuestro [Playground](https://react-pdf-levelup.nimbux.cloud/playground/template/facturaInvoice). Allí podrás interactuar con el código y ver cómo se genera el PDF en tiempo real.</p>
 
 </div>
+
+## getFont
+
+Función asíncrona para recuperar datos de una fuente desde una URL.
+Esta función es **experimental/beta** y podría estar sujeta a cambios.
+
+### Firma
+
+```typescript
+getFont({ fontName, fontUrl }: { fontName: string, fontUrl: string }): Promise<Object>
+```
+
+### Parámetros
+
+| Nombre | Tipo | Descripción |
+| :--- | :--- | :--- |
+| `fontName` | `string` | El nombre de la fuente a recuperar. |
+| `fontUrl` | `string` | La URL desde donde se puede obtener la fuente. |
+
+### Retorno
+
+Retorna una promesa que resuelve con los datos de la fuente.
+
+### Ejemplo
+
+```tsx
+import { getFont } from '@react-pdf-levelup/core';
+
+const fetchMyFont = async () => {
+  const fontData = await getFont({
+    fontName: "Open Sans",
+    fontUrl: "https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf",
+  });
+  console.log("Datos de la fuente:", fontData);
+};
+```
