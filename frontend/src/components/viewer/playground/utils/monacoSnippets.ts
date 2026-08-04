@@ -109,12 +109,11 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
     etiquetaConSalto("Center"),
 
     //header y footer
-    //etiquetaConSalto("Header"),
-    //etiquetaConSalto("Main"),
-    //etiquetaConSalto("Footer"),
+
     etiquetaConSalto("ImgBg"),
 
     etiquetaAutoConclusiva("NextPage"),
+    etiquetaAutoConclusiva("Pass"),
 
     etiquetaAutoConclusiva("BR"),
     etiquetaAutoConclusiva("HR", "style={{ borderTop: '1px solid #000' }}"),
@@ -122,6 +121,12 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
     etiquetaAutoConclusiva("Icon", 'ico="$1"'),
 
     etiquetaConAtributo("A", 'href="$1"'),
+
+    // extens
+    etiquetaConAtributo("Badge", 'variant="$1"'),
+    etiquetaAutoConclusiva("Divider", 'label="$1" variant="dashed" color="#6366f1"'),
+    etiquetaAutoConclusiva("Button", 'label="$1" variant="dashed" color="#6366f1"'),
+
 
     // Componentes de tabla
     etiquetaAvanzada("Table", "<Table>\n  <Thead>\n    <Tr>\n      <Th>$1</Th>\n    </Tr>\n  </Thead>\n  <Tbody>\n    <Tr>\n      <Td></Td>\n    </Tr>\n  </Tbody>\n</Table>"),
@@ -144,9 +149,11 @@ export const getMonacoSnippets = (kind: monaco.languages.CompletionItemKind, ins
 
     etiquetaConAtributo("Blockquote", 'color="$1"'),
 
-    etiquetaAvanzada("QR", `\n        <QR \n          url="https://example.com" \n          size={150} \n          colorDark="#3794ff" \n          colorLight="#ffffff"\n          logo="https://example.com/logo.png" \n          logoWidth={30}\n          logoHeight={30}\n          margin={0}\n          errorCorrectionLevel="H"\n        />`),
+    etiquetaAvanzada("QR", `\n        <QR \n          url="https://example.com" \n          size={150} \n          colorDark="#3794ff" \n          colorLight="#ffffff"\n           logoWidth={30}\n    logoHeight={30}\n          margin={0}\n          errorCorrectionLevel="H"\n        />`),
 
-    etiquetaAvanzada("QRstyle", `\n        <QRstyle\n          url="https://example.com"\n          size={300}\n          colorDark="#3794ff"\n          colorLight="#ffffff"\n          image="https://example.com/logo.png"\n          dotsOptions={{ color: "#3794ff", type: "rounded" }}\n          backgroundOptions={{ color: "#ffffff" }}\n          imageOptions={{ margin: 0, imageSize: 0.4 }}\n          cornersSquareOptions={{ type: "extra-rounded", color: "#3794ff" }}\n          cornersDotOptions={{ type: "dot", color: "#3794ff" }}\n          margin={0}\n          errorCorrectionLevel="H"\n        />`),
+    etiquetaAvanzada("QRstyle", `\n        <QRstyle\n          url="https://example.com"\n          size={300}\n          colorDark="#3794ff"\n          colorLight="#ffffff"\n                    dotsOptions={{ color: "#3794ff", type: "rounded" }}\n          backgroundOptions={{ color: "#ffffff" }}\n          imageOptions={{ margin: 0, imageSize: 0.4 }}\n          cornersSquareOptions={{ type: "extra-rounded", color: "#3794ff" }}\n          cornersDotOptions={{ type: "dot", color: "#3794ff" }}\n          margin={0}\n          errorCorrectionLevel="H"\n        />`),
+    
+    etiquetaAvanzada("Graph", `\n        <Graph \n          variant="bar" \n          width={500} \n          height={300} \n          title="Ventas por región (2026)" \n          subtitle="En miles de pesos" \n          showValues \n          yTickCount={4} \n          series={[ \n            { \n              name: "Primer semestre", \n              data: [ \n                { label: "Norte", value: 120 }, \n                { label: "Centro", value: 85 }, \n                { label: "Sur", value: 150 }, \n                { label: "Este", value: 95 }, \n              ], \n            }, \n            { \n              name: "Segundo semestre", \n              color: "#16a34a", \n              data: [ \n                { label: "Norte", value: 140 }, \n                { label: "Centro", value: 110 }, \n                { label: "Sur", value: 165 }, \n                { label: "Este", value: 120, color: "#dc2626" }, \n              ], \n            }, \n          ]}\n        />`),
   ];
 
   return customTags;

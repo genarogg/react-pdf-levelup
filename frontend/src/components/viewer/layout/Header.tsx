@@ -1,5 +1,5 @@
 import React, { useState, useCallback, Suspense, lazy } from "react"
-import { Github, FileText, Play, Menu, X } from "lucide-react"
+import { Github,  Menu, X } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ThemeSwitcher } from "@/theme/ThemeSwitcher"
@@ -168,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                                 </>
                             )}
 
-                            <ThemeSwitcher />
+                            {import.meta.env.DEV && <ThemeSwitcher />}
                         </div>
                     </div>
 
@@ -221,7 +221,7 @@ const Header: React.FC<HeaderProps> = ({ context }) => {
                             >
                                 <Github className="w-5 h-5 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300" />
                             </a>
-                            <ThemeSwitcher />
+                            {import.meta.env.DEV && <ThemeSwitcher />}
                         </div>
                     </div>
                 </div>
