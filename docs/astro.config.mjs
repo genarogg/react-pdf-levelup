@@ -102,12 +102,6 @@ export default defineConfig({
 								{ slug: 'components/lists', label: 'Lists' },
 								{ slug: 'components/media', label: 'Media' },
 								{ slug: 'components/button', label: 'Button' },
-							],
-						},
-						{
-							label: 'Avanzado',
-							translations: { en: 'Advanced' },
-							items: [
 								{ slug: 'components/form', label: 'Formulario', translations: { en: 'Form' } },
 							],
 						},

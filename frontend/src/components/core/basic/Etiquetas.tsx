@@ -25,7 +25,6 @@ interface LinkProps extends Omit<LinkBaseProps, "style"> {
 const styles = StyleSheet.create({
   p: {
     marginBottom: 5,
-    lineHeight: 1.2,
   },
   h1: {
     fontSize: 24,
