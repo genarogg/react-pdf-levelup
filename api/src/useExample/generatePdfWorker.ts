@@ -1,0 +1,72 @@
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+import log from "../func/log";
+
+dotenv.config({ debug: false });
+
+const { ENDPOINT_API } = process.env;
+
+type ApiResponse = {
+    data?: {
+        pdf?: string
+    }
+}
+
+const petitionWorker = async ({ template, data }: { template: string, data: any }): Promise<string> => {
+    console.log("Using API endpoint (worker):", ENDPOINT_API);
+    //ruta de los templates
+    const templatePath = path.join(process.cwd(), "src", "useExample", template);
+    //convertir a base64
+    const tsxCode = fs.readFileSync(templatePath, "utf-8");
+    const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
+
+    const res = await fetch(`${ENDPOINT_API}/api/worker`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ template: templateBase64, data }),
+    });
+
+    if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`API error (${res.status}): ${txt}`);
+    }
+
+    const json = await res.json() as ApiResponse;
+    const resultBase64 = json?.data?.pdf ?? "";
+
+    return resultBase64;
+}
+
+const savePDF = (resultBase64: string) => {
+    // Convertir base64 a buffer
+    const buffer = Buffer.from(resultBase64, "base64");
+
+    // Definir ruta de salida (usando process.cwd() en lugar de __dirname)
+    const outputPath = path.join(process.cwd(), "src", "useExample", "example-worker.pdf");
+
+    // Guardar archivo
+    fs.writeFileSync(outputPath, new Uint8Array(buffer));
+
+    console.log("PDF guardado exitosamente en:", outputPath);
+}
+
+const generateAndSaveWorkerPDF = async () => {
+    try {
+        const data = {
+            nombre: "Genaro Gonzalez",
+        }
+
+        const resultBase64 = await petitionWorker({ template: "template.tsx", data })
+
+        savePDF(resultBase64);
+
+        console.log("\n")
+        log.success(resultBase64)
+
+    } catch (error) {
+        console.error("Error generating/saving PDF (worker):", error);
+    }
+};
+
+generateAndSaveWorkerPDF();

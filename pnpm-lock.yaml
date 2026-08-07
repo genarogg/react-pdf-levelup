@@ -395,6 +395,9 @@ importers:
       '@react-pdf/renderer':
         specifier: 4.5.1
         version: 4.5.1(react@19.2.8)
+      canvas:
+        specifier: ^3.2.0
+        version: 3.2.0
       jsbarcode:
         specifier: ^3.12.3
         version: 3.12.3
@@ -433,9 +436,18 @@ importers:
 
   lib/mod/icons:
     dependencies:
+      '@react-pdf/renderer':
+        specifier: 4.5.1
+        version: 4.5.1(react@19.2.8)
       lucide:
         specifier: ^0.562.0
         version: 0.562.0
+      react:
+        specifier: '>=18 <=19'
+        version: 19.2.8
+      react-dom:
+        specifier: '>=18 <=19'
+        version: 19.2.8(react@19.2.8)
     devDependencies:
       '@types/node':
         specifier: 22.0.0

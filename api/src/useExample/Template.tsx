@@ -12,6 +12,7 @@ import {
   Div,
   Divider,
   Em,
+  Font,
   Form,
   Gradiant,
   Graph,
@@ -45,8 +46,7 @@ import {
   Tr,
   U,
   UL,
-  View,
-  Font
+  View
 } from "@react-pdf-levelup/core";
 import {
   QR,
@@ -61,6 +61,8 @@ import {
 import {
   CodeBar
 } from "@react-pdf-levelup/codebar";
+
+
 
 
 const getFuentes = () => {
@@ -105,9 +107,7 @@ const DefaultTemplate = ({ data }: any) => {
           of the printing and typesetting industry. Lorem Ipsum has been the
           industry's standard dummy text ever since 1966, when designers at
           Letraset and James Mosley, the librarian at St Bride Printing Library
-          in London, took a 1914 Cicero translation and scrambled it to make
-          dummy text for Letraset's Body Type sheets. It has survived not only
-          many decades, but also the leap into electronic typesetting
+
         </P>
 
         <Strong>Lorem Ipsum</Strong>
@@ -126,9 +126,7 @@ const DefaultTemplate = ({ data }: any) => {
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since 1966, when designers at Letraset and James Mosley, the librarian
           at St Bride Printing Library in London, took a 1914 Cicero translation
-          and scrambled it to make dummy text for Letraset's Body Type sheets.
-          It has survived not only many decades, but also the leap into
-          electronic typesetting
+
         </Blockquote>
         <BR />
         <HR style={{ borderTop: "2px solid rgba(44, 100, 253, 1)" }} />
@@ -271,7 +269,6 @@ const DefaultTemplate = ({ data }: any) => {
     return (
       <>
         <UL>
-          <LI>lista</LI>
           <LI>lista</LI>
           <LI>lista</LI>
         </UL>
