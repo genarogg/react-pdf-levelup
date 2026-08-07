@@ -216,8 +216,7 @@ const LayoutMultiPage: React.FC<LayoutMultiPageProps> = ({
             creator={creator} producer={producer} pdfVersion={pdfVersion} language={language}
             pageMode={pageMode as any} pageLayout={pageLayout as any}
             creationDate={creationDate} modificationDate={modificationDate}
-            ownerPassword={ownerPassword} userPassword={userPassword}
-            permissions={permissions} onRender={onRender}
+            onRender={onRender}
         >
             {pages}
         </Document>

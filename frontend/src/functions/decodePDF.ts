@@ -88,7 +88,7 @@ const decodePDFBackend = async ({
     const fileName = ensurePdfExtension(name);
     const fullPath = path.join(saveSRC, fileName);
 
-    await writeFile(fullPath, buffer);
+    await writeFile(fullPath, new Uint8Array(buffer));
 };
 
 /* ─────────────────────────────────────────────────────────

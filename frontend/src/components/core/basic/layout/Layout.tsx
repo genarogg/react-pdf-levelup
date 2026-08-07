@@ -129,10 +129,7 @@ const Layout: React.FC<LayoutProps> = ({
             pageLayout={pageLayout as any}
             creationDate={creationDate}
             modificationDate={modificationDate}
-            ownerPassword={ownerPassword}
-            userPassword={userPassword}
-            permissions={permissions}
-            onRender={onRender}
+            onRender={onRender as any}
         >
             <Page
                 debug={debug}

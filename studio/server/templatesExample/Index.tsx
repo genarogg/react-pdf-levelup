@@ -1,7 +1,6 @@
 import { Layout, Div } from "@react-pdf-levelup/core"
 import Header from "./components/Header"
 import Main from "./components/Main"
-import Footer from "./components/Footer"
 import getFuentes from "./getFuentes"
 
 const Index = ({ data }: any) => {
@@ -23,7 +22,7 @@ const Index = ({ data }: any) => {
   }
 
   return (
-    <Layout style={page} footer={<Footer />} pagination={false}>
+    <Layout style={page} pagination={false}>
       <Div>
         <Header data={fullData} />
         <Main />

@@ -6,14 +6,8 @@ import {
 
 const DefaultTemplate = ({ data }: any) => {
 
-  const Footer = () => {
-    return (
-      <P>hola</P>
-    )
-  }
-
   return (
-    <Layout footer={<Footer />}>
+    <Layout>
       <P>Lorem ipsum acts as a stand-in for actual text when the final content is not yet available. This allows designers to focus on layout and visual elements without being distracted by the meaning of the text.
         Origin:
         It's derived from a Latin text written by Cicero in 45 BC, but the words have been altered and rearranged to create the nonsensical text we know today.

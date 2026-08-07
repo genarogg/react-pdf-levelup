@@ -49,8 +49,8 @@ const generarPDFBackend = async ({
     const stream = await renderToStream(MyDocument);
 
     const buffer: Buffer = await new Promise((resolve, reject) => {
-        const chunks: Buffer[] = [];
-        stream.on("data", (chunk) => chunks.push(chunk));
+        const chunks: Uint8Array[] = [];
+        stream.on("data", (chunk: Buffer) => chunks.push(new Uint8Array(chunk)));
         stream.on("end", () => resolve(Buffer.concat(chunks)));
         stream.on("error", (error) => reject(error));
     });
