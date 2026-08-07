@@ -78,3 +78,5 @@ api/.tmp-react-pdf-levelup/*
 /.claude
 
 /lib/mod/studio/templates
+
+api/temp/

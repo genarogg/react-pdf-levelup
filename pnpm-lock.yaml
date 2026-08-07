@@ -428,6 +428,22 @@ importers:
         specifier: ^8.5.1
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(supports-color@8.1.1)(tsx@4.23.8)(typescript@5.9.3)
 
+  lib/mod/icons:
+    dependencies:
+      lucide:
+        specifier: ^0.562.0
+        version: 0.562.0
+    devDependencies:
+      '@types/node':
+        specifier: 22.0.0
+        version: 22.0.0
+      json:
+        specifier: ^11.0.0
+        version: 11.0.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.25)(supports-color@8.1.1)(tsx@4.23.8)(typescript@5.9.3)
+
   lib/mod/qr:
     dependencies:
       '@react-pdf/renderer':

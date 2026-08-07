@@ -46,7 +46,7 @@ const savePDF = (resultBase64: string) => {
     const outputPath = path.join(process.cwd(), "src", "useExample", "example.pdf");
 
     // Guardar archivo
-    fs.writeFileSync(outputPath, buffer);
+    fs.writeFileSync(outputPath, new Uint8Array(buffer));
 
     console.log("PDF guardado exitosamente en:", outputPath);
 }
@@ -70,4 +70,3 @@ const generateAndSavePDF = async () => {
 };
 
 generateAndSavePDF();
-
