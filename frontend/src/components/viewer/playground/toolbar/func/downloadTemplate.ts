@@ -7,12 +7,16 @@ interface LibraryComponents {
   core: string[];
   qr: string[];
   chart: string[];
+  icons: string[];
+  codebar: string[];
 }
 
 interface UsedComponents {
   core: Set<string>;
   qr: Set<string>;
   chart: Set<string>;
+  icons: Set<string>;
+  codebar: Set<string>;
 }
 
 // Función pura para detectar componentes utilizados
@@ -28,7 +32,9 @@ const detectUsedComponents = (code: string, libraryComponents: LibraryComponents
   const usedComponents: UsedComponents = {
     core: new Set<string>(),
     qr: new Set<string>(),
-    chart: new Set<string>()
+    chart: new Set<string>(),
+    icons: new Set<string>(),
+    codebar: new Set<string>()
   };
 
   const isComponentUsed = (component: string, componentCode: string): boolean => {
@@ -54,9 +60,22 @@ const detectUsedComponents = (code: string, libraryComponents: LibraryComponents
     }
   });
 
-  const qrAndChartComponents = [...libraryComponents.qr, ...libraryComponents.chart];
+  libraryComponents.icons.forEach(component => {
+    if (isComponentUsed(component, code)) {
+      usedComponents.icons.add(component);
+    }
+  });
+
+  libraryComponents.codebar.forEach(component => {
+    if (isComponentUsed(component, code)) {
+      usedComponents.codebar.add(component);
+    }
+  });
+
+  // Se excluyen qr, chart, icons y codebar para que no queden duplicados dentro de core
+  const excludedFromCore = [...libraryComponents.qr, ...libraryComponents.chart, ...libraryComponents.icons, ...libraryComponents.codebar];
   libraryComponents.core.forEach(component => {
-    if (!qrAndChartComponents.includes(component)) {
+    if (!excludedFromCore.includes(component)) {
       if (isComponentUsed(component, code)) {
         usedComponents.core.add(component);
       }
@@ -103,6 +122,20 @@ const buildImportsSection = (usedComponents: UsedComponents): string => {
     importsSection += `    } from "@react-pdf-levelup/chart";\n`;
   }
 
+  if (usedComponents.icons.size > 0) {
+    const sortedComponents = Array.from(usedComponents.icons).sort();
+    importsSection += `import { \n`;
+    importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
+    importsSection += `    } from "@react-pdf-levelup/icons";\n`;
+  }
+
+  if (usedComponents.codebar.size > 0) {
+    const sortedComponents = Array.from(usedComponents.codebar).sort();
+    importsSection += `import { \n`;
+    importsSection += `      ${sortedComponents.join(',\n      ')}\n`;
+    importsSection += `    } from "@react-pdf-levelup/codebar";\n`;
+  }
+
   return importsSection + '\n\n';
 };
 
@@ -123,7 +156,9 @@ const downloadTemplate = (templateCode: string) => {
     const libraryComponents = {
         core: Object.keys(ReactPdfLevelup).filter(key => /^[A-Z]/.test(key)),
         qr: ['QR', 'QRstyle'],
-        chart: ['ChartJS']
+        chart: ['ChartJS'],
+        icons: ['Icon'],
+        codebar: ['CodeBar']
     };
 
     const usedComponents = detectUsedComponents(templateCode, libraryComponents);

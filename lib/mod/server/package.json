@@ -21,7 +21,12 @@
   "scripts": {
     "build:lib": "tsup --config tsup.config.ts"
   },
+   "dependencies": {
+    
+  },
   "devDependencies": {
+    "json": "^11.0.0",
+    "tsup": "^8.5.1",
     "@types/node": "22.0.0"
   }
 }

@@ -4,5 +4,10 @@ packages:
   - studio
   - frontend
   - lib
-  - lib/* 
+  - lib/*
   - lib/**/*
+allowBuilds:
+  '@parcel/watcher': true
+  canvas: true
+  esbuild: true
+  sharp: true

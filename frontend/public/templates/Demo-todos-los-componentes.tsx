@@ -1,92 +1,69 @@
 import React from "react";
-import {
-  A,
-  BR,
-  Badge,
-  Blockquote,
-  Button,
-  Center,
-  Checkbox,
-  Col6,
-  Container,
-  Div,
-  Divider,
-  Em,
-  Form,
-  Gradiant,
-  Graph,
-  H1,
-  H2,
-  H3,
-  H4,
-  H5,
-  HR,
-  Img,
-  Input,
-  LI,
-  Layout,
-  Left,
-  Mark,
-  NextPage,
-  OL,
-  P,
-  Right,
-  Row,
-  Small,
-  Span,
-  Strong,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  TextArea,
-  Th,
-  Thead,
-  Tr,
-  U,
-  UL,
-  View,
-  Font
-} from "@react-pdf-levelup/core";
-import {
-  QR,
-  QRstyle
-} from "@react-pdf-levelup/qr";
-import {
-  ChartJS
-} from "@react-pdf-levelup/chart";
-import {
-  Icon
-} from "@react-pdf-levelup/icons";
-import {
-  CodeBar
-} from "@react-pdf-levelup/codebar";
+import { 
+      A,
+      BR,
+      Badge,
+      Blockquote,
+      Button,
+      Center,
+      Checkbox,
+      Col6,
+      Container,
+      Div,
+      Divider,
+      Em,
+      Form,
+      Gradiant,
+      Graph,
+      H1,
+      H2,
+      H3,
+      H4,
+      H5,
+      HR,
+      Img,
+      Input,
+      LI,
+      Layout,
+      Left,
+      Mark,
+      NextPage,
+      OL,
+      P,
+      Right,
+      Row,
+      Small,
+      Span,
+      Strong,
+      Table,
+      Tbody,
+      Td,
+      Text,
+      TextArea,
+      Th,
+      Thead,
+      Tr,
+      U,
+      UL,
+      View
+    } from "@react-pdf-levelup/core";
+import { 
+      QR,
+      QRstyle
+    } from "@react-pdf-levelup/qr";
+import { 
+      ChartJS
+    } from "@react-pdf-levelup/chart";
+import { 
+      Icon
+    } from "@react-pdf-levelup/icons";
+import { 
+      CodeBar
+    } from "@react-pdf-levelup/codebar";
 
 
-const getFuentes = () => {
-  Font.register({
-    family: "Nunito",
-    fonts: [
-      {
-        src: "https://fonts.gstatic.com/s/nunito/v12/XRXV3I6Li01BKof4Mg.ttf",
-        fontWeight: "normal",
-      },
-      {
-        src: "https://fonts.gstatic.com/s/nunito/v12/XRXW3I6Li01BKofAjsOkZg.ttf",
-        fontWeight: "bold",
-      },
-      {
-        src: "https://fonts.gstatic.com/s/nunito/v12/XRXX3I6Li01BKofIMOaE.ttf",
-        fontStyle: "italic",
-        fontWeight: "normal",
-      }
-    ],
-  });
-}
 
 const DefaultTemplate = ({ data }: any) => {
-  getFuentes();
-
   const Texto = () => {
     return (
       <>
@@ -302,39 +279,39 @@ const DefaultTemplate = ({ data }: any) => {
     );
   };
 
-  const Gradiante = () => {
-    return (
-      <Gradiant colors={["#FF6B6B", "#4ECDC4"]} height={100}>
+  const Gradiante = ()=>{
+    return(
+         <Gradiant colors={["#FF6B6B", "#4ECDC4"]} height={100}>
         <Text style={{ color: "white" }}>Hola Mundo</Text>
       </Gradiant>
     )
   }
 
-  const Pluguins = () => {
+  const Pluguins = ()=>{
 
-    const QRS = () => {
-      return (
-        <Container>
-          <Row>
-            <Col6>
-              <QR
-                url="https://react-pdf-levelup.com"
-                size={100}
-                colorDark="#1a202c"
-                colorLight="#f7fafc"
-              />
-            </Col6>
-            <Col6>
-              <QRstyle
-                url="https://example.com"
-                size={100}
-                dotsOptions={{ color: "#579cfcff", type: "rounded" }}
-                backgroundOptions={{ color: "#ffffff" }}
-
-              />
-            </Col6>
-          </Row>
-        </Container>
+    const QRS =()=>{
+      return(
+         <Container>
+         <Row>
+         <Col6>
+         <QR
+            url="https://react-pdf-levelup.com"
+            size={100}
+            colorDark="#1a202c"
+            colorLight="#f7fafc"
+          />
+         </Col6>
+          <Col6>
+          <QRstyle
+            url="https://example.com"
+            size={100}
+            dotsOptions={{ color: "#579cfcff", type: "rounded" }}
+            backgroundOptions={{ color: "#ffffff" }}
+         
+          />
+         </Col6>
+         </Row>
+         </Container>
       )
     }
 
@@ -357,35 +334,35 @@ const DefaultTemplate = ({ data }: any) => {
       },
     }
 
-    return (
+    return(
       <>
+    
+      <QRS/>
+      <BR />
+      <ChartJS data={chartConfig} width={500} height={300} />
+      <BR />
+      <Text>Ejemplo CodeBar (CODE128):</Text>
+      <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
+       <BR />
+      <Text>Demo Iconos:</Text>
+      <BR />
+     
 
-        <QRS />
-        <BR />
-        <ChartJS data={chartConfig} width={500} height={300} />
-        <BR />
-        <Text>Ejemplo CodeBar (CODE128):</Text>
-        <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
-        <BR />
-        <Text>Demo Iconos:</Text>
-        <BR />
-
-
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-          <Icon ico="Home" />
-          <Icon ico="Send" />
-          <Icon ico="Flame" />
+           <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+    <Icon ico="Home" />
+        <Icon ico="Send" />
+         <Icon ico="Flame" />
           <Icon ico="Moon" />
-          <Icon ico="Landmark" />
-        </View>
+           <Icon ico="Landmark" />
+</View>
       </>
     )
   }
 
   return (
-    <Layout style={{ fontFamily: "Nunito" }}>
-
-      <Img src="https://react-pdf-levelup.nimbux.cloud/iconos/favicon-192x192.png" width={70} />
+    <Layout>
+    
+      <Img src="/iconos/favicon-192x192.png" width={70} />
       <Texto />
       <Lista />
       <Tabla />
@@ -393,7 +370,7 @@ const DefaultTemplate = ({ data }: any) => {
       <Positions />
       <Formulario />
       <Grafico />
-
+   
       <NextPage />
 
       <Button variant="success" width={200}>
@@ -408,16 +385,16 @@ const DefaultTemplate = ({ data }: any) => {
       >
         Con margen y borderRadius
       </Button>
-      <Gradiante />
+      <Gradiante/>
       <Divider label="Línea continua" variant="line" />
       <Divider label="Discontinua" variant="dashed" color="#6366f1" />
       <Divider label="Punteada" variant="dotted" color="#f59e0b" />
-
-
+      
+     
       <NextPage />
       {/**   */}
-      <Pluguins />
-
+      <Pluguins/>
+     
     </Layout>
   );
 };

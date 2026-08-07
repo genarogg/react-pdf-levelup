@@ -24,9 +24,10 @@
     "@fastify/under-pressure": "^9.0.3",
     "@react-pdf-levelup/chart": "latest",
     "@react-pdf-levelup/client": "latest",
+    "@react-pdf-levelup/codebar": "latest",
     "@react-pdf-levelup/core": "latest",
-    "@react-pdf-levelup/qr": "latest",
     "@react-pdf-levelup/icons": "latest",
+    "@react-pdf-levelup/qr": "latest",
     "@react-pdf/renderer": "^4.3.2",
     "accounting": "^0.4.1",
     "canvas": "^3.2.0",
@@ -39,7 +40,7 @@
     "jsdom": "^27.4.0",
     "qr-code-styling": "^1.9.2",
     "qrcode": "^1.5.4",
-    "react": ">=18 <=19",
+    "react": "^19.2.4",
     "react-dom": ">=18 <=19"
   },
   "devDependencies": {

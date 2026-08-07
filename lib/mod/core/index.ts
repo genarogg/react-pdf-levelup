@@ -17,6 +17,8 @@ import {
     Table, Thead, Tbody, Tr, Th, Td, // tabla
     Form, Input, Checkbox, TextArea, // form
     Left, Right, Center, // alignment
+
+    Pass,
     // extend
     Gradiant,
     Button,
@@ -69,6 +71,7 @@ export {
     // misc
     Div, HR, Layout, NextPage,
     LayoutMultiPage, Section,
+    Pass,
     // extend
     Gradiant,
     Button,
