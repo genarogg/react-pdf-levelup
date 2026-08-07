@@ -24,7 +24,7 @@
 import { isMainThread } from "node:worker_threads";
 import { createElement } from "react";
 import Piscina from "piscina";
-
+import { fileURLToPath } from "node:url";
 /** Mismos valores que el `output` de `generarPDF` en su rama backend. */
 type BackendOutput = "base64" | "buffer";
 
@@ -69,9 +69,9 @@ async function renderInWorker({ templatePath, data }: PDFWorkerData): Promise<Bu
     const { renderToStream } = await import("@react-pdf/renderer");
     const stream = await renderToStream(createElement(Template, { data }) as any);
 
-    const chunks: Buffer[] = [];
+    const chunks: Uint8Array[] = [];
     for await (const chunk of stream) {
-        chunks.push(chunk as Buffer);
+        chunks.push(new Uint8Array(chunk as Buffer));
     }
 
     return Buffer.concat(chunks);
@@ -84,12 +84,14 @@ export default renderInWorker;
  * HILO PRINCIPAL — pool + API pública
  * ───────────────────────────────────────────────────────── */
 
+const __filename = fileURLToPath(import.meta.url);
+
 // Solo se crea si isMainThread es true. Si esto corriera también dentro
 // de cada worker (porque Piscina reimporta este mismo archivo), cada
 // worker terminaría armando su propio pool recursivamente.
 const pool = isMainThread
     ? new Piscina({
-          filename: __filename,
+           filename: __filename,
           // Sin maxThreads/minThreads: Piscina autodetecta según
           // os.availableParallelism() (maxThreads = parallelism * 1.5).
           // idleTimeout explícito: por defecto es 0, así que cualquier

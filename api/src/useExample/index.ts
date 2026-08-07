@@ -14,14 +14,14 @@ type ApiResponse = {
 }
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
-    console.log("Using API endpoint:", ENDPOINT_API);
+    console.log("Using API endpoint (single):", ENDPOINT_API);
     //ruta de los templates
     const templatePath = path.join(process.cwd(), "src", "useExample", template);
     //convertir a base64
     const tsxCode = fs.readFileSync(templatePath, "utf-8");
     const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
 
-    const res = await fetch(`${ENDPOINT_API}/api`, {
+    const res = await fetch(`${ENDPOINT_API}/api/single`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ template: templateBase64, data }),

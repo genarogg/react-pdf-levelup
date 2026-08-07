@@ -28,6 +28,7 @@
     "@react-pdf-levelup/core": "workspace:*",
     "@react-pdf-levelup/icons": "workspace:*",
     "@react-pdf-levelup/qr": "workspace:*",
+    "@react-pdf-levelup/server": "workspace:*",
     "@react-pdf/renderer": "^4.5.1",
     "accounting": "^0.4.1",
     "canvas": "^3.2.0",

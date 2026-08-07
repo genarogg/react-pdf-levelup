@@ -11,3 +11,5 @@ allowBuilds:
   canvas: true
   esbuild: true
   sharp: true
+minimumReleaseAgeExclude:
+  - '@react-pdf-levelup/server@1.1.2'

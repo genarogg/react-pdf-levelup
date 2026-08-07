@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { generatePdfController } from '../controllers/index';
+import { generateSinglePdf, generatePdfOnWorker } from '../controllers';
 
 
 const controller = (request: FastifyRequest, reply: FastifyReply) => {
@@ -8,7 +8,8 @@ const controller = (request: FastifyRequest, reply: FastifyReply) => {
 
 const router = async (fastify: FastifyInstance) => {
     fastify.get('/', controller);
-    fastify.post('/', generatePdfController);
+    fastify.post('/single', generateSinglePdf);
+    fastify.post('/worker', generatePdfOnWorker);
 }
 
 export default router;

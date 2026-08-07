@@ -1,6 +1,6 @@
 {
   "name": "@react-pdf-levelup/server",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Utilidad de frontend para decodificar un PDF en base64 generados con @react-pdf-levelup/core y descargarlo/abrirlo en el navegador.",
   "keywords": [
     "javascript",
@@ -21,8 +21,11 @@
   "scripts": {
     "build:lib": "tsup --config tsup.config.ts"
   },
-   "dependencies": {
-    
+  "dependencies": {
+    "@react-pdf/renderer": "4.5.1",
+    "piscina": "5.3.0",
+    "react": ">=18 <=19",
+    "react-dom": ">=18 <=19"
   },
   "devDependencies": {
     "json": "^11.0.0",
