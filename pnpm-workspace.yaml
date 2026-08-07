@@ -4,8 +4,8 @@ packages:
   - studio
   - frontend
   - lib
-  - lib/*
-  - lib/**/*
+  - lib/mod/*
+  - lib/mod/**/*
 allowBuilds:
   '@parcel/watcher': true
   canvas: true

@@ -27,7 +27,7 @@
     "demo:studio": "cd ./lib/mod/studio && pnpm build:lib &&  node ./bin/cli.js studio",
     "zip:api": "node ./global/zip-api.js",
     "-----Global-----": "-----------------------------------------",
-    "clean:install": "node ./global/clean.js && pnpm install"
+    "clean:install": "node ./global/clean.js && pnpm install && pnpm build:lib"
   },
   "dependencies": {
     "archiver": "^7.0.1",
