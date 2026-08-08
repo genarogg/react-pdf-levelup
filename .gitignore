@@ -81,4 +81,4 @@ api/.tmp-react-pdf-levelup/*
 
 api/temp/
 
-api/src/useExample/pdfs/workers/
+api/src/useExample/pdfs/*

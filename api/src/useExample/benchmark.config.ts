@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 // process.cwd() o desde dónde se ejecute el script.
 export const USE_EXAMPLE_DIR = path.dirname(fileURLToPath(import.meta.url));
 
-export const PDF_COUNT = 1000;
+export const PDF_COUNT = 100;
 
 // Cuántas peticiones se mandan en paralelo por lote (1 = secuencial, como
 // antes). El endpoint /single solo puede procesar una a la vez en el hilo

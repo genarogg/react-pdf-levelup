@@ -23,7 +23,14 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
     const res = await fetch(`${ENDPOINT_API}/api/single`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ template: templateBase64, data }),
+        body: JSON.stringify({
+            template: templateBase64,
+            data,
+            credentials: {
+                username: "admin",
+                password: "123456",
+            }
+        }),
     });
 
     if (!res.ok) {
