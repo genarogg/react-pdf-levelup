@@ -1,3 +1,3 @@
-import { generatePDFonWorker } from "../../../frontend/src/functions"
+import { generatePDFonWorker, __pdfWorkerHandler } from "../../../frontend/src/functions"
 
-export { generatePDFonWorker }
+export { generatePDFonWorker, __pdfWorkerHandler }

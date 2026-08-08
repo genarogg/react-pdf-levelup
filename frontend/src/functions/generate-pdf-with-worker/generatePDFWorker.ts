@@ -8,8 +8,9 @@
 //  - Hilo principal (isMainThread === true): arma el pool UNA sola vez
 //    y expone la API pública `generatePDFonWorker` / `closePDFPool`.
 //  - Cada worker del pool (isMainThread === false): Piscina vuelve a
-//    cargar este archivo y usa su `export default` como la función que
-//    ejecuta por cada tarea.
+//    cargar este archivo y usa el export nombrado `__pdfWorkerHandler`
+//    (ver `name` en las opciones de Piscina, más abajo) como la función
+//    que ejecuta por cada tarea.
 //
 // El guard `isMainThread` en la creación del pool es lo que evita que
 // cada worker, al recargar este mismo archivo, intente crear SU PROPIO
@@ -24,7 +25,7 @@
 import { isMainThread } from "node:worker_threads";
 import { createElement } from "react";
 import Piscina from "piscina";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 /** Mismos valores que el `output` de `generarPDF` en su rama backend. */
 type BackendOutput = "base64" | "buffer";
 
@@ -53,7 +54,12 @@ async function renderInWorker({ templatePath, data }: PDFWorkerData): Promise<Bu
 
     let mod: any;
     try {
-        mod = await import(templatePath);
+        // pathToFileURL es necesario para que funcione en Windows: el loader
+        // ESM de Node no acepta rutas absolutas tipo "A:\...\archivo.js" en
+        // import() -- la letra de unidad seguida de ":" se interpreta como
+        // el scheme de la URL. Hay que convertirla siempre a "file://...".
+        const templateUrl = pathToFileURL(templatePath).href;
+        mod = await import(templateUrl);
     } catch (error) {
         throw new Error(
             `No se pudo importar el template en "${templatePath}": ` +
@@ -77,7 +83,11 @@ async function renderInWorker({ templatePath, data }: PDFWorkerData): Promise<Bu
     return Buffer.concat(chunks);
 }
 
-// Piscina, cuando carga este archivo como worker, busca este export default.
+// Piscina, cuando carga este archivo como worker, busca este export default
+// EN TEORÍA -- pero el barrel público (lib/mod/server/index.ts) reimporta
+// este default y lo re-exporta como named export `__pdfWorkerHandler`. Por
+// eso el `dist/index.js` final NO tiene `.default`, y hay que decirle a
+// Piscina explícitamente qué named export usar (ver `name` más abajo).
 export default renderInWorker;
 
 /* ─────────────────────────────────────────────────────────
@@ -91,7 +101,15 @@ const __filename = fileURLToPath(import.meta.url);
 // worker terminaría armando su propio pool recursivamente.
 const pool = isMainThread
     ? new Piscina({
-           filename: __filename,
+          filename: __filename,
+          // El barrel público (lib/mod/server/index.ts) re-exporta el
+          // default de este archivo como named export `__pdfWorkerHandler`,
+          // así que en dist/index.js no hay `.default`. Sin este `name`,
+          // Piscina busca `.default`, no lo encuentra, y tira "No handler
+          // function exported from ...dist/index.js".
+          // Si el barrel renombra ese export, este string hay que
+          // actualizarlo también.
+          name: "__pdfWorkerHandler",
           // Sin maxThreads/minThreads: Piscina autodetecta según
           // os.availableParallelism() (maxThreads = parallelism * 1.5).
           // idleTimeout explícito: por defecto es 0, así que cualquier

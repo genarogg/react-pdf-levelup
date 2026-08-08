@@ -14,7 +14,7 @@ type ApiResponse = {
 }
 
 const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
-    console.log("Using API endpoint (single):", ENDPOINT_API);
+    console.log("Using API endpoint (single):", `${ENDPOINT_API}/api/single`);
     //ruta de los templates
     const templatePath = path.join(process.cwd(), "src", "useExample", template);
     //convertir a base64

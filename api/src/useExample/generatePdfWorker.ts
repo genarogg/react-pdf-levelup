@@ -21,6 +21,8 @@ const petitionWorker = async ({ template, data }: { template: string, data: any 
     const tsxCode = fs.readFileSync(templatePath, "utf-8");
     const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
 
+    console.log(`${ENDPOINT_API}/api/worker`)
+
     const res = await fetch(`${ENDPOINT_API}/api/worker`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
