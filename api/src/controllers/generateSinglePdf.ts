@@ -101,6 +101,10 @@ async function cleanupTempFile(filePath: string) {
 type BodyInput = {
     template: string
     data?: AnyData
+    credentials: {
+        username: string
+        password: string
+    }
 }
 
 const generateSinglePdf = async (
@@ -110,7 +114,23 @@ const generateSinglePdf = async (
     let tempFilePath: string | null = null
 
     try {
-        const { template, data } = request.body
+        const { template, data, credentials } = request.body
+
+        const { username, password } = credentials
+
+        if (!username || !password) {
+            return reply.status(400).send(
+                errorResponse({ message: "username y password son requeridos" })
+            )
+        }
+
+        const { CR_USERNAME, CR_PASSWORD } = process.env
+
+        if (username !== CR_USERNAME || password !== CR_PASSWORD) {
+            return reply.status(401).send(
+                errorResponse({ message: "credenciales inválidas" })
+            )
+        }
 
         if (!template || typeof template !== "string") {
             return reply.status(400).send(
