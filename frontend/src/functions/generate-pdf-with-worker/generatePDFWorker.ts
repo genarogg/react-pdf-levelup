@@ -29,7 +29,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 /** Mismos valores que el `output` de `generarPDF` en su rama backend. */
 type BackendOutput = "base64" | "buffer";
 
-export interface PDFWorkerData {
+interface PDFWorkerData {
     templatePath: string; // ruta absoluta al módulo que exporta el template (default export)
     data?: any;
     output?: BackendOutput;
@@ -83,18 +83,14 @@ async function renderInWorker({ templatePath, data }: PDFWorkerData): Promise<Bu
     return Buffer.concat(chunks);
 }
 
-// Piscina, cuando carga este archivo como worker, busca este export default
-// EN TEORÍA -- pero el barrel público (lib/mod/server/index.ts) reimporta
-// este default y lo re-exporta como named export `__pdfWorkerHandler`. Por
-// eso el `dist/index.js` final NO tiene `.default`, y hay que decirle a
-// Piscina explícitamente qué named export usar (ver `name` más abajo).
-export default renderInWorker;
-
 /* ─────────────────────────────────────────────────────────
  * HILO PRINCIPAL — pool + API pública
  * ───────────────────────────────────────────────────────── */
 
+import os from "node:os";
+
 const __filename = fileURLToPath(import.meta.url);
+const cores = os.availableParallelism();
 
 // Solo se crea si isMainThread es true. Si esto corriera también dentro
 // de cada worker (porque Piscina reimporta este mismo archivo), cada
@@ -102,21 +98,9 @@ const __filename = fileURLToPath(import.meta.url);
 const pool = isMainThread
     ? new Piscina({
           filename: __filename,
-          // El barrel público (lib/mod/server/index.ts) re-exporta el
-          // default de este archivo como named export `__pdfWorkerHandler`,
-          // así que en dist/index.js no hay `.default`. Sin este `name`,
-          // Piscina busca `.default`, no lo encuentra, y tira "No handler
-          // function exported from ...dist/index.js".
-          // Si el barrel renombra ese export, este string hay que
-          // actualizarlo también.
           name: "__pdfWorkerHandler",
-          // Sin maxThreads/minThreads: Piscina autodetecta según
-          // os.availableParallelism() (maxThreads = parallelism * 1.5).
-          // idleTimeout explícito: por defecto es 0, así que cualquier
-          // worker por encima de minThreads se destruye apenas queda
-          // libre y la próxima ráfaga vuelve a pagar el arranque en frío
-          // (carga de @react-pdf/renderer). Con esto se mantienen
-          // "tibios" 30s antes de matarlos.
+          maxThreads: Math.max(1, cores - 1), // deja 1 core libre para el hilo principal / Fastify
+          minThreads: Math.max(1, Math.floor(cores / 2)), // menos arranques en frío
           idleTimeout: 30_000,
       })
     : undefined;
@@ -133,7 +117,7 @@ const pool = isMainThread
  * @example Forzando buffer
  * const buffer = await generatePDFonWorker({ templatePath: "/abs/path/Invoice.js", data, output: "buffer" });
  */
-export async function generatePDFonWorker({
+async function generatePDFonWorker({
     templatePath,
     data,
     output = "base64",
@@ -165,8 +149,54 @@ export async function generatePDFonWorker({
 
 // Cierre ordenado del pool (esperar a que terminen las tareas en curso).
 // Llamar, por ejemplo, en el hook onClose de Fastify al apagar el server.
-export async function closePDFPool(): Promise<void> {
+async function closePDFPool(): Promise<void> {
     await pool?.close();
 }
 
-export type { BackendOutput };
+interface PoolStats {
+    threads: number;        // workers vivos ahora mismo
+    queueSize: number;       // tareas esperando (ningún worker libre)
+    completed: number;       // tareas completadas desde que arrancó el pool
+    utilization: number;     // 0..1, qué tan ocupado está el pool
+    maxThreads: number;      // techo configurado (autodetectado si no se especifica)
+    minThreads: number;
+}
+
+/**
+ * Snapshot del estado del pool en este instante. Útil para loggear en cada
+ * request y confirmar cuántos workers realmente se están usando.
+ *
+ * Vive en este mismo archivo (no en uno separado) porque `pool` es una
+ * variable privada del módulo, no está exportada — solo el código que
+ * comparte este scope puede leerla.
+ */
+function getPoolStats(): PoolStats | null {
+    if (!pool) return null;
+
+    return {
+        threads: pool.threads.length,
+        queueSize: pool.queueSize,
+        completed: pool.completed,
+        utilization: pool.utilization,
+        maxThreads: pool.options.maxThreads,
+        minThreads: pool.options.minThreads,
+    };
+}
+
+/* ─────────────────────────────────────────────────────────
+ * EXPORTS
+ *
+ * Todos juntos al final. `__pdfWorkerHandler` es el que Piscina busca por
+ * nombre (ver `name` en las opciones del pool, más arriba) cuando carga
+ * este mismo archivo dentro de cada worker thread -- ya no hay
+ * `export default`, así que Piscina nunca busca `.default`.
+ * ───────────────────────────────────────────────────────── */
+
+export {
+    renderInWorker as __pdfWorkerHandler,
+    generatePDFonWorker,
+    closePDFPool,
+    getPoolStats,
+};
+
+export type { PDFWorkerData, BackendOutput, PoolStats };

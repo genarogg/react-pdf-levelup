@@ -80,3 +80,5 @@ api/.tmp-react-pdf-levelup/*
 /lib/mod/studio/templates
 
 api/temp/
+
+api/src/useExample/pdfs/workers/

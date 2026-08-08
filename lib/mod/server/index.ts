@@ -1,3 +1,13 @@
-import { generatePDFonWorker, __pdfWorkerHandler } from "../../../frontend/src/functions"
+import {
+    __pdfWorkerHandler,
+    generatePDFonWorker,
+    closePDFPool,
+    getPoolStats,
+} from "../../../frontend/src/functions"
 
-export { generatePDFonWorker, __pdfWorkerHandler }
+export {
+    __pdfWorkerHandler,
+    generatePDFonWorker,
+    closePDFPool,
+    getPoolStats,
+}

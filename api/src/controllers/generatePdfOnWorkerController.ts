@@ -1,4 +1,4 @@
-import { generatePDFonWorker } from "@react-pdf-levelup/server"
+import { generatePDFonWorker, getPoolStats } from "@react-pdf-levelup/server"
 import type { FastifyRequest, FastifyReply } from "fastify"
 import { successResponse, errorResponse } from "@/func/response"
 import * as fs from "fs/promises"
@@ -86,7 +86,6 @@ const generatePdfOnWorkerController = async (
     reply: FastifyReply
 ) => {
     let tempFilePath: string | null = null
-    console.log("paso 1")
     try {
         const { template, data } = request.body
 
@@ -114,15 +113,20 @@ const generatePdfOnWorkerController = async (
 
         // 5️⃣ Limpiar archivo temporal
         // await cleanupTempFile(tempFilePath)
-        console.log("paso 2")
 
         // 6️⃣ Devolver PDF base64
+        const statsBefore = getPoolStats()
+        if (statsBefore) {
+            console.log(
+                `[pool] threads=${statsBefore.threads}/${statsBefore.maxThreads} ` +
+                `queue=${statsBefore.queueSize} util=${(statsBefore.utilization * 100).toFixed(0)}%`
+            )
+        }
+
         const pdf = await generatePDFonWorker({
             templatePath: tempFilePath,
             data,
         })
-
-        console.log("paso 3")
 
         return reply
             .status(200)
@@ -142,7 +146,7 @@ const generatePdfOnWorkerController = async (
         // arriba no resuelve hasta que el worker devuelve el buffer), así
         // que no hay riesgo de borrar el archivo mientras todavía se está
         // usando.
-        if (tempFilePath) await cleanupTempFile(tempFilePath)
+        // if (tempFilePath) await cleanupTempFile(tempFilePath)
     }
 }
 

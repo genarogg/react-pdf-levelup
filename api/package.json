@@ -12,7 +12,8 @@
     "build": "rimraf dist && tsc -p tsconfig.json && tsc-alias -p tsconfig.json && node scripts/add-js-ext.js",
     "start": "set PRODUCTION=false && node dist/index.js",
     "demo:single": "tsx ./src/useExample/generatePdfSingle.ts",
-    "demo:worker": "tsx ./src/useExample/generatePdfWorker.ts"
+    "demo:worker": "tsx ./src/useExample/generatePdfWorker.ts",
+    "demo:compare": "npm run demo:single && npm run demo:worker"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.5",
