@@ -335,7 +335,7 @@ const DefaultTemplate = ({ data }: any) => {
       )
     }
 
-    const chartConfig = {
+    const chartConfig: any = {
       type: "bar",
       data: {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"],

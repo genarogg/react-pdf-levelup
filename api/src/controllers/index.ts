@@ -1,4 +1,4 @@
 import { generateSinglePdf } from './generateSinglePdf';
-import { generatePdfOnWorker } from './generatePdfOnWorker';
+import { generatePdfOnWorkerController } from './generatePdfOnWorkerController';
 
-export { generateSinglePdf, generatePdfOnWorker }
+export { generateSinglePdf, generatePdfOnWorkerController }

@@ -81,12 +81,12 @@ type BodyInput = {
     data?: AnyData
 }
 
-const generatePdfOnWorker = async (
+const generatePdfOnWorkerController = async (
     request: FastifyRequest<{ Body: BodyInput }>,
     reply: FastifyReply
 ) => {
     let tempFilePath: string | null = null
-
+    console.log("paso 1")
     try {
         const { template, data } = request.body
 
@@ -111,10 +111,18 @@ const generatePdfOnWorker = async (
         //    (loadComponentFromFile ya no hace falta): generatePDFonWorker
         //    recibe la ruta del archivo y es el propio worker el que hace
         //    el `import()` dinámico del template, dentro de su hilo.
+
+        // 5️⃣ Limpiar archivo temporal
+        // await cleanupTempFile(tempFilePath)
+        console.log("paso 2")
+
+        // 6️⃣ Devolver PDF base64
         const pdf = await generatePDFonWorker({
             templatePath: tempFilePath,
             data,
         })
+
+        console.log("paso 3")
 
         return reply
             .status(200)
@@ -138,4 +146,4 @@ const generatePdfOnWorker = async (
     }
 }
 
-export { generatePdfOnWorker }
+export { generatePdfOnWorkerController }

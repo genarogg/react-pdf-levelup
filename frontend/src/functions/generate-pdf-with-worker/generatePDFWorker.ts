@@ -142,7 +142,18 @@ export async function generatePDFonWorker({
         throw new Error("generatePDFonWorker solo puede invocarse desde el hilo principal.");
     }
 
-    const buffer: Buffer = await pool.run({ templatePath, data });
+    // OJO: aunque renderInWorker() devuelve un Buffer real DENTRO del
+    // worker, pool.run() lo transfiere a este hilo vía postMessage
+    // (structured clone), y ese boundary degrada el Buffer a un
+    // Uint8Array plano -- Buffer.isBuffer(raw) da false acá, aunque
+    // el tipo declarado diga "Buffer". Uint8Array no tiene el
+    // toString(encoding) especial de Buffer: hereda el toString de
+    // Array, que ignora cualquier argumento y hace join(','), así que
+    // `.toString("base64")` sobre ese Uint8Array NO tira error pero
+    // devuelve algo tipo "37,80,68,70,..." en vez de base64 real.
+    // Por eso hay que reconstruirlo explícitamente antes de usarlo.
+    const raw: Buffer = await pool.run({ templatePath, data });
+    const buffer = Buffer.isBuffer(raw) ? raw : Buffer.from(raw);
 
     if (output === "buffer") {
         return buffer;
