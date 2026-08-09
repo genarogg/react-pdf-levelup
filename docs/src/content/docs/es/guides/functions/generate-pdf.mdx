@@ -3,115 +3,115 @@ title: Funciones de Generación y Decodificación de PDF
 description: Funciones auxiliares para generar y manejar PDFs.
 ---
 
-> ℹ️ **Nota:** Esta página documenta funciones para la generación y manipulación de PDFs. Algunas son propias del proyecto y otras son re-exportaciones de `@react-pdf/renderer`.
+> ⚠️ **Página legacy:** esta es una referencia antigua de `generatePDF`/`decodePDF`. Para la documentación completa y actualizada (incluyendo la opción `output`, la detección de entorno y todos los parámetros de `decodePDF`), ver [Single — generatePDF y decodePDF](/docs/es/guides/functions/generate-pdf/single).
+
+> ℹ️ **`core` vs `client`:** esta página importa `generatePDF`/`decodePDF` desde `@react-pdf-levelup/core`. La página del [plugin Client](/docs/es/plugin/client) documenta las mismas funciones importándolas desde `@react-pdf-levelup/client` en su lugar — `client` simplemente las re-exporta sin incluir los componentes PDF de `core`, así que ambos imports son intercambiables. Si ya tenés `core` instalado, importá desde `core`. Recurrí a `client` cuando quieras un paquete ultra-liviano solo para navegador — típicamente cuando el PDF se genera en el backend y solo se decodifica/descarga en el frontend.
 
 ## generatePDF
 
-Función asíncrona para generar un PDF a partir de un componente React y, opcionalmente, descargarlo.
-Esta es una nueva función desarrollada específicamente para este proyecto.
+Función asíncrona para generar un PDF a partir de un componente React. Detecta automáticamente el entorno de ejecución (backend/Node o frontend/navegador) y adapta tanto los formatos de salida disponibles como el comportamiento por defecto a ese entorno.
 
 ### Firma
 
 ```typescript
-generatePDF({ document, fileName, download }: { document: React.ElementType, fileName: string, download?: boolean }): Promise<void>
+// Backend (Node)
+generatePDF({ template, data, output }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "base64" | "buffer"; // default: "base64"
+}): Promise<string | Buffer>
+
+// Frontend (navegador)
+generatePDF({ template, data, output, fileName }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "blob" | "url" | "download"; // default: "download"
+  fileName?: string; // solo aplica con output: "download"
+}): Promise<Blob | string | void>
 ```
 
 ### Parámetros
 
 | Nombre | Tipo | Descripción |
 | :--- | :--- | :--- |
-| `document` | `React.ElementType` | El componente React que representa el documento PDF. |
-| `fileName` | `string` | El nombre deseado para el archivo PDF generado. |
-| `download` | `boolean` | Opcional. Si es `true`, el PDF se descargará automáticamente. Por defecto es `true`. |
+| `template` | `React.ElementType` | El componente React que representa el documento PDF. |
+| `data` | `any` | Opcional. Datos que se pasan como prop `data` al componente `template`. |
+| `output` | `string` | Opcional. Formato de salida. En backend: `"base64"` (default) \| `"buffer"`. En frontend: `"blob"` \| `"url"` \| `"download"` (default). |
+| `fileName` | `string` | Opcional, solo frontend con `output: "download"`. Nombre del archivo descargado. Por defecto `"document.pdf"`. |
 
 ### Retorno
 
-Retorna una promesa que resuelve a `void` cuando el PDF ha sido generado y, opcionalmente, descargado.
+- **Backend**: una promesa que resuelve a `string` (base64) o `Buffer`, según `output`.
+- **Frontend**: una promesa que resuelve a `Blob`, `string` (URL de objeto) o `void` (cuando `output: "download"`, que dispara la descarga directamente).
 
-### Ejemplo
+### Ejemplo (backend)
 
 ```tsx
 import { generatePDF } from '@react-pdf-levelup/core';
 import MyDocument from './MyDocument';
 
-const handleGenerateAndDownload = async () => {
-  await generatePDF({ 
-    document: <MyDocument />, 
-    fileName: "mi-documento.pdf",
-    download: true
-  });
-  console.log("PDF generado y descargado");
-};
+const base64 = await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+});
+```
+
+### Ejemplo (frontend)
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+// Por defecto dispara la descarga del PDF en el navegador
+await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+  fileName: "mi-documento.pdf",
+});
 ```
 
 ## decodePDF
 
-Decodifica un documento PDF desde una URL dada.
-Esta es una nueva función desarrollada específicamente para este proyecto.
+Recibe un PDF ya generado (en base64, `Buffer` o `Blob` — lo que sea que haya devuelto `generatePDF`) y lo procesa según el entorno: en frontend lo descarga y/o lo abre en una pestaña nueva; en backend lo guarda en disco.
 
 ### Firma
 
 ```typescript
-decodePDF(url: string, options?: Object): Promise<Object>
+decodePDF({ pdf, name, download, showBlob, saveSRC }: {
+  pdf: string | Buffer | Blob;
+  name: string;
+  download?: boolean;  // frontend, default true
+  showBlob?: boolean;  // frontend, default true
+  saveSRC?: string;    // backend, requerido
+}): Promise<void>
 ```
 
 ### Parámetros
 
 | Nombre | Tipo | Descripción |
 | :--- | :--- | :--- |
-| `url` | `string` | La URL del documento PDF a decodificar. |
-| `options` | `Object` | Opcional. Configuraciones adicionales para la decodificación. |
+| `pdf` | `string \| Buffer \| Blob` | El PDF a procesar, en base64, `Buffer` o `Blob`. |
+| `name` | `string` | Nombre del archivo. Se le agrega `.pdf` automáticamente si falta. |
+| `download` | `boolean` | Opcional, solo frontend. Si dispara la descarga automática. Por defecto `true`. |
+| `showBlob` | `boolean` | Opcional, solo frontend. Si abre el PDF en una pestaña nueva. Por defecto `true`. |
+| `saveSRC` | `string` | Requerido en backend. Ruta de disco donde guardar el PDF. Sin este parámetro, `decodePDF` lanza un error en backend. |
 
 ### Retorno
 
-Retorna una promesa que resuelve con el objeto PDF decodificado.
+Retorna una promesa que resuelve a `void` una vez que el PDF fue guardado, descargado y/o abierto según corresponda.
 
 ### Ejemplo
 
 ```tsx
-import { decodePDF } from '@react-pdf-levelup/core';
-
-const handleDecodePDF = async () => {
-  const pdfDoc = await decodePDF("https://example.com/document.pdf");
-  console.log("PDF decodificado:", pdfDoc);
-};
-```
-
-## generatePDFonWorker
-
-Genera un documento PDF utilizando un *web worker*.
-Esta función es **experimental/beta** y podría estar sujeta a cambios.
-Descarga la generación del PDF a un hilo de trabajo para evitar bloquear el hilo principal de la UI.
-
-### Firma
-
-```typescript
-generatePDFonWorker(props: Object): Promise<Blob>
-```
-
-### Parámetros
-
-| Nombre | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `props` | `Object` | Las propiedades para generar el PDF en un worker. |
-
-### Retorno
-
-Retorna una promesa que resuelve con un `Blob` conteniendo los datos del PDF.
-
-### Ejemplo
-
-```tsx
-import { generatePDFonWorker } from '@react-pdf-levelup/server';
+import { generatePDF, decodePDF } from '@react-pdf-levelup/core';
 import MyDocument from './MyDocument';
 
-const handleGenerateWorker = async () => {
-  const pdfBlob = await generatePDFonWorker({
-    document: <MyDocument />,
-    // otras propiedades para el worker
-  });
-  console.log("PDF generado en worker:", pdfBlob);
-};
+const base64 = await generatePDF({ template: MyDocument, data: { name: "John Doe" } });
+
+await decodePDF({
+  pdf: base64,
+  name: "documento", // se guarda como "documento.pdf"
+});
 ```
 
 ## Funciones Re-exportadas de @react-pdf/renderer

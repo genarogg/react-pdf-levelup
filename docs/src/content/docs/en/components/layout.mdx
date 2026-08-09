@@ -23,7 +23,7 @@ Internally, it manages page configuration and wraps the content with the appropr
 
 | Name                   | Type                                                                     | Default        | Description                                                                                                        |
 |------------------------|--------------------------------------------------------------------------|----------------|--------------------------------------------------------------------------------------------------------------------|
-| `size`                 | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"`         | Page size. Can be an ISO/American preset or a `{ width, height }` object in points (72 dpi). |
+| `size`                 | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"`         | Page size. Accepts a preset (see [supported presets](#supported-presets)) or a `{ width, height }` object in points (72dpi = 1 inch). Presets are case-insensitive. An invalid value (unrecognized preset, or `width`/`height` ≤ 0) falls back to `"A4"`. |
 | `orientation`          | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"`      | `"vertical"`   | Page orientation. Internally transformed to `portrait` or `landscape`.                                             |
 | `backgroundColor`      | `string`                                                                 | `"white"`      | Page background color.                                                                                             |
 | `backgroundImage`      | `string`                                                                 | `undefined`    | URL of background image that covers the entire page.                                                               |
@@ -97,6 +97,34 @@ The `meta` prop allows you to configure standard PDF file metadata, which is vis
 
 ---
 
+# Page Size
+
+## Supported presets
+
+`4A0`, `2A0`, `A0`–`A8`, `B0`–`B9`, `C0`–`C8`, `RA0`–`RA4`, `SRA0`–`SRA4`, `EXECUTIVE`, `FOLIO`, `LEGAL`, `LETTER`, `TABLOID`, `ID1`
+
+They are case-insensitive (`"a4"` and `"A4"` are equivalent).
+
+```tsx
+<Layout size="LETTER" />
+```
+
+## Custom size
+
+You can define a custom size by passing a `{ width, height }` object in points:
+
+```tsx
+<Layout size={{ width: 400, height: 600 }} />
+```
+
+> **Important:** the custom size is normalized based on `orientation`, not used literally as `width`/`height`. Internally, the longer and shorter side of the object are computed, and `orientation` decides which one becomes the width and which becomes the height. This means that passing `{ width: 800, height: 400 }` with the default orientation (`vertical`/`portrait`) will actually result in `{ width: 400, height: 800 }` — the longer side is always assigned according to the orientation, regardless of which property you wrote it into.
+
+## Invalid value
+
+If the preset isn't in the supported list, or the custom size has `width`/`height` ≤ 0, `A4` is used as a fallback (a warning is logged to the console).
+
+---
+
 # Margin System
 
 The Layout includes a predefined margin system to facilitate layout.
@@ -148,14 +176,6 @@ You can also pass a direct number in points (72 dpi = 1 inch):
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.2}
 >
-```
-
-## Custom Page Size
-
-You can define a custom size by passing a `{ width, height }` object in points:
-
-```tsx
-<Layout size={{ width: 400, height: 600 }} />
 ```
 
 ---

@@ -3,7 +3,7 @@ title: Worker — generatePDFonWorker
 description: Genera PDFs en un pool de worker threads (Piscina) sin bloquear el hilo principal.
 ---
 
-> ℹ️ **Nota:** Esta página documenta el modo **Worker** de generación de PDF: corre en un pool de worker threads vía [Piscina](https://github.com/piscinajs/piscina). Para generación directa en el hilo principal, ver [Single](/es/guides/functions/generate-pdf/single).
+> ℹ️ **Nota:** Esta página documenta el modo **Worker** de generación de PDF: corre en un pool de worker threads vía [Piscina](https://github.com/piscinajs/piscina). Para generación directa en el hilo principal, ver [Single](/docs/es/guides/functions/generate-pdf/single).
 
 ## generatePDFonWorker
 
@@ -11,7 +11,9 @@ Genera un PDF igual que `generatePDF`, pero delegando el renderizado a un **pool
 
 Es **solo backend** (Node) — no existe una versión frontend, a diferencia de `generatePDF`. Está pensada para servidores con alto tráfico o PDFs pesados: cada renderizado corre en un hilo separado, así que el hilo principal (por ejemplo el event loop de Fastify) queda libre para seguir atendiendo requests mientras el PDF se genera.
 
-> ℹ️ Es la contraparte del modo **Worker** de la [API REST](/es/guides/api-rest) (`/api/pdf/worker`) — mismo mecanismo, expuesto acá como función de librería en vez de endpoint HTTP.
+> ℹ️ **Paquete:** `generatePDFonWorker`, `closePDFPool` y `getPoolStats` se exportan desde **`@react-pdf-levelup/server`** — un paquete separado de `@react-pdf-levelup/core` (que tiene `generatePDF`, `decodePDF`, `getFont` y los componentes PDF).
+
+> ℹ️ Es la contraparte del modo **Worker** de la [API REST](/docs/es/guides/api-rest) (`/api/worker`) — mismo mecanismo, expuesto acá como función de librería en vez de endpoint HTTP.
 
 ### Cómo funciona por dentro
 
@@ -51,7 +53,7 @@ Retorna una promesa que resuelve a `string` (base64) o `Buffer`, según `output`
 ### Ejemplo
 
 ```tsx
-import { generatePDFonWorker } from '@react-pdf-levelup/core';
+import { generatePDFonWorker } from '@react-pdf-levelup/server';
 
 const base64 = await generatePDFonWorker({
   templatePath: "/abs/path/Invoice.js",
@@ -91,7 +93,7 @@ closePDFPool(): Promise<void>
 ### Ejemplo
 
 ```tsx
-import { closePDFPool } from '@react-pdf-levelup/core';
+import { closePDFPool } from '@react-pdf-levelup/server';
 
 fastify.addHook("onClose", async () => {
   await closePDFPool();
@@ -120,7 +122,7 @@ Devuelve `null` si se llama fuera del hilo principal (donde no existe un pool pr
 ### Ejemplo
 
 ```tsx
-import { getPoolStats } from '@react-pdf-levelup/core';
+import { getPoolStats } from '@react-pdf-levelup/server';
 
 console.log(getPoolStats());
 // { threads: 3, queueSize: 0, completed: 42, utilization: 0.12, maxThreads: 3, minThreads: 2 }

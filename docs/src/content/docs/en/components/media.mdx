@@ -36,8 +36,8 @@ Background image with overlaid content. Places an image as an absolute backgroun
 | Name             | Type                                                              | Default    | Description                                                                         |
 | :--------------- | :---------------------------------------------------------------- | :--------- | :---------------------------------------------------------------------------------- |
 | `src`            | `string`                                                          | `N/A`      | **Required.** Background image URL or path.                                         |
-| `width`          | `number \| string`                                                | `"100%"`   | Container and image width.                                                          |
-| `height`         | `number \| string`                                                | `"100%"`   | Container and image height.                                                         |
+| `width`          | `number \| string`                                                | `"100%"`   | Width of the **background image** only. Does not affect the container size (see note below). |
+| `height`         | `number \| string`                                                | `"100%"`   | Height of the **background image** only. Does not affect the container size (see note below). |
 | `opacity`        | `number`                                                          | `0.2`      | Background image opacity (0 transparent — 1 opaque).                               |
 | `objectFit`      | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"`       | `"cover"`  | How the image fits within the container.                                            |
 | `objectPosition` | `"center" \| "top" \| "left" \| "right" \| "bottom"`             | `"center"` | Image position within the container.                                                |
@@ -48,6 +48,8 @@ Background image with overlaid content. Places an image as an absolute backgroun
 | `break`          | `boolean`                                                         | `false`    | Forces a page break before the element.                                             |
 
 Additionally, it inherits all properties from `View` of `@react-pdf/renderer`.
+
+> **Important:** the `ImgBg` container always takes `100%` width and `100%` height relative to its parent — this is fixed and does not change with the `width`/`height` props. Those two props only size the background image inside that container (useful together with `objectFit`/`objectPosition` to control how the image is cropped or scaled). If you need the **whole `ImgBg` block** to have a different size, use the `style` prop instead (e.g. `style={{ width: 300, height: 200 }}`), or let the container inherit its size from the surrounding layout/`children`.
 
 ### Example
 

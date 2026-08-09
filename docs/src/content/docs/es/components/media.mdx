@@ -1,5 +1,5 @@
 ---
-title: Media
+title: Multimedia
 description: Componentes para imágenes.
 ---
 
@@ -36,8 +36,8 @@ Imagen de fondo con contenido superpuesto. Coloca una imagen como capa de fondo 
 | Nombre           | Tipo                                                              | Default    | Descripción                                                                       |
 | :--------------- | :---------------------------------------------------------------- | :--------- | :-------------------------------------------------------------------------------- |
 | `src`            | `string`                                                          | `N/A`      | **Requerido.** URL o ruta de la imagen de fondo.                                  |
-| `width`          | `number \| string`                                                | `"100%"`   | Ancho del contenedor y la imagen.                                                 |
-| `height`         | `number \| string`                                                | `"100%"`   | Alto del contenedor y la imagen.                                                  |
+| `width`          | `number \| string`                                                | `"100%"`   | Ancho de la **imagen de fondo** únicamente. No afecta el tamaño del contenedor (ver nota abajo). |
+| `height`         | `number \| string`                                                | `"100%"`   | Alto de la **imagen de fondo** únicamente. No afecta el tamaño del contenedor (ver nota abajo). |
 | `opacity`        | `number`                                                          | `0.2`      | Opacidad de la imagen de fondo (0 transparente — 1 opaca).                       |
 | `objectFit`      | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"`       | `"cover"`  | Ajuste de la imagen en el contenedor.                                             |
 | `objectPosition` | `"center" \| "top" \| "left" \| "right" \| "bottom"`             | `"center"` | Posición de la imagen.                                                            |
@@ -48,6 +48,8 @@ Imagen de fondo con contenido superpuesto. Coloca una imagen como capa de fondo 
 | `break`          | `boolean`                                                         | `false`    | Fuerza un salto de página antes del elemento.                                     |
 
 Además, hereda todas las propiedades de `View` de `@react-pdf/renderer`.
+
+> **Importante:** el contenedor de `ImgBg` siempre mide `100%` de ancho y `100%` de alto respecto a su padre — esto es fijo y no cambia con las props `width`/`height`. Esas dos props solo dimensionan la imagen de fondo dentro de ese contenedor (útil junto con `objectFit`/`objectPosition` para controlar cómo se recorta o escala la imagen). Si necesitás que el **bloque completo** de `ImgBg` tenga un tamaño distinto, usá la prop `style` (ej. `style={{ width: 300, height: 200 }}`), o dejá que el contenedor herede su tamaño del layout/`children` que lo rodea.
 
 ### Ejemplo
 

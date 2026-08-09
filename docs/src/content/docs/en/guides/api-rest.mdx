@@ -13,39 +13,60 @@ import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 ## Available Endpoints
 
-- Cloud (Managed Self-hosting): `https://react-pdf-levelup.nimbux.cloud/api`
-- Self-hosted (Your own Self-hosting): download the package from `https://genarogg.github.io/react-pdf-levelup/public/api.zip` and deploy your server. The exposed endpoint is `/api/pdf`.
+The API offers two PDF generation modes, each with its own endpoint:
+
+- **Single**: `/api/single`
+- **Worker**: `/api/worker`
+
+### Single Mode
+
+- **Endpoint**: `/api/single`
+- **Description**: Processes the request on the main thread. It is faster for simple PDFs, but it can block the server if many requests are received simultaneously.
+
+### Worker Mode
+
+- **Endpoint**: `/api/worker`
+- **Description**: Uses a worker pool to generate the PDF in separate threads. It is ideal for applications with high traffic or that generate complex PDFs, as it does not block the main thread.
 
 ### Quick Endpoint Copy
 
 ```text
-https://react-pdf-levelup.nimbux.cloud/api
+https://react-pdf-levelup.nimbux.cloud/api/single
 ```
 
 ```text
-https://genarogg.github.io/react-pdf-levelup/public/api.zip
+https://react-pdf-levelup.nimbux.cloud/api/worker
 ```
+
 <CardGrid>
-  <Card title="Cloud" icon="cloud-download">
-    Ideal for getting started quickly. Just make a POST request to the endpoint with your template in base64 and the data.
+  <Card title="Single Mode" icon="rocket">
+    Ideal for getting started quickly and for simple PDFs.
   </Card>
-  <Card title="Self-hosted" icon="laptop">
-    Download the package, decompress it, and deploy it to your infrastructure (VM, container, PaaS). Offers full control.
+  <Card title="Worker Mode" icon="gear">
+    Recommended for production and for complex or high-traffic PDFs.
   </Card>
 </CardGrid>
 
 ## Request Format
 
-- Method: `POST`
-- Headers: `Content-Type: application/json`
-- Body:
+- **Method**: `POST`
+- **Headers**: `Content-Type: application/json`
+- **Body**:
 
 ```json
 {
   "template": "<TSX_IN_BASE64>",
-  "data": { "field": "value" }
+  "data": { "field": "value" },
+  "credentials": {
+    "username": "your_username",
+    "password": "your_password"
+  }
 }
 ```
+
+### Credentials
+
+To use the API, you must provide a `username` and `password` in the `credentials` object. These credentials are compared with the `CR_USERNAME` and `CR_PASSWORD` environment variables on the server.
 
 ## Font Considerations
 
@@ -130,9 +151,9 @@ type ApiResponse = {
   data?: { pdf?: string }
 }
 
-const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api";
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api/worker";
 
-const petition = async ({ template, data }: { template: string, data: any }): Promise<string> => {
+const petition = async ({ template, data, credentials }: { template: string, data: any, credentials: any }): Promise<string> => {
   const templatePath = path.join(process.cwd(), "src", "useExample", template);
   const tsxCode = fs.readFileSync(templatePath, "utf-8");
   const templateBase64 = Buffer.from(tsxCode, "utf-8").toString("base64");
@@ -140,7 +161,7 @@ const petition = async ({ template, data }: { template: string, data: any }): Pr
   const res = await fetch(ENDPOINT_API, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ template: templateBase64, data }),
+    body: JSON.stringify({ template: templateBase64, data, credentials }),
   });
 
   if (!res.ok) {
@@ -162,7 +183,11 @@ const savePDF = (resultBase64: string) => {
 const generateAndSavePDF = async () => {
   try {
     const data = { name: "Genaro Gonzalez" };
-    const resultBase64 = await petition({ template: "template.tsx", data });
+    const credentials = {
+        username: "test",
+        password: "test"
+    }
+    const resultBase64 = await petition({ template: "template.tsx", data, credentials });
     savePDF(resultBase64);
     console.log(resultBase64);
   } catch (error) {
@@ -180,9 +205,9 @@ These examples show that the API can be used from any language.
 ### curl
 
 ```bash
-curl -X POST https://react-pdf-levelup.nimbux.cloud/api \
+curl -X POST https://react-pdf-levelup.nimbux.cloud/api/worker \
   -H "Content-Type: application/json" \
-  -d '{"template":"BASE64_TSX","data":{"name":"Genaro Gonzalez"}}'
+  -d '{"template":"BASE64_TSX","data":{"name":"Genaro Gonzalez"},"credentials":{"username":"test","password":"test"}}'
 ```
 
 ### Python (requests)
@@ -191,10 +216,11 @@ curl -X POST https://react-pdf-levelup.nimbux.cloud/api \
 import requests
 import base64
 
-endpoint = "https://react-pdf-levelup.nimbux.cloud/api"
+endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker"
 payload = {
     "template": "BASE64_TSX",
-    "data": {"name": "Genaro Gonzalez"}
+    "data": {"name": "Genaro Gonzalez"},
+    "credentials": {"username": "test", "password": "test"}
 }
 
 r = requests.post(endpoint, json=payload)
@@ -213,12 +239,13 @@ using System.Text;
 using System.Text.Json;
 
 var client = new HttpClient();
-var endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
+var endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker";
 
 var body = new
 {
   template = "BASE64_TSX",
-  data = new { name = "Genaro Gonzalez" }
+  data = new { name = "Genaro Gonzalez" },
+  credentials = new { username = "test", password = "test" }
 };
 
 var json = JsonSerializer.Serialize(body);
@@ -238,8 +265,8 @@ await File.WriteAllBytesAsync("example.pdf", bytes);
 import okhttp3.*;
 
 OkHttpClient client = new OkHttpClient();
-String endpoint = "https://react-pdf-levelup.nimbux.cloud/api";
-String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"name\":\"Genaro Gonzalez\"}}";
+String endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker";
+String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"name\":\"Genaro Gonzalez\"},\"credentials\":{\"username\":\"test\",\"password\":\"test\"}}";
 
 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 Request request = new Request.Builder().url(endpoint).post(body).build();
@@ -255,10 +282,11 @@ try (Response response = client.newCall(request).execute()) {
 
 ```php
 <?php
-$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api';
+$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api/worker';
 $payload = [
   'template' => 'BASE64_TSX',
-  'data' => ['name' => 'Genaro Gonzalez']
+  'data' => ['name' => 'Genaro Gonzalez'],
+  'credentials' => ['username' => 'test', 'password' => 'test']
 ];
 
 $ch = curl_init($endpoint);
@@ -282,7 +310,7 @@ file_put_contents('example.pdf', base64_decode($pdfBase64));
 
 - Download `api.zip`: `https://genarogg.github.io/react-pdf-levelup/public/api.zip`.
 - Decompress and deploy to your infrastructure (Node, Docker, PaaS).
-- Expose the `/api/pdf` endpoint and point your client to that URL.
+- Expose the `/api/single` and `/api/worker` endpoints and point your client to those URLs.
 - The payload and response follow the same format shown above.
 
 <LinkButton href="https://genarogg.github.io/react-pdf-levelup/public/api.zip" icon="external" variant="primary" target="_blank" rel="noopener noreferrer">

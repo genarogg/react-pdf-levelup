@@ -3,7 +3,9 @@ title: generatePDF
 description: Helper functions for generating and handling PDFs.
 ---
 
-> ℹ️ **Note:** this page imports `generatePDF`/`decodeBase64Pdf` from `@react-pdf-levelup/core`. The [Client plugin](/en/plugin/client) page documents the same functions importing them from `@react-pdf-levelup/client`. It wasn't possible to verify against the `core` source code which path is current — confirm against your actual installation before copying the example.
+> ⚠️ **Legacy page:** this is an older reference for `generatePDF`/`decodePDF`. For the complete, up-to-date documentation (including the `output` option, environment detection, and every `decodePDF` parameter), see [Single — generatePDF and decodePDF](/docs/en/guides/functions/generate-pdf/single).
+
+> ℹ️ **`core` vs `client`:** this page imports `generatePDF`/`decodePDF` from `@react-pdf-levelup/core`. The [Client plugin](/docs/en/plugin/client) page documents the exact same functions imported from `@react-pdf-levelup/client` instead — `client` just re-exports them without pulling in `core`'s PDF components, so both imports are interchangeable. If you already have `core` installed, import from `core`. Reach for `client` when you want an ultra-lightweight, browser-only package — typically when the PDF is generated on the backend and only decoded/downloaded on the frontend.
 
 ## generatePDF
 
@@ -41,29 +43,44 @@ const handleGenerate = async () => {
 };
 ```
 
-## decodeBase64Pdf
+## decodePDF
 
-Function to decode a base64 PDF string, download it, and open it in a new tab. Works in the browser.
+Takes an already generated PDF (base64, `Buffer`, or `Blob`) and processes it according to the environment: in the frontend it downloads it and/or opens it in a new tab; in the backend it saves it to disk.
 
 ### Signature
 
 ```typescript
-decodeBase64Pdf(base64: string, fileName: string): void
+decodePDF({ pdf, name, download, showBlob, saveSRC }: {
+  pdf: string | Buffer | Blob;
+  name: string;
+  download?: boolean;  // frontend, default true
+  showBlob?: boolean;  // frontend, default true
+  saveSRC?: string;    // backend, required
+}): Promise<void>
 ```
 
 ### Parameters
 
-| Name       | Type     | Description                                |
-| :--------- | :------- | :----------------------------------------- |
-| `base64`   | `string` | The base64 string of the PDF.              |
-| `fileName` | `string` | The name under which the file will be downloaded. |
+| Name       | Type                       | Description                                                        |
+| :--------- | :------------------------- | :------------------------------------------------------------------ |
+| `pdf`      | `string \| Buffer \| Blob` | The PDF to process, as base64, `Buffer`, or `Blob`.                 |
+| `name`     | `string`                   | File name. `.pdf` is appended automatically if missing.             |
+| `download` | `boolean`                  | Optional, frontend only. Whether to trigger the automatic download. Defaults to `true`. |
+| `showBlob` | `boolean`                  | Optional, frontend only. Whether to open the PDF in a new tab. Defaults to `true`. |
+| `saveSRC`  | `string`                   | Required in backend. Disk path where the PDF is saved. Without it, `decodePDF` throws in backend. |
 
 ### Example
 
 ```tsx
-import { decodeBase64Pdf } from '@react-pdf-levelup/core';
+import { generatePDF, decodePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
 
-const handleDownload = () => {
-  decodeBase64Pdf(base64String, "document.pdf");
+const handleDownload = async () => {
+  const base64 = await generatePDF({ template: MyDocument, data: { name: "John Doe" } });
+
+  await decodePDF({
+    pdf: base64,
+    name: "document", // saved as "document.pdf"
+  });
 };
 ```

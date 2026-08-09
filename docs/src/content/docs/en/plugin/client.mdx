@@ -1,43 +1,49 @@
 ---
 title: Client
-description: Plugin for client utility functions, including PDF generation and decoding.
+description: Utility functions from the @react-pdf-levelup/client package, including PDF generation and decoding.
 ---
+
+import { Badge } from '@astrojs/starlight/components';
 
 # Client Plugin (`@react-pdf-levelup/client`)
 
-> ⚠️ **Consistency note (not verified against the `core` source code):** this document describes `generatePDF`, `decodeBase64Pdf`, and `printBase64Pdf` as part of a separate `@react-pdf-levelup/client` package. However, `guides/functions/generate-pdf/single.mdx` documents the first two functions (as `generatePDF`/`decodePDF`) importing them directly from `@react-pdf-levelup/core`. Neither function appears in the `core` source code surveyed for this audit, so it wasn't possible to confirm which import path is correct (they may live in a monorepo package not included in this review). **Before using this example, confirm the actual package via your installation's `package.json`/exports**, or use the `@react-pdf-levelup/core` path documented in the [Single generation guide](/en/guides/functions/generate-pdf/single), which is consistent with the rest of this site's components.
+> ℹ️ **Confirmed against the source code:** `@react-pdf-levelup/client` is a real package that re-exports `generatePDF`, `decodePDF`, and `getFont` from the same source as `@react-pdf-levelup/core` (`frontend/src/functions`). It's a subset of `core` — it doesn't include the PDF components (`Layout`, `Table`, `Button`, etc.), nor the worker functions (those live in `@react-pdf-levelup/server`). `printBase64Pdf` does **not** appear in the `client` source code reviewed for this audit — if your installation exposes it, confirm against your version's actual `package.json`/exports.
 
-The `@react-pdf-levelup/client` plugin provides a set of utility functions designed for interacting with PDFs in client environments (browsers or Node.js). It exports utility functions including `generatePDF`, `decodeBase64Pdf`, and `printBase64Pdf`.
+The `@react-pdf-levelup/client` plugin exposes the PDF generation and handling functions without pulling in `core`'s components — useful when you only need `generatePDF`/`decodePDF`/`getFont` on the client.
 
 ## Exported Functions
 
 ### `generatePDF`
 
-This function allows you to generate a PDF document from a React component. It is the same function described in the main functions documentation.
+Generates a PDF document from a React component, automatically detecting whether it's running in the backend or frontend. It's the same function documented under `@react-pdf-levelup/core`.
 
-- [View detailed documentation for `generatePDF`](/en/guides/functions/generate-pdf/single)
+- [View detailed documentation for `generatePDF`](/docs/en/guides/functions/generate-pdf/single)
 
-### `decodeBase64Pdf`
+### `decodePDF`
 
-This function helps decode a Base64 string representing a PDF and offer it for download to the user. It is the same function described in the main functions documentation, under the name `decodePDF`.
+Takes an already generated PDF (base64, `Buffer`, or `Blob`) and processes it according to the environment: in the frontend it downloads it and/or opens it in a new tab; in the backend it saves it to disk.
 
-- [View detailed documentation for `decodePDF`](/en/guides/functions/generate-pdf/single#decodepdf)
+- [View detailed documentation for `decodePDF`](/docs/en/guides/functions/generate-pdf/single#decodepdf)
 
-### `printBase64Pdf`
+### `getFont`
 
-This function prints a PDF document from a Base64 encoded string. It creates a hidden iframe, loads the PDF, and triggers the browser's print dialog for the user to print or save the document.
+Resolves a font file's path so it can be registered with `Font.register`, automatically adjusting for the environment (URL, absolute path, browser, or Node).
+
+- [View detailed documentation for `getFont`](/docs/en/guides/functions/fonts)
+
+### `printBase64Pdf` <Badge text="unconfirmed" variant="caution" />
+
+A function mentioned in earlier versions of this documentation for printing a PDF from a Base64 string (creating a hidden iframe and triggering the browser's print dialog). It doesn't appear in the `client` source code reviewed for this audit — confirm whether it exists in your installation before using it.
 
 - **Parameters**: `base64Data` (string) - A Base64 encoded PDF string
 - **Returns**: void
 
 ## Usage
 
-To use these functions, simply import them from the `@react-pdf-levelup/client` package (or from `@react-pdf-levelup/core`, see the warning note above, depending on how your project is configured):
-
 ```tsx
-import { generatePDF, decodeBase64Pdf } from '@react-pdf-levelup/client';
+import { generatePDF, decodePDF } from '@react-pdf-levelup/client';
+import { Layout, P } from '@react-pdf-levelup/core';
 
-// Example of using generatePDF
 const myTemplate = ({ data }) => {
   return (
     <Layout>
@@ -49,9 +55,7 @@ const myTemplate = ({ data }) => {
 async function createAndDownloadPdf() {
   const data = { name: 'World' };
   const base64Pdf = await generatePDF({ template: myTemplate, data });
-  if (base64Pdf) {
-    decodeBase64Pdf(base64Pdf, 'my-document.pdf');
-  }
+  await decodePDF({ pdf: base64Pdf, name: 'my-document' });
 }
 
 createAndDownloadPdf();

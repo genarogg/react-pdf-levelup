@@ -47,12 +47,12 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Get Started',
+					label: 'Primeros Pasos',
 					translations: {
 						en: 'Get Started'
 					},
 					items: [
-						{ slug: 'get-started', label: 'Get Started' },
+						{ slug: 'get-started', label: 'Primeros Pasos', translations: { en: 'Get Started' } },
 						{ slug: 'studio', label: 'Playground - Local', translations: { en: 'Playground - Local' } },
 						{ slug: 'playground', label: 'Playground - Online', translations: { en: 'Playground - Online' } },
 					],

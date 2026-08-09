@@ -1,6 +1,5 @@
-
 ---
-title: Layout
+title: Diseño
 description: Componente principal para configurar y renderizar documentos PDF con control avanzado de tamaño, márgenes, fondo y paginación.
 ---
 
@@ -24,7 +23,7 @@ Internamente gestiona la configuración de página y envuelve el contenido con l
 
 | Nombre | Tipo | Default | Descripción |
 |--------|------|---------|-------------|
-| `size` | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"` | Tamaño de página. Puede ser un preset ISO/Americano o un objeto `{ width, height }` en puntos (72 dpi). |
+| `size` | `PageSizeInput` (`PageSize \| { width: number; height: number }`) | `"A4"` | Tamaño de página. Acepta un preset (ver [presets soportados](#presets-soportados)) o un objeto `{ width, height }` en puntos (72dpi = 1 pulgada). Los presets no distinguen mayúsculas/minúsculas. Un valor inválido (preset no reconocido, o `width`/`height` ≤ 0) hace fallback a `"A4"`. |
 | `orientation` | `"vertical" \| "horizontal" \| "portrait" \| "landscape" \| "h" \| "v"` | `"vertical"` | Orientación de la página. Internamente se transforma a `portrait` o `landscape`. |
 | `backgroundColor` | `string` | `"white"` | Color de fondo de la página. |
 | `backgroundImage` | `string` | `undefined` | URL de imagen de fondo que ocupa toda la página. |
@@ -98,6 +97,34 @@ El prop `meta` permite configurar los metadatos estándar del archivo PDF, que s
 
 ---
 
+# Tamaño de Página
+
+## Presets soportados
+
+`4A0`, `2A0`, `A0`–`A8`, `B0`–`B9`, `C0`–`C8`, `RA0`–`RA4`, `SRA0`–`SRA4`, `EXECUTIVE`, `FOLIO`, `LEGAL`, `LETTER`, `TABLOID`, `ID1`
+
+No distinguen mayúsculas/minúsculas (`"a4"` y `"A4"` son equivalentes).
+
+```tsx
+<Layout size="LETTER" />
+```
+
+## Tamaño personalizado
+
+Podés definir un tamaño propio pasando un objeto `{ width, height }` en puntos:
+
+```tsx
+<Layout size={{ width: 400, height: 600 }} />
+```
+
+> **Importante:** el tamaño custom se normaliza según `orientation`, no se usa `width`/`height` literalmente. Internamente se toma el lado mayor y el lado menor del objeto, y `orientation` decide cuál va como ancho y cuál como alto. Esto significa que si pasás `{ width: 800, height: 400 }` con la orientación por defecto (`vertical`/`portrait`), el resultado real será `{ width: 400, height: 800 }` — el lado mayor se asigna siempre según la orientación, sin importar en qué propiedad lo escribiste.
+
+## Valor inválido
+
+Si el preset no existe en la lista soportada, o el tamaño custom tiene `width`/`height` ≤ 0, se usa `A4` como fallback (se emite un warning en consola).
+
+---
+
 # Sistema de Márgenes
 
 El Layout incluye un sistema de márgenes predefinidos para facilitar la maquetación.
@@ -149,14 +176,6 @@ También puedes pasar un número directo en puntos (72 dpi = 1 pulgada):
   backgroundImage="/marca-agua.png"
   backgroundImageOpacity={0.2}
 >
-```
-
-## Tamaño de página personalizado
-
-Puedes definir un tamaño propio pasando un objeto `{ width, height }` en puntos:
-
-```tsx
-<Layout size={{ width: 400, height: 600 }} />
 ```
 
 ---

@@ -3,11 +3,6 @@ title: API REST
 description: Uso del API vía HTTP con fetch, opciones de self‑hosting y ejemplos en varios lenguajes.
 ---
 
----
-title: API REST
-description: Uso del API vía HTTP con fetch, opciones de self‑hosting y ejemplos en varios lenguajes.
----
-
 import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 ## ¿Qué es esta API?
@@ -20,27 +15,27 @@ import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 La API ofrece dos modos de generación de PDF, cada uno con su propio endpoint:
 
-- **Single**: `/api/pdf/single`
-- **Worker**: `/api/pdf/worker`
+- **Single**: `/api/single`
+- **Worker**: `/api/worker`
 
 ### Modo Single
 
-- **Endpoint**: `/api/pdf/single`
+- **Endpoint**: `/api/single`
 - **Descripción**: Procesa la solicitud en el hilo principal. Es más rápido para PDFs sencillos, pero puede bloquear el servidor si se reciben muchas solicitudes simultáneamente.
 
 ### Modo Worker
 
-- **Endpoint**: `/api/pdf/worker`
+- **Endpoint**: `/api/worker`
 - **Descripción**: Utiliza un pool de workers para generar el PDF en hilos separados. Es ideal para aplicaciones con alto tráfico o que generan PDFs complejos, ya que no bloquea el hilo principal.
 
 ### Copiar endpoints rápidos
 
 ```text
-https://react-pdf-levelup.nimbux.cloud/api/pdf/single
+https://react-pdf-levelup.nimbux.cloud/api/single
 ```
 
 ```text
-https://react-pdf-levelup.nimbux.cloud/api/pdf/worker
+https://react-pdf-levelup.nimbux.cloud/api/worker
 ```
 
 <CardGrid>
@@ -156,7 +151,7 @@ type ApiResponse = {
   data?: { pdf?: string }
 }
 
-const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker";
+const ENDPOINT_API = "https://react-pdf-levelup.nimbux.cloud/api/worker";
 
 const petition = async ({ template, data, credentials }: { template: string, data: any, credentials: any }): Promise<string> => {
   const templatePath = path.join(process.cwd(), "src", "useExample", template);
@@ -210,7 +205,7 @@ Estos ejemplos muestran que el API puede usarse desde cualquier lenguaje.
 ### curl
 
 ```bash
-curl -X POST https://react-pdf-levelup.nimbux.cloud/api/pdf/worker \
+curl -X POST https://react-pdf-levelup.nimbux.cloud/api/worker \
   -H "Content-Type: application/json" \
   -d '{"template":"BASE64_TSX","data":{"nombre":"Genaro Gonzalez"},"credentials":{"username":"test","password":"test"}}'
 ```
@@ -221,7 +216,7 @@ curl -X POST https://react-pdf-levelup.nimbux.cloud/api/pdf/worker \
 import requests
 import base64
 
-endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker"
+endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker"
 payload = {
     "template": "BASE64_TSX",
     "data": {"nombre": "Genaro Gonzalez"},
@@ -244,7 +239,7 @@ using System.Text;
 using System.Text.Json;
 
 var client = new HttpClient();
-var endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker";
+var endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker";
 
 var body = new {
   template = "BASE64_TSX",
@@ -269,7 +264,7 @@ await File.WriteAllBytesAsync("example.pdf", bytes);
 import okhttp3.*;
 
 OkHttpClient client = new OkHttpClient();
-String endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker";
+String endpoint = "https://react-pdf-levelup.nimbux.cloud/api/worker";
 String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"nombre\":\"Genaro Gonzalez\"},\"credentials\":{\"username\":\"test\",\"password\":\"test\"}}";
 
 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
@@ -286,7 +281,7 @@ try (Response response = client.newCall(request).execute()) {
 
 ```php
 <?php
-$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api/pdf/worker';
+$endpoint = 'https://react-pdf-levelup.nimbux.cloud/api/worker';
 $payload = [
   'template' => 'BASE64_TSX',
   'data' => ['nombre' => 'Genaro Gonzalez'],
@@ -314,7 +309,7 @@ file_put_contents('example.pdf', base64_decode($pdfBase64));
 
 - Descarga `api.zip`: `https://genarogg.github.io/react-pdf-levelup/public/api.zip`.
 - Descomprime y despliega en tu infraestructura (Node, Docker, PaaS).
-- Expón el endpoint `/api/pdf` y apunta tu cliente a esa URL.
+- Expón los endpoints `/api/single` y `/api/worker` y apunta tu cliente a esas URLs.
 - La carga útil y respuesta siguen el mismo formato mostrado arriba.
 
 <LinkButton href="https://genarogg.github.io/react-pdf-levelup/public/api.zip" icon="external" variant="primary" target="_blank" rel="noopener noreferrer">

@@ -11,7 +11,7 @@ Make sure your environment supports React. This generally works out-of-the-box i
 
 ## Script Example
 
-The following example shows how to generate a PDF, convert it to a Buffer, and save it to the file system or send it to the frontend.
+The following example shows how to generate a PDF in base64 and return it, for example, as an endpoint response. In the backend, `generatePDF` accepts `output: "base64"` (the default) or `"buffer"` — see the [full signature in the Single guide](/docs/en/guides/functions/generate-pdf/single).
 
 ```typescript
 import { generatePDF } from "@react-pdf-levelup/core";
@@ -25,8 +25,8 @@ const controllerX = async () => {
             city: "Madrid",
         };
 
-        // 1. Generate the PDF in base64
-        const base64PDF = await generatePDF({ template: Template, data });
+        // 1. Generate the PDF in base64 (output: "base64" is the backend default)
+        const base64PDF = await generatePDF({ template: Template, data, output: "base64" });
 
         if (!base64PDF) {
             throw new Error("Could not generate PDF");
@@ -39,6 +39,8 @@ const controllerX = async () => {
     }
 };
 
+// If you need the raw Buffer instead of base64:
+// const bufferPDF = await generatePDF({ template: Template, data, output: "buffer" });
 ```
 
 ## Usage in API Endpoints (from your backend).

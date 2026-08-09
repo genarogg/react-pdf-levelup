@@ -11,7 +11,7 @@ Asegúrate de que tu entorno soporte React. Generalmente esto funciona out-of-th
 
 ## Ejemplo de Script
 
-El siguiente ejemplo muestra cómo generar un PDF, convertirlo a Buffer y guardarlo en el sistema de archivos o enviarlo al frontend. 
+El siguiente ejemplo muestra cómo generar un PDF en base64 y devolverlo, por ejemplo, como respuesta de un endpoint. En backend, `generatePDF` acepta `output: "base64"` (valor por defecto) o `"buffer"` — ver la [firma completa en la guía Single](/docs/es/guides/functions/generate-pdf/single).
 
 ```typescript
 import { generatePDF } from "@react-pdf-levelup/core";
@@ -25,8 +25,8 @@ const controllerX = async () => {
             ciudad: "Madrid",
         };
 
-        // 1. Generar el PDF en base64
-        const base64PDF = await generatePDF({ template: Template, data });
+        // 1. Generar el PDF en base64 (output: "base64" es el default en backend)
+        const base64PDF = await generatePDF({ template: Template, data, output: "base64" });
 
         if (!base64PDF) {
             throw new Error("No se pudo generar el PDF");
@@ -35,16 +35,18 @@ const controllerX = async () => {
         return base64PDF;
 
     } catch (error) {
-        console.error("Error generating PDF:", error);
+        console.error("Error al generar el PDF:", error);
     }
 };
 
+// Si necesitas el Buffer crudo en vez de base64:
+// const bufferPDF = await generatePDF({ template: Template, data, output: "buffer" });
 ```
 
 ## Uso en API Endpoints (desde su backend).
 
 Si estás utilizando Express, Next.js API Routes u otro servidor HTTP, puedes enviar el buffer directamente al cliente y decodificarlo en el frontend.
 
-## No utilizo entorno de ejecucion javascript/typescript.
+## No utilizo entorno de ejecución JavaScript/TypeScript
 
-¿puedo usar React PDF Level Up? Si, puedes utilizar el api rest disenada para generar los pdfs, puedes encontrar la documentacion de esta api en [este enlace](https://react-pdf-levelup.nimbux.cloud/docs/es/guides/api-rest/)
+¿Puedo usar React PDF Level Up? Sí, puedes utilizar la API REST diseñada para generar los PDFs. Puedes encontrar la documentación de esta API en [este enlace](https://react-pdf-levelup.nimbux.cloud/docs/es/guides/api-rest/)
