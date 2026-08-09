@@ -1,7 +1,6 @@
 import React from "react"
 import { Text, StyleSheet, Link, View } from "@react-pdf/renderer"
 
-type TextBaseProps = React.ComponentProps<typeof Text>
 type ViewBaseProps = React.ComponentProps<typeof View>
 type LinkBaseProps = React.ComponentProps<typeof Link>
 
@@ -14,15 +13,23 @@ interface ButtonOwnProps {
   textStyle?: any
   width?: number | string
   height?: number | string
-  href?: string
   variant?: ButtonVariant
   size?: ButtonSize
   disabled?: boolean
 }
 
-type ButtonProps = ButtonOwnProps &
-  Omit<ViewBaseProps, keyof ButtonOwnProps> &
-  Omit<LinkBaseProps, keyof ButtonOwnProps>
+// Discriminated union on `href`:
+// - with `href` → extra props must be valid `Link` props (e.g. `hitSlop`).
+// - without `href` → extra props must be valid `View` props.
+// This stops Link-only props from being accepted without `href` (and vice versa),
+// which the previous single-intersection type let through silently.
+type ButtonLinkProps = ButtonOwnProps &
+  Omit<LinkBaseProps, keyof ButtonOwnProps | "href"> & { href: string }
+
+type ButtonViewProps = ButtonOwnProps &
+  Omit<ViewBaseProps, keyof ButtonOwnProps | "href"> & { href?: undefined }
+
+type ButtonProps = ButtonLinkProps | ButtonViewProps
 
 const COLORS = {
   primary: { bg: "#4338ca", text: "#ffffff", border: "#4338ca" },
@@ -62,18 +69,20 @@ const styles = StyleSheet.create({
   },
 })
 
-const Button: React.FC<ButtonProps> = ({
-  children,
-  style,
-  textStyle,
-  width,
-  height,
-  href,
-  variant = "primary",
-  size = "md",
-  disabled = false,
-  ...rest
-}) => {
+const Button: React.FC<ButtonProps> = (props) => {
+  const {
+    children,
+    style,
+    textStyle,
+    width,
+    height,
+    href,
+    variant = "primary",
+    size = "md",
+    disabled = false,
+    ...rest
+  } = props
+
   const palette = COLORS[variant] ?? COLORS.primary
   const dims = SIZES[size] ?? SIZES.md
   const isOutline = variant === "outline"
@@ -119,15 +128,19 @@ const Button: React.FC<ButtonProps> = ({
   )
 
   if (href && !disabled) {
+    // `rest` está tipado como Omit<LinkBaseProps, ...> gracias al discriminated
+    // union de arriba; el `as` solo resuelve que TS no reduce `rest` a un tipo
+    // único tras desestructurar de una unión, no relaja el contrato con quien
+    // consume el componente.
     return (
-      <Link {...(rest as LinkBaseProps)} src={href} style={containerStyle}>
+      <Link {...(rest as Omit<LinkBaseProps, keyof ButtonOwnProps | "href">)} src={href} style={containerStyle}>
         {content}
       </Link>
     )
   }
 
   return (
-    <View style={containerStyle} {...(rest as ViewBaseProps)}>
+    <View style={containerStyle} {...(rest as Omit<ViewBaseProps, keyof ButtonOwnProps | "href">)}>
       {content}
     </View>
   )

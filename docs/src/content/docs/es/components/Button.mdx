@@ -25,7 +25,9 @@ El componente `Button` evita usar `borderWidth` real en la variante `outline` pa
 | `style`      | `any`                                                         | `undefined`   | Estilos adicionales para el contenedor exterior del botón. Se aplica al final del array de estilos, por lo que puede sobrescribir estilos base (backgroundColor, borderRadius, padding, width, height). |
 | `textStyle`  | `any`                                                         | `undefined`   | Estilos adicionales para el texto interno del botón. Se aplica al final del array de estilos, por lo que puede sobrescribir fontSize, color, fontWeight. |
 
-Además, hereda todas las propiedades de `View` de `@react-pdf/renderer` (ej: `margin`, `padding`, `flex`, `fixed`, `break`, `debug`), y cuando se usa con `href` y sin `disabled`, hereda también las propiedades de `Link` (ej: `onPress`).
+Además, hereda todas las propiedades de `View` de `@react-pdf/renderer` (`id`, `wrap`, `debug`, `render`, `fixed`, `break`, `minPresenceAhead`), y cuando se usa con `href` y sin `disabled`, hereda también las propiedades de `Link` (`wrap`, `debug`, `hitSlop`, `fixed`, `break`, `minPresenceAhead`).
+
+> ⚠️ **`margin`, `padding`, `flex` y otras propiedades de layout son propiedades de *estilo*, no props del componente.** Los primitivos de `@react-pdf/renderer` (`View`, `Link`, `Text`) no las aceptan como props directas de JSX — pasar `<Button margin={5}>` no tiene ningún efecto, porque `margin` no es un prop reconocido y se descarta silenciosamente. Usa `style={{ margin: 5 }}` en su lugar.
 
 ### Tipos exportados
 
@@ -97,8 +99,8 @@ import { Button, Center } from '@react-pdf-levelup/core';
   Texto estilizado
 </Button>
 
-// Botón con prop heredada de View (margin)
-<Button variant="success" margin={5}>
+// Botón con una propiedad de estilo heredada de View (margin)
+<Button variant="success" style={{ margin: 5 }}>
   Con margen de 5pt
 </Button>
 ```

@@ -25,7 +25,9 @@ The `Button` component avoids using real `borderWidth` on the `outline` variant 
 | `style`      | `any`                                                                     | `undefined`   | Additional styles for the button outer container. Applied last in the styles array, so it can override base styles (backgroundColor, borderRadius, padding, width, height). |
 | `textStyle`  | `any`                                                                     | `undefined`   | Additional styles for the button inner text. Applied last in the styles array, so it can override fontSize, color, fontWeight. |
 
-Additionally, it inherits all properties from `View` of `@react-pdf/renderer` (e.g. `margin`, `padding`, `flex`, `fixed`, `break`, `debug`), and when used with `href` and without `disabled`, it also inherits `Link` properties (e.g. `onPress`).
+Additionally, it inherits all properties from `View` of `@react-pdf/renderer` (`id`, `wrap`, `debug`, `render`, `fixed`, `break`, `minPresenceAhead`), and when used with `href` and without `disabled`, it also inherits `Link` properties (`wrap`, `debug`, `hitSlop`, `fixed`, `break`, `minPresenceAhead`).
+
+> ⚠️ **`margin`, `padding`, `flex`, and other layout properties are *style* properties, not component props.** `@react-pdf/renderer` primitives (`View`, `Link`, `Text`) do not accept them as direct JSX props — passing `<Button margin={5}>` has no effect, since `margin` is not a recognized prop and gets silently dropped. Use `style={{ margin: 5 }}` instead.
 
 ### Exported types
 
@@ -97,8 +99,8 @@ import { Button, Center } from '@react-pdf-levelup/core';
   Styled text
 </Button>
 
-// Button with inherited View prop (margin)
-<Button variant="success" margin={5}>
+// Button with an inherited View style property (margin)
+<Button variant="success" style={{ margin: 5 }}>
   With 5pt margin
 </Button>
 ```
