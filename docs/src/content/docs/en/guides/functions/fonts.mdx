@@ -58,3 +58,50 @@ Once registered, you can use the font in your styles (`StyleSheet.create` or inl
   <p>You can see a complete example of how to register and use a custom font in our [Playground](https://react-pdf-levelup.nimbux.cloud/playground/template/facturaInvoice). There you can interact with the code and see how the PDF is generated in real time.</p>
 
 </div>
+
+## getFont
+
+Helper function that resolves the path to a font file, so it works correctly both in backend and frontend regardless of which file calls it.
+
+It does not download or parse the font — it only **resolves `fontPath` into a value usable by `Font.register`**, depending on the case:
+
+1. If `fontPath` is already a URL (`http://` or `https://`) → returns it as-is.
+2. If `fontPath` is already an absolute path (starts with `/`, or a Windows drive letter like `C:\` or `C:/`) → returns it as-is.
+3. If running in the browser → returns it as-is (resolving against the file system makes no sense in the browser).
+4. In any other case (backend + relative path) → resolves the relative path **against the directory of the file that called `getFont`**, using `callerImportMetaUrl` to know what that path is relative to.
+
+### Signature
+
+```typescript
+getFont(fontPath: string, callerImportMetaUrl: string): Promise<string>
+```
+
+### Parameters
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| `fontPath` | `string` | Path to the font: can be a URL, an absolute path, or a relative path. |
+| `callerImportMetaUrl` | `string` | The `import.meta.url` of the file calling `getFont`. Used as the base to resolve `fontPath` when it's a relative path in backend. |
+
+> ℹ️ `callerImportMetaUrl` must be the `import.meta.url` of **the caller**, not of `getFont` itself — that way the relative path resolves against the template's own file, not against the library.
+
+### Returns
+
+Returns a promise that resolves to a `string`: the final resolved path (a URL, an absolute path, or the original relative path when running in the browser).
+
+### Example
+
+```tsx
+import { getFont } from '@react-pdf-levelup/core';
+import { Font } from '@react-pdf/renderer';
+
+// MyTemplate.tsx
+const fontSrc = await getFont("./fonts/Lobster-Regular.ttf", import.meta.url);
+
+Font.register({
+  family: "Lobster",
+  fonts: [{ src: fontSrc, fontWeight: "normal" }],
+});
+```
+
+In this example, if `MyTemplate.tsx` runs in the backend, `getFont` resolves `"./fonts/Lobster-Regular.ttf"` to an absolute disk path relative to the folder where `MyTemplate.tsx` lives. If it runs in the browser, it returns the path unchanged.

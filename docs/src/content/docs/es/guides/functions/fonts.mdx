@@ -61,36 +61,47 @@ Una vez registrada, puedes usar la fuente en tus estilos (`StyleSheet.create` o 
 
 ## getFont
 
-Función asíncrona para recuperar datos de una fuente desde una URL.
-Esta función es **experimental/beta** y podría estar sujeta a cambios.
+Función auxiliar para resolver la ruta de un archivo de fuente, de forma que funcione tanto en backend como en frontend sin importar desde qué archivo se llame.
+
+No descarga ni parsea la fuente — solo **resuelve el `fontPath` a un valor utilizable** por `Font.register`, según el caso:
+
+1. Si `fontPath` ya es una URL (`http://` o `https://`) → la devuelve tal cual, sin tocarla.
+2. Si `fontPath` ya es una ruta absoluta (empieza con `/`, o con letra de unidad de Windows como `C:\` o `C:/`) → la devuelve tal cual.
+3. Si se ejecuta en el navegador → la devuelve tal cual (no tiene sentido resolverla contra el filesystem en el browser).
+4. En cualquier otro caso (backend + ruta relativa) → resuelve la ruta relativa **contra el directorio del archivo que llamó a `getFont`**, usando `callerImportMetaUrl` para saber desde dónde es relativa esa ruta.
 
 ### Firma
 
 ```typescript
-getFont({ fontName, fontUrl }: { fontName: string, fontUrl: string }): Promise<Object>
+getFont(fontPath: string, callerImportMetaUrl: string): Promise<string>
 ```
 
 ### Parámetros
 
 | Nombre | Tipo | Descripción |
 | :--- | :--- | :--- |
-| `fontName` | `string` | El nombre de la fuente a recuperar. |
-| `fontUrl` | `string` | La URL desde donde se puede obtener la fuente. |
+| `fontPath` | `string` | Ruta a la fuente: puede ser una URL, una ruta absoluta o una ruta relativa. |
+| `callerImportMetaUrl` | `string` | El `import.meta.url` del archivo que llama a `getFont`. Se usa como base para resolver `fontPath` cuando es una ruta relativa en backend. |
+
+> ℹ️ `callerImportMetaUrl` tiene que ser el `import.meta.url` de **quien llama** a `getFont`, no el de `getFont` mismo — así la ruta relativa se resuelve respecto al archivo del template, no respecto a la librería.
 
 ### Retorno
 
-Retorna una promesa que resuelve con los datos de la fuente.
+Retorna una promesa que resuelve a un `string`: la ruta final ya resuelta (URL, ruta absoluta, o la ruta relativa original si corre en el navegador).
 
 ### Ejemplo
 
 ```tsx
 import { getFont } from '@react-pdf-levelup/core';
+import { Font } from '@react-pdf/renderer';
 
-const fetchMyFont = async () => {
-  const fontData = await getFont({
-    fontName: "Open Sans",
-    fontUrl: "https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0e.ttf",
-  });
-  console.log("Datos de la fuente:", fontData);
-};
+// MyTemplate.tsx
+const fontSrc = await getFont("./fonts/Lobster-Regular.ttf", import.meta.url);
+
+Font.register({
+  family: "Lobster",
+  fonts: [{ src: fontSrc, fontWeight: "normal" }],
+});
 ```
+
+En este ejemplo, si `MyTemplate.tsx` corre en backend, `getFont` resuelve `"./fonts/Lobster-Regular.ttf"` a una ruta absoluta en disco relativa a la carpeta donde vive `MyTemplate.tsx`. Si corre en el navegador, devuelve la ruta tal cual, sin modificarla.

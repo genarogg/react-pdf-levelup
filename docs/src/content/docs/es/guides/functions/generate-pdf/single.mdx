@@ -1,0 +1,150 @@
+---
+title: Single — generatePDF y decodePDF
+description: Genera PDFs en el hilo principal a partir de un componente React, y decodifica/guarda el resultado.
+---
+
+> ℹ️ **Nota:** Esta página documenta el modo **Single** de generación de PDF: corre en el hilo principal (no usa workers). Para generación en un pool de worker threads, ver [Worker](/es/guides/functions/generate-pdf/worker).
+
+## generatePDF
+
+Función asíncrona para generar un PDF a partir de un componente React y `data` opcional.
+Detecta automáticamente el entorno de ejecución (backend/Node o frontend/navegador) y adapta tanto los formatos de salida disponibles como el comportamiento por defecto a ese entorno.
+
+### Firma
+
+```typescript
+// Backend (Node)
+generatePDF({ template, data, output }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "base64" | "buffer"; // default: "base64"
+}): Promise<string | Buffer>
+
+// Frontend (navegador)
+generatePDF({ template, data, output, fileName }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "blob" | "url" | "download"; // default: "download"
+  fileName?: string; // solo aplica con output: "download"
+}): Promise<Blob | string | void>
+```
+
+### Parámetros
+
+| Nombre | Tipo | Descripción |
+| :--- | :--- | :--- |
+| `template` | `React.ElementType` | El componente React que representa el documento PDF. |
+| `data` | `any` | Opcional. Datos que se pasan como prop `data` al componente `template`. |
+| `output` | `string` | Opcional. Formato de salida. En backend: `"base64"` (default) \| `"buffer"`. En frontend: `"blob"` \| `"url"` \| `"download"` (default). |
+| `fileName` | `string` | Opcional, solo frontend con `output: "download"`. Nombre del archivo descargado. Por defecto `"document.pdf"`. |
+
+> ℹ️ `generatePDF` no necesita que le digas en qué entorno está corriendo — lo detecta solo (`typeof window === "undefined"`). Lo único que cambia entre entornos son los valores válidos de `output` y el default.
+
+### Retorno
+
+- **Backend**: una promesa que resuelve a `string` (base64) o `Buffer`, según `output`.
+- **Frontend**: una promesa que resuelve a `Blob`, `string` (URL de objeto) o `void` (cuando `output: "download"`, que dispara la descarga directamente).
+
+### Ejemplo (backend)
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const base64 = await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+});
+// output: "buffer" para obtener el Buffer crudo en vez de base64
+const buffer = await generatePDF({ template: MyDocument, data, output: "buffer" });
+```
+
+### Ejemplo (frontend)
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+// Por defecto dispara la descarga del PDF en el navegador
+await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+  fileName: "mi-documento.pdf",
+});
+
+// output: "blob" o "url" si necesitas manejar el resultado vos mismo
+const blob = await generatePDF({ template: MyDocument, data, output: "blob" });
+```
+
+## decodePDF
+
+Recibe un PDF ya generado (en base64, `Buffer` o `Blob` — lo que sea que haya devuelto `generatePDF`) y lo procesa según el entorno: en frontend lo descarga y/o lo abre en una pestaña nueva; en backend lo guarda en disco.
+
+### Firma
+
+```typescript
+decodePDF({ pdf, name, download, showBlob, saveSRC }: {
+  pdf: string | Buffer | Blob;
+  name: string;
+  download?: boolean;  // frontend, default true
+  showBlob?: boolean;  // frontend, default true
+  saveSRC?: string;    // backend, requerido
+}): Promise<void>
+```
+
+### Parámetros
+
+| Nombre | Tipo | Descripción |
+| :--- | :--- | :--- |
+| `pdf` | `string \| Buffer \| Blob` | El PDF a procesar, en base64, `Buffer` o `Blob`. |
+| `name` | `string` | Nombre del archivo. Se le agrega `.pdf` automáticamente si falta. |
+| `download` | `boolean` | Opcional, solo frontend. Si dispara la descarga automática. Por defecto `true`. |
+| `showBlob` | `boolean` | Opcional, solo frontend. Si abre el PDF en una pestaña nueva. Por defecto `true`. |
+| `saveSRC` | `string` | Requerido en backend. Ruta de disco donde guardar el PDF. Sin este parámetro, `decodePDF` lanza un error en backend. |
+
+> ⚠️ En frontend, `download` y `showBlob` son independientes entre sí y ambos están activos por defecto: `decodePDF` puede descargar el archivo **y** abrirlo en una pestaña nueva en la misma llamada. Si pasás `saveSRC` en frontend (no aplica ahí), `download` queda deshabilitado pero `showBlob` sigue funcionando.
+>
+> ⚠️ En backend, `showBlob` no tiene efecto (no hay pestaña de navegador que abrir) y se ignora con un warning en consola.
+
+### Retorno
+
+Retorna una promesa que resuelve a `void` una vez que el PDF fue guardado, descargado y/o abierto según corresponda.
+
+### Ejemplo (frontend)
+
+```tsx
+import { decodePDF, generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const base64 = await generatePDF({ template: MyDocument, data });
+
+await decodePDF({
+  pdf: base64,
+  name: "mi-documento", // se guarda como "mi-documento.pdf"
+});
+```
+
+### Ejemplo (backend)
+
+```tsx
+import { decodePDF, generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const buffer = await generatePDF({ template: MyDocument, data, output: "buffer" });
+
+await decodePDF({
+  pdf: buffer,
+  name: "reporte",
+  saveSRC: "./output", // requerido en backend
+});
+```
+
+## Funciones Re-exportadas de @react-pdf/renderer
+
+Las siguientes funciones son re-exportadas directamente desde la librería `@react-pdf/renderer` para facilitar su uso. Para una documentación detallada, por favor, consulte la [documentación oficial de React-PDF](https://react-pdf.org/).
+
+- **`pdf`**: El componente principal para crear documentos PDF.
+- **`renderToStream`**: Renderiza un documento PDF a un stream de Node.js.
+- **`renderToBuffer`**: Renderiza un documento PDF a un Buffer.
+- **`renderToFile`**: Renderiza un documento PDF directamente a un archivo en el sistema de archivos.
+- **`usePDF`**: Un hook de React para renderizar documentos PDF en el navegador.

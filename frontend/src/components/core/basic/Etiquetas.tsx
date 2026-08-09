@@ -8,6 +8,12 @@ type LinkBaseProps = React.ComponentProps<typeof Link>
 interface TextProps extends Omit<TextBaseProps, "style"> {
   children?: React.ReactNode
   style?: any
+}
+
+// Only U, Blockquote, and Mark actually read `color` at runtime.
+// Keeping it out of the base TextProps stops it from silently
+// no-op'ing on P, H1-H6, Strong, Em, Small, Span, and BR.
+interface ColorTextProps extends TextProps {
   color?: string
 }
 
@@ -132,7 +138,7 @@ const Em: React.FC<TextProps> = ({ children, style, ...rest }) => (
   <Text style={[styles.em, style]} {...rest}>{children}</Text>
 )
 
-const U: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+const U: React.FC<ColorTextProps> = ({ children, style, color, ...rest }) => (
   <Text style={[styles.u, color ? { textDecorationColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 
@@ -140,11 +146,11 @@ const Small: React.FC<TextProps> = ({ children, style, ...rest }) => (
   <Text style={[styles.small, style]} {...rest}>{children}</Text>
 )
 
-const Blockquote: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+const Blockquote: React.FC<ColorTextProps> = ({ children, style, color, ...rest }) => (
   <Text style={[styles.blockquote, color ? { borderLeftColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 
-const Mark: React.FC<TextProps> = ({ children, style, color, ...rest }) => (
+const Mark: React.FC<ColorTextProps> = ({ children, style, color, ...rest }) => (
   <Text style={[styles.mark, color ? { backgroundColor: color } : {}, style]} {...rest}>{children}</Text>
 )
 

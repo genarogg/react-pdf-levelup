@@ -60,6 +60,7 @@ Inline text formatting components. They support all properties of the `Text` com
 | :------ | :------- | :------ | :-------------------- |
 | `children` | `React.ReactNode` | `undefined` | Inner content (text or other inline components). |
 | `style` | `object` | `undefined` | Additional styles. |
+| `color` | `string` | `undefined` | **`U` only.** Color applied to the underline (`textDecorationColor`). Has no effect on `Strong`, `Em`, or `Small` — it does not change text color. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -70,7 +71,7 @@ Inline text formatting components. They support all properties of the `Text` com
 import { P, Strong, Em, U, Small } from '@react-pdf-levelup/core';
 
 <P>
-  <Strong>Bold</Strong>, <Em>Italic</Em>, <U>Underlined</U>, <Small>Small</Small>
+  <Strong>Bold</Strong>, <Em>Italic</Em>, <U color="red">Red underline</U>, <Small>Small</Small>
 </P>
 ```
 
@@ -84,6 +85,7 @@ Blockquote for highlighting important text. Supports all properties of the `Text
 | :------ | :------- | :------ | :-------------------- |
 | `children` | `React.ReactNode` | `undefined` | Text or inner content of the quote. |
 | `style` | `object` | `undefined` | Additional styles. |
+| `color` | `string` | `undefined` | Color applied to the left border (`borderLeftColor`). Does not change the text color. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -93,7 +95,7 @@ Blockquote for highlighting important text. Supports all properties of the `Text
 ```tsx
 import { Blockquote } from '@react-pdf-levelup/core';
 
-<Blockquote>A highlighted quote in the document.</Blockquote>
+<Blockquote color="blue">A highlighted quote with a blue border.</Blockquote>
 ```
 
 ## Mark
@@ -106,6 +108,7 @@ Highlighted text (like with a marker). Supports all properties of the `Text` com
 | :------ | :------- | :------ | :-------------------- |
 | `children` | `React.ReactNode` | `undefined` | Text or inner content to highlight. |
 | `style` | `object` | `undefined` | Additional styles. |
+| `color` | `string` | `undefined` | Highlight background color (`backgroundColor`). Does not change the text color. |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
@@ -115,7 +118,7 @@ Highlighted text (like with a marker). Supports all properties of the `Text` com
 ```tsx
 import { Mark } from '@react-pdf-levelup/core';
 
-<Mark>Highlighted Text</Mark>
+<Mark color="lime">Highlighted Text</Mark>
 ```
 
 ## Span
@@ -153,6 +156,15 @@ Line break. Supports all properties of the `Text` component.
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
 
+### Default sizes
+
+| Property | Value |
+| :------- | :---- |
+| `width` | `100%` |
+| `height` | `1` |
+| `marginTop` | `6` |
+| `marginBottom` | `6` |
+
 ### Example
 
 ```tsx
@@ -162,6 +174,8 @@ import { P, BR } from '@react-pdf-levelup/core';
 <BR />
 <P>Line 2</P>
 ```
+
+> `BR` renders as a full-width spacer `Text`, not an inline line break. Use it between sibling block elements (like the example above), not nested inside another `Text`/inline component — nesting it there will not produce a line break within the running text.
 
 ## HR
 
@@ -175,6 +189,15 @@ Horizontal dividing line. Supports all properties of the `View` component.
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |
+
+### Default sizes
+
+| Property | Value |
+| :------- | :---- |
+| `width` | `100%` |
+| `borderTop` | `1px solid #000` |
+| `marginTop` | `6` |
+| `marginBottom` | `6` |
 
 ### Example
 
@@ -192,9 +215,10 @@ Link. Supports all properties of the `Link` component from `@react-pdf/renderer`
 
 | Name    | Type     | Default | Description                                                                 |
 | :------ | :------- | :------ | :-------------------------------------------------------------------------- |
+| `children` | `React.ReactNode` | `undefined` | Visible link text or content. |
 | `href`  | `string` | `undefined` | Link URL (preferred).                                                       |
 | `src`   | `string` | `undefined` | Link URL (fallback). If `href` is not provided, `src` is used.              |
-| `style` | `object` | `{}`    | Additional styles.                                                          |
+| `style` | `object` | `undefined` | Additional styles.                                                          |
 | `debug` | `boolean` | `false` | Enables debug mode (borders).                                                |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages.                        |
 | `break` | `boolean` | `false` | Forces a page break before the element.                                     |
@@ -215,7 +239,8 @@ Generic container for grouping elements. Supports all properties of the `View` c
 
 | Name    | Type     | Default | Description           |
 | :------ | :------- | :------ | :-------------------- |
-| `style` | `object` | `{}`    | Additional styles.    |
+| `children` | `React.ReactNode` | `undefined` | Elements rendered inside the container. |
+| `style` | `object` | `undefined` | Additional styles.    |
 | `debug` | `boolean` | `false` | Enables debug mode (borders). |
 | `fixed` | `boolean` | `false` | Indicates if the element should appear on all pages. |
 | `break` | `boolean` | `false` | Forces a page break before the element. |

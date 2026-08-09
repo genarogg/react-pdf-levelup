@@ -1,0 +1,127 @@
+---
+title: Worker — generatePDFonWorker
+description: Genera PDFs en un pool de worker threads (Piscina) sin bloquear el hilo principal.
+---
+
+> ℹ️ **Nota:** Esta página documenta el modo **Worker** de generación de PDF: corre en un pool de worker threads vía [Piscina](https://github.com/piscinajs/piscina). Para generación directa en el hilo principal, ver [Single](/es/guides/functions/generate-pdf/single).
+
+## generatePDFonWorker
+
+Genera un PDF igual que `generatePDF`, pero delegando el renderizado a un **pool de worker threads** en vez de correrlo en el hilo principal.
+
+Es **solo backend** (Node) — no existe una versión frontend, a diferencia de `generatePDF`. Está pensada para servidores con alto tráfico o PDFs pesados: cada renderizado corre en un hilo separado, así que el hilo principal (por ejemplo el event loop de Fastify) queda libre para seguir atendiendo requests mientras el PDF se genera.
+
+> ℹ️ Es la contraparte del modo **Worker** de la [API REST](/es/guides/api-rest) (`/api/pdf/worker`) — mismo mecanismo, expuesto acá como función de librería en vez de endpoint HTTP.
+
+### Cómo funciona por dentro
+
+Toda la lógica del worker vive en **un único archivo autocontenido**. Piscina vuelve a cargar ese mismo archivo como entry point de cada worker del pool, así que el archivo corre con dos roles distintos según el hilo que lo cargue:
+
+- **Hilo principal** (`isMainThread === true`): arma el pool una sola vez y expone la API pública `generatePDFonWorker` / `closePDFPool` / `getPoolStats`.
+- **Cada worker del pool** (`isMainThread === false`): Piscina vuelve a cargar el archivo y usa un handler interno como la función que ejecuta por cada tarea.
+
+Un guard sobre `isMainThread` en la creación del pool es lo que evita que cada worker, al recargar el archivo, intente crear su propio pool y dispare workers hijos sin fin.
+
+### Diferencia clave con `generatePDF`: `templatePath` en vez de `template`
+
+`generatePDFonWorker` no recibe el componente (`template`) directamente, sino `templatePath`: la ruta absoluta a un archivo que exporta el template como `export default`. Esto es porque un componente/función no puede cruzar el boundary de `postMessage` hacia un worker thread — solo datos serializables. Cada worker importa el módulo por su cuenta, en su propio hilo.
+
+### Firma
+
+```typescript
+generatePDFonWorker({ templatePath, data, output }: {
+  templatePath: string; // ruta absoluta al módulo que exporta el template (default export)
+  data?: any;
+  output?: "base64" | "buffer"; // default: "base64"
+}): Promise<string | Buffer>
+```
+
+### Parámetros
+
+| Nombre | Tipo | Descripción |
+| :--- | :--- | :--- |
+| `templatePath` | `string` | Ruta absoluta al archivo que exporta el template como `export default`. |
+| `data` | `any` | Opcional. Datos que se pasan como prop `data` al componente. |
+| `output` | `string` | Opcional. `"base64"` (default) \| `"buffer"`. Misma semántica que en `generatePDF` backend. |
+
+### Retorno
+
+Retorna una promesa que resuelve a `string` (base64) o `Buffer`, según `output` — paridad uno a uno con la rama backend de `generatePDF`.
+
+### Ejemplo
+
+```tsx
+import { generatePDFonWorker } from '@react-pdf-levelup/core';
+
+const base64 = await generatePDFonWorker({
+  templatePath: "/abs/path/Invoice.js",
+  data: { name: "John Doe" },
+});
+
+// output: "buffer" para obtener el Buffer crudo
+const buffer = await generatePDFonWorker({
+  templatePath: "/abs/path/Invoice.js",
+  data,
+  output: "buffer",
+});
+```
+
+> ⚠️ Cualquier registro de fuentes a nivel de módulo (por ejemplo `Font.register` en el archivo del template) se ejecuta dentro del worker la primera vez que ese worker importa el módulo — el cache de módulos ESM es por hilo, así que corre una sola vez por worker, no una vez por request.
+
+### Configuración del pool
+
+El pool se crea automáticamente al importar el módulo (solo en el hilo principal), con valores derivados de los cores disponibles:
+
+| Opción | Valor | Descripción |
+| :--- | :--- | :--- |
+| `maxThreads` | `cores - 1` (mínimo 1) | Deja 1 core libre para el hilo principal / Fastify. |
+| `minThreads` | `Math.floor(cores / 2)` (mínimo 1) | Menos arranques en frío. |
+| `idleTimeout` | `30_000` ms | Tiempo antes de cerrar un worker inactivo por encima de `minThreads`. |
+
+## closePDFPool
+
+Cierra el pool de workers de forma ordenada, esperando a que terminen las tareas en curso antes de apagar los hilos. Pensada para invocarse en el hook de cierre del servidor (por ejemplo `onClose` en Fastify).
+
+### Firma
+
+```typescript
+closePDFPool(): Promise<void>
+```
+
+### Ejemplo
+
+```tsx
+import { closePDFPool } from '@react-pdf-levelup/core';
+
+fastify.addHook("onClose", async () => {
+  await closePDFPool();
+});
+```
+
+## getPoolStats
+
+Devuelve un snapshot del estado actual del pool de workers. Útil para loggear en cada request y confirmar cuántos workers se están usando realmente, o para exponer métricas de salud del servidor.
+
+### Firma
+
+```typescript
+getPoolStats(): {
+  threads: number;      // workers vivos en este momento
+  queueSize: number;    // tareas esperando (ningún worker libre)
+  completed: number;    // tareas completadas desde que arrancó el pool
+  utilization: number;  // 0..1, qué tan ocupado está el pool
+  maxThreads: number;   // techo configurado (autodetectado según cores disponibles)
+  minThreads: number;   // piso configurado
+} | null
+```
+
+Devuelve `null` si se llama fuera del hilo principal (donde no existe un pool propio).
+
+### Ejemplo
+
+```tsx
+import { getPoolStats } from '@react-pdf-levelup/core';
+
+console.log(getPoolStats());
+// { threads: 3, queueSize: 0, completed: 42, utilization: 0.12, maxThreads: 3, minThreads: 2 }
+```

@@ -1,39 +1,34 @@
 ---
-title: API REST
-description: Uso del API vía HTTP con fetch, opciones de self‑hosting y ejemplos en varios lenguajes.
----
-
----
-title: API REST
-description: Uso del API vía HTTP con fetch, opciones de self‑hosting y ejemplos en varios lenguajes.
+title: REST API
+description: API usage via HTTP with fetch, self-hosting options, and examples in various languages.
 ---
 
 import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-## ¿Qué es esta API?
+## What is this API?
 
-- Expone un endpoint HTTP para generar PDFs a partir de un template React (TSX) y un objeto de datos.
-- Devuelve un JSON con un campo `data.pdf` que contiene el PDF en base64.
-- Puede consumirse desde cualquier lenguaje capaz de hacer peticiones HTTP.
+- Exposes an HTTP endpoint to generate PDFs from a React (TSX) template and a data object.
+- Returns a JSON with a `data.pdf` field containing the PDF in base64.
+- Can be consumed by any language capable of making HTTP requests.
 
-## Endpoints disponibles
+## Available Endpoints
 
-La API ofrece dos modos de generación de PDF, cada uno con su propio endpoint:
+The API offers two PDF generation modes, each with its own endpoint:
 
 - **Single**: `/api/pdf/single`
 - **Worker**: `/api/pdf/worker`
 
-### Modo Single
+### Single Mode
 
 - **Endpoint**: `/api/pdf/single`
-- **Descripción**: Procesa la solicitud en el hilo principal. Es más rápido para PDFs sencillos, pero puede bloquear el servidor si se reciben muchas solicitudes simultáneamente.
+- **Description**: Processes the request on the main thread. It is faster for simple PDFs, but it can block the server if many requests are received simultaneously.
 
-### Modo Worker
+### Worker Mode
 
 - **Endpoint**: `/api/pdf/worker`
-- **Descripción**: Utiliza un pool de workers para generar el PDF en hilos separados. Es ideal para aplicaciones con alto tráfico o que generan PDFs complejos, ya que no bloquea el hilo principal.
+- **Description**: Uses a worker pool to generate the PDF in separate threads. It is ideal for applications with high traffic or that generate complex PDFs, as it does not block the main thread.
 
-### Copiar endpoints rápidos
+### Quick Endpoint Copy
 
 ```text
 https://react-pdf-levelup.nimbux.cloud/api/pdf/single
@@ -44,41 +39,41 @@ https://react-pdf-levelup.nimbux.cloud/api/pdf/worker
 ```
 
 <CardGrid>
-  <Card title="Modo Single" icon="rocket">
-    Ideal para empezar rápido y para PDFs sencillos.
+  <Card title="Single Mode" icon="rocket">
+    Ideal for getting started quickly and for simple PDFs.
   </Card>
-  <Card title="Modo Worker" icon="gear">
-    Recomendado para producción y para PDFs complejos o con mucho tráfico.
+  <Card title="Worker Mode" icon="gear">
+    Recommended for production and for complex or high-traffic PDFs.
   </Card>
 </CardGrid>
 
-## Formato de solicitud
+## Request Format
 
-- **Método**: `POST`
+- **Method**: `POST`
 - **Headers**: `Content-Type: application/json`
 - **Body**:
 
 ```json
 {
-  "template": "<TSX_EN_BASE64>",
-  "data": { "campo": "valor" },
+  "template": "<TSX_IN_BASE64>",
+  "data": { "field": "value" },
   "credentials": {
-    "username": "tu_usuario",
-    "password": "tu_contraseña"
+    "username": "your_username",
+    "password": "your_password"
   }
 }
 ```
 
-### Credenciales
+### Credentials
 
-Para usar la API, debes proporcionar un `username` and `password` en el objeto `credentials`. Estas credenciales se comparan con las variables de entorno `CR_USERNAME` and `CR_PASSWORD` en el servidor.
+To use the API, you must provide a `username` and `password` in the `credentials` object. These credentials are compared with the `CR_USERNAME` and `CR_PASSWORD` environment variables on the server.
 
-## Consideraciones sobre Fuentes
+## Font Considerations
 
-### Registro de Fuentes Personalizadas
+### Custom Font Registration
 
-Si tu template utiliza fuentes personalizadas, debes registrarlas usando `Font.register`.
-**IMPORTANTE**: La API no puede acceder a archivos locales. Las fuentes deben cargarse desde **URLs remotas absolutas** (https://...).
+If your template uses custom fonts, you must register them using `Font.register`.
+**IMPORTANT**: The API cannot access local files. Fonts must be loaded from **absolute remote URLs** (https://...).
 
 ```ts
 Font.register({
@@ -92,18 +87,18 @@ Font.register({
 });
 ```
 
-### Fuentes por defecto
+### Default Fonts
 
-Las siguientes fuentes están disponibles sin necesidad de registro:
+The following fonts are available without registration:
 `Courier`, `Courier-Bold`, `Courier-Oblique`, `Courier-BoldOblique`, `Helvetica`, `Helvetica-Bold`, `Helvetica-Oblique`, `Helvetica-BoldOblique`, `Times-Roman`, `Times-Bold`, `Times-Italic`, `Times-BoldItalic`.
 
-## Consideraciones con Imágenes
+## Image Considerations
 
-### Carga y acceso
+### Loading and Access
 
-La API no puede acceder a archivos locales. Todas las imágenes utilizadas en un template deben referenciarse mediante **URLs remotas absolutas** (https://...). Evita rutas relativas o archivos locales en el paquete del cliente, ya que el servicio de renderizado no podrá resolverlos.
+The API cannot access local files. All images used in a template must be referenced by **absolute remote URLs** (https://...). Avoid relative paths or local files in the client package, as the rendering service will not be able to resolve them.
 
-Ejemplo de uso dentro de un template:
+Example of use within a template:
 
 ```tsx
 import { Image } from '@react-pdf-levelup/core';
@@ -118,35 +113,35 @@ const MyTemplate = ({ data }) => (
 );
 ```
 
-### Formatos y recomendaciones
+### Formats and Recommendations
 
-- Prefiere `JPEG` para fotografías (mejor compresión) y `PNG` para imágenes con transparencia o gráficos.
-- Evita imágenes excesivamente grandes; redimensiona y optimiza (herramientas de compresión) antes de servirlas.
-- Los data URLs (base64) funcionan técnicamente, pero aumentan mucho el tamaño de la carga útil — **no es recomendable para imágenes grandes.**
+- Prefer `JPEG` for photographs (better compression) and `PNG` for images with transparency or graphics.
+- Avoid excessively large images; resize and optimize (compression tools) before serving them.
+- Data URLs (base64) technically work, but greatly increase payload size — **not recommended for large images.**
 
-### CORS y accesibilidad
+### CORS and Accessibility
 
-El servidor remoto que aloja las imágenes debe permitir el acceso desde el servicio de renderizado. Asegúrate de que el recurso esté públicamente accesible (sin autenticación) y no bloquee peticiones por CORS o IP. Si necesitas imágenes protegidas, utiliza URLs con tokens de acceso válidos y con tiempo de expiración adecuado.
+The remote server hosting the images must allow access from the rendering service. Ensure that the resource is publicly accessible (without authentication) and does not block requests due to CORS or IP. If you need protected images, use URLs with valid access tokens and appropriate expiration times.
 
 ### SVG
 
-Los SVG pueden funcionar, pero comprueba que estén bien formateados y no incluyan referencias locales ni scripts. En ocasiones es preferible rasterizarlos a PNG si el renderizado no es consistente.
+SVGs can work, but make sure they are well-formatted and do not include local references or scripts. Sometimes it is preferable to rasterize them to PNG if rendering is not consistent.
 
-Si quieres, puedo añadir ejemplos visuales de antes/después (optimización) o instrucciones para servir imágenes desde GitHub Pages / CDN.
+If you wish, I can add visual examples of before/after (optimization) or instructions for serving images from GitHub Pages / CDN.
 
-## Respuesta
+## Response
 
 ```json
 {
   "data": {
-    "pdf": "<PDF_EN_BASE64>"
+    "pdf": "<PDF_IN_BASE64>"
   }
 }
 ```
 
-## Ejemplo completo con Node.js (fetch)
+## Complete Example with Node.js (fetch)
 
-Este ejemplo lee un template `.tsx`, lo convierte a base64, envía la petición al API y guarda el PDF.
+This example reads a `.tsx` template, converts it to base64, sends the request to the API, and saves the PDF.
 
 ```ts
 import fs from "fs";
@@ -182,12 +177,12 @@ const savePDF = (resultBase64: string) => {
   const buffer = Buffer.from(resultBase64, "base64");
   const outputPath = path.join(process.cwd(), "src", "useExample", "example.pdf");
   fs.writeFileSync(outputPath, buffer);
-  console.log("PDF guardado exitosamente en:", outputPath);
+  console.log("PDF saved successfully to:", outputPath);
 }
 
 const generateAndSavePDF = async () => {
   try {
-    const data = { nombre: "Genaro Gonzalez" };
+    const data = { name: "Genaro Gonzalez" };
     const credentials = {
         username: "test",
         password: "test"
@@ -203,16 +198,16 @@ const generateAndSavePDF = async () => {
 generateAndSavePDF();
 ```
 
-## Ejemplos en otros lenguajes
+## Examples in other languages
 
-Estos ejemplos muestran que el API puede usarse desde cualquier lenguaje.
+These examples show that the API can be used from any language.
 
 ### curl
 
 ```bash
 curl -X POST https://react-pdf-levelup.nimbux.cloud/api/pdf/worker \
   -H "Content-Type: application/json" \
-  -d '{"template":"BASE64_TSX","data":{"nombre":"Genaro Gonzalez"},"credentials":{"username":"test","password":"test"}}'
+  -d '{"template":"BASE64_TSX","data":{"name":"Genaro Gonzalez"},"credentials":{"username":"test","password":"test"}}'
 ```
 
 ### Python (requests)
@@ -224,7 +219,7 @@ import base64
 endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker"
 payload = {
     "template": "BASE64_TSX",
-    "data": {"nombre": "Genaro Gonzalez"},
+    "data": {"name": "Genaro Gonzalez"},
     "credentials": {"username": "test", "password": "test"}
 }
 
@@ -246,9 +241,10 @@ using System.Text.Json;
 var client = new HttpClient();
 var endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker";
 
-var body = new {
+var body = new
+{
   template = "BASE64_TSX",
-  data = new { nombre = "Genaro Gonzalez" },
+  data = new { name = "Genaro Gonzalez" },
   credentials = new { username = "test", password = "test" }
 };
 
@@ -270,7 +266,7 @@ import okhttp3.*;
 
 OkHttpClient client = new OkHttpClient();
 String endpoint = "https://react-pdf-levelup.nimbux.cloud/api/pdf/worker";
-String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"nombre\":\"Genaro Gonzalez\"},\"credentials\":{\"username\":\"test\",\"password\":\"test\"}}";
+String json = "{\"template\":\"BASE64_TSX\",\"data\":{\"name\":\"Genaro Gonzalez\"},\"credentials\":{\"username\":\"test\",\"password\":\"test\"}}";
 
 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 Request request = new Request.Builder().url(endpoint).post(body).build();
@@ -278,7 +274,7 @@ Request request = new Request.Builder().url(endpoint).post(body).build();
 try (Response response = client.newCall(request).execute()) {
   if (!response.isSuccessful()) throw new RuntimeException("HTTP " + response.code());
   String res = response.body().string();
-  // Parsear JSON para extraer data.pdf y decodificar base64
+  // Parse JSON to extract data.pdf and decode base64
 }
 ```
 
@@ -289,7 +285,7 @@ try (Response response = client.newCall(request).execute()) {
 $endpoint = 'https://react-pdf-levelup.nimbux.cloud/api/pdf/worker';
 $payload = [
   'template' => 'BASE64_TSX',
-  'data' => ['nombre' => 'Genaro Gonzalez'],
+  'data' => ['name' => 'Genaro Gonzalez'],
   'credentials' => ['username' => 'test', 'password' => 'test']
 ];
 
@@ -310,17 +306,17 @@ $pdfBase64 = $json['data']['pdf'] ?? '';
 file_put_contents('example.pdf', base64_decode($pdfBase64));
 ```
 
-## Self‑hosting propio
+## Self-hosting
 
-- Descarga `api.zip`: `https://genarogg.github.io/react-pdf-levelup/public/api.zip`.
-- Descomprime y despliega en tu infraestructura (Node, Docker, PaaS).
-- Expón el endpoint `/api/pdf` y apunta tu cliente a esa URL.
-- La carga útil y respuesta siguen el mismo formato mostrado arriba.
+- Download `api.zip`: `https://genarogg.github.io/react-pdf-levelup/public/api.zip`.
+- Decompress and deploy to your infrastructure (Node, Docker, PaaS).
+- Expose the `/api/pdf` endpoint and point your client to that URL.
+- The payload and response follow the same format shown above.
 
 <LinkButton href="https://genarogg.github.io/react-pdf-levelup/public/api.zip" icon="external" variant="primary" target="_blank" rel="noopener noreferrer">
-  Descargar paquete API (ZIP)
+  Download API Package (ZIP)
 </LinkButton>
 
 {/* <LinkButton href="/docs/guides/backend-integration" icon="right-arrow" variant="primary">
-  Ver guía de Integración Backend
+  See Backend Integration Guide
 </LinkButton> */}

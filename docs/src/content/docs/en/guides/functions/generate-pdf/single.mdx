@@ -1,0 +1,150 @@
+---
+title: Single — generatePDF and decodePDF
+description: Generate PDFs on the main thread from a React component, and decode/save the result.
+---
+
+> ℹ️ **Note:** This page documents the **Single** PDF generation mode: it runs on the main thread (no workers involved). For generation on a worker thread pool, see [Worker](/en/guides/functions/generate-pdf/worker).
+
+## generatePDF
+
+Asynchronous function to generate a PDF from a React component and optional `data`.
+It automatically detects the execution environment (backend/Node or frontend/browser) and adapts both the available output formats and the default behavior to that environment.
+
+### Signature
+
+```typescript
+// Backend (Node)
+generatePDF({ template, data, output }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "base64" | "buffer"; // default: "base64"
+}): Promise<string | Buffer>
+
+// Frontend (browser)
+generatePDF({ template, data, output, fileName }: {
+  template: React.ElementType;
+  data?: any;
+  output?: "blob" | "url" | "download"; // default: "download"
+  fileName?: string; // only applies with output: "download"
+}): Promise<Blob | string | void>
+```
+
+### Parameters
+
+| Name       | Type                | Description                                                  |
+| :--------- | :------------------ | :------------------------------------------------------------ |
+| `template` | `React.ElementType` | The React component that represents the PDF document.         |
+| `data`     | `any`                | Optional data passed as the `data` prop to the `template` component. |
+| `output`   | `string`             | Optional output format. Backend: `"base64"` (default) \| `"buffer"`. Frontend: `"blob"` \| `"url"` \| `"download"` (default). |
+| `fileName` | `string`             | Optional, frontend only, with `output: "download"`. Name of the downloaded file. Defaults to `"document.pdf"`. |
+
+> ℹ️ `generatePDF` doesn't need to be told which environment it's running in — it detects it automatically (`typeof window === "undefined"`). Only the valid `output` values and the default change between environments.
+
+### Returns
+
+- **Backend**: a promise that resolves to a `string` (base64) or `Buffer`, depending on `output`.
+- **Frontend**: a promise that resolves to a `Blob`, a `string` (object URL), or `void` (when `output: "download"`, which triggers the download directly).
+
+### Example (backend)
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const base64 = await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+});
+// output: "buffer" to get the raw Buffer instead of base64
+const buffer = await generatePDF({ template: MyDocument, data, output: "buffer" });
+```
+
+### Example (frontend)
+
+```tsx
+import { generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+// By default triggers the PDF download in the browser
+await generatePDF({
+  template: MyDocument,
+  data: { name: "John Doe" },
+  fileName: "my-document.pdf",
+});
+
+// output: "blob" or "url" if you need to handle the result yourself
+const blob = await generatePDF({ template: MyDocument, data, output: "blob" });
+```
+
+## decodePDF
+
+Takes an already generated PDF (base64, `Buffer`, or `Blob` — whatever `generatePDF` returned) and processes it according to the environment: in the frontend it downloads it and/or opens it in a new tab; in the backend it saves it to disk.
+
+### Signature
+
+```typescript
+decodePDF({ pdf, name, download, showBlob, saveSRC }: {
+  pdf: string | Buffer | Blob;
+  name: string;
+  download?: boolean;  // frontend, default true
+  showBlob?: boolean;  // frontend, default true
+  saveSRC?: string;    // backend, required
+}): Promise<void>
+```
+
+### Parameters
+
+| Name       | Type                       | Description                                                        |
+| :--------- | :------------------------- | :------------------------------------------------------------------ |
+| `pdf`      | `string \| Buffer \| Blob` | The PDF to process, as base64, `Buffer`, or `Blob`.                 |
+| `name`     | `string`                   | File name. `.pdf` is appended automatically if missing.             |
+| `download` | `boolean`                  | Optional, frontend only. Whether to trigger the automatic download. Defaults to `true`. |
+| `showBlob` | `boolean`                  | Optional, frontend only. Whether to open the PDF in a new tab. Defaults to `true`. |
+| `saveSRC`  | `string`                   | Required in backend. Disk path where the PDF is saved. Without it, `decodePDF` throws in backend. |
+
+> ⚠️ In the frontend, `download` and `showBlob` are independent of each other and both default to `true`: `decodePDF` can download the file **and** open it in a new tab in the same call. If you pass `saveSRC` in the frontend (it doesn't apply there), `download` is disabled but `showBlob` keeps working.
+>
+> ⚠️ In the backend, `showBlob` has no effect (there's no browser tab to open) and is ignored, logging a console warning.
+
+### Returns
+
+Returns a promise that resolves to `void` once the PDF has been saved, downloaded, and/or opened as applicable.
+
+### Example (frontend)
+
+```tsx
+import { decodePDF, generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const base64 = await generatePDF({ template: MyDocument, data });
+
+await decodePDF({
+  pdf: base64,
+  name: "my-document", // saved as "my-document.pdf"
+});
+```
+
+### Example (backend)
+
+```tsx
+import { decodePDF, generatePDF } from '@react-pdf-levelup/core';
+import MyDocument from './MyDocument';
+
+const buffer = await generatePDF({ template: MyDocument, data, output: "buffer" });
+
+await decodePDF({
+  pdf: buffer,
+  name: "report",
+  saveSRC: "./output", // required in backend
+});
+```
+
+## Functions Re-exported from @react-pdf/renderer
+
+The following functions are re-exported directly from the `@react-pdf/renderer` library for convenience. For detailed documentation, please refer to the [official React-PDF documentation](https://react-pdf.org/).
+
+- **`pdf`**: The main component for creating PDF documents.
+- **`renderToStream`**: Renders a PDF document to a Node.js stream.
+- **`renderToBuffer`**: Renders a PDF document to a Buffer.
+- **`renderToFile`**: Renders a PDF document directly to a file on the file system.
+- **`usePDF`**: A React hook for rendering PDF documents in the browser.

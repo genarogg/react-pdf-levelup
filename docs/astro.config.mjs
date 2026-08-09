@@ -73,7 +73,14 @@ export default defineConfig({
 							},
 							items: [
 								{ slug: 'guides/functions/fonts', label: 'Gestión de Fuentes', translations: { en: 'Font Management' } },
-								{ slug: 'guides/functions/generate-pdf', label: 'generatePDF' },
+								{
+									label: 'Generar PDF',
+									translations: { en: 'Generate PDF' },
+									items: [
+										{ slug: 'guides/functions/generate-pdf/single', label: 'Single', translations: { en: 'Single' } },
+										{ slug: 'guides/functions/generate-pdf/worker', label: 'Worker', translations: { en: 'Worker' } },
+									],
+								},
 							],
 						},
 					],
