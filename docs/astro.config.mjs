@@ -5,6 +5,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://react-pdf-levelup.nimbux.cloud',
 	base: '/docs',
 
 
@@ -113,8 +114,8 @@ export default defineConfig({
 							],
 						},
 						{
-							label: 'Extend',
-							translations: { en: 'Extend' },
+							label: 'Avanzado',
+							translations: { en: 'Advanced' },
 							items: [
 								{ slug: 'components/grid', label: 'Grid (Columnas)', translations: { en: 'Grid (Columns)' } },
 								{ slug: 'components/gradiant', label: 'Gradiant' },
@@ -141,7 +142,7 @@ export default defineConfig({
 						},
 						{ slug: 'plugin/client', label: 'Cliente', translations: { en: 'Client' } },
 						{ slug: 'plugin/chartjs', label: 'ChartJS' },
-						{ slug: 'plugin/icon', label: 'Icon' },
+						{ slug: 'plugin/icon', label: 'Icono', translations: { en: 'Icon' } },
 						{ slug: 'plugin/codebar', label: 'CodeBar' },
 					],
 				},
