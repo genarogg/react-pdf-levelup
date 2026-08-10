@@ -33,5 +33,6 @@
     "archiver": "^7.0.1",
     "turbo": "^2.7.2"
   },
+  
   "packageManager": "pnpm@11.20.0"
 }

@@ -10,3 +10,7 @@ allowBuilds:
   canvas: true
   esbuild: true
   sharp: true
+
+overrides:
+  react: 19.2.8
+  react-dom: 19.2.8
