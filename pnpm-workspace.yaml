@@ -3,6 +3,7 @@ packages:
   - docs
   - studio
   - frontend
+  - 'lib'
   - 'lib/mod/*'
 allowBuilds:
   '@parcel/watcher': true
