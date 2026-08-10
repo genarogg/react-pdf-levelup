@@ -32,6 +32,14 @@ function traverseAndClean(currentDir) {
          console.error(`Failed to delete ${fullPath}:`, e.message);
        }
     }
+    else if (item === 'pnpm-lock.yaml') {
+       try {
+        fs.unlinkSync(fullPath);
+        console.log(`Deleted: ${fullPath}`);
+       } catch (e) {
+         console.error(`Failed to delete ${fullPath}:`, e.message);
+       }
+    }
   }
 }
 

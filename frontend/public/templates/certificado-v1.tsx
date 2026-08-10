@@ -19,7 +19,7 @@ const COLORS = {
   lineGray: "#cfc3ca",
 };
 
-const LogoMark = ({ type }) => {
+const LogoMark = ({ type }: any) => {
   const stroke = COLORS.wine;
   const common = { stroke, strokeWidth: 2.4, fill: "none" };
   return (
@@ -70,7 +70,7 @@ const Logos = ({ data }: any) => {
           marginBottom: 42,
         }}
       >
-        {data.organizaciones.map((org, i) => (
+        {data.organizaciones.map((org: any, i: any) => (
           <Div
             key={i}
             style={{
@@ -82,7 +82,7 @@ const Logos = ({ data }: any) => {
           >
             <LogoMark type={org.tipo} />
             <Div>
-              {org.nombre.split("\n").map((line, j) => (
+              {org.nombre.split("\n").map((line: any, j: any) => (
                 <P
                   key={j}
                   style={{
@@ -194,7 +194,7 @@ const Signatures = ({ data }: any) => {
           marginTop: 80
         }}
       >
-        {data.firmantes.map((f, i) => (
+        {data.firmantes.map((f: any, i: any) => (
           <Div
             key={i}
             style={{ display: "flex", flexDirection: "column", alignItems: "center" }}

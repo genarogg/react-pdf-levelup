@@ -4,7 +4,7 @@ import {
   P
 } from "@react-pdf-levelup/core";
 
-const DefaultTemplate = ({ data }: any) => {
+const DefaultTemplate = ({ data: _data }: any) => {
 
   return (
     <Layout>

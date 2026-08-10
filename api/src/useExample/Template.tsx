@@ -86,7 +86,7 @@ const getFuentes = () => {
   });
 }
 
-const DefaultTemplate = ({ data }: any) => {
+const DefaultTemplate = ({ data: _data }: any) => {
   getFuentes();
 
   const Texto = () => {
