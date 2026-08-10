@@ -10,8 +10,8 @@ export const TableContext = createContext<TableContextValue>({
   zebraColor: "#eeeeee",
   zebra: true,
   grid: "grid",
-  outerRadius: 0,
+  outerRadius: { topLeft: 0, topRight: 0, bottomRight: 0, bottomLeft: 0 },
   outerBorderWidth: 0,
-  innerRadius: 0,
+  innerRadius: { topLeft: 0, topRight: 0, bottomRight: 0, bottomLeft: 0 },
   borderRadiusMethod: "view",
 });

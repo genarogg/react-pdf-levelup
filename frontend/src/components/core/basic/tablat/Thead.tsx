@@ -31,10 +31,10 @@ const Thead: React.FC<TheadProps> = ({
           // Thead). Agregarlo también acá duplicaba la línea — las dos
           // se apilaban y se veía como un borde doble/más grueso
           // únicamente en la fila de encabezado.
-          context.innerRadius
+          context.innerRadius.topLeft || context.innerRadius.topRight
             ? {
-                borderTopLeftRadius: context.innerRadius,
-                borderTopRightRadius: context.innerRadius,
+                borderTopLeftRadius: context.innerRadius.topLeft,
+                borderTopRightRadius: context.innerRadius.topRight,
               }
             : null,
           style,

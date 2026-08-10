@@ -60,7 +60,17 @@ const SingleTable: React.FC<TableProps> = ({
   // `style` (que sí se respeta: `resolveBorderRadiusFixSvg` no lo saca
   // de `restStyle`).
   const content = isViewFix ? (
-    <View style={{ backgroundColor, borderRadius: innerRadius }}>{children}</View>
+    <View
+      style={{
+        backgroundColor,
+        borderTopLeftRadius: innerRadius.topLeft,
+        borderTopRightRadius: innerRadius.topRight,
+        borderBottomRightRadius: innerRadius.bottomRight,
+        borderBottomLeftRadius: innerRadius.bottomLeft,
+      }}
+    >
+      {children}
+    </View>
   ) : (
     children
   );
@@ -97,29 +107,34 @@ const SingleTable: React.FC<TableProps> = ({
           isViewFix
             ? {
                 backgroundColor: outerBorderColor,
-                borderRadius: outerRadius,
+                borderTopLeftRadius: outerRadius.topLeft,
+                borderTopRightRadius: outerRadius.topRight,
+                borderBottomRightRadius: outerRadius.bottomRight,
+                borderBottomLeftRadius: outerRadius.bottomLeft,
                 padding: outerBorderWidth,
               }
             : null,
-          // "svg" SÍ necesita `borderRadius: outerRadius` acá, aunque el
-          // trazo real lo dibuje `BorderRadiusSvgOverlay` aparte: sin
-          // esto, el `backgroundColor` que el usuario haya puesto en
-          // `style` (que `restStyle` deja pasar tal cual, ver
-          // `resolveBorderRadiusFixSvg`) se pintaría CUADRADO en esta
-          // View, asomando por detrás de la curva del trazo en las 4
-          // esquinas. Agregar `borderRadius` acá es seguro — no dispara
-          // el bug #395 — porque esta View NO tiene `borderWidth` real
-          // (lo saca `restStyle`): el bug es específicamente
-          // borderWidth+borderRadius juntos, no backgroundColor+
-          // borderRadius. `position: relative` sirve de referencia para
-          // el overlay absoluto, y el mismo `padding: outerBorderWidth`
-          // que "view" usa evita que el contenido quede pegado contra
-          // el trazo.
+          // "svg" SÍ necesita el radio acá, aunque el trazo real lo
+          // dibuje `BorderRadiusSvgOverlay` aparte: sin esto, el
+          // `backgroundColor` que el usuario haya puesto en `style` (que
+          // `restStyle` deja pasar tal cual, ver `resolveBorderRadiusFixSvg`)
+          // se pintaría CUADRADO en esta View, asomando por detrás de la
+          // curva del trazo en las 4 esquinas. Agregar el radio acá es
+          // seguro — no dispara el bug #395 — porque esta View NO tiene
+          // `borderWidth` real (lo saca `restStyle`): el bug es
+          // específicamente borderWidth+borderRadius juntos, no
+          // backgroundColor+borderRadius. `position: relative` sirve de
+          // referencia para el overlay absoluto, y el mismo
+          // `padding: outerBorderWidth` que "view" usa evita que el
+          // contenido quede pegado contra el trazo.
           isSvgFix
             ? {
                 position: "relative",
                 padding: outerBorderWidth,
-                borderRadius: outerRadius,
+                borderTopLeftRadius: outerRadius.topLeft,
+                borderTopRightRadius: outerRadius.topRight,
+                borderBottomRightRadius: outerRadius.bottomRight,
+                borderBottomLeftRadius: outerRadius.bottomLeft,
               }
             : null,
           restStyle,

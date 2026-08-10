@@ -29,6 +29,10 @@ export const BORDER_SHORTHAND_KEYS = [
   "borderBottomColor",
   "borderLeftColor",
   "borderRadius",
+  "borderTopLeftRadius",
+  "borderTopRightRadius",
+  "borderBottomRightRadius",
+  "borderBottomLeftRadius",
 ];
 
 export function flattenStyle(style: any): Record<string, any> {
@@ -80,6 +84,65 @@ export function extractBorderColor(flat: Record<string, any>): string | undefine
 
 export function innerRadiusOf(outerRadius: number, outerBorderWidth: number): number {
   return Math.max(outerRadius - outerBorderWidth, 0);
+}
+
+/**
+ * Radios por esquina. Reemplaza al `number` único que usaban
+ * `outerRadius`/`innerRadius` hasta ahora, para poder redondear cada
+ * esquina de `Table` de forma independiente (ver `extractCornerRadii` y
+ * `innerRadiiOf` más abajo).
+ */
+export interface CornerRadii {
+  topLeft: number;
+  topRight: number;
+  bottomRight: number;
+  bottomLeft: number;
+}
+
+/**
+ * Mismo patrón que `extractBorderColor`: lee primero el valor específico
+ * de la esquina (`borderTopLeftRadius`, etc.) y, si no vino, cae al
+ * shorthand `borderRadius`. Si tampoco vino el shorthand, `toNumber`
+ * resuelve a 0 igual que antes.
+ *
+ * Con solo `borderRadius: N` (sin overrides por esquina) da las 4 iguales
+ * a N — mismo resultado que el `toNumber(flatStyle.borderRadius)` que
+ * reemplaza, así que no rompe a nadie que hoy solo use el shorthand.
+ */
+export function extractCornerRadii(flat: Record<string, any>): CornerRadii {
+  const shorthand = toNumber(flat.borderRadius);
+  return {
+    topLeft:
+      flat.borderTopLeftRadius !== undefined
+        ? toNumber(flat.borderTopLeftRadius)
+        : shorthand,
+    topRight:
+      flat.borderTopRightRadius !== undefined
+        ? toNumber(flat.borderTopRightRadius)
+        : shorthand,
+    bottomRight:
+      flat.borderBottomRightRadius !== undefined
+        ? toNumber(flat.borderBottomRightRadius)
+        : shorthand,
+    bottomLeft:
+      flat.borderBottomLeftRadius !== undefined
+        ? toNumber(flat.borderBottomLeftRadius)
+        : shorthand,
+  };
+}
+
+/**
+ * Versión por-esquina de `innerRadiusOf`. El `borderWidth` sigue siendo
+ * un único número uniforme (eso no cambia en este plan) — solo el radio
+ * se vuelve independiente por esquina.
+ */
+export function innerRadiiOf(outer: CornerRadii, borderWidth: number): CornerRadii {
+  return {
+    topLeft: innerRadiusOf(outer.topLeft, borderWidth),
+    topRight: innerRadiusOf(outer.topRight, borderWidth),
+    bottomRight: innerRadiusOf(outer.bottomRight, borderWidth),
+    bottomLeft: innerRadiusOf(outer.bottomLeft, borderWidth),
+  };
 }
 
 export function omitKeys(flat: Record<string, any>, keys: string[]): Record<string, any> {

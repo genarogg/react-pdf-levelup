@@ -1,11 +1,12 @@
 import {
   flattenStyle,
-  toNumber,
   extractBorderWidth,
   extractBorderColor,
-  innerRadiusOf,
+  extractCornerRadii,
+  innerRadiiOf,
   omitKeys,
   BORDER_SHORTHAND_KEYS,
+  type CornerRadii,
 } from "./style-utils";
 import { resolveBorderRadiusFixSvg } from "./border-radius-svg-fix";
 import type { GridMode, BorderRadiusMethod } from "./types";
@@ -36,8 +37,8 @@ export interface BorderRadiusFixResult {
   method: BorderRadiusMethod;
   outerBorderColor: string;
   outerBorderWidth: number;
-  outerRadius: number;
-  innerRadius: number;
+  outerRadius: CornerRadii;
+  innerRadius: CornerRadii;
   /**
    * backgroundColor original del usuario. Solo tiene un uso real en el
    * método "view" (se reserva para la capa interna del sándwich — ver
@@ -116,7 +117,7 @@ function resolveBorderRadiusFixView(
   borderColor: string
 ): BorderRadiusFixResult {
   const flatStyle = flattenStyle(style);
-  const outerRadius = toNumber(flatStyle.borderRadius);
+  const outerRadius = extractCornerRadii(flatStyle);
   const styleBorderWidth = extractBorderWidth(flatStyle);
 
   // grid="grid" agrega su propio borde fino de 1 al Table (ver Table.tsx).
@@ -140,14 +141,16 @@ function resolveBorderRadiusFixView(
   const outerBorderWidth = hasExplicitBorderWidth ? styleBorderWidth : gridBorderWidth;
   const outerBorderColor = extractBorderColor(flatStyle) ?? borderColor;
 
-  // El fix se dispara solo por `borderRadius` explícito (outerRadius > 0
-  // ya lo garantiza: el default es 0, no hay radio implícito en ningún
+  // El fix se dispara si CUALQUIER esquina tiene radio explícito (antes
+  // era `outerRadius > 0` sobre un único número; ahora `outerRadius` es
+  // un objeto por esquina, así que basta con que una sola no sea 0 — el
+  // default de las 4 sigue siendo 0, no hay radio implícito en ningún
   // lado). Ya NO exige `outerBorderWidth > 0`: el bug de renderizado con
   // radios grandes en @react-pdf/renderer ocurre tenga o no borde real,
   // así que gatearlo por el borde dejaba sin fix, por ejemplo, a
   // grid="not-grid" (sin borderWidth explícito) con radios grandes.
-  const useFix = outerRadius > 0;
-  const innerRadius = innerRadiusOf(outerRadius, outerBorderWidth);
+  const useFix = Object.values(outerRadius).some((r) => r > 0);
+  const innerRadius = innerRadiiOf(outerRadius, outerBorderWidth);
 
   // Si useFix está activo, el `backgroundColor` del usuario se reserva
   // para la capa interna (ver `content` en Table.tsx): el View exterior ya

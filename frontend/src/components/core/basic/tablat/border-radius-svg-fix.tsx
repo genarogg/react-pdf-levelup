@@ -2,12 +2,13 @@ import React from "react";
 import { View, Svg, Path } from "@react-pdf/renderer";
 import {
   flattenStyle,
-  toNumber,
   extractBorderWidth,
   extractBorderColor,
-  innerRadiusOf,
+  extractCornerRadii,
+  innerRadiiOf,
   omitKeys,
   BORDER_SHORTHAND_KEYS,
+  type CornerRadii,
 } from "./style-utils";
 import type { GridMode } from "./types";
 import type { BorderRadiusFixResult } from "./border-radius-fix";
@@ -46,7 +47,7 @@ export function resolveBorderRadiusFixSvg(
   borderColor: string
 ): BorderRadiusFixResult {
   const flatStyle = flattenStyle(style);
-  const outerRadius = toNumber(flatStyle.borderRadius);
+  const outerRadius = extractCornerRadii(flatStyle);
   const styleBorderWidth = extractBorderWidth(flatStyle);
 
   const gridBorderWidth = grid === "grid" ? 1 : 0;
@@ -55,13 +56,15 @@ export function resolveBorderRadiusFixSvg(
   const outerBorderWidth = hasExplicitBorderWidth ? styleBorderWidth : gridBorderWidth;
   const outerBorderColor = extractBorderColor(flatStyle) ?? borderColor;
 
-  const useFix = outerRadius > 0;
+  // Igual que en "view": el fix se dispara si CUALQUIER esquina tiene
+  // radio explícito, no solo cuando las 4 lo tienen.
+  const useFix = Object.values(outerRadius).some((r) => r > 0);
   // Mismo valor que ya consumen Thead/Cell desde TableContext para
   // redondear sus propias esquinas (issue #640: el overflow no las
   // recorta, así que se redondean a mano). Clave que "svg" calcule esto
   // IGUAL que "view" — el contorno de `BorderRadiusSvgOverlay` está
   // armado para terminar su borde interior justo en este radio.
-  const innerRadius = innerRadiusOf(outerRadius, outerBorderWidth);
+  const innerRadius = innerRadiiOf(outerRadius, outerBorderWidth);
 
   // A diferencia de "view", acá no se arma ningún sándwich de Views ni
   // se reserva el `backgroundColor` del usuario para una capa aparte —
@@ -116,7 +119,7 @@ function cornerArcPath(corner: "tl" | "tr" | "br" | "bl", R: number, r: number):
 }
 
 export interface BorderRadiusSvgOverlayProps {
-  outerRadius: number;
+  outerRadius: CornerRadii;
   outerBorderWidth: number;
   outerBorderColor: string;
 }
@@ -178,6 +181,16 @@ export interface BorderRadiusSvgOverlayProps {
  * `fill="none"`, no `"transparent"`: el parser de color de
  * @react-pdf/renderer no reconoce esa keyword CSS (ver la nota sobre
  * `grid="not-grid"` en `border-radius-fix.ts` — mismo motivo).
+ *
+ * RADIOS INDEPENDIENTES POR ESQUINA: cada una de las 4 esquinas tiene su
+ * propio `R`/`r`/`edgeInset`, calculados con la misma fórmula de siempre
+ * pero aplicada individualmente (antes había un único `R` compartido por
+ * las 4). Si el `R` de una esquina es `0`, esa esquina no dibuja arco
+ * (un arco de radio 0 es degenerado y no aporta nada) — queda cuadrada,
+ * y el extremo de cada tramo recto que toca esa esquina usa inset `0`
+ * ahí (sin solape, porque no hay arco con el que solapar). Los dos
+ * extremos de un mismo tramo pueden así tener insets distintos entre sí
+ * cuando sus dos esquinas vecinas tienen radios distintos.
  */
 export function BorderRadiusSvgOverlay({
   outerRadius,
@@ -191,11 +204,24 @@ export function BorderRadiusSvgOverlay({
     return null;
   }
 
-  const R = outerRadius;
-  const r = Math.max(R - outerBorderWidth / 2, 0);
+  // R/r por esquina: mismo cálculo que antes (R - strokeWidth/2 para que
+  // el trazo centrado dé exactamente outerRadius por fuera e innerRadius
+  // por dentro), aplicado a cada una de las 4 por separado.
+  const R = {
+    tl: outerRadius.topLeft,
+    tr: outerRadius.topRight,
+    br: outerRadius.bottomRight,
+    bl: outerRadius.bottomLeft,
+  };
+  const r = {
+    tl: Math.max(R.tl - outerBorderWidth / 2, 0),
+    tr: Math.max(R.tr - outerBorderWidth / 2, 0),
+    br: Math.max(R.br - outerBorderWidth / 2, 0),
+    bl: Math.max(R.bl - outerBorderWidth / 2, 0),
+  };
 
-  // Las 8 piezas (4 arcos + 4 rectas) se calculan para tocarse justo en
-  // R, sin superponerse ni dejar hueco — en teoría. En la práctica, R no
+  // Las piezas se calculan para tocarse justo en el R de cada esquina,
+  // sin superponerse ni dejar hueco — en teoría. En la práctica, R no
   // suele ser un número entero de píxeles en el DPI final del PDF, así
   // que cada pieza redondea SU PROPIO límite por separado al rasterizar
   // (la caja del arco redondea "para adentro", la recta redondea "para
@@ -212,19 +238,35 @@ export function BorderRadiusSvgOverlay({
   // veces encima), pero el hueco de redondeo desaparece. No toco el
   // tamaño de los arcos (`width/height: R`) porque ahí SÍ importa la
   // coordenada exacta para que `cornerArcPath` dé el radio correcto.
+  //
+  // Con R=0 en una esquina no hay arco con el que solapar — esa esquina
+  // es cuadrada de verdad — así que su edgeInset es 0 directamente (sin
+  // restar SEAM_OVERLAP, que dejaría un inset negativo-clampeado a 0 de
+  // todos modos, pero por las razones equivocadas).
   const SEAM_OVERLAP = 0.5;
-  const edgeInset = Math.max(R - SEAM_OVERLAP, 0);
+  const edgeInset = {
+    tl: R.tl > 0 ? Math.max(R.tl - SEAM_OVERLAP, 0) : 0,
+    tr: R.tr > 0 ? Math.max(R.tr - SEAM_OVERLAP, 0) : 0,
+    br: R.br > 0 ? Math.max(R.br - SEAM_OVERLAP, 0) : 0,
+    bl: R.bl > 0 ? Math.max(R.bl - SEAM_OVERLAP, 0) : 0,
+  };
 
-  const corner = (name: "tl" | "tr" | "br" | "bl", pos: Record<string, number>) => (
-    <Svg key={name} style={{ position: "absolute", width: R, height: R, ...pos }}>
-      <Path
-        d={cornerArcPath(name, R, r)}
-        stroke={outerBorderColor}
-        strokeWidth={outerBorderWidth}
-        fill="none"
-      />
-    </Svg>
-  );
+  const corner = (name: "tl" | "tr" | "br" | "bl", pos: Record<string, number>) => {
+    // Esquina sin radio: nada que dibujar acá, queda cuadrada limpia
+    // (sin arco degenerado ni resto de solape — el tramo recto
+    // correspondiente ya usa inset 0 en este extremo).
+    if (R[name] <= 0) return null;
+    return (
+      <Svg key={name} style={{ position: "absolute", width: R[name], height: R[name], ...pos }}>
+        <Path
+          d={cornerArcPath(name, R[name], r[name])}
+          stroke={outerBorderColor}
+          strokeWidth={outerBorderWidth}
+          fill="none"
+        />
+      </Svg>
+    );
+  };
 
   return (
     <>
@@ -233,42 +275,46 @@ export function BorderRadiusSvgOverlay({
       {corner("br", { bottom: 0, right: 0 })}
       {corner("bl", { bottom: 0, left: 0 })}
 
+      {/* Tramo superior: el extremo izquierdo toca la esquina tl, el derecho toca tr. */}
       <View
         style={{
           position: "absolute",
           top: 0,
-          left: edgeInset,
-          right: edgeInset,
+          left: edgeInset.tl,
+          right: edgeInset.tr,
           height: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
       />
+      {/* Tramo inferior: izquierdo toca bl, derecho toca br. */}
       <View
         style={{
           position: "absolute",
           bottom: 0,
-          left: edgeInset,
-          right: edgeInset,
+          left: edgeInset.bl,
+          right: edgeInset.br,
           height: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
       />
+      {/* Tramo izquierdo: extremo superior toca tl, inferior toca bl. */}
       <View
         style={{
           position: "absolute",
           left: 0,
-          top: edgeInset,
-          bottom: edgeInset,
+          top: edgeInset.tl,
+          bottom: edgeInset.bl,
           width: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}
       />
+      {/* Tramo derecho: extremo superior toca tr, inferior toca br. */}
       <View
         style={{
           position: "absolute",
           right: 0,
-          top: edgeInset,
-          bottom: edgeInset,
+          top: edgeInset.tr,
+          bottom: edgeInset.br,
           width: outerBorderWidth,
           backgroundColor: outerBorderColor,
         }}

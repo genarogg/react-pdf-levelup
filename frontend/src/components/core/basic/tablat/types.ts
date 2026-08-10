@@ -1,4 +1,5 @@
 import type React from "react";
+import type { CornerRadii } from "./style-utils";
 
 /* ================= TYPES ================= */
 
@@ -191,9 +192,31 @@ export interface TableContextValue {
   zebraColor: string;
   zebra: boolean;
   grid: GridMode;
-  outerRadius: number;
+  /**
+   * LIMITACIÓN CONOCIDA — radio de esquina vs. alto de fila: cada
+   * esquina de `outerRadius`/`innerRadius` es ahora independiente (ver
+   * `CornerRadii`), pero `innerRadius` se sigue aplicando sobre `View`s
+   * de alto acotado (la fila de `Thead`, o la última fila de `Tbody` vía
+   * `Cell` — `minHeight: height ?? cellHeight`). Si el radio de una
+   * esquina supera el alto disponible de esa fila, Yoga clampea la
+   * curva ahí adentro, mientras que `BorderRadiusSvgOverlay` sigue
+   * trazando el contorno EXTERIOR completo (no depende del alto de
+   * ninguna celda) — el resultado es un descalce visible entre el
+   * contorno exterior y el interior de esa esquina (confirmado
+   * renderizando: con `cellHeight: 22` y esa esquina en 30+, queda una
+   * cuña del color de fondo del header asomando bajo la curva).
+   * Es una variante del límite práctico de radio ~12 del método "view"
+   * que ya menciona `BorderRadiusMethod` más abajo (ver `bug.md`), pero
+   * ahora más fácil de disparar sin querer: con radios por esquina, una
+   * sola esquina puede pedir un radio grande sin que las demás lo
+   * "diluyan" hacia el shorthand. No hay clamp automático — quien use
+   * radios por esquina debe mantener cada uno por debajo del alto de la
+   * fila que lo contiene (`cellHeight` de `Table`, o `height` de la
+   * celda si lo sobreescribe).
+   */
+  outerRadius: CornerRadii;
   outerBorderWidth: number;
-  innerRadius: number;
+  innerRadius: CornerRadii;
   /**
    * Método EFECTIVAMENTE aplicado por `resolveBorderRadiusFix` — hoy
    * coincide siempre con el `borderRadiusMethod` pedido en `Table`

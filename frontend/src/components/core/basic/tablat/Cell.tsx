@@ -11,9 +11,10 @@ import type { CellProps, CellBaseProps } from "./types";
  *
  *   1. El estilo base: `styles.th` (fontWeight bold) vs `styles.td`.
  *   2. El fondo zebra: SOLO Td lo tiene — Th nunca alterna color de fondo.
- *   3. El redondeo de esquina inferior en la última fila: SOLO Td lo
- *      necesita, porque Thead ya redondea sus propias esquinas superiores
- *      a nivel de contenedor; Th nunca es la última fila de la tabla.
+ *   3. Qué esquina redondea cada uno: Th redondea las de ARRIBA (solo
+ *      en la primera/última columna), Td redondea las de ABAJO (solo en
+ *      la última fila, primera/última columna). Ver el bloque de radios
+ *      más abajo para el motivo exacto.
  *
  * `variant` decide esas tres diferencias; todo lo demás vive acá una
  * sola vez. `Th`/`Td` son wrappers finos con la misma firma pública de
@@ -94,14 +95,41 @@ const Cell: React.FC<CellBaseProps> = ({
           paddingRight: isLast ? 8 : 9,
           paddingBottom: isLastRow ? 0 : 1,
         },
-        // Redondeo de esquina inferior en la última fila: solo Td. Th
-        // nunca es la última fila (Thead ya redondea sus propias
-        // esquinas superiores a nivel de contenedor).
-        !isHeader && isLastRow && isFirst && innerRadius
-          ? { borderBottomLeftRadius: innerRadius }
+        // Redondeo de esquina superior en el Th de la primera/última
+        // columna: Thead SÍ redondea su propio View contenedor
+        // (ver Thead.tsx), pero eso solo se nota si el fondo de la
+        // cabecera vive en ESE View — con `context.headerBackground`, o
+        // con `style` puesto directo en `Thead`. Si el usuario pone
+        // `backgroundColor` en el `Th` (como suele hacerse para pintar
+        // la cabecera con un color propio), cada `Th` es una View
+        // cuadrada aparte que pinta por encima del contenedor
+        // redondeado — el radio del contenedor deja de tener efecto
+        // visual y asoma un "pico" cuadrado en la esquina. Por eso acá
+        // TAMBIÉN se redondea el propio `Th`, igual que ya se hace con
+        // el `Td` de la última fila más abajo. Poner el radio en ambos
+        // niveles (contenedor de Thead y celda) es seguro y no dobla el
+        // efecto: si el `Th` no trae `backgroundColor` propio, redondear
+        // una View transparente no cambia nada visualmente.
+        isHeader && isFirst && innerRadius.topLeft
+          ? { borderTopLeftRadius: innerRadius.topLeft }
           : null,
-        !isHeader && isLastRow && isLast && innerRadius
-          ? { borderBottomRightRadius: innerRadius }
+        isHeader && isLast && innerRadius.topRight
+          ? { borderTopRightRadius: innerRadius.topRight }
+          : null,
+        // Redondeo de esquina inferior en la última fila: solo Td, mismo
+        // motivo que arriba pero para el borde de abajo — un `Td` con
+        // `backgroundColor` propio en la última fila (ej. una fila de
+        // "Total") tapa el radio que ya aplica `Table.tsx`/el contenedor
+        // si no se redondea acá también. Cada condición chequea su
+        // propio valor de esquina (bottomLeft/bottomRight), no el objeto
+        // innerRadius genérico — así no se redondea una esquina cuyo
+        // radio efectivo es 0 aunque otra esquina de la tabla sí tenga
+        // radio.
+        !isHeader && isLastRow && isFirst && innerRadius.bottomLeft
+          ? { borderBottomLeftRadius: innerRadius.bottomLeft }
+          : null,
+        !isHeader && isLastRow && isLast && innerRadius.bottomRight
+          ? { borderBottomRightRadius: innerRadius.bottomRight }
           : null,
         style,
       ]}
