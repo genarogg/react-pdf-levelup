@@ -65,6 +65,7 @@ import {
 
 
 
+
 const getFuentes = () => {
   Font.register({
     family: "Nunito",
@@ -86,7 +87,8 @@ const getFuentes = () => {
   });
 }
 
-const DefaultTemplate = ({ data: _data }: any) => {
+const DefaultTemplate = ({ data }: any) => {
+    
   getFuentes();
 
   const Texto = () => {
@@ -102,31 +104,38 @@ const DefaultTemplate = ({ data: _data }: any) => {
           <H3>Div</H3>
         </Div>
 
-        <P style={{ textDecoration: "lineThrough" }}>
-          Lorem Ipsum is simply dummy <Mark color="#f3f">Lorem Ipsum</Mark>text
+        <P>
+          Lorem Ipsum is simply dummy text
           of the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since 1966, when designers at
+          industry <Strong>Lorem Ipsum</Strong> since 1966, when designers at
           Letraset and James Mosley, the librarian at St Bride Printing Library
+          in London, took a 1914 and scrambled it to make
+          dummy text for Letraset's Body Type sheets. It has survived not only
+          many decades, but also the leap into electronic typesetting 
+          <BR />
+          <Span> Lorem Ipsum </Span>
+          <A href="https://example.com">example link </A>
+          <Mark color="#f3f">Lorem Ipsum </Mark>
+            <U>Lorem Ipsum</U> 
 
+            <BR />
+            <Em>Lorem Ipsum</Em>
+          
+   <Small>Lorem Ipsum</Small>
         </P>
-
-        <Strong>Lorem Ipsum</Strong>
-        <Mark color="#f3f">Lorem Ipsum</Mark>
-        <U>Lorem Ipsum</U>
-        <BR />
-
-        <A href="https://example.com">example link</A>
-        <Small>Lorem Ipsum</Small>
-        <Span>Lorem Ipsum</Span>
-        <Em>Lorem Ipsum</Em>
-
+        
+       
+       
+        
         <BR />
         <Blockquote color="red">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since 1966, when designers at Letraset and James Mosley, the librarian
           at St Bride Printing Library in London, took a 1914 Cicero translation
-
+          and scrambled it to make dummy text for Letraset's Body Type sheets.
+          It has survived not only many decades, but also the leap into
+          electronic typesetting
         </Blockquote>
         <BR />
         <HR style={{ borderTop: "2px solid rgba(44, 100, 253, 1)" }} />
@@ -136,7 +145,7 @@ const DefaultTemplate = ({ data: _data }: any) => {
 
   const Tabla = () => {
     return (
-      <Table>
+      <Table style={{ borderRadius: 14, border: "1px solid #28a745" }}>
         <Thead textColor="#282828">
           <Tr>
             <Th style={{ backgroundColor: "#14b8a6", width: "100%" }}>
@@ -205,13 +214,13 @@ const DefaultTemplate = ({ data: _data }: any) => {
       <>
         <Div>
           <Left>
-            <P>Left</P>
+            <P style={{ border: "1px solid red" }}>Left</P>
           </Left>
           <Center>
-            <P>Center</P>
+            <P style={{ border: "1px solid #7c3aed" }}>Center</P>
           </Center>
           <Right>
-            <P>Right</P>
+            <P style={{ border: "1px solid blue" }}>Right</P>
           </Right>
         </Div>
 
@@ -271,6 +280,7 @@ const DefaultTemplate = ({ data: _data }: any) => {
         <UL>
           <LI>lista</LI>
           <LI>lista</LI>
+          <LI>lista</LI>
         </UL>
 
         <OL>
@@ -299,43 +309,43 @@ const DefaultTemplate = ({ data: _data }: any) => {
     );
   };
 
-  const Gradiante = () => {
-    return (
-      <Gradiant colors={["#FF6B6B", "#4ECDC4"]} height={100}>
+  const Gradiante = ()=>{
+    return(
+         <Gradiant colors={["#FF6B6B", "#4ECDC4"]} height={100}>
         <Text style={{ color: "white" }}>Hola Mundo</Text>
       </Gradiant>
     )
   }
 
-  const Pluguins = () => {
+  const Pluguins = ()=>{
 
-    const QRS = () => {
-      return (
-        <Container>
-          <Row>
-            <Col6>
-              <QR
-                url="https://react-pdf-levelup.com"
-                size={100}
-                colorDark="#1a202c"
-                colorLight="#f7fafc"
-              />
-            </Col6>
-            <Col6>
-              <QRstyle
-                url="https://example.com"
-                size={100}
-                dotsOptions={{ color: "#579cfcff", type: "rounded" }}
-                backgroundOptions={{ color: "#ffffff" }}
-
-              />
-            </Col6>
-          </Row>
-        </Container>
+    const QRS =()=>{
+      return(
+         <Container>
+         <Row>
+         <Col6>
+         <QR
+            url="https://react-pdf-levelup.com"
+            size={100}
+            colorDark="#1a202c"
+            colorLight="#f7fafc"
+          />
+         </Col6>
+          <Col6>
+          <QRstyle
+            url="https://example.com"
+            size={100}
+            dotsOptions={{ color: "#579cfcff", type: "rounded" }}
+            backgroundOptions={{ color: "#ffffff" }}
+         
+          />
+         </Col6>
+         </Row>
+         </Container>
       )
     }
 
-    const chartConfig: any = {
+    const chartConfig = {
       type: "bar",
       data: {
         labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"],
@@ -354,27 +364,27 @@ const DefaultTemplate = ({ data: _data }: any) => {
       },
     }
 
-    return (
+    return(
       <>
+    
+      <QRS/>
+      <BR />
+      <ChartJS data={chartConfig} width={500} height={300} />
+      <BR />
+      <Text>Ejemplo CodeBar (CODE128):</Text>
+      <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
+       <BR />
+      <Text>Demo Iconos:</Text>
+      <BR />
+     
 
-        <QRS />
-        <BR />
-        <ChartJS data={chartConfig} width={500} height={300} />
-        <BR />
-        <Text>Ejemplo CodeBar (CODE128):</Text>
-        <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />
-        <BR />
-        <Text>Demo Iconos:</Text>
-        <BR />
-
-
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-          <Icon ico="Home" />
-          <Icon ico="Send" />
-          <Icon ico="Flame" />
+           <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+    <Icon ico="Home" />
+        <Icon ico="Send" />
+         <Icon ico="Flame" />
           <Icon ico="Moon" />
-          <Icon ico="Landmark" />
-        </View>
+           <Icon ico="Landmark" />
+</View>
       </>
     )
   }
@@ -382,7 +392,9 @@ const DefaultTemplate = ({ data: _data }: any) => {
   return (
     <Layout style={{ fontFamily: "Nunito" }}>
 
-      <Img src="https://react-pdf-levelup.nimbux.cloud/iconos/favicon-192x192.png" width={70} />
+
+    
+      <Img src="/iconos/favicon-192x192.png" width={70} />
       <Texto />
       <Lista />
       <Tabla />
@@ -390,7 +402,7 @@ const DefaultTemplate = ({ data: _data }: any) => {
       <Positions />
       <Formulario />
       <Grafico />
-
+   
       <NextPage />
 
       <Button variant="success" width={200}>
@@ -405,16 +417,16 @@ const DefaultTemplate = ({ data: _data }: any) => {
       >
         Con margen y borderRadius
       </Button>
-      <Gradiante />
+      <Gradiante/>
       <Divider label="Línea continua" variant="line" />
       <Divider label="Discontinua" variant="dashed" color="#6366f1" />
       <Divider label="Punteada" variant="dotted" color="#f59e0b" />
-
-
+      
+     
       <NextPage />
       {/**   */}
-      <Pluguins />
-
+      <Pluguins/>
+     
     </Layout>
   );
 };

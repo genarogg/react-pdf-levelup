@@ -1,69 +1,96 @@
 import React from "react";
-import { 
-      A,
-      BR,
-      Badge,
-      Blockquote,
-      Button,
-      Center,
-      Checkbox,
-      Col6,
-      Container,
-      Div,
-      Divider,
-      Em,
-      Form,
-      Gradiant,
-      Graph,
-      H1,
-      H2,
-      H3,
-      H4,
-      H5,
-      HR,
-      Img,
-      Input,
-      LI,
-      Layout,
-      Left,
-      Mark,
-      NextPage,
-      OL,
-      P,
-      Right,
-      Row,
-      Small,
-      Span,
-      Strong,
-      Table,
-      Tbody,
-      Td,
-      Text,
-      TextArea,
-      Th,
-      Thead,
-      Tr,
-      U,
-      UL,
-      View
-    } from "@react-pdf-levelup/core";
-import { 
-      QR,
-      QRstyle
-    } from "@react-pdf-levelup/qr";
-import { 
-      ChartJS
-    } from "@react-pdf-levelup/chart";
-import { 
-      Icon
-    } from "@react-pdf-levelup/icons";
-import { 
-      CodeBar
-    } from "@react-pdf-levelup/codebar";
+import {
+  A,
+  BR,
+  Badge,
+  Blockquote,
+  Button,
+  Center,
+  Checkbox,
+  Col6,
+  Container,
+  Div,
+  Divider,
+  Em,
+  Font,
+  Form,
+  Gradiant,
+  Graph,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  HR,
+  Img,
+  Input,
+  LI,
+  Layout,
+  Left,
+  Mark,
+  NextPage,
+  OL,
+  P,
+  Right,
+  Row,
+  Small,
+  Span,
+  Strong,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  TextArea,
+  Th,
+  Thead,
+  Tr,
+  U,
+  UL,
+  View
+} from "@react-pdf-levelup/core";
+import {
+  QR,
+  QRstyle
+} from "@react-pdf-levelup/qr";
+import {
+  ChartJS
+} from "@react-pdf-levelup/chart";
+import {
+  Icon
+} from "@react-pdf-levelup/icons";
+import {
+  CodeBar
+} from "@react-pdf-levelup/codebar";
 
 
+
+
+
+const getFuentes = () => {
+  Font.register({
+    family: "Nunito",
+    fonts: [
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXV3I6Li01BKof4Mg.ttf",
+        fontWeight: "normal",
+      },
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXW3I6Li01BKofAjsOkZg.ttf",
+        fontWeight: "bold",
+      },
+      {
+        src: "https://fonts.gstatic.com/s/nunito/v12/XRXX3I6Li01BKofIMOaE.ttf",
+        fontStyle: "italic",
+        fontWeight: "normal",
+      }
+    ],
+  });
+}
 
 const DefaultTemplate = ({ data }: any) => {
+    
+  getFuentes();
+
   const Texto = () => {
     return (
       <>
@@ -77,26 +104,29 @@ const DefaultTemplate = ({ data }: any) => {
           <H3>Div</H3>
         </Div>
 
-        <P style={{ textDecoration: "lineThrough" }}>
-          Lorem Ipsum is simply dummy <Mark color="#f3f">Lorem Ipsum</Mark>text
+        <P>
+          Lorem Ipsum is simply dummy text
           of the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since 1966, when designers at
+          industry <Strong>Lorem Ipsum</Strong> since 1966, when designers at
           Letraset and James Mosley, the librarian at St Bride Printing Library
-          in London, took a 1914 Cicero translation and scrambled it to make
+          in London, took a 1914 and scrambled it to make
           dummy text for Letraset's Body Type sheets. It has survived not only
-          many decades, but also the leap into electronic typesetting
+          many decades, but also the leap into electronic typesetting 
+          <BR />
+          <Span> Lorem Ipsum </Span>
+          <A href="https://example.com">example link </A>
+          <Mark color="#f3f">Lorem Ipsum </Mark>
+            <U>Lorem Ipsum</U> 
+
+            <BR />
+            <Em>Lorem Ipsum</Em>
+          
+   <Small>Lorem Ipsum</Small>
         </P>
-
-        <Strong>Lorem Ipsum</Strong>
-        <Mark color="#f3f">Lorem Ipsum</Mark>
-        <U>Lorem Ipsum</U>
-        <BR />
-
-        <A href="https://example.com">example link</A>
-        <Small>Lorem Ipsum</Small>
-        <Span>Lorem Ipsum</Span>
-        <Em>Lorem Ipsum</Em>
-
+        
+       
+       
+        
         <BR />
         <Blockquote color="red">
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -115,7 +145,7 @@ const DefaultTemplate = ({ data }: any) => {
 
   const Tabla = () => {
     return (
-      <Table>
+      <Table style={{ borderRadius: 14, border: "1px solid #28a745" }}>
         <Thead textColor="#282828">
           <Tr>
             <Th style={{ backgroundColor: "#14b8a6", width: "100%" }}>
@@ -184,13 +214,13 @@ const DefaultTemplate = ({ data }: any) => {
       <>
         <Div>
           <Left>
-            <P>Left</P>
+            <P style={{ border: "1px solid red" }}>Left</P>
           </Left>
           <Center>
-            <P>Center</P>
+            <P style={{ border: "1px solid #7c3aed" }}>Center</P>
           </Center>
           <Right>
-            <P>Right</P>
+            <P style={{ border: "1px solid blue" }}>Right</P>
           </Right>
         </Div>
 
@@ -360,7 +390,9 @@ const DefaultTemplate = ({ data }: any) => {
   }
 
   return (
-    <Layout>
+    <Layout style={{ fontFamily: "Nunito" }}>
+
+
     
       <Img src="/iconos/favicon-192x192.png" width={70} />
       <Texto />

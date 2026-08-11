@@ -1,4 +1,4 @@
-export type TabId = "layout" | "text" | "table" | "position" | "lists" | "media" | "page" | "fonts";
+export type TabId = "layout" | "text" | "table" | "position" | "lists" | "media" | "page" | "fonts" | "advanced";
 
 export interface BasePropDoc {
   name: string;

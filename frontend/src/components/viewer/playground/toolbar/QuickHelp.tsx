@@ -17,6 +17,7 @@ const TAB_LABELS: Record<Lang, Record<TabId, string>> = {
     media: "Media",
     page: "Página",
     fonts: "Fuentes",
+    advanced: "Avanzado",
   },
   en: {
     layout: "Layout",
@@ -27,6 +28,7 @@ const TAB_LABELS: Record<Lang, Record<TabId, string>> = {
     media: "Media",
     page: "Page",
     fonts: "Fonts",
+    advanced: "Advanced",
   },
 }
 
@@ -122,7 +124,7 @@ const QuickHelp: React.FC<QuickHelpProps> = ({ inline = false }) => {
 
             {/* Tabs */}
             <div className="flex flex-wrap gap-1.5 mb-4 pb-3 border-b border-gray-800/50">
-              {(["layout", "text", "table", "position", "lists", "media", "page", "fonts"] as TabId[]).map((tab) => (
+              {(["layout", "text", "table", "position", "lists", "media", "page", "fonts", "advanced"] as TabId[]).map((tab) => (
                 <button
                   key={tab}
                   className={`px-3.5 py-2 text-sm font-medium rounded-md transition-all duration-200 ${activeTab === tab
