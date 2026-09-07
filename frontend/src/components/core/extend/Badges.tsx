@@ -13,6 +13,7 @@ interface BadgeProps extends Omit<ViewProps, "style"> {
 const styles = StyleSheet.create({
   badge: {
     display: "flex",
+    alignSelf: 'flex-start',
     flexDirection: "row",
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  
+
   // Tamaños
   sm: {
     paddingHorizontal: 6,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
-  
+
   // Variantes - Default
   defaultBg: {
     backgroundColor: "#f3f4f6",
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     color: "#1f2937",
     fontWeight: "600",
   },
-  
+
   // Variantes - Active
   activeBg: {
     backgroundColor: "#d1fae5",
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     color: "#065f46",
     fontWeight: "600",
   },
-  
+
   // Variantes - Pending
   pendingBg: {
     backgroundColor: "#fef3c7",
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     color: "#92400e",
     fontWeight: "600",
   },
-  
+
   // Variantes - Cancelled
   cancelledBg: {
     backgroundColor: "#fee2e2",
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     color: "#991b1b",
     fontWeight: "600",
   },
-  
+
   // Variantes - Success
   successBg: {
     backgroundColor: "#dcfce7",
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     color: "#166534",
     fontWeight: "600",
   },
-  
+
   // Variantes - Warning
   warningBg: {
     backgroundColor: "#fcd34d",
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     color: "#78350f",
     fontWeight: "600",
   },
-  
+
   // Variantes - Error
   errorBg: {
     backgroundColor: "#fca5a5",
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     color: "#7c2d12",
     fontWeight: "600",
   },
-  
+
   // Variantes - Info
   infoBg: {
     backgroundColor: "#bfdbfe",
