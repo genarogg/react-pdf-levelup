@@ -88,6 +88,7 @@ const getFuentes = () => {
 }
 
 const DefaultTemplate = ({ data }: any) => {
+  console.log(data);
     
   getFuentes();
 
@@ -369,7 +370,7 @@ const DefaultTemplate = ({ data }: any) => {
     
       <QRS/>
       <BR />
-      <ChartJS data={chartConfig} width={500} height={300} />
+      {/* <ChartJS data={chartConfig} width={500} height={300} /> */}
       <BR />
       <Text>Ejemplo CodeBar (CODE128):</Text>
       <CodeBar value="1234567890128" format="CODE128" width={250} height={100} />

@@ -88,6 +88,7 @@ const getFuentes = () => {
 }
 
 const DefaultTemplate = ({ data }: any) => {
+  console.log(data);
     
   getFuentes();
 
