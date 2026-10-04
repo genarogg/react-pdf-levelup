@@ -54,3 +54,5 @@ export interface GetRenderFileQuery {
 export type GetRenderFileResponse =
   | { ok: true; pdfBase64: string; fileName: string }
   | { ok: false; error: string }
+
+  
