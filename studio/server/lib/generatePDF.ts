@@ -42,15 +42,15 @@ const generatePDF = async ({ template: Template, data }: PDFData): Promise<strin
     const stream = await renderToStream(MyDocument)
 
     const buffer: Buffer = await new Promise((resolve, reject) => {
-      const chunks: Buffer[] = []
+      const chunks: Uint8Array[] = []
       stream.on("data", (chunk) => chunks.push(chunk))
-      stream.on("end", () => resolve(Buffer.concat(chunks)))
+      stream.on("end", () => resolve(Buffer.concat(chunks as unknown as Uint8Array<ArrayBuffer>[])))
       stream.on("error", (error) => reject(error))
     })
 
     // Guardar en el backend, dentro del workspace (.playground/output/)
     await fs.mkdir(OUTPUT_DIR, { recursive: true })
-    await fs.writeFile(OUTPUT_FILE, buffer)
+    await fs.writeFile(OUTPUT_FILE, new Uint8Array(buffer))
 
     return buffer.toString("base64")
   } catch (error) {
